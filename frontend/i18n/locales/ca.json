@@ -1,0 +1,170 @@
+{
+  "meta": {
+    "defaultTitle": "ARGOS-IT | Consultoria informàtica per a empreses",
+    "defaultDescription": "Consultoria informàtica, manteniment, suport tècnic, ciberseguretat, automatització i solucions digitals per a empreses."
+  },
+  "language": {
+    "label": "Idioma",
+    "es": "ES",
+    "en": "EN",
+    "ca": "CA",
+    "fr": "FR",
+    "de": "DE",
+    "it": "IT",
+    "pt": "PT"
+  },
+  "nav": {
+    "home": "Inici",
+    "services": "Serveis",
+    "method": "Mètode",
+    "about": "Sobre ARGOS-IT",
+    "contact": "Contacte",
+    "menu": "Menú"
+  },
+  "actions": {
+    "requestConsultation": "Sol·licitar consulta",
+    "viewServices": "Veure serveis",
+    "viewDetail": "Veure detall",
+    "viewService": "Veure servei",
+    "viewMethod": "Veure mètode",
+    "backHome": "Tornar a inici",
+    "backServices": "Tornar a serveis"
+  },
+  "home": {
+    "eyebrow": "Consultoria informàtica B2B",
+    "title": "La informàtica que funciona. Sense soroll. Sense preocupacions.",
+    "subtitle": "Cuidem l'entorn tecnològic de la teva empresa perquè sigui estable, segur i previsible.",
+    "trustTitle": "Pilars de confiança",
+    "trustItems": [
+      "Resposta clara i professional",
+      "Prevenció abans que improvisació",
+      "Tecnologia alineada amb el negoci",
+      "Servei orientat a empreses"
+    ],
+    "servicesEyebrow": "Serveis ARGOS-IT",
+    "servicesTitle": "Serveis professionals per a continuïtat, seguretat i creixement.",
+    "servicesSubtitle": "Pensats per a equips que necessiten tecnologia fiable i suport real."
+  },
+  "servicesPage": {
+    "title": "Serveis ARGOS-IT",
+    "subtitle": "Consultoria informàtica, manteniment IT, suport tècnic, ciberseguretat, xarxes, backup, IA i desenvolupament web."
+  },
+  "serviceDetail": {
+    "includesTitle": "Inclou",
+    "problemTitle": "Problema que resol",
+    "benefitsTitle": "Beneficis clau",
+    "processTitle": "Com treballem",
+    "audienceTitle": "Ideal per a",
+    "ctaTitle": "Aquest servei encaixa amb tu?",
+    "ctaSubtitle": "Explica'ns la teva situació i et respondrem amb un pla tècnic realista i prioritzat."
+  },
+  "method": {
+    "title": "Mètode ARGOS-IT",
+    "subtitle": "Un marc clar perquè cada millora tecnològica tingui impacte real.",
+    "steps": [
+      { "id": "01", "title": "Diagnosi", "description": "Revisió inicial de sistemes, riscos i prioritats." },
+      { "id": "02", "title": "Pla de millora", "description": "Accions prioritzades, realistes i executables." },
+      { "id": "03", "title": "Implementació", "description": "Execució ordenada amb documentació." },
+      { "id": "04", "title": "Seguiment", "description": "Control de resultats i prevenció contínua." }
+    ]
+  },
+  "about": {
+    "title": "Sobre ARGOS-IT",
+    "paragraphs": [
+      "ARGOS-IT és una consultora informàtica orientada a empreses i equips que necessiten estabilitat operativa i seguretat.",
+      "Combinem manteniment, suport tècnic, ciberseguretat, xarxes, backup, automatització amb IA i desenvolupament web."
+    ],
+    "valuesTitle": "Com treballem",
+    "values": [
+      "Diagnosi honesta abans d'executar.",
+      "Prioritats de negoci per davant de modes tècniques.",
+      "Comunicació clara amb equips no tècnics.",
+      "Prevenció i millora contínua."
+    ]
+  },
+  "contact": {
+    "title": "Sol·licitar consulta tècnica",
+    "subtitle": "Explica'ns el teu context actual i et respondrem amb una proposta clara i prioritzada.",
+    "intro": "Treballem amb empreses internacionals en manteniment IT, suport, seguretat, IA i projectes web.",
+    "cards": {
+      "emailTitle": "Email",
+      "phoneTitle": "Telèfon",
+      "coverageTitle": "Cobertura",
+      "coverageLines": [
+        "Servei internacional",
+        "Atenció remota i presencial segons projecte"
+      ]
+    },
+    "form": {
+      "title": "Formulari de contacte",
+      "name": "Nom",
+      "email": "Email",
+      "phone": "Telèfon",
+      "company": "Empresa o projecte",
+      "service": "Servei d'interès",
+      "message": "Missatge",
+      "privacy": "Accepto la política de privacitat i autoritzo la resposta comercial.",
+      "submit": "Sol·licitar consulta",
+      "requiredHint": "* Camps obligatoris. Resposta inicial en menys de 24 hores laborables.",
+      "namePlaceholder": "Nom complet",
+      "emailPlaceholder": "tu@email.com",
+      "phonePlaceholder": "+34 600 000 000",
+      "companyPlaceholder": "Nom de l'empresa o projecte",
+      "messagePlaceholder": "Descriu la necessitat, el context i la prioritat.",
+      "servicePlaceholder": "Selecciona un servei",
+      "success": "Sol·licitud enviada correctament.",
+      "error": "No s'ha pogut enviar el formulari. Revisa els camps.",
+      "errors": {
+        "required": "Aquest camp és obligatori.",
+        "email": "Introdueix un email vàlid.",
+        "phone": "Introdueix un telèfon vàlid.",
+        "privacy": "Has d'acceptar la política de privacitat.",
+        "service": "Selecciona un servei."
+      }
+    }
+  },
+  "legal": {
+    "aviso": { "title": "Avís legal", "intro": "Informació legal i condicions d'ús del web d'ARGOS-IT." },
+    "privacy": { "title": "Política de privacitat", "intro": "Com tractem les dades personals." },
+    "cookies": { "title": "Política de cookies", "intro": "Ús de cookies i tecnologies similars." }
+  },
+  "cookiesBanner": {
+    "message": "Utilitzem cookies tècniques i analítiques per millorar l'experiència. Pots acceptar o rebutjar les no essencials.",
+    "accept": "Acceptar",
+    "reject": "Rebutjar",
+    "policy": "Veure política de cookies"
+  },
+  "footer": {
+    "tagline": "Consultoria informàtica professional per a empreses que necessiten estabilitat, seguretat i continuïtat.",
+    "rights": "ARGOS-IT. Tots els drets reservats."
+  },
+  "mascots": {
+    "chicoName": "Chico",
+    "dumboName": "Dumbo",
+    "chicoAria": "Interactuar amb Chico, assistent de protecció",
+    "dumboAria": "Interactuar amb Dumbo, assistent d'acompanyament",
+    "messages": {
+      "idle": {
+        "chico": "Estic atent a la seguretat del teu entorn.",
+        "dumbo": "T'acompanyo perquè tot sigui més clar."
+      },
+      "formStart": { "chico": "Perfecte, revisem les dades clau.", "dumbo": "Comença amb calma, et guio." },
+      "formSuccess": { "chico": "Sol·licitud enviada.", "dumbo": "Genial, següent pas fet." },
+      "formError": { "chico": "Veig un detall pendent.", "dumbo": "Et marco el camp." },
+      "inactive": { "chico": "Em quedo en guàrdia.", "dumbo": "Soc aquí si em necessites." },
+      "cursorNearChico": { "chico": "Prioritzem el crític primer." },
+      "cursorNearDumbo": { "dumbo": "Si vols, ho ordenem pas a pas." }
+    },
+    "buttons": { "speak": "Veu" }
+  },
+  "services": {
+    "mantenimiento-informatico": { "title": "Manteniment informàtic per a empreses", "description": "Gestió preventiva i correctiva d'equips i sistemes." },
+    "soporte-tecnico": { "title": "Suport tècnic professional", "description": "Suport clar i ordenat per resoldre incidències." },
+    "ciberseguridad": { "title": "Ciberseguretat preventiva", "description": "Protecció per reduir riscos i assegurar la informació." },
+    "redes-sistemas": { "title": "Xarxes, sistemes i servidors", "description": "Configuració i millora de connectivitat empresarial." },
+    "backup-recuperacion": { "title": "Backup i recuperació", "description": "Còpies de seguretat i recuperació de dades crítiques." },
+    "automatizacion-ia": { "title": "Automatització amb IA", "description": "Automatització de processos repetitius amb criteri." },
+    "consultoria-digital": { "title": "Consultoria digital", "description": "Anàlisi tecnològica i full de ruta de millora." },
+    "desarrollo-web": { "title": "Desenvolupament i optimització web", "description": "Webs professionals orientades a confiança i conversió." }
+  }
+}

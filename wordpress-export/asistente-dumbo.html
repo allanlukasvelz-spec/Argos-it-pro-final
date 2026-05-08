@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dumbo, asistente de ayuda y seguimiento | ARGOS-IT</title>
+  <meta name="description" content="Dumbo es el asistente de acompañamiento de ARGOS-IT para ayuda rápida, seguimiento, formularios, incidencias simples y preparación de mensajes.">
+  <meta name="robots" content="index,follow">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body class="service-page assistant-page">
+  <header class="topbar">
+    <div class="wrap nav">
+      <a class="brand" href="./index.html" aria-label="ARGOS-IT inicio"><img src="./logo-argos-it.png" alt="ARGOS-IT Consultoría y Servicios Informáticos" class="argos-logo"></a>
+      <nav class="links"><a href="./index.html#servicios">Servicios</a><a href="./index.html#asistentes">Asistentes</a><a href="./contacto.html">Contacto</a></nav>
+      <a class="btn primary" href="#formulario">Pedir ayuda</a>
+    </div>
+  </header>
+  <main>
+    <section class="hero service-detail-hero">
+      <div class="wrap service-hero">
+        <div class="breadcrumb"><a href="./index.html">Inicio</a><span>/</span><span>Dumbo</span></div>
+        <span class="eyebrow">Asistente ARGOS</span>
+        <h1>Dumbo, ayuda rápida y seguimiento.</h1>
+        <p class="lead">Dumbo acompaña al usuario cuando necesita elegir formulario, explicar una incidencia simple, preparar un mensaje, solicitar seguimiento o pedir ayuda sin perder contexto.</p>
+        <div class="service-hero-actions"><a class="btn primary" href="#formulario">Pedir ayuda a Dumbo</a><a class="btn ghost" href="./contacto.html" target="_blank" rel="noopener">Ir a contacto</a></div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="wrap service-detail-grid">
+        <article class="service-panel">
+          <h2>En qué puede ayudarte</h2>
+          <ul class="service-list">
+            <li>Preparar mensajes claros para ARGOS-IT.</li>
+            <li>Orientar hacia contacto, web, WordPress, automatización o soporte.</li>
+            <li>Registrar contexto para seguimiento de solicitudes.</li>
+            <li>Explicar qué información conviene incluir en cada formulario.</li>
+          </ul>
+        <a class="detail-link" href="#formulario" target="_blank" rel="noopener">Ver detalle y formulario</a></article>
+        <aside class="service-panel service-summary">
+          <h2>Rutas recomendadas</h2>
+          <ul class="service-list">
+            <li><a href="./contacto.html" target="_blank" rel="noopener">Contacto general</a></li>
+            <li><a href="./servicios/web-wordpress.html" target="_blank" rel="noopener">Web, WordPress y presencia digital</a></li>
+            <li><a href="./servicios/automatizacion-ia.html" target="_blank" rel="noopener">Automatización con IA</a></li>
+            <li><a href="./servicios/mantenimiento-informatico.html" target="_blank" rel="noopener">Soporte y mantenimiento</a></li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+    <section class="section white">
+      <div class="wrap service-form-wrap">
+        <div>
+          <span class="kicker">Ayuda guiada</span>
+          <h2>Pedir ayuda a Dumbo</h2>
+          <p class="muted">Dumbo ayuda a preparar la solicitud y el seguimiento. No promete resultados garantizados ni ejecuta acciones críticas sin confirmación.</p>
+        </div>
+        <form id="formulario" class="form service-form" action="https://formspree.io/f/xpqooedl" method="POST">
+          <input type="hidden" name="_subject" value="Solicitud desde asistente Dumbo">
+          <input type="hidden" name="origen" value="asistente-argos">
+          <input type="hidden" name="asistente" value="dumbo">
+          <div class="grid2">
+            <label>Nombre y apellidos<input required name="nombre" placeholder="Tu nombre"></label>
+            <label>Empresa o actividad profesional<input name="empresa" placeholder="Empresa o actividad"></label>
+            <label>Email<input required type="email" name="email" placeholder="tu@email.com"></label>
+            <label>Teléfono<input name="telefono" placeholder="+34"></label>
+            <label>Tipo de ayuda<select name="tipo_ayuda"><option>Ayuda rápida</option><option>Seguimiento de solicitud</option><option>Elegir formulario</option><option>Incidencia simple</option><option>Preparar mensaje</option><option>Recordatorio</option></select></label>
+            <label>Canal preferido<select name="canal_preferido"><option>Email</option><option>Teléfono</option><option>WhatsApp si está disponible</option></select></label>
+            <label>Servicio relacionado<select name="servicio_relacionado"><option>No lo sé todavía</option><option>Web, WordPress y presencia digital</option><option>Automatización con IA</option><option>Mantenimiento informático para empresas</option><option>Consultoría IT premium</option><option>Seguridad informática y protección digital</option></select></label>
+            <label>Urgencia<select name="urgencia"><option>Normal</option><option>Alta</option><option>Crítica</option></select></label>
+          </div>
+          <label style="margin-top:16px">Mensaje o contexto<textarea required name="descripcion" rows="5" placeholder="Explica qué necesitas, qué has intentado y qué respuesta esperas."></textarea></label>
+          <label class="consent" style="margin-top:16px"><input required type="checkbox" name="privacidad">Acepto la política de privacidad y autorizo a ARGOS-IT a contactar conmigo.</label>
+          <button class="btn primary" style="width:100%;margin-top:18px" type="submit">Enviar ayuda a ARGOS-IT</button>
+        </form>
+      </div>
+    </section>
+  </main>
+  <footer class="footer"><div class="wrap footer-grid"><div><img src="./logo-argos-it.png" alt="ARGOS-IT Consultoría y Servicios Informáticos" class="argos-logo-footer"><p>Dumbo acompaña, ordena solicitudes y facilita el seguimiento.</p></div><a href="./index.html">Inicio</a><a href="./contacto.html">Contacto</a><div><a href="./aviso-legal.html">Aviso legal</a><br><a href="./privacidad.html">Privacidad</a><br><a href="./cookies.html">Cookies</a></div></div></footer>
+  <script src="./script.js"></script>
+</body>
+</html>

@@ -1,0 +1,512 @@
+{
+  "meta": {
+    "defaultTitle": "ARGOS-IT | Consultoría informática para empresas",
+    "defaultDescription": "Consultoría informática, mantenimiento, soporte técnico, ciberseguridad, automatización y soluciones digitales para empresas.",
+    "keywords": "consultoría informática, mantenimiento informático, soporte técnico empresas, ciberseguridad, redes, backup, automatización IA, Sabadell, Barcelona",
+    "author": "ARGOS-IT",
+    "homeTitle": "ARGOS-IT | La informática que funciona",
+    "homeDescription": "Soporte técnico, mantenimiento, seguridad, automatización y consultoría digital con enfoque empresarial.",
+    "servicesTitle": "Servicios IT | ARGOS-IT",
+    "servicesDescription": "Servicios profesionales de mantenimiento, soporte, ciberseguridad, redes, backup, IA y desarrollo web empresarial.",
+    "methodTitle": "Método ARGOS-IT | Trabajo técnico ordenado",
+    "methodDescription": "Diagnóstico, plan, implementación y seguimiento para una infraestructura estable y segura.",
+    "aboutTitle": "Sobre ARGOS-IT | Consultoría tecnológica B2B",
+    "aboutDescription": "Equipo técnico orientado a continuidad operativa, seguridad y crecimiento digital empresarial.",
+    "contactTitle": "Contacto ARGOS-IT | Solicitar consulta técnica",
+    "contactDescription": "Cuéntanos tu necesidad y te responderemos con una propuesta clara y accionable."
+  },
+  "language": {
+    "label": "Idioma",
+    "es": "ES",
+    "en": "EN",
+    "ca": "CA",
+    "fr": "FR",
+    "de": "DE",
+    "it": "IT",
+    "pt": "PT"
+  },
+  "nav": {
+    "home": "Inicio",
+    "services": "Servicios",
+    "method": "Método",
+    "about": "Sobre ARGOS-IT",
+    "contact": "Contacto",
+    "menu": "Menú"
+  },
+  "actions": {
+    "requestConsultation": "Solicitar consulta",
+    "viewServices": "Ver servicios",
+    "viewDetail": "Ver detalle",
+    "viewService": "Ver servicio",
+    "viewMethod": "Ver método",
+    "backHome": "Volver a inicio",
+    "backServices": "Volver a servicios"
+  },
+  "home": {
+    "eyebrow": "Consultoría informática B2B",
+    "title": "La informática que funciona. Sin ruido. Sin preocupaciones.",
+    "subtitle": "Cuidamos el entorno tecnológico de tu empresa para que sea estable, seguro y predecible. Soporte, mantenimiento, seguridad, automatización y consultoría digital con enfoque profesional.",
+    "trustTitle": "Bloques de confianza",
+    "trustItems": [
+      "Respuesta clara y profesional",
+      "Prevención antes que improvisación",
+      "Tecnología alineada con el negocio",
+      "Servicio enfocado a empresas"
+    ],
+    "servicesEyebrow": "Servicios ARGOS-IT",
+    "servicesTitle": "Servicios profesionales para continuidad, seguridad y crecimiento.",
+    "servicesSubtitle": "Diseñados para empresas, autónomos, despachos y equipos que necesitan tecnología confiable y soporte real."
+  },
+  "servicesPage": {
+    "title": "Servicios ARGOS-IT",
+    "subtitle": "Consultoría informática, mantenimiento IT, soporte técnico, ciberseguridad, redes, backup, automatización IA y desarrollo web empresarial."
+  },
+  "serviceDetail": {
+    "includesTitle": "Incluye",
+    "problemTitle": "Problema que resuelve",
+    "benefitsTitle": "Beneficios clave",
+    "processTitle": "Cómo trabajamos",
+    "audienceTitle": "Ideal para",
+    "ctaTitle": "¿Te encaja este servicio?",
+    "ctaSubtitle": "Cuéntanos tu situación actual y te responderemos con un plan técnico realista, priorizado y accionable."
+  },
+  "method": {
+    "title": "Método ARGOS-IT",
+    "subtitle": "Trabajamos con un método claro para que cada mejora tecnológica tenga impacto real y sea sostenible.",
+    "steps": [
+      {
+        "id": "01",
+        "title": "Diagnóstico",
+        "description": "Revisión técnica inicial de entorno, riesgos, procesos y prioridades de negocio."
+      },
+      {
+        "id": "02",
+        "title": "Plan de mejora",
+        "description": "Propuesta priorizada con acciones realistas, plazos y responsables."
+      },
+      {
+        "id": "03",
+        "title": "Implementación",
+        "description": "Ejecución técnica ordenada, documentada y orientada a continuidad."
+      },
+      {
+        "id": "04",
+        "title": "Seguimiento",
+        "description": "Control de resultados, ajustes y prevención continua."
+      }
+    ]
+  },
+  "about": {
+    "title": "Sobre ARGOS-IT",
+    "paragraphs": [
+      "ARGOS-IT es una firma de consultoría informática orientada a empresas, autónomos y equipos que necesitan estabilidad operativa, seguridad y una hoja de ruta tecnológica clara.",
+      "Nuestro enfoque combina mantenimiento, soporte técnico, ciberseguridad, redes, backup, automatización con IA y desarrollo web, siempre con criterio profesional, documentación y continuidad."
+    ],
+    "valuesTitle": "Cómo trabajamos",
+    "values": [
+      "Diagnóstico honesto antes de ejecutar.",
+      "Prioridades de negocio por delante de modas técnicas.",
+      "Comunicación clara con responsables no técnicos.",
+      "Prevención y mejora continua para evitar incidencias repetidas."
+    ]
+  },
+  "contact": {
+    "title": "Solicitar consulta técnica",
+    "subtitle": "Cuéntanos el estado actual de tu infraestructura o proyecto y te responderemos con una propuesta clara, priorizada y orientada a resultados.",
+    "intro": "Trabajamos con empresas internacionales en mantenimiento IT, soporte técnico, seguridad, automatización con IA y desarrollo web empresarial.",
+    "cards": {
+      "emailTitle": "Email",
+      "phoneTitle": "Teléfono",
+      "coverageTitle": "Cobertura",
+      "coverageLines": [
+        "Servicio internacional",
+        "Atención remota y presencial (según proyecto)"
+      ]
+    },
+    "form": {
+      "title": "Formulario de contacto",
+      "name": "Nombre",
+      "email": "Email",
+      "phone": "Teléfono",
+      "company": "Empresa o proyecto",
+      "service": "Servicio de interés",
+      "message": "Mensaje",
+      "privacy": "Acepto la política de privacidad y autorizo la respuesta comercial a esta consulta.",
+      "submit": "Solicitar consulta",
+      "requiredHint": "* Campos obligatorios. Respuesta inicial en menos de 24 horas laborables.",
+      "namePlaceholder": "Tu nombre completo",
+      "emailPlaceholder": "tu@email.com",
+      "phonePlaceholder": "+34 600 000 000",
+      "companyPlaceholder": "Nombre de tu empresa o proyecto",
+      "messagePlaceholder": "Describe tu necesidad, contexto y prioridad.",
+      "servicePlaceholder": "Selecciona un servicio",
+      "success": "Solicitud enviada correctamente. Te responderemos en breve.",
+      "error": "No se pudo enviar el formulario. Revisa los campos e inténtalo de nuevo.",
+      "errors": {
+        "required": "Este campo es obligatorio.",
+        "email": "Introduce un email válido.",
+        "phone": "Introduce un teléfono válido.",
+        "privacy": "Debes aceptar la política de privacidad.",
+        "service": "Selecciona un servicio."
+      }
+    }
+  },
+  "legal": {
+    "aviso": {
+      "title": "Aviso legal",
+      "intro": "Información legal y condiciones de uso del sitio web de ARGOS-IT.",
+      "sections": [
+        {
+          "title": "Titularidad",
+          "body": "Titular: ARGOS-IT. Domicilio: Barcelona, España. Contacto: info@argos-it.com."
+        },
+        {
+          "title": "Objeto del sitio",
+          "body": "Este sitio ofrece información sobre servicios profesionales de consultoría informática, mantenimiento, soporte, ciberseguridad, redes, backup, automatización y desarrollo web."
+        },
+        {
+          "title": "Propiedad intelectual",
+          "body": "Los contenidos del sitio son titularidad de ARGOS-IT o se usan con autorización. Queda prohibida su reproducción total o parcial sin consentimiento."
+        },
+        {
+          "title": "Responsabilidad",
+          "body": "ARGOS-IT no se hace responsable de daños derivados del uso del sitio, interrupciones de servicio o enlaces de terceros fuera de su control."
+        }
+      ]
+    },
+    "privacy": {
+      "title": "Política de privacidad",
+      "intro": "Cómo tratamos tus datos personales cuando navegas o contactas con ARGOS-IT.",
+      "sections": [
+        {
+          "title": "Datos que recogemos",
+          "body": "Recogemos datos de contacto y contexto profesional facilitados voluntariamente en formularios."
+        },
+        {
+          "title": "Finalidad",
+          "body": "Usamos tus datos para responder consultas, preparar propuestas de servicio y mantener la relación comercial."
+        },
+        {
+          "title": "Base jurídica",
+          "body": "Tratamos los datos por consentimiento, ejecución de medidas precontractuales y cumplimiento de obligaciones legales."
+        },
+        {
+          "title": "Derechos",
+          "body": "Puedes solicitar acceso, rectificación, supresión, oposición y limitación escribiendo a info@argos-it.com."
+        }
+      ]
+    },
+    "cookies": {
+      "title": "Política de cookies",
+      "intro": "Uso de cookies y tecnologías similares en el sitio de ARGOS-IT.",
+      "sections": [
+        {
+          "title": "Cookies técnicas",
+          "body": "Necesarias para funcionamiento básico, seguridad y preferencias de navegación."
+        },
+        {
+          "title": "Cookies analíticas",
+          "body": "Nos ayudan a entender el uso del sitio para mejorar experiencia, contenidos y rendimiento."
+        },
+        {
+          "title": "Gestión de preferencias",
+          "body": "Puedes aceptar o rechazar cookies no esenciales desde el banner y cambiar tu decisión más adelante."
+        },
+        {
+          "title": "Más información",
+          "body": "Para dudas sobre cookies o privacidad, contacta con info@argos-it.com."
+        }
+      ]
+    }
+  },
+  "cookiesBanner": {
+    "message": "Usamos cookies técnicas y analíticas para mejorar tu experiencia. Puedes aceptar o rechazar las no esenciales.",
+    "accept": "Aceptar",
+    "reject": "Rechazar",
+    "policy": "Ver política de cookies"
+  },
+  "footer": {
+    "tagline": "Consultoría informática profesional para empresas, autónomos y equipos que necesitan estabilidad, seguridad y continuidad.",
+    "rights": "ARGOS-IT. Todos los derechos reservados."
+  },
+  "mascots": {
+    "chicoName": "Chico",
+    "dumboName": "Dumbo",
+    "chicoAria": "Interactuar con Chico, asistente de protección",
+    "dumboAria": "Interactuar con Dumbo, asistente de acompañamiento",
+    "messages": {
+      "idle": {
+        "chico": "Estoy atento a la seguridad de tu entorno.",
+        "dumbo": "Te acompaño para que todo sea más claro."
+      },
+      "formStart": {
+        "chico": "Perfecto, revisemos juntos los datos clave.",
+        "dumbo": "Empieza con calma, yo te voy guiando."
+      },
+      "formSuccess": {
+        "chico": "Solicitud enviada. Seguimos protegidos.",
+        "dumbo": "Genial. Ya hemos dado el siguiente paso."
+      },
+      "formError": {
+        "chico": "Veo un dato pendiente. Lo corregimos rápido.",
+        "dumbo": "Te señalo el campo para que no pierdas tiempo."
+      },
+      "inactive": {
+        "chico": "Me quedo en guardia, por si me necesitas.",
+        "dumbo": "Aquí sigo, listo para ayudarte."
+      },
+      "cursorNearChico": {
+        "chico": "Estoy contigo. Revisemos lo crítico primero."
+      },
+      "cursorNearDumbo": {
+        "dumbo": "Si quieres, ordenamos la consulta paso a paso."
+      }
+    },
+    "buttons": {
+      "speak": "Voz"
+    }
+  },
+  "services": {
+    "mantenimiento-informatico": {
+      "title": "Mantenimiento informático para empresas",
+      "description": "Gestión preventiva y correctiva de equipos, sistemas y herramientas para que tu empresa trabaje sin interrupciones innecesarias.",
+      "problem": "Evita paradas por fallos repetidos, equipos desactualizados y falta de seguimiento técnico.",
+      "includes": [
+        "Revisión de equipos",
+        "Mantenimiento preventivo",
+        "Resolución de incidencias",
+        "Optimización de sistemas",
+        "Actualizaciones",
+        "Soporte remoto",
+        "Diagnóstico técnico"
+      ],
+      "benefits": [
+        "Menos interrupciones en la operativa diaria.",
+        "Mayor vida útil de equipos y sistemas.",
+        "Respuesta técnica más rápida y ordenada."
+      ],
+      "process": [
+        "Auditoría inicial del entorno.",
+        "Plan de mantenimiento priorizado.",
+        "Ejecución técnica y documentación.",
+        "Seguimiento continuo y mejora."
+      ],
+      "audience": [
+        "Pymes con infraestructura interna.",
+        "Despachos y oficinas con dependencia digital.",
+        "Empresas sin departamento IT interno."
+      ]
+    },
+    "soporte-tecnico": {
+      "title": "Soporte técnico profesional",
+      "description": "Soporte claro, rápido y organizado para resolver problemas técnicos sin generar dependencia ni caos.",
+      "problem": "Resuelve incidencias sin perder tiempo en cadenas de mensajes desordenadas ni soluciones improvisadas.",
+      "includes": [
+        "Soporte remoto",
+        "Soporte presencial si aplica",
+        "Ayuda con software",
+        "Configuración de dispositivos",
+        "Resolución de incidencias",
+        "Seguimiento del caso",
+        "Documentación básica"
+      ],
+      "benefits": [
+        "Incidencias cerradas con trazabilidad.",
+        "Usuarios más autónomos y productivos.",
+        "Menor impacto de errores recurrentes."
+      ],
+      "process": [
+        "Recepción y clasificación de incidencia.",
+        "Diagnóstico técnico y priorización.",
+        "Resolución y validación con usuario.",
+        "Registro de solución y prevención."
+      ],
+      "audience": [
+        "Empresas con equipos distribuidos.",
+        "Negocios con software crítico diario.",
+        "Organizaciones que requieren SLA claro."
+      ]
+    },
+    "ciberseguridad": {
+      "title": "Ciberseguridad preventiva",
+      "description": "Protección básica y avanzada para reducir riesgos, mejorar accesos y proteger la información de tu empresa.",
+      "problem": "Reduce exposición a accesos indebidos, malware, pérdida de datos y configuraciones inseguras.",
+      "includes": [
+        "Revisión de contraseñas",
+        "Configuración segura",
+        "Antivirus y protección endpoint",
+        "Copias de seguridad",
+        "Control de accesos",
+        "Revisión de vulnerabilidades básicas",
+        "Recomendaciones de seguridad"
+      ],
+      "benefits": [
+        "Riesgo operativo más controlado.",
+        "Mejor protección de datos y accesos.",
+        "Mayor tranquilidad para dirección y equipos."
+      ],
+      "process": [
+        "Evaluación de superficie de riesgo.",
+        "Plan de refuerzo por prioridad.",
+        "Aplicación de controles y hardening.",
+        "Monitorización y revisiones periódicas."
+      ],
+      "audience": [
+        "Empresas con información sensible.",
+        "Negocios con trabajo remoto o híbrido.",
+        "Equipos con cumplimiento normativo."
+      ]
+    },
+    "redes-sistemas": {
+      "title": "Redes, sistemas y servidores",
+      "description": "Configuración, revisión y mejora de redes, sistemas internos, servidores y conectividad empresarial.",
+      "problem": "Evita cuellos de botella, cortes de red y configuraciones inseguras que frenan la productividad.",
+      "includes": [
+        "Redes WiFi profesionales",
+        "Routers",
+        "Switches",
+        "Servidores",
+        "Permisos",
+        "Carpetas compartidas",
+        "Impresoras en red",
+        "Diagnóstico de conectividad"
+      ],
+      "benefits": [
+        "Conectividad estable para todo el equipo.",
+        "Mejor rendimiento de red y sistemas.",
+        "Infraestructura más segura y escalable."
+      ],
+      "process": [
+        "Mapa técnico de red y sistemas.",
+        "Detección de puntos críticos.",
+        "Reconfiguración y optimización.",
+        "Pruebas, documentación y continuidad."
+      ],
+      "audience": [
+        "Oficinas con múltiples puestos y sedes.",
+        "Empresas con servidores internos.",
+        "Negocios con problemas de red recurrentes."
+      ]
+    },
+    "backup-recuperacion": {
+      "title": "Backup y recuperación",
+      "description": "Sistemas de copia de seguridad y recuperación para proteger documentos, archivos críticos y continuidad del negocio.",
+      "problem": "Evita pérdidas definitivas de información y reduce tiempos de recuperación ante incidentes.",
+      "includes": [
+        "Estrategia de backup",
+        "Copias locales",
+        "Copias en nube",
+        "Recuperación de archivos",
+        "Revisión de riesgos",
+        "Automatización de copias",
+        "Verificación periódica"
+      ],
+      "benefits": [
+        "Continuidad de negocio ante imprevistos.",
+        "Recuperación rápida de información crítica.",
+        "Control real del estado de copias."
+      ],
+      "process": [
+        "Inventario de datos críticos.",
+        "Diseño de política de copias.",
+        "Implementación y automatización.",
+        "Pruebas regulares de recuperación."
+      ],
+      "audience": [
+        "Empresas con documentación crítica.",
+        "Negocios con requisitos de continuidad.",
+        "Equipos que no validan sus copias actuales."
+      ]
+    },
+    "automatizacion-ia": {
+      "title": "Automatización con IA",
+      "description": "Automatizamos procesos repetitivos con herramientas digitales e inteligencia artificial para ahorrar tiempo y mejorar la eficiencia.",
+      "problem": "Reduce tareas manuales repetitivas que consumen tiempo y elevan el riesgo de errores operativos.",
+      "includes": [
+        "Automatización de tareas",
+        "Formularios inteligentes",
+        "Flujos de trabajo",
+        "Integración con herramientas",
+        "Asistentes internos",
+        "Optimización documental",
+        "Procesos administrativos"
+      ],
+      "benefits": [
+        "Más tiempo para tareas de alto valor.",
+        "Menos errores en procesos repetitivos.",
+        "Mejor trazabilidad del trabajo interno."
+      ],
+      "process": [
+        "Análisis de procesos actuales.",
+        "Selección de automatizaciones viables.",
+        "Implementación incremental y pruebas.",
+        "Medición de impacto y ajustes."
+      ],
+      "audience": [
+        "Equipos administrativos y operativos.",
+        "Empresas con alto volumen de tareas repetidas.",
+        "Negocios que quieren escalar sin sobrecargar plantilla."
+      ]
+    },
+    "consultoria-digital": {
+      "title": "Consultoría digital",
+      "description": "Analizamos el estado tecnológico de tu empresa y proponemos mejoras realistas, útiles y alineadas con tu negocio.",
+      "problem": "Aporta criterio técnico para decidir inversiones y prioridades sin improvisar ni sobredimensionar soluciones.",
+      "includes": [
+        "Auditoría tecnológica",
+        "Análisis de procesos",
+        "Recomendaciones",
+        "Plan de mejora",
+        "Priorización de inversiones",
+        "Estrategia digital",
+        "Acompañamiento"
+      ],
+      "benefits": [
+        "Decisiones tecnológicas con contexto.",
+        "Plan de acción realista y ejecutable.",
+        "Mejor retorno de inversión en tecnología."
+      ],
+      "process": [
+        "Entrevistas y diagnóstico inicial.",
+        "Evaluación técnica y de procesos.",
+        "Roadmap por impacto y urgencia.",
+        "Acompañamiento en ejecución."
+      ],
+      "audience": [
+        "Dirección de pymes en crecimiento.",
+        "Empresas en transición digital.",
+        "Negocios sin liderazgo tecnológico interno."
+      ]
+    },
+    "desarrollo-web": {
+      "title": "Desarrollo y optimización web",
+      "description": "Creamos y optimizamos páginas web profesionales enfocadas en confianza, conversión y presencia digital.",
+      "problem": "Mejora webs lentas, desactualizadas o poco orientadas a negocio que no convierten visitas en oportunidades.",
+      "includes": [
+        "Diseño web",
+        "Landing pages",
+        "Formularios",
+        "SEO básico",
+        "Velocidad",
+        "Estructura comercial",
+        "Integración con herramientas"
+      ],
+      "benefits": [
+        "Presencia digital más sólida y profesional.",
+        "Mayor conversión de tráfico en contactos.",
+        "Base técnica preparada para crecer."
+      ],
+      "process": [
+        "Auditoría de web y objetivos.",
+        "Diseño de estructura y mensajes.",
+        "Desarrollo y optimización técnica.",
+        "Medición de resultados y mejora continua."
+      ],
+      "audience": [
+        "Empresas que necesitan captar más leads.",
+        "Negocios con web obsoleta o lenta.",
+        "Equipos comerciales que dependen del canal digital."
+      ]
+    }
+  }
+}

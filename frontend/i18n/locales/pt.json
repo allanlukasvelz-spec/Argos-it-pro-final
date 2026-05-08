@@ -1,0 +1,163 @@
+{
+  "language": {
+    "label": "Idioma",
+    "es": "ES",
+    "en": "EN",
+    "ca": "CA",
+    "fr": "FR",
+    "de": "DE",
+    "it": "IT",
+    "pt": "PT"
+  },
+  "nav": {
+    "home": "Início",
+    "services": "Serviços",
+    "method": "Método",
+    "about": "Sobre a ARGOS-IT",
+    "contact": "Contacto",
+    "menu": "Menu"
+  },
+  "actions": {
+    "requestConsultation": "Solicitar consulta",
+    "viewServices": "Ver serviços",
+    "viewDetail": "Ver detalhe",
+    "viewService": "Ver serviço",
+    "viewMethod": "Ver método",
+    "backHome": "Voltar ao início",
+    "backServices": "Voltar aos serviços"
+  },
+  "home": {
+    "eyebrow": "Consultoria informática B2B",
+    "title": "A informática que funciona. Sem ruído. Sem preocupações.",
+    "subtitle": "Mantemos o teu ambiente tecnológico estável, seguro e previsível.",
+    "trustTitle": "Pilares de confiança",
+    "trustItems": [
+      "Resposta clara e profissional",
+      "Prevenção antes da improvisação",
+      "Tecnologia alinhada com o negócio",
+      "Serviço focado em empresas"
+    ],
+    "servicesEyebrow": "Serviços ARGOS-IT",
+    "servicesTitle": "Serviços profissionais para continuidade, segurança e crescimento.",
+    "servicesSubtitle": "Pensados para equipas que precisam de tecnologia fiável e suporte real."
+  },
+  "servicesPage": {
+    "title": "Serviços ARGOS-IT",
+    "subtitle": "Consultoria IT, manutenção, suporte técnico, cibersegurança, redes, backup, automação IA e desenvolvimento web."
+  },
+  "serviceDetail": {
+    "includesTitle": "Inclui",
+    "problemTitle": "Problema que resolve",
+    "benefitsTitle": "Benefícios principais",
+    "processTitle": "Como trabalhamos",
+    "audienceTitle": "Ideal para",
+    "ctaTitle": "Este serviço encaixa no teu negócio?",
+    "ctaSubtitle": "Partilha o teu contexto e responderemos com um plano técnico realista e priorizado."
+  },
+  "method": {
+    "title": "Método ARGOS-IT",
+    "subtitle": "Estrutura clara para melhorias técnicas com impacto real.",
+    "steps": [
+      { "id": "01", "title": "Diagnóstico", "description": "Revisão inicial de sistemas, riscos e prioridades." },
+      { "id": "02", "title": "Plano de melhoria", "description": "Ações priorizadas e realistas." },
+      { "id": "03", "title": "Implementação", "description": "Execução organizada com documentação." },
+      { "id": "04", "title": "Acompanhamento", "description": "Controlo de resultados e prevenção contínua." }
+    ]
+  },
+  "about": {
+    "title": "Sobre a ARGOS-IT",
+    "paragraphs": [
+      "A ARGOS-IT apoia empresas que precisam de estabilidade operacional, segurança e uma rota tecnológica clara.",
+      "Combinamos manutenção, suporte técnico, cibersegurança, redes, backup, automação com IA e desenvolvimento web."
+    ],
+    "valuesTitle": "Como trabalhamos",
+    "values": [
+      "Diagnóstico honesto antes de executar.",
+      "Prioridades de negócio acima de modas técnicas.",
+      "Comunicação clara com equipas não técnicas.",
+      "Prevenção e melhoria contínua."
+    ]
+  },
+  "contact": {
+    "title": "Solicitar consulta técnica",
+    "subtitle": "Explica o teu contexto e responderemos com uma proposta clara e priorizada.",
+    "intro": "Trabalhamos com empresas internacionais em manutenção IT, suporte, segurança, IA e projetos web.",
+    "cards": {
+      "emailTitle": "Email",
+      "phoneTitle": "Telefone",
+      "coverageTitle": "Cobertura",
+      "coverageLines": [
+        "Serviço internacional",
+        "Atendimento remoto e presencial conforme projeto"
+      ]
+    },
+    "form": {
+      "title": "Formulário de contacto",
+      "name": "Nome",
+      "email": "Email",
+      "phone": "Telefone",
+      "company": "Empresa ou projeto",
+      "service": "Serviço de interesse",
+      "message": "Mensagem",
+      "privacy": "Aceito a política de privacidade e autorizo resposta comercial.",
+      "submit": "Solicitar consulta",
+      "requiredHint": "* Campos obrigatórios. Resposta inicial em menos de 24 horas úteis.",
+      "namePlaceholder": "Nome completo",
+      "emailPlaceholder": "teu@email.com",
+      "phonePlaceholder": "+351 900 000 000",
+      "companyPlaceholder": "Nome da empresa ou projeto",
+      "messagePlaceholder": "Descreve necessidade, contexto e prioridade.",
+      "servicePlaceholder": "Seleciona um serviço",
+      "success": "Pedido enviado com sucesso.",
+      "error": "Não foi possível enviar o formulário. Revê os campos.",
+      "errors": {
+        "required": "Este campo é obrigatório.",
+        "email": "Introduce um email válido.",
+        "phone": "Introduce um telefone válido.",
+        "privacy": "Deves aceitar a política de privacidade.",
+        "service": "Seleciona um serviço."
+      }
+    }
+  },
+  "legal": {
+    "aviso": { "title": "Aviso legal", "intro": "Informação legal e condições de utilização do site ARGOS-IT." },
+    "privacy": { "title": "Política de privacidade", "intro": "Como tratamos dados pessoais." },
+    "cookies": { "title": "Política de cookies", "intro": "Uso de cookies e tecnologias semelhantes." }
+  },
+  "cookiesBanner": {
+    "message": "Usamos cookies técnicas e analíticas para melhorar a experiência.",
+    "accept": "Aceitar",
+    "reject": "Rejeitar",
+    "policy": "Ver política de cookies"
+  },
+  "footer": {
+    "tagline": "Consultoria informática profissional para empresas que precisam de estabilidade, segurança e continuidade.",
+    "rights": "ARGOS-IT. Todos os direitos reservados."
+  },
+  "mascots": {
+    "chicoName": "Chico",
+    "dumboName": "Dumbo",
+    "chicoAria": "Interagir com Chico, assistente de proteção",
+    "dumboAria": "Interagir com Dumbo, assistente de acompanhamento",
+    "messages": {
+      "idle": { "chico": "Estou atento à segurança do teu ambiente.", "dumbo": "Estou aqui para tornar tudo mais claro." },
+      "formStart": { "chico": "Perfeito, vamos rever os dados essenciais.", "dumbo": "Avança com calma, eu guio-te." },
+      "formSuccess": { "chico": "Pedido enviado.", "dumbo": "Excelente, próximo passo concluído." },
+      "formError": { "chico": "Há um detalhe pendente.", "dumbo": "Vou indicar o campo." },
+      "inactive": { "chico": "Fico de guarda.", "dumbo": "Estou aqui se precisares." },
+      "cursorNearChico": { "chico": "Vamos priorizar o que é crítico." },
+      "cursorNearDumbo": { "dumbo": "Se quiseres, organizamos passo a passo." }
+    },
+    "buttons": { "speak": "Voz" }
+  },
+  "services": {
+    "mantenimiento-informatico": { "title": "Manutenção informática para empresas", "description": "Gestão preventiva e corretiva de equipamentos e sistemas." },
+    "soporte-tecnico": { "title": "Suporte técnico profissional", "description": "Suporte claro e organizado para resolver incidentes técnicos." },
+    "ciberseguridad": { "title": "Cibersegurança preventiva", "description": "Proteção para reduzir riscos e proteger informação empresarial." },
+    "redes-sistemas": { "title": "Redes, sistemas e servidores", "description": "Configuração e melhoria de conectividade empresarial." },
+    "backup-recuperacion": { "title": "Backup e recuperação", "description": "Sistemas de cópia e recuperação de dados críticos." },
+    "automatizacion-ia": { "title": "Automação com IA", "description": "Automação de processos repetitivos para aumentar eficiência." },
+    "consultoria-digital": { "title": "Consultoria digital", "description": "Análise tecnológica e plano realista de melhoria." },
+    "desarrollo-web": { "title": "Desenvolvimento e otimização web", "description": "Sites profissionais focados em confiança e conversão." }
+  }
+}

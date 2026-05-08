@@ -1,0 +1,227 @@
+{
+  "meta": {
+    "defaultTitle": "ARGOS-IT | IT consulting for businesses",
+    "defaultDescription": "IT consulting, maintenance, technical support, cybersecurity, automation and digital solutions for businesses.",
+    "homeTitle": "ARGOS-IT | IT that simply works",
+    "homeDescription": "Support, maintenance, security, automation and digital consulting for business teams.",
+    "servicesTitle": "IT Services | ARGOS-IT",
+    "servicesDescription": "Professional IT services for business continuity, security and growth.",
+    "methodTitle": "ARGOS-IT Method | Structured technical work",
+    "methodDescription": "Diagnosis, plan, implementation and follow-up for stable infrastructure.",
+    "aboutTitle": "About ARGOS-IT | B2B technology consulting",
+    "aboutDescription": "Technical team focused on operational continuity and secure growth.",
+    "contactTitle": "Contact ARGOS-IT | Request a technical consultation",
+    "contactDescription": "Tell us your needs and we will reply with a clear, actionable proposal."
+  },
+  "language": {
+    "label": "Language",
+    "es": "ES",
+    "en": "EN",
+    "ca": "CA",
+    "fr": "FR",
+    "de": "DE",
+    "it": "IT",
+    "pt": "PT"
+  },
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "method": "Method",
+    "about": "About ARGOS-IT",
+    "contact": "Contact",
+    "menu": "Menu"
+  },
+  "actions": {
+    "requestConsultation": "Request consultation",
+    "viewServices": "View services",
+    "viewDetail": "View details",
+    "viewService": "View service",
+    "viewMethod": "View method",
+    "backHome": "Back to home",
+    "backServices": "Back to services"
+  },
+  "home": {
+    "eyebrow": "B2B IT consulting",
+    "title": "IT that works. No noise. No worries.",
+    "subtitle": "We keep your technology stack stable, secure and predictable. Support, maintenance, security, automation and digital consulting with a business focus.",
+    "trustTitle": "Trust pillars",
+    "trustItems": [
+      "Clear and professional communication",
+      "Prevention before improvisation",
+      "Technology aligned with business goals",
+      "Service designed for companies"
+    ],
+    "servicesEyebrow": "ARGOS-IT services",
+    "servicesTitle": "Professional services for continuity, security and growth.",
+    "servicesSubtitle": "Built for companies and teams that need reliable technology and real support."
+  },
+  "servicesPage": {
+    "title": "ARGOS-IT Services",
+    "subtitle": "IT consulting, maintenance, support, cybersecurity, networks, backup, AI automation and business web development."
+  },
+  "serviceDetail": {
+    "includesTitle": "What is included",
+    "problemTitle": "Problem this solves",
+    "benefitsTitle": "Key benefits",
+    "processTitle": "How we work",
+    "audienceTitle": "Best fit",
+    "ctaTitle": "Does this service fit your needs?",
+    "ctaSubtitle": "Share your current situation and we will reply with a realistic, prioritized technical plan."
+  },
+  "method": {
+    "title": "ARGOS-IT Method",
+    "subtitle": "A clear framework so every technical improvement has real and sustainable impact.",
+    "steps": [
+      { "id": "01", "title": "Diagnosis", "description": "Initial review of systems, risks, processes and business priorities." },
+      { "id": "02", "title": "Improvement plan", "description": "Prioritized proposal with realistic actions, timelines and ownership." },
+      { "id": "03", "title": "Implementation", "description": "Structured execution, documentation and continuity-oriented delivery." },
+      { "id": "04", "title": "Follow-up", "description": "Result tracking, adjustments and continuous prevention." }
+    ]
+  },
+  "about": {
+    "title": "About ARGOS-IT",
+    "paragraphs": [
+      "ARGOS-IT is an IT consulting firm focused on companies and teams that need operational stability, security and a clear technology roadmap.",
+      "Our approach combines maintenance, technical support, cybersecurity, networks, backup, AI automation and web development with professional criteria and continuity."
+    ],
+    "valuesTitle": "How we work",
+    "values": [
+      "Honest diagnosis before execution.",
+      "Business priorities over technical hype.",
+      "Clear communication for non-technical stakeholders.",
+      "Prevention and continuous improvement."
+    ]
+  },
+  "contact": {
+    "title": "Request a technical consultation",
+    "subtitle": "Tell us about your current infrastructure or project and we will reply with a clear, prioritized proposal.",
+    "intro": "We work with international companies in IT maintenance, support, security, AI automation and business web projects.",
+    "cards": {
+      "emailTitle": "Email",
+      "phoneTitle": "Phone",
+      "coverageTitle": "Coverage",
+      "coverageLines": [
+        "International service",
+        "Remote and on-site support (depending on project)"
+      ]
+    },
+    "form": {
+      "title": "Contact form",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "company": "Company or project",
+      "service": "Service of interest",
+      "message": "Message",
+      "privacy": "I accept the privacy policy and authorize a commercial response to this request.",
+      "submit": "Request consultation",
+      "requiredHint": "* Required fields. Initial response within one business day.",
+      "namePlaceholder": "Your full name",
+      "emailPlaceholder": "you@email.com",
+      "phonePlaceholder": "+44 7000 000000",
+      "companyPlaceholder": "Your company or project",
+      "messagePlaceholder": "Describe your context, needs and priority.",
+      "servicePlaceholder": "Select a service",
+      "success": "Request sent successfully. We will contact you soon.",
+      "error": "The form could not be sent. Please check the fields and try again.",
+      "errors": {
+        "required": "This field is required.",
+        "email": "Enter a valid email.",
+        "phone": "Enter a valid phone number.",
+        "privacy": "You must accept the privacy policy.",
+        "service": "Please select a service."
+      }
+    }
+  },
+  "legal": {
+    "aviso": {
+      "title": "Legal notice",
+      "intro": "Legal information and terms of use for the ARGOS-IT website."
+    },
+    "privacy": {
+      "title": "Privacy policy",
+      "intro": "How we process your personal data when you browse or contact ARGOS-IT."
+    },
+    "cookies": {
+      "title": "Cookie policy",
+      "intro": "Use of cookies and similar technologies on the ARGOS-IT site."
+    }
+  },
+  "cookiesBanner": {
+    "message": "We use technical and analytics cookies to improve your experience. You can accept or reject non-essential cookies.",
+    "accept": "Accept",
+    "reject": "Reject",
+    "policy": "View cookie policy"
+  },
+  "footer": {
+    "tagline": "Professional IT consulting for companies and teams that need stability, security and continuity.",
+    "rights": "ARGOS-IT. All rights reserved."
+  },
+  "mascots": {
+    "chicoName": "Chico",
+    "dumboName": "Dumbo",
+    "chicoAria": "Interact with Chico, protection assistant",
+    "dumboAria": "Interact with Dumbo, guidance assistant",
+    "messages": {
+      "idle": {
+        "chico": "I am watching over your environment security.",
+        "dumbo": "I am here to make everything clearer."
+      },
+      "formStart": {
+        "chico": "Great, let us review key details together.",
+        "dumbo": "Take it step by step, I will guide you."
+      },
+      "formSuccess": {
+        "chico": "Request sent. Everything stays protected.",
+        "dumbo": "Great. We just moved forward."
+      },
+      "formError": {
+        "chico": "I can see one pending detail.",
+        "dumbo": "I will point out the field so you save time."
+      },
+      "inactive": {
+        "chico": "I stay on guard, whenever you need me.",
+        "dumbo": "I am right here if you need help."
+      },
+      "cursorNearChico": { "chico": "I am with you. Let us check the critical part first." },
+      "cursorNearDumbo": { "dumbo": "If you want, we can organize this step by step." }
+    },
+    "buttons": {
+      "speak": "Voice"
+    }
+  },
+  "services": {
+    "mantenimiento-informatico": {
+      "title": "IT maintenance for businesses",
+      "description": "Preventive and corrective management of devices and systems to keep your operations running."
+    },
+    "soporte-tecnico": {
+      "title": "Professional technical support",
+      "description": "Clear and organized support to solve technical issues quickly."
+    },
+    "ciberseguridad": {
+      "title": "Preventive cybersecurity",
+      "description": "Basic and advanced protection to reduce risk and secure your company information."
+    },
+    "redes-sistemas": {
+      "title": "Networks, systems and servers",
+      "description": "Configuration and improvement of business networks, systems and connectivity."
+    },
+    "backup-recuperacion": {
+      "title": "Backup and recovery",
+      "description": "Backup and recovery systems to protect critical files and business continuity."
+    },
+    "automatizacion-ia": {
+      "title": "AI automation",
+      "description": "Automation of repetitive processes to save time and improve efficiency."
+    },
+    "consultoria-digital": {
+      "title": "Digital consulting",
+      "description": "Technology analysis and realistic improvement plans aligned with your business."
+    },
+    "desarrollo-web": {
+      "title": "Web development and optimization",
+      "description": "Professional websites focused on trust, conversion and digital presence."
+    }
+  }
+}

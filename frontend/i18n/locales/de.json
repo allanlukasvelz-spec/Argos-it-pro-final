@@ -1,0 +1,163 @@
+{
+  "language": {
+    "label": "Sprache",
+    "es": "ES",
+    "en": "EN",
+    "ca": "CA",
+    "fr": "FR",
+    "de": "DE",
+    "it": "IT",
+    "pt": "PT"
+  },
+  "nav": {
+    "home": "Start",
+    "services": "Leistungen",
+    "method": "Methode",
+    "about": "Über ARGOS-IT",
+    "contact": "Kontakt",
+    "menu": "Menü"
+  },
+  "actions": {
+    "requestConsultation": "Beratung anfragen",
+    "viewServices": "Leistungen ansehen",
+    "viewDetail": "Details ansehen",
+    "viewService": "Leistung ansehen",
+    "viewMethod": "Methode ansehen",
+    "backHome": "Zurück zur Startseite",
+    "backServices": "Zurück zu den Leistungen"
+  },
+  "home": {
+    "eyebrow": "B2B-IT-Beratung",
+    "title": "IT, die funktioniert. Ohne Lärm. Ohne Sorgen.",
+    "subtitle": "Wir halten Ihre IT-Umgebung stabil, sicher und planbar.",
+    "trustTitle": "Vertrauenssäulen",
+    "trustItems": [
+      "Klare und professionelle Kommunikation",
+      "Prävention statt Improvisation",
+      "Technologie im Einklang mit dem Geschäft",
+      "Service für Unternehmen"
+    ],
+    "servicesEyebrow": "ARGOS-IT Leistungen",
+    "servicesTitle": "Professionelle Leistungen für Kontinuität, Sicherheit und Wachstum.",
+    "servicesSubtitle": "Für Teams, die zuverlässige Technologie und echten Support brauchen."
+  },
+  "servicesPage": {
+    "title": "ARGOS-IT Leistungen",
+    "subtitle": "IT-Beratung, Wartung, technischer Support, Cybersicherheit, Netzwerke, Backup, KI-Automatisierung und Webentwicklung."
+  },
+  "serviceDetail": {
+    "includesTitle": "Enthalten",
+    "problemTitle": "Welches Problem wird gelöst",
+    "benefitsTitle": "Wichtige Vorteile",
+    "processTitle": "So arbeiten wir",
+    "audienceTitle": "Geeignet für",
+    "ctaTitle": "Passt dieser Service zu Ihnen?",
+    "ctaSubtitle": "Teilen Sie uns Ihre Situation mit und wir antworten mit einem realistischen, priorisierten Plan."
+  },
+  "method": {
+    "title": "ARGOS-IT Methode",
+    "subtitle": "Ein klarer Rahmen für nachhaltige technische Verbesserungen.",
+    "steps": [
+      { "id": "01", "title": "Analyse", "description": "Erstprüfung von Systemen, Risiken und Prioritäten." },
+      { "id": "02", "title": "Verbesserungsplan", "description": "Priorisierte und realistische Maßnahmen." },
+      { "id": "03", "title": "Umsetzung", "description": "Strukturierte Ausführung mit Dokumentation." },
+      { "id": "04", "title": "Nachverfolgung", "description": "Ergebniskontrolle und kontinuierliche Prävention." }
+    ]
+  },
+  "about": {
+    "title": "Über ARGOS-IT",
+    "paragraphs": [
+      "ARGOS-IT begleitet Unternehmen, die operative Stabilität, Sicherheit und eine klare technische Roadmap benötigen.",
+      "Wir kombinieren Wartung, Support, Cybersicherheit, Netzwerke, Backup, KI-Automatisierung und Webentwicklung."
+    ],
+    "valuesTitle": "Unsere Arbeitsweise",
+    "values": [
+      "Ehrliche Analyse vor Umsetzung.",
+      "Geschäftsprioritäten vor Technik-Trends.",
+      "Klare Kommunikation mit nicht-technischen Teams.",
+      "Prävention und kontinuierliche Verbesserung."
+    ]
+  },
+  "contact": {
+    "title": "Technische Beratung anfragen",
+    "subtitle": "Beschreiben Sie Ihren aktuellen Kontext und wir senden Ihnen einen klaren Vorschlag.",
+    "intro": "Wir arbeiten mit internationalen Unternehmen in Wartung, Support, Sicherheit, KI und Webprojekten.",
+    "cards": {
+      "emailTitle": "E-Mail",
+      "phoneTitle": "Telefon",
+      "coverageTitle": "Abdeckung",
+      "coverageLines": [
+        "Internationaler Service",
+        "Remote- und Vor-Ort-Support je nach Projekt"
+      ]
+    },
+    "form": {
+      "title": "Kontaktformular",
+      "name": "Name",
+      "email": "E-Mail",
+      "phone": "Telefon",
+      "company": "Unternehmen oder Projekt",
+      "service": "Gewünschte Leistung",
+      "message": "Nachricht",
+      "privacy": "Ich akzeptiere die Datenschutzerklärung und erlaube die geschäftliche Rückmeldung.",
+      "submit": "Beratung anfragen",
+      "requiredHint": "* Pflichtfelder. Erste Antwort innerhalb eines Werktags.",
+      "namePlaceholder": "Vollständiger Name",
+      "emailPlaceholder": "sie@email.com",
+      "phonePlaceholder": "+49 170 0000000",
+      "companyPlaceholder": "Name des Unternehmens oder Projekts",
+      "messagePlaceholder": "Beschreiben Sie Bedarf, Kontext und Priorität.",
+      "servicePlaceholder": "Leistung auswählen",
+      "success": "Anfrage erfolgreich gesendet.",
+      "error": "Formular konnte nicht gesendet werden. Bitte Felder prüfen.",
+      "errors": {
+        "required": "Dieses Feld ist erforderlich.",
+        "email": "Bitte eine gültige E-Mail eingeben.",
+        "phone": "Bitte eine gültige Telefonnummer eingeben.",
+        "privacy": "Sie müssen die Datenschutzerklärung akzeptieren.",
+        "service": "Bitte wählen Sie eine Leistung."
+      }
+    }
+  },
+  "legal": {
+    "aviso": { "title": "Impressum", "intro": "Rechtliche Informationen und Nutzungsbedingungen." },
+    "privacy": { "title": "Datenschutz", "intro": "Wie wir personenbezogene Daten verarbeiten." },
+    "cookies": { "title": "Cookie-Richtlinie", "intro": "Verwendung von Cookies und ähnlichen Technologien." }
+  },
+  "cookiesBanner": {
+    "message": "Wir verwenden technische und analytische Cookies zur Verbesserung der Nutzererfahrung.",
+    "accept": "Akzeptieren",
+    "reject": "Ablehnen",
+    "policy": "Cookie-Richtlinie ansehen"
+  },
+  "footer": {
+    "tagline": "Professionelle IT-Beratung für Unternehmen mit Fokus auf Stabilität, Sicherheit und Kontinuität.",
+    "rights": "ARGOS-IT. Alle Rechte vorbehalten."
+  },
+  "mascots": {
+    "chicoName": "Chico",
+    "dumboName": "Dumbo",
+    "chicoAria": "Mit Chico interagieren, Schutzassistent",
+    "dumboAria": "Mit Dumbo interagieren, Begleitassistent",
+    "messages": {
+      "idle": { "chico": "Ich überwache die Sicherheit Ihrer Umgebung.", "dumbo": "Ich helfe dabei, alles klarer zu machen." },
+      "formStart": { "chico": "Perfekt, wir prüfen die wichtigsten Daten.", "dumbo": "Schritt für Schritt, ich begleite Sie." },
+      "formSuccess": { "chico": "Anfrage gesendet.", "dumbo": "Super, nächster Schritt erledigt." },
+      "formError": { "chico": "Ein Detail fehlt noch.", "dumbo": "Ich markiere das Feld." },
+      "inactive": { "chico": "Ich bleibe in Bereitschaft.", "dumbo": "Ich bin hier, wenn Sie mich brauchen." },
+      "cursorNearChico": { "chico": "Lassen Sie uns zuerst das Kritische priorisieren." },
+      "cursorNearDumbo": { "dumbo": "Wir können es Schritt für Schritt ordnen." }
+    },
+    "buttons": { "speak": "Stimme" }
+  },
+  "services": {
+    "mantenimiento-informatico": { "title": "IT-Wartung für Unternehmen", "description": "Präventive und korrektive Verwaltung von Geräten und Systemen." },
+    "soporte-tecnico": { "title": "Professioneller technischer Support", "description": "Klarer und strukturierter Support zur Lösung von Vorfällen." },
+    "ciberseguridad": { "title": "Präventive Cybersicherheit", "description": "Schutz zur Risikominimierung und Sicherung von Unternehmensdaten." },
+    "redes-sistemas": { "title": "Netzwerke, Systeme und Server", "description": "Konfiguration und Optimierung der Unternehmenskonnektivität." },
+    "backup-recuperacion": { "title": "Backup und Wiederherstellung", "description": "Sicherung und Wiederherstellung kritischer Daten." },
+    "automatizacion-ia": { "title": "Automatisierung mit KI", "description": "Automatisierung wiederkehrender Prozesse für mehr Effizienz." },
+    "consultoria-digital": { "title": "Digitale Beratung", "description": "Technologische Analyse und realistischer Verbesserungsplan." },
+    "desarrollo-web": { "title": "Webentwicklung und Optimierung", "description": "Professionelle Websites mit Fokus auf Vertrauen und Conversion." }
+  }
+}

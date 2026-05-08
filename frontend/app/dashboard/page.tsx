@@ -1,0 +1,375 @@
+"use client";
+
+import { FormEvent, useEffect, useMemo, useState } from "react";
+import API from "@/lib/api";
+import { useAuthStore } from "@/lib/auth";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+
+type Locale = "es" | "en" | "ca";
+
+const copy = {
+  es: {
+    portal: "Portal de cliente",
+    subtitle: "Administra tu cuenta, revisa mejoras y envía nuevas necesidades técnicas.",
+    logout: "Cerrar sesión",
+    verified: "Cuenta verificada",
+    company: "Empresa",
+    website: "Visualización web",
+    score: "Puntuación operativa",
+    improvements: "Mejoras previstas",
+    improvementForm: "Enviar mejora o idea",
+    direct: "Mensajería directa",
+    send: "Enviar",
+    title: "Título",
+    message: "Mensaje",
+    category: "Necesidad",
+    priority: "Prioridad",
+    page: "Página o URL afectada",
+    subject: "Asunto",
+    urgency: "Urgencia",
+    recent: "Solicitudes recientes",
+    empty: "Aún no hay solicitudes registradas.",
+    saved: "Enviado correctamente"
+  },
+  en: {
+    portal: "Client portal",
+    subtitle: "Manage your account, review improvements and send technical needs.",
+    logout: "Sign out",
+    verified: "Verified account",
+    company: "Company",
+    website: "Website overview",
+    score: "Operational score",
+    improvements: "Planned improvements",
+    improvementForm: "Send improvement or idea",
+    direct: "Direct messaging",
+    send: "Send",
+    title: "Title",
+    message: "Message",
+    category: "Need",
+    priority: "Priority",
+    page: "Affected page or URL",
+    subject: "Subject",
+    urgency: "Urgency",
+    recent: "Recent requests",
+    empty: "No requests yet.",
+    saved: "Sent successfully"
+  },
+  ca: {
+    portal: "Portal de client",
+    subtitle: "Administra el compte, revisa millores i envia necessitats tecniques.",
+    logout: "Tancar sessio",
+    verified: "Compte verificat",
+    company: "Empresa",
+    website: "Visualitzacio web",
+    score: "Puntuacio operativa",
+    improvements: "Millores previstes",
+    improvementForm: "Enviar millora o idea",
+    direct: "Missatgeria directa",
+    send: "Enviar",
+    title: "Titol",
+    message: "Missatge",
+    category: "Necessitat",
+    priority: "Prioritat",
+    page: "Pagina o URL afectada",
+    subject: "Assumpte",
+    urgency: "Urgencia",
+    recent: "Sol.licituds recents",
+    empty: "Encara no hi ha sol.licituds registrades.",
+    saved: "Enviat correctament"
+  }
+};
+
+const categories = [
+  "Seguridad informática",
+  "Soporte técnico",
+  "WordPress / Hosting",
+  "Automatización con IA",
+  "SEO y captación",
+  "Nueva funcionalidad"
+];
+
+export default function Dashboard() {
+  const router = useRouter();
+  const { token, user, logout } = useAuthStore();
+  const [locale, setLocale] = useState<Locale>("es");
+  const [portal, setPortal] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [improvement, setImprovement] = useState({
+    category: categories[0],
+    priority: "Media",
+    pageUrl: "",
+    title: "",
+    message: ""
+  });
+  const [directMessage, setDirectMessage] = useState({
+    subject: "",
+    urgency: "Normal",
+    message: ""
+  });
+
+  const t = copy[locale];
+
+  useEffect(() => {
+    const language = navigator.language.toLowerCase();
+    if (language.startsWith("ca")) setLocale("ca");
+    else if (language.startsWith("en")) setLocale("en");
+    else setLocale("es");
+  }, []);
+
+  useEffect(() => {
+    if (!token) {
+      router.push("/auth/login");
+      return;
+    }
+
+    fetchPortal();
+  }, [token]);
+
+  const fetchPortal = async () => {
+    try {
+      const res = await API.get("/api/client/portal");
+      setPortal(res.data);
+    } catch (error) {
+      toast.error("No se pudo cargar el portal");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLogout = () => {
+    logout();
+    router.push("/");
+  };
+
+  const auditChecks = useMemo(() => portal?.websiteAudit?.checks || [], [portal]);
+
+  const submitImprovement = async (event: FormEvent) => {
+    event.preventDefault();
+    try {
+      await API.post("/api/client/improvements", improvement);
+      toast.success(t.saved);
+      setImprovement({
+        category: categories[0],
+        priority: "Media",
+        pageUrl: "",
+        title: "",
+        message: ""
+      });
+      fetchPortal();
+    } catch (error: any) {
+      toast.error(error.response?.data?.error || "No se pudo enviar la mejora");
+    }
+  };
+
+  const submitMessage = async (event: FormEvent) => {
+    event.preventDefault();
+    try {
+      await API.post("/api/client/messages", directMessage);
+      toast.success(t.saved);
+      setDirectMessage({ subject: "", urgency: "Normal", message: "" });
+      fetchPortal();
+    } catch (error: any) {
+      toast.error(error.response?.data?.error || "No se pudo enviar el mensaje");
+    }
+  };
+
+  if (loading) {
+    return <div className="min-h-screen bg-[#F8FBFF] p-8 text-[#07111F]">Cargando portal...</div>;
+  }
+
+  return (
+    <div className="min-h-screen bg-[#F8FBFF] text-[#07111F]">
+      <header className="border-b border-[#E5E7EB] bg-white">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-5 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="text-sm font-black uppercase text-[#2563EB]">ARGOS-IT</p>
+            <h1 className="text-3xl font-black">{t.portal}</h1>
+            <p className="text-[#4B5563]">{t.subtitle}</p>
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <select
+              value={locale}
+              onChange={(event) => setLocale(event.target.value as Locale)}
+              className="rounded-md border border-[#E5E7EB] bg-white px-3 py-2 text-sm font-bold text-[#07111F]"
+            >
+              <option value="es">ES</option>
+              <option value="en">EN</option>
+              <option value="ca">CA</option>
+            </select>
+            <span className="rounded-md border border-[#BFDBFE] bg-[#EFF6FF] px-3 py-2 text-sm font-bold text-[#2563EB]">
+              {t.verified}
+            </span>
+            <button onClick={handleLogout} className="rounded-md border border-[#2563EB] bg-[#2563EB] px-4 py-2 text-sm font-bold text-white transition hover:bg-[#1D4ED8]">
+              {t.logout}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main className="mx-auto grid max-w-7xl gap-6 px-5 py-8 lg:grid-cols-[1.05fr_.95fr]">
+        <section className="rounded-lg border border-[#E5E7EB] bg-white p-6 shadow-sm">
+          <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
+            <div>
+              <p className="text-sm font-black uppercase text-[#2563EB]">{t.company}</p>
+              <h2 className="mt-1 text-2xl font-black">{portal?.user?.company || user?.company || "Empresa pendiente"}</h2>
+              <p className="text-[#4B5563]">{portal?.user?.email || user?.email}</p>
+            </div>
+            <div className="rounded-md border border-[#E5E7EB] bg-[#F9FAFB] px-4 py-3 text-right">
+              <p className="text-sm font-bold text-[#2563EB]">{t.score}</p>
+              <strong className="text-3xl">{portal?.websiteAudit?.score || 0}/100</strong>
+            </div>
+          </div>
+
+          <div className="mt-7">
+            <h3 className="text-xl font-black">{t.website}</h3>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              {auditChecks.map((check: any) => (
+                <div key={check.label} className="rounded-md border border-[#E5E7EB] bg-[#F9FAFB] p-4">
+                  <p className="font-bold">{check.label}</p>
+                  <p className="text-sm text-[#4B5563]">{check.status}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-7">
+            <h3 className="text-xl font-black">{t.improvements}</h3>
+            <div className="mt-4 grid gap-3">
+              {(portal?.suggestedImprovements || []).map((item: string) => (
+                <div key={item} className="border-l-4 border-[#2563EB] bg-[#F9FAFB] p-4 font-semibold text-[#111827]">
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="rounded-lg border border-[#E5E7EB] bg-white p-6 shadow-sm">
+          <h2 className="text-2xl font-black">{t.improvementForm}</h2>
+          <form onSubmit={submitImprovement} className="mt-5 space-y-4">
+            <label className="block text-sm font-bold">
+              {t.category}
+              <select
+                value={improvement.category}
+                onChange={(event) => setImprovement({ ...improvement, category: event.target.value })}
+                className="mt-2 w-full rounded-md border border-[#E5E7EB] bg-white px-4 py-3"
+              >
+                {categories.map((category) => <option key={category}>{category}</option>)}
+              </select>
+            </label>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className="block text-sm font-bold">
+                {t.priority}
+                <select
+                  value={improvement.priority}
+                  onChange={(event) => setImprovement({ ...improvement, priority: event.target.value })}
+                  className="mt-2 w-full rounded-md border border-[#E5E7EB] bg-white px-4 py-3"
+                >
+                  <option>Baja</option>
+                  <option>Media</option>
+                  <option>Alta</option>
+                  <option>Urgente</option>
+                </select>
+              </label>
+              <label className="block text-sm font-bold">
+                {t.page}
+                <input
+                  value={improvement.pageUrl}
+                  onChange={(event) => setImprovement({ ...improvement, pageUrl: event.target.value })}
+                  className="mt-2 w-full rounded-md border border-[#E5E7EB] bg-white px-4 py-3"
+                  placeholder="https://..."
+                />
+              </label>
+            </div>
+            <label className="block text-sm font-bold">
+              {t.title}
+              <input
+                required
+                value={improvement.title}
+                onChange={(event) => setImprovement({ ...improvement, title: event.target.value })}
+                className="mt-2 w-full rounded-md border border-[#E5E7EB] bg-white px-4 py-3"
+                placeholder="Ej. Mejorar formulario de contacto"
+              />
+            </label>
+            <label className="block text-sm font-bold">
+              {t.message}
+              <textarea
+                required
+                rows={5}
+                value={improvement.message}
+                onChange={(event) => setImprovement({ ...improvement, message: event.target.value })}
+                className="mt-2 w-full rounded-md border border-[#E5E7EB] bg-white px-4 py-3"
+                placeholder="Describe la necesidad, objetivo y cualquier referencia."
+              />
+            </label>
+            <button className="w-full rounded-md border border-[#2563EB] bg-[#2563EB] px-5 py-3 font-black text-white transition hover:bg-[#1D4ED8]" type="submit">
+              {t.send}
+            </button>
+          </form>
+        </section>
+
+        <section className="rounded-lg border border-[#E5E7EB] bg-white p-6 shadow-sm">
+          <h2 className="text-2xl font-black">{t.direct}</h2>
+          <p className="mt-2 text-[#4B5563]">
+            Canal para clientes autenticados. Los mensajes quedan registrados y se notifican al correo de servicio si Formspree está activo.
+          </p>
+          <form onSubmit={submitMessage} className="mt-5 space-y-4">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className="block text-sm font-bold">
+                {t.subject}
+                <input
+                  required
+                  value={directMessage.subject}
+                  onChange={(event) => setDirectMessage({ ...directMessage, subject: event.target.value })}
+                  className="mt-2 w-full rounded-md border border-[#E5E7EB] bg-white px-4 py-3"
+                />
+              </label>
+              <label className="block text-sm font-bold">
+                {t.urgency}
+                <select
+                  value={directMessage.urgency}
+                  onChange={(event) => setDirectMessage({ ...directMessage, urgency: event.target.value })}
+                  className="mt-2 w-full rounded-md border border-[#E5E7EB] bg-white px-4 py-3"
+                >
+                  <option>Normal</option>
+                  <option>Alta</option>
+                  <option>Incidencia critica</option>
+                </select>
+              </label>
+            </div>
+            <label className="block text-sm font-bold">
+              {t.message}
+              <textarea
+                required
+                rows={5}
+                value={directMessage.message}
+                onChange={(event) => setDirectMessage({ ...directMessage, message: event.target.value })}
+                className="mt-2 w-full rounded-md border border-[#E5E7EB] bg-white px-4 py-3"
+              />
+            </label>
+            <button className="w-full rounded-md border border-[#2563EB] bg-transparent px-5 py-3 font-black text-[#2563EB] transition hover:bg-[#EFF6FF]" type="submit">
+              {t.send}
+            </button>
+          </form>
+        </section>
+
+        <section className="rounded-lg border border-[#E5E7EB] bg-white p-6 shadow-sm">
+          <h2 className="text-2xl font-black">{t.recent}</h2>
+          <div className="mt-5 space-y-3">
+            {portal?.submissions?.length ? (
+              portal.submissions.map((submission: any) => (
+                <div key={submission.id} className="rounded-md border border-[#E5E7EB] bg-[#F9FAFB] p-4">
+                  <p className="font-bold">{submission.data?.title || submission.data?.subject || submission.data?.type}</p>
+                  <p className="text-sm text-[#4B5563]">{submission.status} · {new Date(submission.created_at).toLocaleString()}</p>
+                </div>
+              ))
+            ) : (
+              <p className="text-[#4B5563]">{t.empty}</p>
+            )}
+          </div>
+        </section>
+      </main>
+    </div>
+  );
+}
