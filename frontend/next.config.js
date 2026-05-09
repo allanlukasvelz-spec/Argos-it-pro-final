@@ -4,8 +4,12 @@ const nextConfig = {
   turbopack: {
     root: __dirname
   },
-  env: {
-    NEXT_PUBLIC_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000"
+  async redirects() {
+    return [
+      { source: "/legal/aviso-legal", destination: "/aviso-legal", permanent: true },
+      { source: "/legal/privacidad", destination: "/privacidad", permanent: true },
+      { source: "/legal/cookies", destination: "/cookies", permanent: true }
+    ];
   }
 };
 

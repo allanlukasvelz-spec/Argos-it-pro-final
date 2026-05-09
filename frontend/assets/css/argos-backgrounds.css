@@ -23,6 +23,23 @@
   min-height: 100vh;
   overflow: hidden;
   background:
+    radial-gradient(
+      ellipse 68% 52% at 0% 100%,
+      rgba(118, 86, 52, .26) 0%,
+      rgba(32, 82, 74, .20) 38%,
+      rgba(7, 20, 33, 0) 58%
+    ),
+    linear-gradient(
+      96deg,
+      rgba(4, 10, 22, .72) 0%,
+      rgba(6, 16, 32, .55) 7%,
+      rgba(132, 96, 58, .34) 15%,
+      rgba(36, 88, 78, .28) 30%,
+      rgba(12, 34, 54, .48) 46%,
+      rgba(7, 20, 33, .35) 56%,
+      rgba(11, 31, 51, .12) 68%,
+      transparent 76%
+    ),
     radial-gradient(circle at 20% 20%, rgba(24, 212, 247, .18), transparent 30%),
     radial-gradient(circle at 85% 55%, rgba(57, 244, 255, .12), transparent 34%),
     linear-gradient(135deg, var(--argos-ink) 0%, var(--argos-navy) 42%, var(--argos-navy-2) 100%);
@@ -261,6 +278,100 @@
   background-size: 38px 38px, 54px 54px, 72px 72px;
 }
 
+/* Estrellas fugaces (sólo con prefers-reduced-motion: no-preference) */
+.argos-bg-meteors {
+  overflow: hidden;
+  mix-blend-mode: screen;
+  opacity: .44;
+  pointer-events: none;
+}
+
+.argos-bg-meteors::before,
+.argos-bg-meteors::after {
+  content: "";
+  position: absolute;
+  width: min(200px, 36vw);
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, .75) 38%,
+    rgba(200, 234, 255, .55) 58%,
+    transparent 100%
+  );
+  box-shadow: 0 0 12px rgba(200, 235, 255, .35);
+  opacity: 0;
+  transform-origin: left center;
+}
+
+/* Destellos tipo galaxia (muy sutiles) */
+.argos-bg-stars {
+  opacity: .5;
+  mix-blend-mode: screen;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-image:
+    radial-gradient(circle at 6% 9%, rgba(244, 250, 255, .85) 0, transparent 1px),
+    radial-gradient(circle at 11% 22%, rgba(180, 222, 255, .4) 0, transparent 1px),
+    radial-gradient(circle at 19% 6%, rgba(255, 255, 255, .55) 0, transparent 1px),
+    radial-gradient(circle at 24% 38%, rgba(244, 250, 255, .5) 0, transparent 1.5px),
+    radial-gradient(circle at 31% 14%, rgba(140, 210, 245, .35) 0, transparent 1px),
+    radial-gradient(circle at 38% 42%, rgba(255, 255, 255, .4) 0, transparent 1px),
+    radial-gradient(circle at 44% 8%, rgba(244, 250, 255, .7) 0, transparent 1px),
+    radial-gradient(circle at 52% 28%, rgba(200, 235, 255, .45) 0, transparent 1px),
+    radial-gradient(circle at 58% 11%, rgba(255, 255, 255, .5) 0, transparent 1px),
+    radial-gradient(circle at 63% 36%, rgba(167, 230, 255, .4) 0, transparent 1px),
+    radial-gradient(circle at 71% 7%, rgba(244, 250, 255, .65) 0, transparent 1px),
+    radial-gradient(circle at 78% 24%, rgba(255, 255, 255, .38) 0, transparent 1px),
+    radial-gradient(circle at 84% 13%, rgba(150, 215, 250, .42) 0, transparent 1px),
+    radial-gradient(circle at 91% 31%, rgba(244, 250, 255, .55) 0, transparent 1px),
+    radial-gradient(circle at 95% 8%, rgba(220, 245, 255, .35) 0, transparent 1px),
+    radial-gradient(circle at 8% 52%, rgba(244, 250, 255, .45) 0, transparent 1px),
+    radial-gradient(circle at 16% 68%, rgba(255, 255, 255, .35) 0, transparent 1px),
+    radial-gradient(circle at 27% 55%, rgba(120, 200, 240, .32) 0, transparent 1px),
+    radial-gradient(circle at 35% 78%, rgba(244, 250, 255, .5) 0, transparent 1px),
+    radial-gradient(circle at 42% 61%, rgba(255, 255, 255, .4) 0, transparent 1px),
+    radial-gradient(circle at 49% 88%, rgba(190, 228, 255, .38) 0, transparent 1px),
+    radial-gradient(circle at 56% 58%, rgba(244, 250, 255, .42) 0, transparent 1px),
+    radial-gradient(circle at 64% 72%, rgba(255, 255, 255, .33) 0, transparent 1px),
+    radial-gradient(circle at 73% 49%, rgba(167, 220, 250, .36) 0, transparent 1px),
+    radial-gradient(circle at 81% 66%, rgba(244, 250, 255, .48) 0, transparent 1px),
+    radial-gradient(circle at 88% 52%, rgba(255, 255, 255, .4) 0, transparent 1px),
+    radial-gradient(circle at 93% 78%, rgba(210, 238, 255, .34) 0, transparent 1px),
+    radial-gradient(circle at 4% 88%, rgba(244, 250, 255, .4) 0, transparent 1px),
+    radial-gradient(circle at 12% 94%, rgba(255, 255, 255, .32) 0, transparent 1px),
+    radial-gradient(circle at 33% 91%, rgba(180, 220, 250, .3) 0, transparent 1px),
+    radial-gradient(circle at 61% 93%, rgba(244, 250, 255, .38) 0, transparent 1px),
+    radial-gradient(circle at 76% 89%, rgba(255, 255, 255, .35) 0, transparent 1px),
+    radial-gradient(circle at 47% 48%, rgba(255, 255, 255, .25) 0, transparent 1.5px),
+    radial-gradient(circle at 67% 45%, rgba(200, 235, 255, .28) 0, transparent 1px);
+  transform-origin: 48% 42%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .argos-bg-stars {
+    animation: argosStarsDrift 200s linear infinite;
+  }
+
+  .argos-bg-meteors::before {
+    top: 10%;
+    left: -8%;
+    transform: rotate(-31deg);
+    animation: argosMeteorLong 12s cubic-bezier(.2, .75, .15, 1) infinite;
+  }
+
+  .argos-bg-meteors::after {
+    top: 26%;
+    left: 55%;
+    width: min(120px, 22vw);
+    height: 1.5px;
+    transform: rotate(-26deg);
+    animation: argosMeteorShort 16s cubic-bezier(.2, .75, .15, 1) infinite;
+    animation-delay: -7s;
+  }
+}
+
 .argos-bg-panel {
   position: absolute;
   right: max(40px, 7vw);
@@ -429,6 +540,14 @@
   opacity: .18;
 }
 
+.argos-bg-legal .argos-bg-stars {
+  opacity: .22;
+}
+
+.argos-bg-legal .argos-bg-meteors {
+  opacity: .1;
+}
+
 .argos-bg-portal .argos-bg-grid {
   opacity: .5;
 }
@@ -568,6 +687,37 @@
   box-shadow: 0 0 16px rgba(24, 212, 247, .55);
 }
 
+@keyframes argosStarsDrift {
+  from { transform: rotate(0deg) scale(1.08); }
+  to { transform: rotate(360deg) scale(1.08); }
+}
+
+@keyframes argosMeteorLong {
+  0% {
+    transform: rotate(-31deg) translate3d(-30px, 0, 0);
+    opacity: 0;
+  }
+  4% { opacity: .9; }
+  22% { opacity: .85; }
+  100% {
+    transform: rotate(-31deg) translate3d(125vw, 72vh, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes argosMeteorShort {
+  0% {
+    transform: rotate(-26deg) translate3d(40px, -20px, 0);
+    opacity: 0;
+  }
+  3% { opacity: .75; }
+  18% { opacity: .7; }
+  100% {
+    transform: rotate(-26deg) translate3d(-90vw, 48vh, 0);
+    opacity: 0;
+  }
+}
+
 @keyframes glowPulse {
   0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: .68; }
   50% { transform: translate3d(2%, -1%, 0) scale(1.04); opacity: .96; }
@@ -601,6 +751,23 @@
 
   .argos-page-shell {
     background:
+      radial-gradient(
+        ellipse 74% 48% at 0% 100%,
+        rgba(118, 86, 52, .20) 0%,
+        rgba(32, 82, 74, .16) 36%,
+        rgba(7, 20, 33, 0) 54%
+      ),
+      linear-gradient(
+        96deg,
+        rgba(4, 10, 22, .62) 0%,
+        rgba(6, 16, 32, .48) 8%,
+        rgba(132, 96, 58, .28) 17%,
+        rgba(36, 88, 78, .22) 32%,
+        rgba(12, 34, 54, .38) 48%,
+        rgba(7, 20, 33, .28) 58%,
+        rgba(11, 31, 51, .10) 66%,
+        transparent 74%
+      ),
       radial-gradient(circle at 18% 12%, rgba(24, 212, 247, .14), transparent 34%),
       linear-gradient(145deg, var(--argos-ink) 0%, var(--argos-navy) 54%, var(--argos-navy-2) 100%);
   }
@@ -654,9 +821,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .argos-bg-layer,
-  .argos-bg-layer::before,
-  .argos-bg-layer::after,
+  .argos-bg-grid,
+  .argos-bg-circuit,
+  .argos-bg-diagonal,
+  .argos-bg-glow,
+  .argos-bg-orbit,
   .argos-page-bg::after,
   .argos-floating-panel,
   .argos-scan-line::after {

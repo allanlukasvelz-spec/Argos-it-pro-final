@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Toaster } from "react-hot-toast";
+import ClientShell from "@/components/layout/ClientShell";
 import SiteShell from "@/components/layout/SiteShell";
 import { LanguageProvider } from "@/i18n/provider";
 import "./globals.css";
@@ -99,8 +100,10 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <LanguageProvider>
-          <SiteShell>{children}</SiteShell>
-          <Toaster position="top-right" />
+          <ClientShell>
+            <SiteShell>{children}</SiteShell>
+            <Toaster position="top-right" />
+          </ClientShell>
         </LanguageProvider>
       </body>
     </html>

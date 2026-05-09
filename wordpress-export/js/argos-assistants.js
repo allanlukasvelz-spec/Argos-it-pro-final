@@ -209,6 +209,7 @@
 
     state.panel.classList.remove("chico-chat", "dumbo-chat");
     state.panel.classList.add("is-open", "open", `${state.current}-chat`);
+    document.body.classList.add("argos-assistant-chat-open");
     document.querySelectorAll("[data-assistant-bot]").forEach((bot) => {
       bot.classList.toggle("is-active", bot.dataset.assistantBot === state.current);
     });
@@ -219,6 +220,7 @@
 
   function closeAssistantChat() {
     if (state.panel) state.panel.classList.remove("is-open", "open", "is-guiding");
+    document.body.classList.remove("argos-assistant-chat-open");
     document.querySelectorAll("[data-assistant-bot]").forEach((bot) => bot.classList.remove("is-active"));
   }
 

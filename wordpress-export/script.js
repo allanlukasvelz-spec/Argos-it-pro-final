@@ -356,11 +356,15 @@
         }, 420);
       }
 
-      avatar.addEventListener("click", () => {
-        bot.classList.toggle("is-active");
-        bot.classList.remove("is-greeting");
-        setAssistantState(name, name === "chico" ? "alert" : "guide", name === "chico" ? stateTexts.near.chico : stateTexts.near.dumbo, { active: true });
-        speak((index + 1) % messages[name].length);
+      avatar.addEventListener("mouseenter", () => {
+        if (bot.classList.contains("is-active") || document.body.classList.contains("argos-assistant-chat-open")) return;
+        const b = bots[name];
+        if (!b || b.state === "sleep") return;
+        setAssistantState(name, "sit", stateTexts.idle[name], { returnToIdle: false });
+      });
+      avatar.addEventListener("mouseleave", () => {
+        if (bot.classList.contains("is-active") || document.body.classList.contains("argos-assistant-chat-open")) return;
+        setAssistantState(name, "idle", stateTexts.idle[name], { returnToIdle: false });
       });
 
       window.setInterval(() => {
@@ -371,7 +375,6 @@
 
     let inactivityTimer = 0;
     let lastWake = 0;
-    const proximity = { chico: 0, dumbo: 0 };
 
     const onIdle = () => {
       setAssistantState("chico", "sleep", stateTexts.rest.chico, { returnToIdle: false });
@@ -390,7 +393,7 @@
       ["chico", "dumbo"].forEach((name) => {
         const assistant = bots[name];
         if (!assistant) return;
-        if (assistant.state === "lie" || assistant.state === "sit" || assistant.state === "sleep") {
+        if (assistant.state === "lie" || assistant.state === "sleep") {
           setAssistantState(name, "idle", stateTexts.idle[name], { returnToIdle: false, instant: true });
         }
       });
@@ -401,27 +404,11 @@
       queueInactivity();
     };
 
-    const handleProximity = (event) => {
+    const handlePointerMoveWake = () => {
       handleActivity();
-      Object.keys(bots).forEach((name) => {
-        const assistant = bots[name];
-        const rect = assistant.bot.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        const distance = Math.hypot(event.clientX - centerX, event.clientY - centerY);
-        const now = Date.now();
-        if (distance > 190 || now - proximity[name] < 1600) return;
-        proximity[name] = now;
-        setAssistantState(
-          name,
-          name === "chico" ? "alert" : "look",
-          name === "chico" ? stateTexts.near.chico : stateTexts.near.dumbo,
-          { duration: 2600 }
-        );
-      });
     };
 
-    document.addEventListener("mousemove", handleProximity);
+    document.addEventListener("mousemove", handlePointerMoveWake, { passive: true });
     ["keydown", "touchstart", "scroll"].forEach((eventName) => {
       document.addEventListener(eventName, handleActivity, { passive: true });
     });

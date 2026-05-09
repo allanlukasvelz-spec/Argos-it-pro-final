@@ -28,6 +28,8 @@ export default function ArgosPageShell({ variant, children, className = "" }: Pr
         <span className="argos-bg-layer argos-bg-glow argos-bg-glow--two" />
         <span className="argos-bg-layer argos-bg-orbit" />
         <span className="argos-bg-layer argos-bg-noise" />
+        <span className="argos-bg-layer argos-bg-meteors" />
+        <span className="argos-bg-layer argos-bg-stars" />
       </div>
 
       <main className="argos-content-layer">{children}</main>

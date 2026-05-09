@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import API from "@/lib/api";
 import ArgosPageShell from "@/components/layout/ArgosPageShell";
@@ -11,10 +11,17 @@ import toast from "react-hot-toast";
 export default function Login() {
   const router = useRouter();
   const login = useAuthStore((state) => state.login);
+  const token = useAuthStore((state) => state.token);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (token) {
+      router.replace("/dashboard");
+    }
+  }, [token, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
