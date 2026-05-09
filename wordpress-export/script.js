@@ -106,33 +106,43 @@
   }
 
   function buildLanguageSwitcher() {
-    if (document.querySelector(".language-tools")) return;
-    const nav = document.querySelector(".nav");
-    if (!nav) return;
+    const topbar = document.querySelector(".topbar");
+    if (!topbar) return;
 
-    const tools = document.createElement("div");
-    tools.className = "language-tools notranslate";
-    tools.setAttribute("aria-label", "Selector de idioma ARGOS-IT");
-    tools.innerHTML = `
+    let langRow = topbar.querySelector(".topbar-lang-row");
+    if (!langRow) {
+      langRow = document.createElement("div");
+      langRow.className = "wrap topbar-lang-row notranslate";
+      topbar.insertBefore(langRow, topbar.firstChild);
+    }
+
+    let tools = document.querySelector(".language-tools");
+    if (!tools) {
+      tools = document.createElement("div");
+      tools.className = "language-tools notranslate";
+      tools.setAttribute("aria-label", "Selector de idioma ARGOS-IT");
+      tools.innerHTML = `
       <button type="button" data-argos-lang="es" aria-pressed="false">ES</button>
       <button type="button" data-argos-lang="en" aria-pressed="false">EN</button>
       <button type="button" data-argos-lang="ca" aria-pressed="false">CA</button>
       <button type="button" data-argos-lang="auto" aria-pressed="false">Auto</button>
     `;
 
-    const cta = nav.querySelector(".btn.primary");
-    nav.insertBefore(tools, cta || null);
+      tools.addEventListener("click", function (event) {
+        const button = event.target.closest("[data-argos-lang]");
+        if (!button) return;
+        const requested = button.getAttribute("data-argos-lang");
+        if (requested === "auto") {
+          applyLanguage(getDeviceLanguage(), "auto", true);
+          return;
+        }
+        applyLanguage(requested, requested, true);
+      });
+    }
 
-    tools.addEventListener("click", function (event) {
-      const button = event.target.closest("[data-argos-lang]");
-      if (!button) return;
-      const requested = button.getAttribute("data-argos-lang");
-      if (requested === "auto") {
-        applyLanguage(getDeviceLanguage(), "auto", true);
-        return;
-      }
-      applyLanguage(requested, requested, true);
-    });
+    if (!langRow.contains(tools)) {
+      langRow.appendChild(tools);
+    }
   }
 
   buildLanguageSwitcher();
@@ -192,12 +202,14 @@
       chico: [
         "Hola, soy Chico. Estoy pendiente de que todo esté protegido.",
         "Si algo te preocupa, lo revisamos con calma.",
-        "Puedo ayudarte a ordenar riesgos sin complicarlo."
+        "Puedo ayudarte a ordenar riesgos sin complicarlo.",
+        "Puedo ayudarte a preparar el diagnóstico inicial de tu portal."
       ],
       dumbo: [
         "Hola, soy Dumbo. Te acompaño paso a paso.",
         "Si no sabes por dónde empezar, yo te guío.",
-        "Cuéntame qué necesitas y buscamos el camino simple."
+        "Cuéntame qué necesitas y buscamos el camino simple.",
+        "Puedo ayudarte a solicitar el acceso o explicarte qué podrás ver dentro del portal."
       ]
     };
     const stateClasses = {
@@ -238,9 +250,22 @@
         dumbo: "Te acompaño paso a paso."
       }
     };
+    const exportCfg = window.ARGOS_EXPORT || {};
+    const assetsRoot = String(exportCfg.assetsRoot || "").replace(/\/$/, "");
+    const siteOrigin = String(exportCfg.origin || "").replace(/\/$/, "");
+    const paths = exportCfg.paths || {};
+    const absolutePage = (path) => {
+      if (!siteOrigin || !path) return null;
+      const p = path.startsWith("/") ? path : `/${path}`;
+      return `${siteOrigin}${p}`;
+    };
     const assistantUrls = {
-      chico: "./asistente-chico.html?asistente=chico",
-      dumbo: "./asistente-dumbo.html?asistente=dumbo"
+      chico: siteOrigin
+        ? `${absolutePage(paths.asistenteChico || "/asistente-chico/")}?asistente=chico`
+        : "./asistente-chico.html?asistente=chico",
+      dumbo: siteOrigin
+        ? `${absolutePage(paths.asistenteDumbo || "/asistente-dumbo/")}?asistente=dumbo`
+        : "./asistente-dumbo.html?asistente=dumbo"
     };
     const voiceLines = {
       chico: "Hola, soy Chico. Estoy aquí para ayudarte a proteger lo importante y priorizar con calma.",
@@ -268,7 +293,9 @@
       let stateForFile = state;
       if (state === "walk") stateForFile = assistant.nextWalkFrame();
       else if (state === "lie") stateForFile = "lay";
-      const spritePath = `./assets/mascots/${name}/${name}_${stateForFile}.png`;
+      const spritePath = assetsRoot
+        ? `${assetsRoot}/mascots/${name}/${name}_${stateForFile}.png`
+        : `./assets/mascots/${name}/${name}_${stateForFile}.png`;
 
       window.clearTimeout(assistant.returnTimer);
       assistant.state = state;
@@ -316,7 +343,7 @@
         returnTimer: 0,
         nextWalkFrame() {
           walkFrame = walkFrame === 1 ? 2 : 1;
-          return `walk-0${walkFrame}`;
+          return `walk_0${walkFrame}`;
         }
       };
 
@@ -516,4 +543,5 @@
   }
 
   keyHologramImages();
+  activateAssistants();
 })();

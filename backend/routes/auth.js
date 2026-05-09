@@ -49,7 +49,7 @@ router.post("/register", authLimiter, validatePassword, async (req, res) => {
 
     res.status(201).json({
       message: "Usuario creado exitosamente",
-      user: result.rows[0]
+      user: { ...result.rows[0], company: company || "", role: "cliente", clientVerified: false }
     });
   } catch (error) {
     console.error("Error en registro:", error);
@@ -93,7 +93,7 @@ router.post("/login", authLimiter, async (req, res) => {
     if (!requireJwtSecret(res)) return;
 
     const token = jwt.sign(
-      { id: user.id, email: user.email },
+      { id: user.id, email: user.email, role: user.role || "cliente" },
       process.env.JWT_SECRET,
       { expiresIn: "24h" }
     );
@@ -114,7 +114,14 @@ router.post("/login", authLimiter, async (req, res) => {
       message: "Login exitoso",
       token,
       refreshToken,
-      user: { id: user.id, email: user.email, name: user.name }
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        company: user.company,
+        role: user.role || "cliente",
+        clientVerified: Boolean(user.client_verified)
+      }
     });
   } catch (error) {
     console.error("Error en login:", error);
@@ -139,7 +146,7 @@ router.post("/refresh", authLimiter, (req, res) => {
     );
 
     const newToken = jwt.sign(
-      { id: decoded.id },
+      { id: decoded.id, role: decoded.role || "cliente" },
       process.env.JWT_SECRET,
       { expiresIn: "24h" }
     );

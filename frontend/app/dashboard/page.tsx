@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import API from "@/lib/api";
+import ArgosPageShell from "@/components/layout/ArgosPageShell";
 import { useAuthStore } from "@/lib/auth";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
@@ -175,17 +176,21 @@ export default function Dashboard() {
   };
 
   if (loading) {
-    return <div className="min-h-screen bg-[#F8FBFF] p-8 text-[#07111F]">Cargando portal...</div>;
+    return (
+      <ArgosPageShell variant="portal">
+        <div className="p-8 text-white">Cargando portal...</div>
+      </ArgosPageShell>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-[#F8FBFF] text-[#07111F]">
-      <header className="border-b border-[#E5E7EB] bg-white">
+    <ArgosPageShell variant="portal">
+      <header className="border-b border-white/10 bg-white/[.08] backdrop-blur">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-5 md:flex-row md:items-center md:justify-between">
           <div>
-            <p className="text-sm font-black uppercase text-[#2563EB]">ARGOS-IT</p>
-            <h1 className="text-3xl font-black">{t.portal}</h1>
-            <p className="text-[#4B5563]">{t.subtitle}</p>
+            <p className="text-sm font-black uppercase text-[#39F4FF]">ARGOS-IT</p>
+            <h1 className="text-3xl font-black text-white">{t.portal}</h1>
+            <p className="text-[#D7E8F6]">{t.subtitle}</p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <select
@@ -197,7 +202,7 @@ export default function Dashboard() {
               <option value="en">EN</option>
               <option value="ca">CA</option>
             </select>
-            <span className="rounded-md border border-[#BFDBFE] bg-[#EFF6FF] px-3 py-2 text-sm font-bold text-[#2563EB]">
+            <span className="rounded-md border border-[#18D4F7]/40 bg-[#18D4F7]/10 px-3 py-2 text-sm font-bold text-[#39F4FF]">
               {t.verified}
             </span>
             <button onClick={handleLogout} className="rounded-md border border-[#2563EB] bg-[#2563EB] px-4 py-2 text-sm font-bold text-white transition hover:bg-[#1D4ED8]">
@@ -370,6 +375,6 @@ export default function Dashboard() {
           </div>
         </section>
       </main>
-    </div>
+    </ArgosPageShell>
   );
 }

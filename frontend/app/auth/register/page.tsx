@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import API from "@/lib/api";
+import ArgosPageShell from "@/components/layout/ArgosPageShell";
 import Link from "next/link";
 import toast from "react-hot-toast";
 
@@ -37,7 +38,8 @@ export default function Register() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#F8FBFF] px-5">
+    <ArgosPageShell variant="portal">
+    <div className="flex min-h-screen items-center justify-center px-5">
       <div className="w-full max-w-md rounded-lg border border-[#E5E7EB] bg-white p-8 shadow-xl shadow-[#0B1E33]/10">
         <h1 className="mb-2 text-center text-3xl font-bold text-[#0B1E33]">
           Crear cuenta ARGOS-IT
@@ -99,5 +101,6 @@ export default function Register() {
         </p>
       </div>
     </div>
+    </ArgosPageShell>
   );
 }

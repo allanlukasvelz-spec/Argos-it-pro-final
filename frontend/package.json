@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start --hostname 127.0.0.1",
     "preview": "next start --hostname 127.0.0.1",
-    "lint": "next lint"
+    "lint": "tsc --noEmit --pretty false --incremental false"
   },
   "dependencies": {
     "axios": "^1.6.2",

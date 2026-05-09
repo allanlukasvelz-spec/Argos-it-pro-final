@@ -22,28 +22,28 @@ export type DumboSpriteState =
   | "look";
 
 export const chicoSprites: Record<ChicoSpriteState, string> = {
-  idle: "/mascots/chico/chico_idle.png",
-  walk_01: "/mascots/chico/chico_walk_01.png",
-  walk_02: "/mascots/chico/chico_walk_02.png",
-  jump: "/mascots/chico/chico_jump.png",
-  turn: "/mascots/chico/chico_turn.png",
-  sit: "/mascots/chico/chico_sit.png",
-  lay: "/mascots/chico/chico_lay.png",
-  alert: "/mascots/chico/chico_alert.png",
-  sleep: "/mascots/chico/chico_sleep.png"
+  idle: "/mascots/chico/chico_esperando2.png",
+  walk_01: "/mascots/chico/chico_caminando.png",
+  walk_02: "/mascots/chico/chico_corriendo.png",
+  jump: "/mascots/chico/chico_corriendofeliz.png",
+  turn: "/mascots/chico/chico_olfateando.png",
+  sit: "/mascots/chico/chico_esperando2.png",
+  lay: "/mascots/chico/chico_reposo.png",
+  alert: "/mascots/chico/chico_mirandoatento.png",
+  sleep: "/mascots/chico/chico_durmiendo.png"
 };
 
 export const dumboSprites: Record<DumboSpriteState, string> = {
-  idle: "/mascots/dumbo/dumbo_idle.png",
-  walk_01: "/mascots/dumbo/dumbo_walk_01.png",
-  walk_02: "/mascots/dumbo/dumbo_walk_02.png",
-  jump: "/mascots/dumbo/dumbo_jump.png",
+  idle: "/mascots/dumbo/dumbo_frente.png",
+  walk_01: "/mascots/dumbo/dumbo_caminando.png",
+  walk_02: "/mascots/dumbo/dumbo_caminando_2.png",
+  jump: "/mascots/dumbo/dumbo_corriendofeliz.png",
   turn: "/mascots/dumbo/dumbo_turn.png",
-  sit: "/mascots/dumbo/dumbo_sit.png",
-  lay: "/mascots/dumbo/dumbo_lay.png",
+  sit: "/mascots/dumbo/dumbo_sentado_atento.png",
+  lay: "/mascots/dumbo/dumbo_relajado.png",
   guide: "/mascots/dumbo/dumbo_guide.png",
-  sleep: "/mascots/dumbo/dumbo_sleep.png",
-  look: "/mascots/dumbo/dumbo_look.png"
+  sleep: "/mascots/dumbo/dumbo_durmiendo.png",
+  look: "/mascots/dumbo/dumbo_vistacielo.png"
 };
 
 export const walkFrames = {

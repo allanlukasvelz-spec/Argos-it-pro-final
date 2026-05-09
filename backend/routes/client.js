@@ -53,16 +53,36 @@ router.get("/portal", async (req, res) => {
     );
 
     res.json({
-      user: userResult.rows[0],
+      user: {
+        ...userResult.rows[0],
+        role: req.user.role || "cliente",
+        clientVerified: true
+      },
+      roles: ["visitante", "cliente", "cliente_verificado", "admin", "super_admin"],
       clientVerified: true,
+      companyProfile: {
+        name: userResult.rows[0]?.company || "Empresa pendiente",
+        contactEmail: userResult.rows[0]?.email,
+        status: "perfil_basico",
+        nextStep: "Completar dominio web, responsables y servicios contratados."
+      },
+      activeServices: [
+        { slug: "consultoria-it", name: "Consultoría IT premium", status: "available" },
+        { slug: "mantenimiento-informatico", name: "Mantenimiento informático", status: "available" },
+        { slug: "seguridad-informatica", name: "Seguridad informática", status: "available" },
+        { slug: "web-wordpress", name: "Web y WordPress", status: "available" },
+        { slug: "automatizacion-ia", name: "Automatización con IA", status: "available" },
+        { slug: "auditoria-digital", name: "Auditoría digital continua", status: "available" }
+      ],
       websiteAudit: {
         status: "pendiente_de_revision",
         score: 82,
+        reviewedAt: new Date().toISOString(),
         checks: [
-          { label: "SEO tecnico", status: "mejorable" },
-          { label: "Rendimiento movil", status: "correcto" },
-          { label: "Seguridad WordPress", status: "prioritario" },
-          { label: "Captacion B2B", status: "mejorable" }
+          { label: "SEO tecnico", status: "mejorable", priority: "Media" },
+          { label: "Rendimiento movil", status: "correcto", priority: "Baja" },
+          { label: "Seguridad WordPress", status: "prioritario", priority: "Alta" },
+          { label: "Captacion digital", status: "mejorable", priority: "Media" }
         ]
       },
       suggestedImprovements: [
@@ -71,6 +91,20 @@ router.get("/portal", async (req, res) => {
         "Completar datos legales y banner de cookies si hay analitica.",
         "Crear formularios segmentados por seguridad, soporte, IA y WordPress."
       ],
+      improvementPanel: {
+        statusOptions: ["pending", "reviewed", "accepted", "in_progress", "done"],
+        fields: ["estado_web", "problema_detectado", "mejora_recomendada", "prioridad", "estado", "fecha_revision"]
+      },
+      messages: submissions.rows
+        .filter((submission) => submission.data?.type === "direct_message")
+        .map((submission) => ({
+          id: submission.id,
+          subject: submission.data?.subject,
+          urgency: submission.data?.urgency,
+          status: submission.status,
+          read: submission.status !== "pending",
+          created_at: submission.created_at
+        })),
       submissions: submissions.rows,
       activity: activity.rows
     });

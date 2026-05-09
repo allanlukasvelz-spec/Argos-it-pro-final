@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import API from "@/lib/api";
+import ArgosPageShell from "@/components/layout/ArgosPageShell";
 import { useAuthStore } from "@/lib/auth";
 import Link from "next/link";
 import toast from "react-hot-toast";
@@ -33,7 +34,8 @@ export default function Login() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#F8FBFF] px-5">
+    <ArgosPageShell variant="portal">
+    <div className="flex min-h-screen items-center justify-center px-5">
       <div className="w-full max-w-md rounded-lg border border-[#E5E7EB] bg-white p-8 shadow-xl shadow-[#0B1E33]/10">
         <h1 className="mb-2 text-center text-3xl font-black text-[#0B1E33]">Iniciar sesión</h1>
         <p className="mb-6 text-center text-[#4B5563]">Accede al portal de cliente ARGOS-IT.</p>
@@ -74,5 +76,6 @@ export default function Login() {
         </p>
       </div>
     </div>
+    </ArgosPageShell>
   );
 }

@@ -50,7 +50,6 @@ export default function ChicoDumboSpriteSystem() {
             width={232}
             height={232}
             sizes="(max-width: 860px) 140px, 232px"
-            quality={70}
             priority={false}
           />
         </button>
@@ -78,7 +77,6 @@ export default function ChicoDumboSpriteSystem() {
             width={208}
             height={208}
             sizes="(max-width: 860px) 124px, 208px"
-            quality={70}
             priority={false}
           />
         </button>

@@ -1,12 +1,10 @@
 export const serviceSlugs = [
+  "consultoria-it",
   "mantenimiento-informatico",
-  "soporte-tecnico",
-  "ciberseguridad",
-  "redes-sistemas",
-  "backup-recuperacion",
+  "seguridad-informatica",
+  "web-wordpress",
   "automatizacion-ia",
-  "consultoria-digital",
-  "desarrollo-web"
+  "auditoria-digital"
 ] as const;
 
 export type ServiceSlug = (typeof serviceSlugs)[number];

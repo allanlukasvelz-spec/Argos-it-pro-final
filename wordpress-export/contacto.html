@@ -3,9 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Contacto | Consultoría informática ARGOS-IT</title>
-  <meta name="description" content="Solicita una consulta con ARGOS-IT para consultoría informática, soporte IT, mantenimiento informático, seguridad, WordPress o automatización con IA.">
+  <title>Contacto | Consultoría informática ARGOS-IT cualquier lugar</title>
+  <meta name="description" content="Solicita una consulta con ARGOS-IT para consultoría informática, soporte IT, mantenimiento informático, seguridad, WordPress o automatización con IA en cualquier lugar, de forma telemática, telefónica o presencial.">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="assets/css/argos-backgrounds.css">
 </head>
 <body>
   <header class="topbar">
@@ -13,17 +14,51 @@
       <a class="brand" href="index.html" aria-label="ARGOS-IT inicio">
         <img src="./logo-argos-it.png" alt="ARGOS-IT Consultoría y Servicios Informáticos" class="argos-logo">
       </a>
-      <nav class="links"><a href="index.html#servicios">Servicios</a><a href="index.html#seguridad">Seguridad</a><a href="index.html#metodo">Método</a></nav>
-      <a class="btn primary" href="#formulario">Solicitar consulta</a>
+      <nav class="links"><a href="index.html#servicios">Servicios</a><a href="index.html#metodo">Método</a><a href="index.html#planes">Planes</a><a href="./portal.html">Portal</a></nav>
     </div>
   </header>
-  <main class="section">
+  <div class="argos-page-shell argos-bg-contact">
+  <div class="argos-page-bg" aria-hidden="true">
+    <span class="argos-bg-layer argos-bg-grid"></span>
+    <span class="argos-bg-layer argos-bg-circuit"></span>
+    <span class="argos-bg-layer argos-bg-diagonal argos-bg-diagonal--one"></span>
+    <span class="argos-bg-layer argos-bg-diagonal argos-bg-diagonal--two"></span>
+    <span class="argos-bg-layer argos-bg-glow argos-bg-glow--one"></span>
+    <span class="argos-bg-layer argos-bg-glow argos-bg-glow--two"></span>
+    <span class="argos-bg-layer argos-bg-orbit"></span>
+    <span class="argos-bg-layer argos-bg-noise"></span>
+  </div>
+
+  <main class="argos-content-layer section">
     <div class="wrap split">
-      <div><span class="kicker">Contacto</span><h1>Hablemos de tu infraestructura, web o soporte IT.</h1><p class="muted">Responderemos en menos de 24 horas laborables con un siguiente paso concreto. Servicio orientado a empresas, autónomos y profesionales que necesitan apoyo tecnológico cercano, flexible y preparado para trabajar en remoto.</p><div class="wp-note"><strong>Email:</strong> info@argos-it.com<br><strong>Alcance:</strong> internacional y remoto<br><strong>Enfoque:</strong> tecnología que protege, acompaña y simplifica.</div></div>
-      <form id="formulario" class="form" action="https://formspree.io/f/xpqooedl" method="POST"><input type="hidden" name="_subject" value="Nueva consulta desde la pagina de contacto ARGOS-IT"><div class="grid2"><label>Nombre completo<input required name="name" placeholder="Tu nombre"></label><label>Email<input required type="email" name="email" placeholder="tu@email.com"></label><label>Empresa<input name="company" placeholder="Nombre de empresa"></label><label>Teléfono<input name="phone" placeholder="+34"></label></div><label style="margin-top:16px">Necesidad principal<select name="service"><option>Quiero una web profesional</option><option>Necesito soporte técnico</option><option>Quiero mejorar mi web</option><option>Seguridad informática</option><option>Automatización con IA</option><option>Hosting / WordPress</option><option>Consultoría IT premium</option><option>Auditoría digital continua</option></select></label><label style="margin-top:16px">Mensaje<textarea required name="message" rows="6" placeholder="Describe contexto, urgencia, objetivo, web actual si existe y tipo de acompañamiento que necesitas."></textarea></label><label class="consent" style="margin-top:16px"><input required type="checkbox" name="privacy">Acepto la política de privacidad y autorizo a ARGOS-IT a contactar conmigo.</label><button class="btn primary" style="width:100%;margin-top:18px" type="submit">Enviar solicitud</button></form>
+      <div>
+        <span class="kicker">Contacto</span>
+        <h1>Hablemos de prevención, seguridad y mejora continua.</h1>
+        <p class="muted">Responderemos con un siguiente paso concreto. Servicio orientado a empresas, autónomos y profesionales de cualquier lugar, con atención telemática, telefónica o presencial que necesitan apoyo tecnológico cercano, flexible y preparado para crecer.</p>
+        <div class="wp-note"><strong>Email:</strong> info@argos-it.com<br><strong>Zona:</strong> cualquier lugar, de forma telemática, telefónica o presencial<br><strong>Enfoque:</strong> no esperamos a que tu tecnología falle; la revisamos, reforzamos y sostenemos.</div>
+      </div>
+      <form id="formulario" class="form" action="https://formspree.io/f/xpqooedl" method="POST">
+        <input type="hidden" name="_subject" value="Nueva consulta desde la pagina de contacto ARGOS-IT">
+        <input type="hidden" name="origen" value="pagina-contacto">
+        <div class="grid2">
+          <label>Nombre completo<input required name="name" placeholder="Tu nombre"></label>
+          <label>Email<input required type="email" name="email" placeholder="tu@email.com"></label>
+          <label>Empresa<input name="company" placeholder="Nombre de empresa"></label>
+          <label>Teléfono<input name="phone" placeholder="+34"></label>
+          <label>Zona o modalidad<input name="zona_modalidad" placeholder="telemática, telefónica o presencial"></label>
+          <label>Necesidad principal<select name="necesidad_principal"><option>Solicitar diagnóstico ARGOS</option><option>Solicitar mantenimiento preventivo</option><option>Revisar mi web</option><option>Quiero una web profesional</option><option>Necesito soporte técnico</option><option>Quiero mejorar mi web</option><option>Seguridad informática</option><option>Automatización con IA</option><option>Hosting/WordPress</option><option>No lo sé todavía</option></select></label>
+          <label>Servicio ARGOS relacionado<select name="service"><option>Consultoría IT premium</option><option>Mantenimiento informático para empresas</option><option>Seguridad informática y protección digital</option><option>Web, WordPress y presencia digital</option><option>Automatización con IA</option><option>Auditoría digital continua</option><option>No lo sé todavía</option></select></label>
+          <label>Nivel de urgencia<select name="urgencia"><option>Normal</option><option>Alta</option><option>Crítica</option><option>No lo sé todavía</option></select></label>
+        </div>
+        <label style="margin-top:16px">Mensaje<textarea required name="message" rows="6" placeholder="Describe contexto, urgencia, objetivo, web actual si existe y tipo de acompañamiento que necesitas."></textarea></label>
+        <label class="consent" style="margin-top:16px"><input required type="checkbox" name="privacy">Acepto la política de privacidad y autorizo a ARGOS-IT a contactar conmigo.</label>
+        <button class="btn primary" style="width:100%;margin-top:18px" type="submit">Hablar con ARGOS-IT</button>
+      </form>
     </div>
   </main>
-  <footer class="footer"><div class="wrap footer-grid"><div><img src="./logo-argos-it.png" alt="ARGOS-IT Consultoría y Servicios Informáticos" class="argos-logo-footer"><p>Consultoría informática, soporte IT y mejora continua para negocios.</p></div><a href="index.html">Inicio</a><a href="aviso-legal.html">Aviso legal</a><div><a href="privacidad.html">Privacidad</a><br><a href="cookies.html">Cookies</a></div></div></footer>
+</div>
+  <footer class="footer"><div class="wrap footer-grid"><div><img src="./logo-argos-it.png" alt="ARGOS-IT Consultoría y Servicios Informáticos" class="argos-logo-footer"><p>Consultoría informática, soporte IT y mejora continua para negocios de cualquier lugar, de forma telemática, telefónica o presencial.</p></div><a href="index.html">Inicio</a><a href="aviso-legal.html">Aviso legal</a><div><a href="privacidad.html">Privacidad</a><br><a href="cookies.html">Cookies</a></div></div></footer>
   <script src="script.js"></script>
+  <script src="./js/argos-assistants.js"></script>
 </body>
 </html>

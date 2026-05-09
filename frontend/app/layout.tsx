@@ -3,13 +3,14 @@ import { Toaster } from "react-hot-toast";
 import SiteShell from "@/components/layout/SiteShell";
 import { LanguageProvider } from "@/i18n/provider";
 import "./globals.css";
+import "../assets/css/argos-backgrounds.css";
 import "../styles/mascot-sprites.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://argos-it.com"),
-  title: "ARGOS-IT | Consultoría informática para empresas",
-  description: "Consultoría informática, mantenimiento, soporte técnico, ciberseguridad, automatización y soluciones digitales para empresas.",
-  keywords: "consultoría informática, mantenimiento informático, soporte técnico empresas, ciberseguridad, redes, backup, automatización IA, Sabadell, Barcelona",
+  title: "ARGOS-IT | Consultoría tecnológica premium",
+  description: "Tecnología que protege, acompaña y simplifica: soporte IT, seguridad informática, mantenimiento web, WordPress, automatización con IA y mejora continua.",
+  keywords: "consultoría informática, servicios informáticos, mantenimiento informático, soporte IT, seguridad informática, diseño web WordPress, automatización con IA",
   authors: [{ name: "ARGOS-IT" }],
   icons: {
     icon: "/favicon.svg",
@@ -18,16 +19,16 @@ export const metadata: Metadata = {
   
   // Open Graph
   openGraph: {
-    title: "ARGOS-IT | Consultoría informática para empresas",
-    description: "Mantenimiento IT, soporte técnico, ciberseguridad, redes, backup, automatización IA y desarrollo web empresarial.",
+    title: "ARGOS-IT | Tecnología que protege, acompaña y simplifica",
+    description: "Socio tecnológico externo para soporte IT, ciberseguridad, WordPress, automatización con IA y mejora continua.",
     url: "https://argos-it.com",
     siteName: "Argos IT",
     images: [
       {
-        url: "/og-image.svg",
+        url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "ARGOS-IT - Consultoría informática para empresas"
+        alt: "ARGOS-IT - Consultoría tecnológica premium"
       }
     ],
     type: "website",
@@ -37,9 +38,9 @@ export const metadata: Metadata = {
   // Twitter
   twitter: {
     card: "summary_large_image",
-    title: "ARGOS-IT | Consultoría informática para empresas",
-    description: "Servicios IT B2B para empresas",
-    images: ["/og-image.svg"]
+    title: "ARGOS-IT | Consultoría tecnológica premium",
+    description: "Tecnología que protege, acompaña y simplifica",
+    images: ["/og-image.png"]
   },
 
   // Verificación y confianza
@@ -69,12 +70,12 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     name: "ARGOS-IT",
-    description: "Consultoría informática, mantenimiento IT, soporte técnico, ciberseguridad, automatización IA y desarrollo web para empresas",
-    areaServed: ["International"],
+    description: "Consultoría tecnológica premium, soporte IT, seguridad informática, mantenimiento web, WordPress y automatización con IA para empresas y profesionales",
+    areaServed: ["España", "Unión Europea", "Atención telemática", "Atención telefónica", "Atención presencial según proyecto"],
     url: "https://argos-it.com",
     email: "info@argos-it.com",
-    serviceType: ["Consultoría IT", "Seguridad informática", "Mantenimiento IT", "Soporte técnico", "Desarrollo web empresarial"],
-    knowsAbout: ["Ciberseguridad", "Redes y sistemas", "Backup y recuperación", "Automatización con IA", "Soporte IT"]
+    serviceType: ["Consultoría IT premium", "Mantenimiento informático para empresas", "Seguridad informática y protección digital", "Web, WordPress y presencia digital", "Automatización con IA", "Auditoría digital continua"],
+    knowsAbout: ["Soporte IT", "Seguridad informática", "WordPress", "Automatización con IA", "Auditoría digital continua", "Mantenimiento informático"]
   };
 
   return (

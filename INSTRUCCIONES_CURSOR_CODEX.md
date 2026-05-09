@@ -33,10 +33,17 @@ Mantener:
 - Formulario Formspree `https://formspree.io/f/xpqooedl`.
 - Páginas legales.
 - Español profesional.
+- Posicionamiento de consultoría tecnológica premium, no reparación informática.
+- Cobertura flexible para cualquier lugar, mediante atención telemática, telefónica o presencial según proyecto.
+- Formulario inteligente por necesidad en home y contacto.
+- Portal de clientes como visión de Fase 2, sin inventar APIs ni acceso privado no implementado.
 - Los asistentes Chico y Dumbo deben estar visibles como módulo funcional y enlazar a sus páginas/formularios contextuales.
+- El botón "Portal" de la home debe abrir `./portal.html`.
+- `wordpress-export/portal.html` debe presentarse como página informativa y de activación del área privada, con el formulario al final y sin login ficticio.
 - Las tarjetas de servicios de la home no deben hacer scroll interno: cada una debe abrir una página independiente de detalle.
 - Cada página de servicio debe incluir explicación completa, beneficios, proceso de trabajo, CTA y formulario específico conectado a Formspree.
 - Debe existir la carpeta `wordpress-export/servicios/` con una página HTML por cada servicio oficial.
+- Debe existir la carpeta `wordpress-export/metodo/` con páginas independientes para Analizar, Reforzar, Gestionar, Optimizar y Sostener.
 
 
 ## Servicios oficiales
@@ -46,6 +53,29 @@ Mantener:
 4. Web, WordPress y presencia digital.
 5. Automatización con IA.
 6. Auditoría digital continua.
+
+En el frontend Next, `frontend/lib/services.ts` debe mantener solo los slugs oficiales:
+- `consultoria-it`
+- `mantenimiento-informatico`
+- `seguridad-informatica`
+- `web-wordpress`
+- `automatizacion-ia`
+- `auditoria-digital`
+
+## SEO obligatorio
+Reforzar textos y metadatos para:
+- Consultoría informática.
+- Servicios informáticos.
+- Mantenimiento informático.
+- Soporte IT.
+- Seguridad informática.
+- Diseño web WordPress.
+- Automatización con IA.
+- Atención telemática.
+- Atención telefónica.
+- Atención presencial según proyecto.
+
+No limitar la cobertura a una ciudad concreta. La web debe comunicar que ARGOS-IT puede atender en cualquier lugar, de forma telemática, telefónica o presencial según el proyecto.
 
 ## Navegación obligatoria de servicios
 La home debe funcionar como resumen visual y puerta de entrada. No debe resolver todos los servicios dentro de la misma página ni depender de desplazamientos internos.
@@ -152,7 +182,7 @@ Actualizar `wordpress-export/style.css` con estilos para:
 - `.service-cta`
 
 Requisitos:
-- Mantener diseño premium, limpio y B2B.
+- Mantener diseño premium, limpio y profesional.
 - Responsive perfecto en móvil.
 - Botones visibles y claros.
 - Tarjetas clicables con estado hover.
@@ -166,6 +196,37 @@ Requisitos:
 - O — Optimizar.
 - S — Sostener.
 
+Las tarjetas del método en la home deben ser enlaces reales, no scroll interno:
+- A — Analizar -> `wordpress-export/metodo/analizar.html`
+- R — Reforzar -> `wordpress-export/metodo/reforzar.html`
+- G — Gestionar -> `wordpress-export/metodo/gestionar.html`
+- O — Optimizar -> `wordpress-export/metodo/optimizar.html`
+- S — Sostener -> `wordpress-export/metodo/sostener.html`
+
+Cada página del método debe explicar:
+- Qué significa esa fase.
+- Qué hacemos en esa fase.
+- Qué obtiene el cliente.
+- Qué problemas evitamos.
+- Qué herramientas usamos.
+- CTA "Solicitar diagnóstico ARGOS".
+- Formulario Formspree con `origen=metodo-argos` y `fase_argos`.
+
+Mensaje obligatorio:
+> No esperamos a que algo falle. Analizamos, reforzamos y acompañamos para prevenir problemas antes de que afecten a tu negocio.
+
+## Herramientas, infraestructura y prueba social
+La home debe incluir:
+- "Herramientas y tecnología con las que trabajamos".
+- "Infraestructura propia, privacidad y control".
+- "Acompañamiento continuo".
+- "Clientes que confían en ARGOS-IT".
+
+Las reseñas deben ser placeholders genéricos hasta contar con testimonios reales. No inventar nombres reales de clientes ni empresas.
+
+Mensaje preventivo:
+> En ARGOS-IT no solo resolvemos problemas: los prevenimos.
+
 ## Planes
 Planes comerciales sin precios:
 - Essential.
@@ -174,12 +235,21 @@ Planes comerciales sin precios:
 
 No inventar precios. La propuesta debe cerrarse tras diagnóstico.
 
+Cada plan se comunica por nivel de acompañamiento:
+- Essential: orden, diagnóstico inicial y base segura.
+- Professional: soporte recurrente, auditoría periódica y mejoras digitales.
+- Elite: dirección tecnológica externa, seguridad reforzada y evolución continua.
+
 ## Marca
 - Logo oficial: `wordpress-export/logo-argos-it.png`.
 - Imagen narrativa: `wordpress-export/chico-dumbo-historia.png`.
 - Chico = protección, diagnóstico, seguridad, orientación, firmeza.
 - Dumbo = acompañamiento, seguimiento, recordatorios, cercanía, soporte.
 - Chico y Dumbo no son el logo principal.
+
+## Regla de lenguaje comercial
+- Queda prohibido usar ese término comercial salvo petición expresa del propietario.
+- Usar lenguaje profesional: consultoría tecnológica premium, orientado a clientes, para empresas, autónomos y profesionales.
 
 ## Asistentes Chico y Dumbo — implementación obligatoria
 Chico y Dumbo deben existir como asistentes funcionales de la experiencia ARGOS-IT, no solo como concepto de marca.
@@ -242,9 +312,11 @@ Dumbo debe poder orientar al usuario en:
 - No deben prometer resultados garantizados.
 - No deben recopilar datos sensibles innecesarios.
 - Deben enviar solicitudes mediante Formspree o el backend existente, nunca exponer claves API.
+- `chico-dumbo-historia.png` solo puede usarse en la sección "El origen de ARGOS-IT".
+- El logo principal siempre debe ser `logo-argos-it.png`.
 
 ### Requisitos de implementación
-- Mantener diseño premium, B2B y profesional.
+- Mantener diseño premium y profesional.
 - Añadir estilos en `wordpress-export/style.css` para tarjetas, botones y layout responsive.
 - No romper el formulario de contacto actual.
 - No eliminar páginas legales.
@@ -255,6 +327,7 @@ Dumbo debe poder orientar al usuario en:
 Confirmar que existen y funcionan:
 - `wordpress-export/index.html`
 - `wordpress-export/contacto.html`
+- `wordpress-export/portal.html`
 - `wordpress-export/aviso-legal.html`
 - `wordpress-export/privacidad.html`
 - `wordpress-export/cookies.html`
@@ -267,6 +340,11 @@ Confirmar que existen y funcionan:
 - `wordpress-export/servicios/web-wordpress.html`
 - `wordpress-export/servicios/automatizacion-ia.html`
 - `wordpress-export/servicios/auditoria-digital.html`
+- `wordpress-export/metodo/analizar.html`
+- `wordpress-export/metodo/reforzar.html`
+- `wordpress-export/metodo/gestionar.html`
+- `wordpress-export/metodo/optimizar.html`
+- `wordpress-export/metodo/sostener.html`
 - `wordpress-export/asistente-chico.html`
 - `wordpress-export/asistente-dumbo.html`
 
@@ -275,8 +353,13 @@ Verificar:
 - Cada página de servicio tiene formulario específico.
 - Cada formulario conserva Formspree.
 - Cada formulario incluye campo oculto `servicio` u `origen` según corresponda.
+- Cada página del método incluye formulario Formspree con `fase_argos`.
+- Home y contacto incluyen necesidades inteligentes: web profesional, soporte técnico, mejora web, seguridad informática, automatización con IA y hosting/WordPress.
+- La home y la página de contacto no limitan la cobertura a una ciudad concreta.
+- Las reseñas están marcadas como placeholders.
 - Chico y Dumbo aparecen como asistentes funcionales.
 - Chico y Dumbo enlazan a sus páginas/formularios propios.
+- `portal.html` funciona como página informativa y de activación, con formulario al final y sin login ficticio.
 - El logo oficial se usa como logo principal.
 - `chico-dumbo-historia.png` se usa solo para la historia de marca.
 - Las páginas legales siguen disponibles.

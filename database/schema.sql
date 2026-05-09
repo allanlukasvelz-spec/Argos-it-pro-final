@@ -5,6 +5,9 @@ CREATE TABLE IF NOT EXISTS users (
   password TEXT NOT NULL,
   name TEXT,
   company TEXT,
+  role TEXT DEFAULT 'cliente', -- 'visitante', 'cliente', 'cliente_verificado', 'admin', 'super_admin'
+  client_verified BOOLEAN DEFAULT false,
+  company_profile JSONB DEFAULT '{}'::jsonb,
   avatar_url TEXT,
   is_active BOOLEAN DEFAULT true,
   created_at TIMESTAMP DEFAULT NOW(),
@@ -61,9 +64,60 @@ CREATE TABLE IF NOT EXISTS form_submissions (
   created_at TIMESTAMP DEFAULT NOW()
 );
 
+-- Tabla de servicios contratados por cliente
+CREATE TABLE IF NOT EXISTS client_services (
+  id SERIAL PRIMARY KEY,
+  user_id INT REFERENCES users(id) ON DELETE CASCADE,
+  service_slug TEXT NOT NULL,
+  status TEXT DEFAULT 'active',
+  started_at TIMESTAMP DEFAULT NOW(),
+  renewed_at TIMESTAMP,
+  metadata JSONB DEFAULT '{}'::jsonb
+);
+
+-- Tabla de auditorías y mejoras web
+CREATE TABLE IF NOT EXISTS website_audits (
+  id SERIAL PRIMARY KEY,
+  user_id INT REFERENCES users(id) ON DELETE CASCADE,
+  website_url TEXT,
+  score INT DEFAULT 0,
+  status TEXT DEFAULT 'pending',
+  findings JSONB DEFAULT '[]'::jsonb,
+  reviewed_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS client_improvements (
+  id SERIAL PRIMARY KEY,
+  user_id INT REFERENCES users(id) ON DELETE CASCADE,
+  title TEXT NOT NULL,
+  priority TEXT DEFAULT 'Media',
+  status TEXT DEFAULT 'pending',
+  page_url TEXT,
+  details TEXT,
+  reviewed_at TIMESTAMP DEFAULT NOW(),
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS client_messages (
+  id SERIAL PRIMARY KEY,
+  user_id INT REFERENCES users(id) ON DELETE CASCADE,
+  related_submission_id INT REFERENCES form_submissions(id) ON DELETE SET NULL,
+  sender_role TEXT DEFAULT 'cliente',
+  subject TEXT,
+  message TEXT NOT NULL,
+  urgency TEXT DEFAULT 'Normal',
+  read_at TIMESTAMP,
+  attachments JSONB DEFAULT '[]'::jsonb,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
 -- Índices para optimización
 CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_ai_memory_user ON ai_memory(user_id);
 CREATE INDEX idx_activity_logs_user ON activity_logs(user_id);
 CREATE INDEX idx_security_logs_user ON security_logs(user_id);
 CREATE INDEX idx_security_logs_created ON security_logs(created_at);
+CREATE INDEX idx_client_services_user ON client_services(user_id);
+CREATE INDEX idx_website_audits_user ON website_audits(user_id);
+CREATE INDEX idx_client_improvements_user ON client_improvements(user_id);
+CREATE INDEX idx_client_messages_user ON client_messages(user_id);

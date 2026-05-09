@@ -1,0 +1,665 @@
+:root {
+  --argos-ink: #030812;
+  --argos-navy: #071421;
+  --argos-navy-2: #0B1F33;
+  --argos-blue: #0D3B66;
+  --argos-cyan: #18D4F7;
+  --argos-cyan-2: #39F4FF;
+  --argos-aqua: #00A8C8;
+  --argos-white: #F4FAFF;
+  --argos-muted: #9CB7C9;
+  --argos-glass: rgba(255, 255, 255, .075);
+  --argos-glass-strong: rgba(255, 255, 255, .12);
+  --argos-border: rgba(255, 255, 255, .16);
+  --argos-cyan-border: rgba(24, 212, 247, .32);
+  --argos-shadow-deep: rgba(0, 0, 0, .55);
+  --argos-shadow-cyan: rgba(24, 212, 247, .22);
+  --argos-mascot-safe-left: 280px;
+  --argos-mascot-safe-right: 280px;
+}
+
+.argos-page-shell {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(24, 212, 247, .18), transparent 30%),
+    radial-gradient(circle at 85% 55%, rgba(57, 244, 255, .12), transparent 34%),
+    linear-gradient(135deg, var(--argos-ink) 0%, var(--argos-navy) 42%, var(--argos-navy-2) 100%);
+  color: var(--argos-white);
+  isolation: isolate;
+}
+
+.argos-page-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.argos-bg-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.argos-content-layer {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+}
+
+.argos-page-shell .hero,
+.argos-page-shell .method-detail-hero {
+  background: transparent;
+}
+
+.argos-page-shell .hero::before {
+  opacity: .14;
+  mix-blend-mode: screen;
+}
+
+.argos-page-shell .section:not(.white):not(.brand-story):not(.contact):not(.tech-stack):not(.continuous-support):not(.cta-preventive):not(.testimonials),
+.argos-page-shell main.section {
+  color: var(--argos-white);
+}
+
+.argos-page-shell .section:not(.white):not(.brand-story):not(.contact):not(.tech-stack):not(.continuous-support):not(.cta-preventive):not(.testimonials) .section-title h2,
+.argos-page-shell .section:not(.white):not(.brand-story):not(.contact):not(.tech-stack):not(.continuous-support):not(.cta-preventive):not(.testimonials) h1,
+.argos-page-shell .section:not(.white):not(.brand-story):not(.contact):not(.tech-stack):not(.continuous-support):not(.cta-preventive):not(.testimonials) h2,
+.argos-page-shell main.section h1,
+.argos-page-shell main.section h2 {
+  color: var(--argos-white);
+}
+
+.argos-page-shell .section:not(.white):not(.brand-story):not(.contact):not(.tech-stack):not(.continuous-support):not(.cta-preventive):not(.testimonials) .muted,
+.argos-page-shell main.section .muted {
+  color: #C9DDEC;
+}
+
+.argos-page-shell .white,
+.argos-page-shell .brand-story,
+.argos-page-shell .testimonials {
+  background: rgba(255, 255, 255, .96);
+  color: var(--ink, #07111F);
+}
+
+.argos-page-shell .card,
+.argos-page-shell .method-card,
+.argos-page-shell .plan-card,
+.argos-page-shell .portal-panel a,
+.argos-page-shell .assistant-card,
+.argos-page-shell .service-panel:not(.service-summary),
+.argos-page-shell .service-benefit,
+.argos-page-shell .service-step,
+.argos-page-shell .method-detail-card,
+.argos-page-shell .form,
+.argos-page-shell .legal-box {
+  color: var(--ink, #07111F);
+}
+
+.argos-page-shell .card p,
+.argos-page-shell .method-card p,
+.argos-page-shell .plan-card p,
+.argos-page-shell .portal-panel span,
+.argos-page-shell .assistant-card p,
+.argos-page-shell .service-panel:not(.service-summary) p,
+.argos-page-shell .service-benefit p,
+.argos-page-shell .service-step p,
+.argos-page-shell .method-detail-card p,
+.argos-page-shell .form .muted,
+.argos-page-shell .legal-box p,
+.argos-page-shell .legal-box li {
+  color: var(--muted, #4B5563);
+}
+
+.argos-page-shell .service-summary,
+.argos-page-shell .service-cta,
+.argos-page-shell .service-cta-band,
+.argos-page-shell .tech-stack,
+.argos-page-shell .continuous-support,
+.argos-page-shell .cta-preventive {
+  color: var(--argos-white);
+}
+
+.argos-page-shell .service-summary p,
+.argos-page-shell .service-summary li,
+.argos-page-shell .service-cta p,
+.argos-page-shell .service-cta-band p {
+  color: #C9DDEC;
+}
+
+.argos-bg-grid {
+  opacity: .36;
+  background-image:
+    linear-gradient(rgba(24, 212, 247, .095) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(24, 212, 247, .085) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, .92), rgba(0, 0, 0, .35) 70%, transparent);
+  animation: gridDrift 28s linear infinite;
+}
+
+.argos-bg-circuit {
+  opacity: .42;
+  background:
+    linear-gradient(90deg, transparent 0 16%, rgba(24, 212, 247, .12) 16.2%, transparent 16.6% 46%, rgba(57, 244, 255, .10) 46.2%, transparent 46.6% 100%),
+    linear-gradient(0deg, transparent 0 28%, rgba(24, 212, 247, .10) 28.2%, transparent 28.6% 72%, rgba(57, 244, 255, .08) 72.2%, transparent 72.6% 100%);
+  background-size: 360px 260px;
+  animation: dataFlow 16s linear infinite;
+}
+
+.argos-bg-circuit::before,
+.argos-bg-circuit::after {
+  content: "";
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  border: 1px solid rgba(57, 244, 255, .4);
+  border-radius: 999px;
+  background: rgba(24, 212, 247, .12);
+  box-shadow:
+    160px 90px 0 rgba(24, 212, 247, .13),
+    360px 220px 0 rgba(57, 244, 255, .11),
+    620px 140px 0 rgba(24, 212, 247, .10),
+    920px 340px 0 rgba(57, 244, 255, .10);
+}
+
+.argos-bg-circuit::before {
+  left: 12%;
+  top: 18%;
+}
+
+.argos-bg-circuit::after {
+  right: 18%;
+  bottom: 20%;
+  opacity: .72;
+}
+
+.argos-bg-diagonal {
+  inset: auto;
+  width: min(92vw, 940px);
+  height: min(58vw, 520px);
+  border: 1px solid var(--argos-border);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, .105), rgba(255, 255, 255, .025)),
+    linear-gradient(90deg, rgba(24, 212, 247, .08), transparent 62%);
+  box-shadow: 0 32px 90px rgba(0, 0, 0, .34), inset 0 1px 0 rgba(255, 255, 255, .14);
+  transform: skewX(-18deg) rotate(-8deg);
+  backdrop-filter: blur(18px);
+  animation: diagonalBreath 14s ease-in-out infinite;
+}
+
+.argos-bg-diagonal--one {
+  left: -18%;
+  bottom: 8%;
+}
+
+.argos-bg-diagonal--two {
+  right: -24%;
+  top: 5%;
+  width: min(80vw, 780px);
+  height: min(48vw, 430px);
+  opacity: .72;
+  transform: skewX(-18deg) rotate(-10deg);
+  animation-delay: -5s;
+}
+
+.argos-bg-glow {
+  inset: auto;
+  width: min(72vw, 760px);
+  height: min(72vw, 760px);
+  filter: blur(12px);
+  opacity: .9;
+  animation: glowPulse 12s ease-in-out infinite;
+}
+
+.argos-bg-glow--one {
+  left: -16%;
+  top: -18%;
+  background: radial-gradient(circle, rgba(24, 212, 247, .22), rgba(24, 212, 247, .075) 34%, transparent 68%);
+}
+
+.argos-bg-glow--two {
+  right: -18%;
+  bottom: -20%;
+  background: radial-gradient(circle, rgba(57, 244, 255, .14), rgba(13, 59, 102, .12) 36%, transparent 70%);
+  animation-delay: -4s;
+}
+
+.argos-bg-orbit {
+  inset: 8% 8% auto auto;
+  width: min(40vw, 460px);
+  aspect-ratio: 1;
+  border: 1px solid rgba(57, 244, 255, .12);
+  border-radius: 50%;
+  opacity: .45;
+  animation: orbitFloat 18s ease-in-out infinite;
+}
+
+.argos-bg-orbit::before,
+.argos-bg-orbit::after {
+  content: "";
+  position: absolute;
+  inset: 16%;
+  border: 1px solid rgba(24, 212, 247, .12);
+  border-radius: inherit;
+}
+
+.argos-bg-orbit::after {
+  inset: 34%;
+  border-color: rgba(244, 250, 255, .08);
+}
+
+.argos-bg-noise {
+  opacity: .13;
+  mix-blend-mode: soft-light;
+  background-image:
+    radial-gradient(circle at 18% 26%, rgba(255, 255, 255, .35) 0 1px, transparent 1px),
+    radial-gradient(circle at 82% 62%, rgba(255, 255, 255, .24) 0 1px, transparent 1px),
+    radial-gradient(circle at 52% 78%, rgba(24, 212, 247, .22) 0 1px, transparent 1px);
+  background-size: 38px 38px, 54px 54px, 72px 72px;
+}
+
+.argos-bg-panel {
+  position: absolute;
+  right: max(40px, 7vw);
+  top: 24%;
+  width: min(32vw, 360px);
+  height: 280px;
+  border: 1px solid var(--argos-cyan-border);
+  border-radius: 8px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, .10), rgba(255, 255, 255, .035));
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .35), 0 0 44px rgba(24, 212, 247, .10);
+  backdrop-filter: blur(18px);
+}
+
+.argos-bg-panel::before,
+.argos-bg-panel::after {
+  content: "";
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(24, 212, 247, .45), transparent);
+}
+
+.argos-bg-panel::before {
+  top: 74px;
+  box-shadow: 0 62px 0 rgba(57, 244, 255, .18), 0 124px 0 rgba(24, 212, 247, .16);
+}
+
+.argos-bg-panel::after {
+  bottom: 28px;
+  width: 42%;
+  border-radius: 999px;
+  box-shadow: 160px -118px 0 rgba(24, 212, 247, .16), 210px -58px 0 rgba(57, 244, 255, .12);
+}
+
+.argos-bg-home .argos-bg-grid {
+  opacity: .46;
+}
+
+.argos-bg-home .argos-bg-diagonal--one {
+  border-color: rgba(24, 212, 247, .24);
+}
+
+.argos-bg-home .argos-page-bg::after {
+  content: "";
+  position: absolute;
+  right: max(var(--argos-mascot-safe-right), 9vw);
+  bottom: 20%;
+  width: min(30vw, 380px);
+  height: 280px;
+  border: 1px solid rgba(24, 212, 247, .18);
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, rgba(24, 212, 247, .12), transparent 1px),
+    linear-gradient(180deg, rgba(255, 255, 255, .09), rgba(255, 255, 255, .025));
+  box-shadow: 0 26px 80px rgba(0, 0, 0, .22);
+  backdrop-filter: blur(14px);
+}
+
+.argos-bg-services .argos-bg-circuit {
+  background-size: 240px 220px;
+  opacity: .52;
+}
+
+.argos-bg-services .argos-bg-diagonal--two {
+  top: 20%;
+  opacity: .45;
+}
+
+.argos-bg-services .argos-page-bg::after {
+  content: "";
+  position: absolute;
+  inset: 14% 8% auto auto;
+  width: min(34vw, 420px);
+  height: 360px;
+  opacity: .26;
+  background:
+    linear-gradient(rgba(24, 212, 247, .18) 0 0) 0 0 / 100% 1px,
+    repeating-linear-gradient(to bottom, rgba(255, 255, 255, .16) 0 1px, transparent 1px 44px);
+}
+
+.argos-bg-method .argos-bg-circuit {
+  opacity: .24;
+}
+
+.argos-bg-method .argos-bg-orbit {
+  opacity: .26;
+}
+
+.argos-bg-method .argos-page-bg::after {
+  content: "";
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 40%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(24, 212, 247, .48), transparent);
+  box-shadow: 0 0 24px rgba(24, 212, 247, .22);
+  animation: dataFlow 16s linear infinite;
+}
+
+.argos-bg-about .argos-bg-grid {
+  opacity: .18;
+}
+
+.argos-bg-about .argos-bg-circuit {
+  opacity: .12;
+}
+
+.argos-bg-about .argos-bg-diagonal {
+  opacity: .32;
+}
+
+.argos-bg-about .argos-bg-orbit {
+  inset: 10% auto auto 8%;
+  opacity: .34;
+}
+
+.argos-bg-about .argos-bg-noise {
+  opacity: .08;
+}
+
+.argos-bg-contact .argos-bg-diagonal--one {
+  width: min(78vw, 780px);
+  left: -24%;
+  bottom: 18%;
+}
+
+.argos-bg-contact .argos-bg-glow--one {
+  left: 34%;
+  top: 18%;
+  opacity: .76;
+}
+
+.argos-bg-contact .argos-bg-circuit {
+  opacity: .18;
+}
+
+.argos-bg-agenda .argos-bg-grid {
+  background-size: 56px 44px;
+}
+
+.argos-bg-agenda .argos-bg-circuit {
+  opacity: .22;
+}
+
+.argos-bg-agenda .argos-page-bg::after {
+  content: "";
+  position: absolute;
+  inset: 12% 12% auto auto;
+  width: min(36vw, 440px);
+  height: 420px;
+  border: 1px solid rgba(24, 212, 247, .14);
+  background: repeating-linear-gradient(to bottom, rgba(255, 255, 255, .08) 0 1px, transparent 1px 52px);
+  border-radius: 8px;
+}
+
+.argos-bg-legal .argos-bg-grid,
+.argos-bg-legal .argos-bg-circuit,
+.argos-bg-legal .argos-bg-orbit {
+  opacity: .08;
+}
+
+.argos-bg-legal .argos-bg-diagonal,
+.argos-bg-legal .argos-bg-glow {
+  opacity: .18;
+}
+
+.argos-bg-portal .argos-bg-grid {
+  opacity: .5;
+}
+
+.argos-bg-portal .argos-bg-circuit {
+  opacity: .48;
+}
+
+.argos-bg-portal .argos-bg-diagonal--two {
+  border-color: rgba(24, 212, 247, .28);
+  opacity: .8;
+}
+
+.argos-side-nav {
+  position: fixed;
+  right: 18px;
+  top: 42%;
+  z-index: 35;
+  display: grid;
+  gap: 10px;
+}
+
+.argos-side-nav__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 116px;
+  min-height: 42px;
+  border: 1px solid var(--argos-cyan-border);
+  border-radius: 999px;
+  background: rgba(7, 20, 33, .66);
+  color: var(--argos-white);
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, .26);
+  backdrop-filter: blur(16px);
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease, color .2s ease;
+}
+
+.argos-side-nav__item::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  margin-right: 8px;
+  border-radius: 999px;
+  background: var(--argos-cyan);
+  box-shadow: 0 0 14px var(--argos-shadow-cyan);
+}
+
+.argos-side-nav__item:hover {
+  transform: translateX(-3px);
+  border-color: rgba(57, 244, 255, .58);
+  color: #ffffff;
+  box-shadow: 0 18px 46px rgba(0, 0, 0, .30), 0 0 26px rgba(24, 212, 247, .18);
+}
+
+.argos-hologram-card,
+.argos-floating-panel,
+.argos-tech-frame {
+  border: 1px solid var(--argos-border);
+  background: linear-gradient(145deg, rgba(255, 255, 255, .12), rgba(255, 255, 255, .045));
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .35);
+  backdrop-filter: blur(18px);
+}
+
+.argos-hologram-card,
+.argos-floating-panel {
+  border-radius: 8px;
+}
+
+.argos-tech-frame {
+  position: relative;
+  border-radius: 8px;
+}
+
+.argos-tech-frame::before,
+.argos-tech-frame::after {
+  content: "";
+  position: absolute;
+  width: 42px;
+  height: 42px;
+  border-color: rgba(24, 212, 247, .54);
+  pointer-events: none;
+}
+
+.argos-tech-frame::before {
+  left: -1px;
+  top: -1px;
+  border-left: 2px solid;
+  border-top: 2px solid;
+}
+
+.argos-tech-frame::after {
+  right: -1px;
+  bottom: -1px;
+  border-right: 2px solid;
+  border-bottom: 2px solid;
+}
+
+.argos-floating-panel {
+  animation: orbitFloat 18s ease-in-out infinite;
+}
+
+.argos-scan-line {
+  position: relative;
+  overflow: hidden;
+}
+
+.argos-scan-line::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -40%;
+  height: 36%;
+  background: linear-gradient(to bottom, transparent, rgba(57, 244, 255, .16), transparent);
+  animation: dataFlow 16s linear infinite;
+  pointer-events: none;
+}
+
+.argos-status-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--argos-white);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.argos-status-dot::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: var(--argos-cyan);
+  box-shadow: 0 0 16px rgba(24, 212, 247, .55);
+}
+
+@keyframes glowPulse {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: .68; }
+  50% { transform: translate3d(2%, -1%, 0) scale(1.04); opacity: .96; }
+}
+
+@keyframes gridDrift {
+  0% { background-position: 0 0, 0 0; }
+  100% { background-position: 64px 64px, 64px 64px; }
+}
+
+@keyframes orbitFloat {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -12px, 0); }
+}
+
+@keyframes dataFlow {
+  0% { background-position: 0 0; }
+  100% { background-position: 360px 260px; }
+}
+
+@keyframes diagonalBreath {
+  0%, 100% { opacity: .54; filter: saturate(1); }
+  50% { opacity: .74; filter: saturate(1.15); }
+}
+
+@media (max-width: 860px) {
+  :root {
+    --argos-mascot-safe-left: 150px;
+    --argos-mascot-safe-right: 150px;
+  }
+
+  .argos-page-shell {
+    background:
+      radial-gradient(circle at 18% 12%, rgba(24, 212, 247, .14), transparent 34%),
+      linear-gradient(145deg, var(--argos-ink) 0%, var(--argos-navy) 54%, var(--argos-navy-2) 100%);
+  }
+
+  .argos-bg-grid {
+    opacity: .22;
+    background-size: 56px 56px;
+  }
+
+  .argos-bg-circuit {
+    opacity: .16;
+  }
+
+  .argos-bg-diagonal {
+    width: 112vw;
+    height: 300px;
+    opacity: .24;
+    backdrop-filter: blur(8px);
+  }
+
+  .argos-bg-glow {
+    width: 96vw;
+    height: 96vw;
+    opacity: .52;
+  }
+
+  .argos-bg-orbit,
+  .argos-bg-panel,
+  .argos-page-bg::after {
+    display: none;
+  }
+
+  .argos-side-nav {
+    position: sticky;
+    left: 12px;
+    right: 12px;
+    top: 10px;
+    bottom: auto;
+    margin: 0 12px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .argos-side-nav__item {
+    min-width: 0;
+    min-height: 38px;
+    padding: 0 12px;
+    font-size: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .argos-bg-layer,
+  .argos-bg-layer::before,
+  .argos-bg-layer::after,
+  .argos-page-bg::after,
+  .argos-floating-panel,
+  .argos-scan-line::after {
+    animation: none !important;
+  }
+}

@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import HomeView from "@/components/pages/HomeView";
 
 export const metadata: Metadata = {
-  title: "ARGOS-IT | La informática que funciona",
+  title: "ARGOS-IT | Consultoría tecnológica premium",
   description:
-    "Soporte técnico, mantenimiento, seguridad, automatización y consultoría digital con enfoque empresarial."
+    "Tecnología que protege, acompaña y simplifica: soporte IT, seguridad, mantenimiento web, WordPress, automatización con IA y mejora continua."
 };
 
 export default function HomePage() {

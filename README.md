@@ -1,6 +1,6 @@
 # ARGOS-IT
 
-Web profesional de consultoría informática para empresas, con foco en continuidad operativa, soporte técnico, ciberseguridad, redes, backup, automatización IA y desarrollo web empresarial.
+Web de consultoría tecnológica premium para empresas, autónomos y profesionales, con foco en soporte IT, mantenimiento informático, seguridad informática, WordPress, automatización con IA y auditoría digital continua.
 
 ## Stack principal
 

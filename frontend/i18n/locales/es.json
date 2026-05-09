@@ -1,16 +1,16 @@
 {
   "meta": {
-    "defaultTitle": "ARGOS-IT | Consultoría informática para empresas",
-    "defaultDescription": "Consultoría informática, mantenimiento, soporte técnico, ciberseguridad, automatización y soluciones digitales para empresas.",
-    "keywords": "consultoría informática, mantenimiento informático, soporte técnico empresas, ciberseguridad, redes, backup, automatización IA, Sabadell, Barcelona",
+    "defaultTitle": "ARGOS-IT | Consultoría tecnológica premium",
+    "defaultDescription": "Consultoría informática premium, soporte IT, seguridad informática, mantenimiento web, WordPress, automatización con IA y mejora continua para empresas y profesionales.",
+    "keywords": "consultoría informática, servicios informáticos, mantenimiento informático, soporte IT, seguridad informática, diseño web WordPress, automatización con IA",
     "author": "ARGOS-IT",
-    "homeTitle": "ARGOS-IT | La informática que funciona",
-    "homeDescription": "Soporte técnico, mantenimiento, seguridad, automatización y consultoría digital con enfoque empresarial.",
-    "servicesTitle": "Servicios IT | ARGOS-IT",
-    "servicesDescription": "Servicios profesionales de mantenimiento, soporte, ciberseguridad, redes, backup, IA y desarrollo web empresarial.",
-    "methodTitle": "Método ARGOS-IT | Trabajo técnico ordenado",
-    "methodDescription": "Diagnóstico, plan, implementación y seguimiento para una infraestructura estable y segura.",
-    "aboutTitle": "Sobre ARGOS-IT | Consultoría tecnológica B2B",
+    "homeTitle": "ARGOS-IT | Tecnología que protege, acompaña y simplifica",
+    "homeDescription": "Socio tecnológico externo para empresas y profesionales: soporte IT, ciberseguridad, mantenimiento web, automatización con IA y mejora continua.",
+    "servicesTitle": "Servicios premium | ARGOS-IT",
+    "servicesDescription": "Consultoría IT premium, mantenimiento informático, seguridad, WordPress, automatización con IA y auditoría digital continua.",
+    "methodTitle": "Método ARGOS | Analizar, Reforzar, Gestionar, Optimizar y Sostener",
+    "methodDescription": "Método ARGOS para convertir problemas técnicos en diagnóstico, refuerzo, gestión, optimización y seguimiento sostenido.",
+    "aboutTitle": "Sobre ARGOS-IT | Consultoría tecnológica premium",
     "aboutDescription": "Equipo técnico orientado a continuidad operativa, seguridad y crecimiento digital empresarial.",
     "contactTitle": "Contacto ARGOS-IT | Solicitar consulta técnica",
     "contactDescription": "Cuéntanos tu necesidad y te responderemos con una propuesta clara y accionable."
@@ -43,23 +43,23 @@
     "backServices": "Volver a servicios"
   },
   "home": {
-    "eyebrow": "Consultoría informática B2B",
-    "title": "La informática que funciona. Sin ruido. Sin preocupaciones.",
-    "subtitle": "Cuidamos el entorno tecnológico de tu empresa para que sea estable, seguro y predecible. Soporte, mantenimiento, seguridad, automatización y consultoría digital con enfoque profesional.",
-    "trustTitle": "Bloques de confianza",
+    "eyebrow": "Consultoría tecnológica premium",
+    "title": "Tecnología que protege, acompaña y simplifica.",
+    "subtitle": "Ayudamos a empresas, autónomos y profesionales a mantener su infraestructura digital segura, estable y preparada para crecer, combinando soporte IT, ciberseguridad, mantenimiento web, automatización con IA y mejora continua.",
+    "trustTitle": "Acompañamiento tecnológico",
     "trustItems": [
-      "Respuesta clara y profesional",
-      "Prevención antes que improvisación",
-      "Tecnología alineada con el negocio",
-      "Servicio enfocado a empresas"
+      "Diagnóstico y prioridades con criterio externo",
+      "Seguridad, soporte y continuidad operativa",
+      "WordPress, presencia digital y formularios cuidados",
+      "Automatización con IA de forma controlada"
     ],
-    "servicesEyebrow": "Servicios ARGOS-IT",
-    "servicesTitle": "Servicios profesionales para continuidad, seguridad y crecimiento.",
-    "servicesSubtitle": "Diseñados para empresas, autónomos, despachos y equipos que necesitan tecnología confiable y soporte real."
+    "servicesEyebrow": "Servicios premium",
+    "servicesTitle": "Seis áreas para proteger, gestionar y hacer evolucionar tu entorno digital.",
+    "servicesSubtitle": "Diseñados para empresas, autónomos y profesionales de cualquier lugar que necesitan soporte IT, seguridad, WordPress, IA y mejora continua de forma telemática, telefónica o presencial."
   },
   "servicesPage": {
     "title": "Servicios ARGOS-IT",
-    "subtitle": "Consultoría informática, mantenimiento IT, soporte técnico, ciberseguridad, redes, backup, automatización IA y desarrollo web empresarial."
+    "subtitle": "Consultoría IT premium, mantenimiento informático, seguridad informática, WordPress, automatización con IA y auditoría digital continua."
   },
   "serviceDetail": {
     "includesTitle": "Incluye",
@@ -71,36 +71,41 @@
     "ctaSubtitle": "Cuéntanos tu situación actual y te responderemos con un plan técnico realista, priorizado y accionable."
   },
   "method": {
-    "title": "Método ARGOS-IT",
-    "subtitle": "Trabajamos con un método claro para que cada mejora tecnológica tenga impacto real y sea sostenible.",
+    "title": "Método ARGOS",
+    "subtitle": "Una metodología propia para pasar del problema técnico a la mejora sostenida.",
     "steps": [
       {
-        "id": "01",
-        "title": "Diagnóstico",
-        "description": "Revisión técnica inicial de entorno, riesgos, procesos y prioridades de negocio."
+        "id": "A",
+        "title": "Analizar",
+        "description": "Entender sistemas, web, riesgos, procesos y necesidades reales del negocio."
       },
       {
-        "id": "02",
-        "title": "Plan de mejora",
-        "description": "Propuesta priorizada con acciones realistas, plazos y responsables."
+        "id": "R",
+        "title": "Reforzar",
+        "description": "Corregir puntos débiles en seguridad, estabilidad, accesos, backups y operación."
       },
       {
-        "id": "03",
-        "title": "Implementación",
-        "description": "Ejecución técnica ordenada, documentada y orientada a continuidad."
+        "id": "G",
+        "title": "Gestionar",
+        "description": "Ordenar soporte, solicitudes, mantenimiento, documentación y prioridades técnicas."
       },
       {
-        "id": "04",
-        "title": "Seguimiento",
-        "description": "Control de resultados, ajustes y prevención continua."
+        "id": "O",
+        "title": "Optimizar",
+        "description": "Mejorar rendimiento, captación, automatización, experiencia web y eficiencia interna."
+      },
+      {
+        "id": "S",
+        "title": "Sostener",
+        "description": "Mantener seguimiento, auditoría continua y evolución digital sin improvisación."
       }
     ]
   },
   "about": {
     "title": "Sobre ARGOS-IT",
     "paragraphs": [
-      "ARGOS-IT es una firma de consultoría informática orientada a empresas, autónomos y equipos que necesitan estabilidad operativa, seguridad y una hoja de ruta tecnológica clara.",
-      "Nuestro enfoque combina mantenimiento, soporte técnico, ciberseguridad, redes, backup, automatización con IA y desarrollo web, siempre con criterio profesional, documentación y continuidad."
+      "ARGOS-IT es una consultoría tecnológica premium orientada a empresas, autónomos y profesionales que necesitan estabilidad operativa, seguridad y una hoja de ruta tecnológica clara.",
+      "Nuestro enfoque combina soporte IT, mantenimiento informático, ciberseguridad, mantenimiento web, WordPress, automatización con IA y auditoría digital continua, siempre con criterio profesional, documentación y continuidad."
     ],
     "valuesTitle": "Cómo trabajamos",
     "values": [
@@ -113,14 +118,14 @@
   "contact": {
     "title": "Solicitar consulta técnica",
     "subtitle": "Cuéntanos el estado actual de tu infraestructura o proyecto y te responderemos con una propuesta clara, priorizada y orientada a resultados.",
-    "intro": "Trabajamos con empresas internacionales en mantenimiento IT, soporte técnico, seguridad, automatización con IA y desarrollo web empresarial.",
+    "intro": "Trabajamos con empresas, autónomos y profesionales de cualquier lugar en soporte IT, seguridad, mantenimiento web, WordPress, automatización con IA y mejora continua, ya sea de forma telemática, telefónica o presencial.",
     "cards": {
       "emailTitle": "Email",
       "phoneTitle": "Teléfono",
       "coverageTitle": "Cobertura",
       "coverageLines": [
-        "Servicio internacional",
-        "Atención remota y presencial (según proyecto)"
+        "Cualquier lugar",
+        "Atención telemática, telefónica o presencial según proyecto"
       ]
     },
     "form": {
@@ -162,7 +167,7 @@
         },
         {
           "title": "Objeto del sitio",
-          "body": "Este sitio ofrece información sobre servicios profesionales de consultoría informática, mantenimiento, soporte, ciberseguridad, redes, backup, automatización y desarrollo web."
+          "body": "Este sitio ofrece información sobre servicios profesionales de consultoría informática, mantenimiento informático, soporte IT, seguridad informática, WordPress, automatización con IA y auditoría digital continua."
         },
         {
           "title": "Propiedad intelectual",
@@ -226,7 +231,7 @@
     "policy": "Ver política de cookies"
   },
   "footer": {
-    "tagline": "Consultoría informática profesional para empresas, autónomos y equipos que necesitan estabilidad, seguridad y continuidad.",
+    "tagline": "Consultoría tecnológica premium para empresas, autónomos y profesionales que necesitan estabilidad, seguridad y evolución digital.",
     "rights": "ARGOS-IT. Todos los derechos reservados."
   },
   "mascots": {
@@ -267,245 +272,178 @@
     }
   },
   "services": {
+    "consultoria-it": {
+      "title": "Consultoría IT premium",
+      "description": "Criterio tecnológico externo para ordenar infraestructura, riesgos, soporte, web, herramientas y prioridades antes de invertir en soluciones aisladas.",
+      "problem": "Convierte problemas dispersos en una hoja de ruta clara para decidir qué revisar, reforzar y mejorar primero.",
+      "includes": [
+        "Diagnóstico de infraestructura y presencia digital",
+        "Revisión de riesgos, accesos, copias y soporte",
+        "Priorización por impacto, urgencia y coste de oportunidad",
+        "Hoja de ruta técnica alineada con el negocio",
+        "Acompañamiento para decidir herramientas y proveedores"
+      ],
+      "benefits": [
+        "Decisiones técnicas con más claridad.",
+        "Menos riesgo por puntos débiles no detectados.",
+        "Mejor inversión en tecnología útil."
+      ],
+      "process": [
+        "Analizar contexto, sistemas y problemas.",
+        "Reforzar riesgos inmediatos.",
+        "Gestionar prioridades y responsables.",
+        "Optimizar mejoras viables.",
+        "Sostener seguimiento y evolución."
+      ],
+      "audience": [
+        "Empresas sin dirección IT interna.",
+        "Autónomos y profesionales con dudas técnicas recurrentes.",
+        "Negocios que quieren crecer sin improvisar."
+      ]
+    },
     "mantenimiento-informatico": {
       "title": "Mantenimiento informático para empresas",
-      "description": "Gestión preventiva y correctiva de equipos, sistemas y herramientas para que tu empresa trabaje sin interrupciones innecesarias.",
-      "problem": "Evita paradas por fallos repetidos, equipos desactualizados y falta de seguimiento técnico.",
+      "description": "Soporte preventivo y correctivo para mantener equipos, usuarios, sistemas y documentación bajo control.",
+      "problem": "Reduce interrupciones, incidencias repetidas y dependencia de soluciones improvisadas.",
       "includes": [
-        "Revisión de equipos",
-        "Mantenimiento preventivo",
-        "Resolución de incidencias",
-        "Optimización de sistemas",
-        "Actualizaciones",
-        "Soporte remoto",
-        "Diagnóstico técnico"
+        "Revisión preventiva de equipos y usuarios",
+        "Soporte remoto o presencial según necesidad",
+        "Actualizaciones, limpieza y documentación",
+        "Control de incidencias repetidas",
+        "Coordinación con proveedores de internet, hosting o software"
       ],
       "benefits": [
-        "Menos interrupciones en la operativa diaria.",
-        "Mayor vida útil de equipos y sistemas.",
-        "Respuesta técnica más rápida y ordenada."
+        "Menos paradas en la operativa diaria.",
+        "Canal claro para prevenir, atender y documentar incidencias técnicas.",
+        "Información técnica documentada."
       ],
       "process": [
-        "Auditoría inicial del entorno.",
-        "Plan de mantenimiento priorizado.",
-        "Ejecución técnica y documentación.",
-        "Seguimiento continuo y mejora."
+        "Analizar estado de equipos y soporte.",
+        "Reforzar puntos críticos.",
+        "Gestionar incidencias y prioridades.",
+        "Optimizar rendimiento.",
+        "Sostener revisiones periódicas."
       ],
       "audience": [
-        "Pymes con infraestructura interna.",
-        "Despachos y oficinas con dependencia digital.",
-        "Empresas sin departamento IT interno."
+        "Empresas pequeñas y equipos profesionales.",
+        "Oficinas que necesitan soporte IT recurrente.",
+        "Negocios sin departamento técnico propio."
       ]
     },
-    "soporte-tecnico": {
-      "title": "Soporte técnico profesional",
-      "description": "Soporte claro, rápido y organizado para resolver problemas técnicos sin generar dependencia ni caos.",
-      "problem": "Resuelve incidencias sin perder tiempo en cadenas de mensajes desordenadas ni soluciones improvisadas.",
+    "seguridad-informatica": {
+      "title": "Seguridad informática y protección digital",
+      "description": "Revisión y refuerzo de accesos, copias, WordPress, usuarios, sistemas críticos y hábitos operativos.",
+      "problem": "Reduce exposición digital y prepara mejor al negocio ante incidencias, errores humanos o accesos indebidos.",
       "includes": [
-        "Soporte remoto",
-        "Soporte presencial si aplica",
-        "Ayuda con software",
-        "Configuración de dispositivos",
-        "Resolución de incidencias",
-        "Seguimiento del caso",
-        "Documentación básica"
+        "Revisión de accesos, contraseñas, roles y doble factor",
+        "Evaluación de copias de seguridad y recuperación",
+        "Protección básica de WordPress, hosting y formularios",
+        "Detección de sistemas críticos",
+        "Recomendaciones priorizadas para reducir riesgos"
       ],
       "benefits": [
-        "Incidencias cerradas con trazabilidad.",
-        "Usuarios más autónomos y productivos.",
-        "Menor impacto de errores recurrentes."
+        "Mejor control de accesos y sistemas críticos.",
+        "Mayor capacidad de recuperación.",
+        "Prevención de errores habituales."
       ],
       "process": [
-        "Recepción y clasificación de incidencia.",
-        "Diagnóstico técnico y priorización.",
-        "Resolución y validación con usuario.",
-        "Registro de solución y prevención."
+        "Analizar mapa de riesgos.",
+        "Reforzar medidas críticas.",
+        "Gestionar roles, copias y criterios.",
+        "Optimizar protección.",
+        "Sostener revisión periódica."
       ],
       "audience": [
-        "Empresas con equipos distribuidos.",
-        "Negocios con software crítico diario.",
-        "Organizaciones que requieren SLA claro."
+        "Negocios que gestionan datos o clientes.",
+        "Empresas con web, correo o sistemas críticos.",
+        "Equipos que quieren mejorar seguridad sin complicarse."
       ]
     },
-    "ciberseguridad": {
-      "title": "Ciberseguridad preventiva",
-      "description": "Protección básica y avanzada para reducir riesgos, mejorar accesos y proteger la información de tu empresa.",
-      "problem": "Reduce exposición a accesos indebidos, malware, pérdida de datos y configuraciones inseguras.",
+    "web-wordpress": {
+      "title": "Web, WordPress y presencia digital",
+      "description": "Diseño web WordPress, mantenimiento, hosting, SEO técnico y mejoras de conversión para convertir presencia digital en confianza.",
+      "problem": "Mejora webs antiguas, lentas, poco profesionales o sin seguimiento técnico.",
       "includes": [
-        "Revisión de contraseñas",
-        "Configuración segura",
-        "Antivirus y protección endpoint",
-        "Copias de seguridad",
-        "Control de accesos",
-        "Revisión de vulnerabilidades básicas",
-        "Recomendaciones de seguridad"
+        "Diseño o rediseño web WordPress orientado a clientes",
+        "Configuración de hosting, formularios y páginas legales",
+        "SEO técnico básico y estructura de captación",
+        "Mantenimiento, actualizaciones y rendimiento",
+        "Mejoras de conversión, contenidos y confianza"
       ],
       "benefits": [
-        "Riesgo operativo más controlado.",
-        "Mejor protección de datos y accesos.",
-        "Mayor tranquilidad para dirección y equipos."
+        "Presencia digital más clara y profesional.",
+        "Formularios y CTA preparados para consultas reales.",
+        "Base WordPress más estable y mantenible."
       ],
       "process": [
-        "Evaluación de superficie de riesgo.",
-        "Plan de refuerzo por prioridad.",
-        "Aplicación de controles y hardening.",
-        "Monitorización y revisiones periódicas."
+        "Analizar objetivos, público y web actual.",
+        "Reforzar base técnica y seguridad.",
+        "Gestionar contenido, estructura y publicación.",
+        "Optimizar SEO, velocidad y conversión.",
+        "Sostener mantenimiento continuo."
       ],
       "audience": [
-        "Empresas con información sensible.",
-        "Negocios con trabajo remoto o híbrido.",
-        "Equipos con cumplimiento normativo."
-      ]
-    },
-    "redes-sistemas": {
-      "title": "Redes, sistemas y servidores",
-      "description": "Configuración, revisión y mejora de redes, sistemas internos, servidores y conectividad empresarial.",
-      "problem": "Evita cuellos de botella, cortes de red y configuraciones inseguras que frenan la productividad.",
-      "includes": [
-        "Redes WiFi profesionales",
-        "Routers",
-        "Switches",
-        "Servidores",
-        "Permisos",
-        "Carpetas compartidas",
-        "Impresoras en red",
-        "Diagnóstico de conectividad"
-      ],
-      "benefits": [
-        "Conectividad estable para todo el equipo.",
-        "Mejor rendimiento de red y sistemas.",
-        "Infraestructura más segura y escalable."
-      ],
-      "process": [
-        "Mapa técnico de red y sistemas.",
-        "Detección de puntos críticos.",
-        "Reconfiguración y optimización.",
-        "Pruebas, documentación y continuidad."
-      ],
-      "audience": [
-        "Oficinas con múltiples puestos y sedes.",
-        "Empresas con servidores internos.",
-        "Negocios con problemas de red recurrentes."
-      ]
-    },
-    "backup-recuperacion": {
-      "title": "Backup y recuperación",
-      "description": "Sistemas de copia de seguridad y recuperación para proteger documentos, archivos críticos y continuidad del negocio.",
-      "problem": "Evita pérdidas definitivas de información y reduce tiempos de recuperación ante incidentes.",
-      "includes": [
-        "Estrategia de backup",
-        "Copias locales",
-        "Copias en nube",
-        "Recuperación de archivos",
-        "Revisión de riesgos",
-        "Automatización de copias",
-        "Verificación periódica"
-      ],
-      "benefits": [
-        "Continuidad de negocio ante imprevistos.",
-        "Recuperación rápida de información crítica.",
-        "Control real del estado de copias."
-      ],
-      "process": [
-        "Inventario de datos críticos.",
-        "Diseño de política de copias.",
-        "Implementación y automatización.",
-        "Pruebas regulares de recuperación."
-      ],
-      "audience": [
-        "Empresas con documentación crítica.",
-        "Negocios con requisitos de continuidad.",
-        "Equipos que no validan sus copias actuales."
+        "Profesionales que necesitan una web seria.",
+        "Empresas con WordPress desactualizado.",
+        "Negocios que quieren mejorar captación y confianza."
       ]
     },
     "automatizacion-ia": {
       "title": "Automatización con IA",
-      "description": "Automatizamos procesos repetitivos con herramientas digitales e inteligencia artificial para ahorrar tiempo y mejorar la eficiencia.",
-      "problem": "Reduce tareas manuales repetitivas que consumen tiempo y elevan el riesgo de errores operativos.",
+      "description": "Automatización de tareas repetitivas, formularios, solicitudes, mensajes y procesos con enfoque seguro y controlado.",
+      "problem": "Reduce tareas manuales, mensajes repetidos y solicitudes desordenadas sin exponer claves ni datos sensibles.",
       "includes": [
-        "Automatización de tareas",
-        "Formularios inteligentes",
-        "Flujos de trabajo",
-        "Integración con herramientas",
-        "Asistentes internos",
-        "Optimización documental",
-        "Procesos administrativos"
+        "Análisis de tareas repetitivas y puntos de fricción",
+        "Diseño de flujos guiados con formularios y reglas",
+        "Uso responsable de IA para clasificación o borradores",
+        "Integración con herramientas existentes cuando sea viable",
+        "Documentación y validación antes de automatizar acciones sensibles"
       ],
       "benefits": [
-        "Más tiempo para tareas de alto valor.",
-        "Menos errores en procesos repetitivos.",
-        "Mejor trazabilidad del trabajo interno."
+        "Más tiempo para trabajo de valor.",
+        "Solicitudes y datos mejor estructurados.",
+        "Automatizaciones con revisión humana cuando importa."
       ],
       "process": [
-        "Análisis de procesos actuales.",
-        "Selección de automatizaciones viables.",
-        "Implementación incremental y pruebas.",
-        "Medición de impacto y ajustes."
+        "Analizar tareas y datos disponibles.",
+        "Reforzar seguridad y permisos.",
+        "Gestionar flujos y validaciones.",
+        "Optimizar pruebas y mejoras.",
+        "Sostener seguimiento y ajustes."
       ],
       "audience": [
-        "Equipos administrativos y operativos.",
-        "Empresas con alto volumen de tareas repetidas.",
-        "Negocios que quieren escalar sin sobrecargar plantilla."
+        "Equipos con tareas administrativas repetidas.",
+        "Negocios que reciben solicitudes desordenadas.",
+        "Empresas que quieren usar IA con criterio."
       ]
     },
-    "consultoria-digital": {
-      "title": "Consultoría digital",
-      "description": "Analizamos el estado tecnológico de tu empresa y proponemos mejoras realistas, útiles y alineadas con tu negocio.",
-      "problem": "Aporta criterio técnico para decidir inversiones y prioridades sin improvisar ni sobredimensionar soluciones.",
+    "auditoria-digital": {
+      "title": "Auditoría digital continua",
+      "description": "Revisión periódica de web, WordPress, seguridad, rendimiento, formularios, SEO técnico y oportunidades de mejora.",
+      "problem": "Evita que la web y los sistemas queden abandonados hasta que aparezca una incidencia.",
       "includes": [
-        "Auditoría tecnológica",
-        "Análisis de procesos",
-        "Recomendaciones",
-        "Plan de mejora",
-        "Priorización de inversiones",
-        "Estrategia digital",
-        "Acompañamiento"
+        "Revisión de web, WordPress, velocidad y formularios",
+        "Control de seguridad básica, backups y actualizaciones",
+        "SEO técnico y estructura de captación",
+        "Registro de problemas detectados y mejoras recomendadas",
+        "Informe orientado a decisiones prácticas"
       ],
       "benefits": [
-        "Decisiones tecnológicas con contexto.",
-        "Plan de acción realista y ejecutable.",
-        "Mejor retorno de inversión en tecnología."
+        "Problemas y mejoras registrados con contexto.",
+        "Acciones ordenadas por impacto y urgencia.",
+        "Evolución continua de web y sistemas."
       ],
       "process": [
-        "Entrevistas y diagnóstico inicial.",
-        "Evaluación técnica y de procesos.",
-        "Roadmap por impacto y urgencia.",
-        "Acompañamiento en ejecución."
+        "Analizar señales iniciales.",
+        "Reforzar riesgos detectados.",
+        "Gestionar hallazgos.",
+        "Optimizar mejoras priorizadas.",
+        "Sostener periodicidad y seguimiento."
       ],
       "audience": [
-        "Dirección de pymes en crecimiento.",
-        "Empresas en transición digital.",
-        "Negocios sin liderazgo tecnológico interno."
-      ]
-    },
-    "desarrollo-web": {
-      "title": "Desarrollo y optimización web",
-      "description": "Creamos y optimizamos páginas web profesionales enfocadas en confianza, conversión y presencia digital.",
-      "problem": "Mejora webs lentas, desactualizadas o poco orientadas a negocio que no convierten visitas en oportunidades.",
-      "includes": [
-        "Diseño web",
-        "Landing pages",
-        "Formularios",
-        "SEO básico",
-        "Velocidad",
-        "Estructura comercial",
-        "Integración con herramientas"
-      ],
-      "benefits": [
-        "Presencia digital más sólida y profesional.",
-        "Mayor conversión de tráfico en contactos.",
-        "Base técnica preparada para crecer."
-      ],
-      "process": [
-        "Auditoría de web y objetivos.",
-        "Diseño de estructura y mensajes.",
-        "Desarrollo y optimización técnica.",
-        "Medición de resultados y mejora continua."
-      ],
-      "audience": [
-        "Empresas que necesitan captar más leads.",
-        "Negocios con web obsoleta o lenta.",
-        "Equipos comerciales que dependen del canal digital."
+        "Negocios con web publicada pero sin seguimiento.",
+        "Profesionales con dudas sobre SEO, velocidad o formularios.",
+        "Empresas que quieren priorizar mejoras por impacto."
       ]
     }
   }

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FormEvent, useMemo, useState } from "react";
 import { useEffect } from "react";
 import { motion } from "framer-motion";
+import ArgosPageShell from "@/components/layout/ArgosPageShell";
 import { useI18n } from "@/i18n/useI18n";
 import { useLocalizedServices } from "@/hooks/useLocalizedServices";
 import { usePageMeta } from "@/components/seo/usePageMeta";
@@ -105,11 +106,13 @@ export default function ContactView() {
 
     const payload = new FormData();
     payload.append("_subject", "Nueva solicitud desde ARGOS-IT");
+    payload.append("origen", "servicio-argos-it");
     payload.append("name", form.name);
     payload.append("email", form.email);
     payload.append("phone", form.phone);
     payload.append("company", form.company);
     payload.append("service", form.service);
+    payload.append("servicio", form.service);
     payload.append("message", form.message);
     payload.append("privacy", "accepted");
 
@@ -135,38 +138,36 @@ export default function ContactView() {
   };
 
   return (
-    <main className="min-h-screen bg-white text-[#07111F]">
-      <header className="border-b border-[#E5E7EB] bg-[#F8FBFF] py-12">
+    <ArgosPageShell variant="contact">
+      <header className="py-12">
         <div className="mx-auto max-w-6xl px-6">
-          <Link href="/" className="mb-6 inline-block text-[#2563EB] hover:underline">
+          <Link href="/" className="mb-6 inline-block text-[#39F4FF] hover:underline">
             ← {t("actions.backHome")}
           </Link>
-          <h1 className="text-4xl font-black text-[#0B1E33] sm:text-5xl">{t("contact.title")}</h1>
-          <p className="mt-4 max-w-3xl text-lg text-[#4B5563]">{t("contact.subtitle")}</p>
+          <h1 className="text-4xl font-black text-white sm:text-5xl">{t("contact.title")}</h1>
+          <p className="mt-4 max-w-3xl text-lg text-[#D7E8F6]">{t("contact.subtitle")}</p>
         </div>
       </header>
 
       <section className="px-6 py-14">
         <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.95fr_1.05fr]">
           <motion.div {...fadeIn} className="mb-12">
-            <p className="mb-8 text-lg leading-8 text-[#4B5563]">{t("contact.intro")}</p>
+            <p className="mb-8 text-lg leading-8 text-[#D7E8F6]">{t("contact.intro")}</p>
 
             <div className="mb-12 grid gap-5 sm:grid-cols-3">
-              <div className="rounded-lg border border-[#E5E7EB] bg-white p-5">
-                <h3 className="mb-2 text-lg font-bold text-[#111827]">{t("contact.cards.emailTitle")}</h3>
-                <a href="mailto:info@argos-it.com" className="text-[#2563EB] hover:underline">
+              <div className="argos-hologram-card p-5">
+                <h3 className="mb-2 text-lg font-bold text-white">{t("contact.cards.emailTitle")}</h3>
+                <a href="mailto:info@argos-it.com" className="text-[#39F4FF] hover:underline">
                   info@argos-it.com
                 </a>
               </div>
-              <div className="rounded-lg border border-[#E5E7EB] bg-white p-5">
-                <h3 className="mb-2 text-lg font-bold text-[#111827]">{t("contact.cards.phoneTitle")}</h3>
-                <a href="tel:+34933333333" className="text-[#2563EB] hover:underline">
-                  +34 93 333 3333
-                </a>
+              <div className="argos-hologram-card p-5">
+                <h3 className="mb-2 text-lg font-bold text-white">{t("contact.cards.phoneTitle")}</h3>
+                <span className="text-[#C9DDEC]">Canal a confirmar tras la solicitud</span>
               </div>
-              <div className="rounded-lg border border-[#E5E7EB] bg-white p-5">
-                <h3 className="mb-2 text-lg font-bold text-[#111827]">{t("contact.cards.coverageTitle")}</h3>
-                <p className="text-[#4B5563]">
+              <div className="argos-hologram-card p-5">
+                <h3 className="mb-2 text-lg font-bold text-white">{t("contact.cards.coverageTitle")}</h3>
+                <p className="text-[#C9DDEC]">
                   {coverageLines.map((line) => (
                     <span key={line} className="block">
                       {line}
@@ -312,6 +313,6 @@ export default function ContactView() {
           </motion.form>
         </div>
       </section>
-    </main>
+    </ArgosPageShell>
   );
 }
