@@ -6,10 +6,10 @@ yarn-error.log*
 .pnp
 .pnp.js
 
-# Next.js
-/.next
-/out
-/.cache
+# Next.js (any app directory, e.g. frontend/.next)
+.next/
+out/
+.cache/
 .vercel
 
 # Environment
@@ -23,12 +23,14 @@ yarn-error.log*
 *.swp
 *.swo
 *~
-.DS_Store
 .env.example.local
 
 # OS
 .DS_Store
 Thumbs.db
+
+# Local tooling / caches
+.pydeps/
 
 # Build
 dist/
@@ -37,6 +39,3 @@ build/
 # Logs
 logs/
 *.log
-
-# Docker
-.dockerignore
