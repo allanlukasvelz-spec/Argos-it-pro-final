@@ -51,6 +51,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     document.documentElement.lang = locale;
     document.documentElement.setAttribute("data-locale", locale);
     window.localStorage.setItem(localeStorageKey, locale);
+    const maxAge = 60 * 60 * 24 * 365;
+    document.cookie = `${localeStorageKey}=${encodeURIComponent(locale)}; Path=/; Max-Age=${maxAge}; SameSite=Lax`;
   }, [locale]);
 
   const setLocale = useCallback((nextLocale: Locale) => {

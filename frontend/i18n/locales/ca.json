@@ -43,7 +43,83 @@
     ],
     "servicesEyebrow": "Serveis ARGOS-IT",
     "servicesTitle": "Serveis professionals per a continuïtat, seguretat i creixement.",
-    "servicesSubtitle": "Pensats per a equips que necessiten tecnologia fiable i suport real."
+    "servicesSubtitle": "Pensats per a equips que necessiten tecnologia fiable i suport real.",
+    "explainer": {
+      "eyebrow": "ARGOS-IT en marxa",
+      "stagesAria": "Etapes de la història interactiva",
+      "liveRegion": "Escena actual del relat Dumbo i Chico",
+      "pause": "Pausar animació automàtica",
+      "play": "Reprendre animació automàtica",
+      "prev": "Anterior",
+      "next": "Següent",
+      "ctaForm": "Omplir formulari",
+      "ctaServices": "Veure serveis",
+      "altDumbo": "Dumbo, gos guia ARGOS-IT",
+      "altDumboGuide": "Dumbo de perfil, gos guia que encapçala el recorregut a l’escena de solucions",
+      "altDumboFront": "Dumbo de front, gos guia que acompanya el missatge a l’escena de solucions",
+      "altChico": "Chico, gos guardià ARGOS-IT",
+      "s0": {
+        "title": "Dumbo et guia. Chico et protegeix.",
+        "subtitle": "ARGOS-IT acompanya empreses i professionals per millorar web, seguretat, suport i processos digitals.",
+        "tab": "Introducció"
+      },
+      "s1": {
+        "title": "La plataforma també genera fricció",
+        "subtitle": "Situacions habituals abans d'ordenar l'entorn digital.",
+        "tab": "Problemes"
+      },
+      "s2": {
+        "title": "ARGOS-IT transforma el recorregut",
+        "subtitle": "Proposta alineada amb consultoria i suport professional.",
+        "tab": "Solucions"
+      },
+      "s3": {
+        "title": "Arriba Chico: seguretat i vigilància",
+        "subtitle": "Seguretat, vigilància i confiança digital. Mode protecció activa.",
+        "tab": "Guardià",
+        "badges": ["Escut d'accés", "Monitorització", "Polítiques clares"]
+      },
+      "s4": {
+        "title": "Àrees de protecció",
+        "subtitle": "Chico cobreix el perímetre digital de forma estructurada.",
+        "tab": "Protecció"
+      },
+      "s5": {
+        "title": "Explica'ns què necessita la teva empresa",
+        "subtitle": "Sol·licita el diagnòstic inicial. Dumbo guia el següent pas; Chico manté la guàrdia.",
+        "tab": "Contacte"
+      },
+      "problems": [
+        "Equips lents",
+        "Web desactualitzada",
+        "Formularis que no funcionen",
+        "Correus insegurs",
+        "Processos manuals",
+        "Falta de còpies de seguretat",
+        "Sistemes desordenats",
+        "Pèrdua de temps"
+      ],
+      "solutions": [
+        "Suport IT",
+        "Disseny web professional",
+        "Formularis funcionals",
+        "Seguretat de correu",
+        "Còpies de seguretat",
+        "Automatització",
+        "Diagnòstic tècnic",
+        "Organització digital"
+      ],
+      "protection": [
+        "Protecció d'equips",
+        "Control d'accés",
+        "Còpies de seguretat",
+        "Seguretat web",
+        "Seguretat de correu",
+        "Revisió de vulnerabilitats",
+        "Prevenció d'amenaces",
+        "Continuïtat del negoci"
+      ]
+    }
   },
   "servicesPage": {
     "title": "Serveis ARGOS-IT",
@@ -155,7 +231,24 @@
       "cursorNearChico": { "chico": "Prioritzem el crític primer." },
       "cursorNearDumbo": { "dumbo": "Si vols, ho ordenem pas a pas." }
     },
-    "buttons": { "speak": "Veu" }
+    "buttons": { "speak": "Veu" },
+    "chat": {
+      "titleDumbo": "Xat amb en Dumbo",
+      "titleChico": "Xat amb en Chico",
+      "subtitle": "Pregunta el que necessitis; et respondem amb el to de cada mascota.",
+      "close": "Tancar",
+      "closeBackdrop": "Tancar conversa",
+      "send": "Enviar",
+      "placeholder": "Escriu el teu missatge…",
+      "inputLabel": "Missatge per a l’assistant",
+      "loading": "Pensant…",
+      "readAloud": "Llegir en veu alta",
+      "contactLink": "Anar a contacte",
+      "errorGeneric": "No s’ha pogut respondre. Torna-ho a provar o escriu-nos.",
+      "errorUnavailable": "L’assistant no està disponible ara mateix. Escriu-nos des de contacte.",
+      "errorNetwork": "No hem pogut connectar amb el servidor. Revisa la xarxa o torna més tard.",
+      "errorBadRequest": "Revisa el missatge i torna-ho a provar."
+    }
   },
   "services": {
     "mantenimiento-informatico": { "title": "Manteniment informàtic per a empreses", "description": "Gestió preventiva i correctiva d'equips i sistemes." },

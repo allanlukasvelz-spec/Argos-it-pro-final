@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 /** Debe coincidir con AUTH_SESSION_COOKIE en lib/auth-session.ts */
 const AUTH_SESSION_COOKIE = "argos_session";
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (pathname.startsWith("/dashboard")) {

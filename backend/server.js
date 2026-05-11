@@ -4,8 +4,11 @@ const http = require("http");
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const jwt = require("jsonwebtoken");
 const { Server } = require("socket.io");
 const pool = require("./db");
+const { isAllowedWsActionType, sanitizeWsDetails } = require("./lib/wsActions");
+const { ensureRefreshSessionsTable } = require("./lib/ensureRefreshSessions");
 
 const authRoutes = require("./routes/auth");
 const aiRoutes = require("./routes/ai");
@@ -35,12 +38,103 @@ const corsOptions = {
   credentials: true
 };
 
-const io = new Server(server, {
-  cors: {
-    origin: allowedOrigins.length > 0 ? allowedOrigins : false,
-    credentials: true
-  }
-});
+const socketIoEnabled = process.env.ENABLE_SOCKET_IO !== "false";
+
+/** @type {import("socket.io").Server | null} */
+let io = null;
+
+if (socketIoEnabled) {
+  io = new Server(server, {
+    cors: {
+      origin: allowedOrigins.length > 0 ? allowedOrigins : false,
+      credentials: true
+    }
+  });
+
+  io.use((socket, next) => {
+    try {
+      const secret = process.env.JWT_SECRET;
+      if (!secret || secret.length < 32) {
+        return next(new Error("Servidor sin JWT configurado"));
+      }
+      const token =
+        socket.handshake.auth?.token ||
+        (typeof socket.handshake.query?.token === "string" ? socket.handshake.query.token : null);
+      if (!token || typeof token !== "string") {
+        return next(new Error("Token de autenticacion requerido"));
+      }
+      const raw = token.startsWith("Bearer ") ? token.slice(7) : token;
+      const decoded = jwt.verify(raw, secret);
+      const userId = decoded?.id;
+      if (!userId) {
+        return next(new Error("Token invalido"));
+      }
+      socket.data.userId = userId;
+      socket.data.role = decoded.role || "cliente";
+      socket.data.email = decoded.email;
+      next();
+    } catch (err) {
+      next(new Error("Token invalido o expirado"));
+    }
+  });
+
+  io.on("connection", (socket) => {
+    const sessionUserId = socket.data.userId;
+    const role = socket.data.role || "cliente";
+    if (role === "admin" || role === "super_admin") {
+      socket.join("admin");
+    }
+    console.log(`[WS] Usuario conectado: ${socket.id} (user ${sessionUserId})`);
+
+    socket.on("user_action", async (data) => {
+      try {
+        const type = data?.type;
+        const details = sanitizeWsDetails(data?.details);
+
+        if (!type || !isAllowedWsActionType(type)) {
+          socket.emit("chico_error", { message: "Tipo de accion no permitido" });
+          return;
+        }
+
+        console.log(`[CHICO] Accion detectada: ${type} (user ${sessionUserId})`);
+
+        await pool.query(
+          "INSERT INTO activity_logs(user_id, action_type, details) VALUES($1, $2, $3)",
+          [sessionUserId, type, JSON.stringify(details)]
+        );
+
+        if (type === "login_failed") {
+          socket.emit("chico_alert", {
+            level: "warning",
+            message: "⚠️ Intento de login fallido detectado"
+          });
+        }
+
+        if (type === "suspicious_behavior") {
+          socket.emit("chico_alert", {
+            level: "critical",
+            message: "🔒 Comportamiento sospechoso detectado. Verificando..."
+          });
+        }
+
+        if (details?.risk_level === "high" && io) {
+          io.to("admin").emit("security_alert", {
+            user: sessionUserId,
+            action: type,
+            timestamp: new Date()
+          });
+        }
+      } catch (error) {
+        console.error("[CHICO ERROR]", error);
+        socket.emit("chico_error", { message: "Error procesando acción" });
+      }
+    });
+
+    socket.on("disconnect", () => {
+      console.log(`[WS] Usuario desconectado: ${socket.id}`);
+    });
+  });
+}
 
 // Middlewares globales
 app.disable("x-powered-by");
@@ -68,64 +162,35 @@ app.get("/api/health", (req, res) => {
   res.json({ status: "OK", timestamp: new Date() });
 });
 
-// WebSockets - Chico Guardian
-io.on("connection", (socket) => {
-  console.log(`[WS] Usuario conectado: ${socket.id}`);
-
-  socket.on("user_action", async (data) => {
-    try {
-      const { type, userId, details = {} } = data || {};
-
-      console.log(`[CHICO] Acción detectada: ${type}`);
-
-      // Guardar en DB
-      if (type) {
-        await pool.query(
-          "INSERT INTO activity_logs(user_id, action_type, details) VALUES($1, $2, $3)",
-          [userId || null, type, JSON.stringify(details)]
-        );
-      }
-
-      // Análisis de seguridad en tiempo real
-      if (type === "login_failed") {
-        socket.emit("chico_alert", {
-          level: "warning",
-          message: "⚠️ Intento de login fallido detectado"
-        });
-      }
-
-      if (type === "suspicious_behavior") {
-        socket.emit("chico_alert", {
-          level: "critical",
-          message: "🔒 Comportamiento sospechoso detectado. Verificando..."
-        });
-      }
-
-      // Notificar a admin si es crítico
-      if (details?.risk_level === "high") {
-        io.to("admin").emit("security_alert", {
-          user: userId,
-          action: type,
-          timestamp: new Date()
-        });
-      }
-    } catch (error) {
-      console.error("[CHICO ERROR]", error);
-      socket.emit("chico_error", { message: "Error procesando acción" });
-    }
-  });
-
-  socket.on("disconnect", () => {
-    console.log(`[WS] Usuario desconectado: ${socket.id}`);
-  });
-});
-
 const PORT = process.env.PORT || 4000;
 
-server.listen(PORT, () => {
-  console.log(`✅ Backend corriendo en http://localhost:${PORT}`);
-  console.log(`📡 WebSockets disponibles`);
-  console.log(`🤖 IA (Chico + Dumbo) lista`);
+server.on("error", (err) => {
+  console.error("Error en servidor HTTP:", err.message);
+  if (err.code === "EADDRINUSE") {
+    console.error(`Puerto ${PORT} en uso. Cierra el otro proceso o define PORT distinto.`);
+  }
+  process.exit(1);
 });
+
+async function start() {
+  try {
+    await ensureRefreshSessionsTable(pool);
+  } catch (err) {
+    console.error("❌ No se pudo asegurar la tabla refresh_sessions:", err.message);
+    process.exit(1);
+  }
+
+  server.listen(PORT, () => {
+    console.log(`✅ Backend corriendo en http://localhost:${PORT}`);
+    if (socketIoEnabled) {
+      console.log(`📡 WebSockets disponibles`);
+    } else {
+      console.log(`📡 WebSockets desactivados (ENABLE_SOCKET_IO=false)`);
+    }
+    console.log(`🤖 IA (Chico + Dumbo) lista`);
+  });
+}
+
+start();
 
 module.exports = { app, io };

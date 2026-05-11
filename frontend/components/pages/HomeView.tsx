@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { Suspense } from "react";
+import ArgosExplainerAnimation from "@/components/ArgosExplainerAnimation";
 import ArgosPageShell from "@/components/layout/ArgosPageShell";
 import { useI18n } from "@/i18n/useI18n";
 import { useLocalizedServices } from "@/hooks/useLocalizedServices";
@@ -141,6 +143,10 @@ export default function HomeView() {
         </div>
       </section>
 
+      <Suspense fallback={null}>
+        <ArgosExplainerAnimation />
+      </Suspense>
+
       <section className="px-5 py-16 lg:px-8" id="servicios">
         <div className="mx-auto max-w-7xl">
           <div className="mb-10">
@@ -252,20 +258,20 @@ export default function HomeView() {
         </div>
       </section>
 
-      <section className="testimonials px-5 py-16 lg:px-8">
+      <section className="testimonials px-5 pb-24 pt-16 lg:px-8 lg:pb-32 lg:pr-[max(1.25rem,clamp(1.25rem,6vw,4.5rem))]">
         <div className="mx-auto max-w-7xl">
           <div className="mb-10 max-w-3xl">
-            <p className="text-sm font-black uppercase text-[#18D4F7]">Clientes que confían en ARGOS-IT</p>
-            <h2 className="mt-3 text-3xl font-black text-white">Prueba social editable para incorporar testimonios reales.</h2>
-            <p className="mt-4 text-sm leading-7 text-[#BFD7E8]">
+            <p className="text-sm font-black uppercase tracking-wide text-[#22d3ee]">Clientes que confían en ARGOS-IT</p>
+            <h2 className="mt-3 text-3xl font-black text-slate-50">Prueba social editable para incorporar testimonios reales.</h2>
+            <p className="mt-4 text-sm leading-7 text-slate-300">
               Estos textos son placeholders profesionales y deben sustituirse por reseñas reales cuando estén disponibles.
             </p>
           </div>
           <div className="grid gap-5 md:grid-cols-2">
             {testimonials.map((testimonial) => (
-              <article key={testimonial.author} className="testimonial-card argos-hologram-card p-6">
-                <p className="text-sm leading-7 text-[#EAF7FF]">“{testimonial.quote}”</p>
-                <strong className="mt-4 block text-sm text-[#39F4FF]">— {testimonial.author}</strong>
+              <article key={testimonial.author} className="testimonial-card p-6 md:p-7">
+                <p className="text-sm leading-7 text-white">“{testimonial.quote}”</p>
+                <strong className="mt-4 block text-sm font-semibold text-white/95">— {testimonial.author}</strong>
               </article>
             ))}
           </div>

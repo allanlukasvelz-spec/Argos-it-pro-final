@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
-import es from "@/i18n/locales/es.json";
+import { defaultLocale, localeStorageKey, type Locale } from "@/i18n/config";
+import { dictionaries, isLocale } from "@/i18n/dictionaries";
 import ServiceDetailView from "@/components/pages/ServiceDetailView";
 import { getServiceBySlug, serviceDefinitions, type ServiceSlug } from "@/lib/services";
 
@@ -22,11 +24,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  const serviceCopy = (es.services as Record<string, { title: string; description: string }>)[service.slug];
+  const cookieStore = await cookies();
+  const rawCookie = cookieStore.get(localeStorageKey)?.value;
+  const decoded = rawCookie ? decodeURIComponent(rawCookie) : null;
+  const locale: Locale = decoded && isLocale(decoded) ? decoded : defaultLocale;
+  const dict = dictionaries[locale];
+
+  const serviceCopy = (dict.services as Record<string, { title: string; description: string }>)[service.slug];
+  const defaultDesc = (dict.meta as { defaultDescription?: string }).defaultDescription;
 
   return {
     title: `${serviceCopy?.title ?? "Servicio"} | ARGOS-IT`,
-    description: serviceCopy?.description ?? es.meta.defaultDescription
+    description: serviceCopy?.description ?? defaultDesc ?? ""
   };
 }
 

@@ -39,7 +39,83 @@
     ],
     "servicesEyebrow": "Serviços ARGOS-IT",
     "servicesTitle": "Serviços profissionais para continuidade, segurança e crescimento.",
-    "servicesSubtitle": "Pensados para equipas que precisam de tecnologia fiável e suporte real."
+    "servicesSubtitle": "Pensados para equipas que precisam de tecnologia fiável e suporte real.",
+    "explainer": {
+      "eyebrow": "ARGOS-IT em movimento",
+      "stagesAria": "Etapas da história interativa",
+      "liveRegion": "Cena actual da história Dumbo e Chico",
+      "pause": "Pausar animação automática",
+      "play": "Retomar animação automática",
+      "prev": "Anterior",
+      "next": "Seguinte",
+      "ctaForm": "Preencher formulário",
+      "ctaServices": "Ver serviços",
+      "altDumbo": "Dumbo, cão guia ARGOS-IT",
+      "altDumboGuide": "Dumbo de perfil, cão guia que lidera o percurso na cena de soluções",
+      "altDumboFront": "Dumbo de frente, cão guia na cena de soluções",
+      "altChico": "Chico, cão guardião ARGOS-IT",
+      "s0": {
+        "title": "Dumbo guia-o. Chico protege-o.",
+        "subtitle": "ARGOS-IT acompanha empresas e profissionais em web, segurança, suporte e processos digitais.",
+        "tab": "Introdução"
+      },
+      "s1": {
+        "title": "A plataforma também gera fricção",
+        "subtitle": "Situações típicas antes de organizar o ambiente.",
+        "tab": "Problemas"
+      },
+      "s2": {
+        "title": "ARGOS-IT transforma o percurso",
+        "subtitle": "Proposta alinhada com consultoria e suporte profissional.",
+        "tab": "Soluções"
+      },
+      "s3": {
+        "title": "Entra Chico: segurança e vigilância",
+        "subtitle": "Segurança, vigilância e confiança digital. Modo protecção activa.",
+        "tab": "Guardião",
+        "badges": ["Escudo de acessos", "Monitorização", "Políticas claras"]
+      },
+      "s4": {
+        "title": "Áreas de protecção",
+        "subtitle": "Chico cobre o perímetro digital de forma estruturada.",
+        "tab": "Protecção"
+      },
+      "s5": {
+        "title": "Diga-nos o que a sua empresa precisa",
+        "subtitle": "Peça o diagnóstico inicial. Dumbo guia o próximo passo; Chico mantém a guarda.",
+        "tab": "Contacto"
+      },
+      "problems": [
+        "Equipamentos lentos",
+        "Web desactualizada",
+        "Formulários avariados",
+        "Correio inseguro",
+        "Processos manuais",
+        "Falta de cópias de segurança",
+        "Sistemas desordenados",
+        "Perda de tempo"
+      ],
+      "solutions": [
+        "Suporte IT",
+        "Web design profissional",
+        "Formulários funcionais",
+        "Segurança de correio",
+        "Backups",
+        "Automatização",
+        "Diagnóstico técnico",
+        "Organização digital"
+      ],
+      "protection": [
+        "Protecção de equipamentos",
+        "Controlo de acessos",
+        "Cópias de segurança",
+        "Segurança web",
+        "Segurança de correio",
+        "Revisão de vulnerabilidades",
+        "Prevenção de ameaças",
+        "Continuidade do negócio"
+      ]
+    }
   },
   "servicesPage": {
     "title": "Serviços ARGOS-IT",
@@ -148,7 +224,24 @@
       "cursorNearChico": { "chico": "Vamos priorizar o que é crítico." },
       "cursorNearDumbo": { "dumbo": "Se quiseres, organizamos passo a passo." }
     },
-    "buttons": { "speak": "Voz" }
+    "buttons": { "speak": "Voz" },
+    "chat": {
+      "titleDumbo": "Chat com o Dumbo",
+      "titleChico": "Chat com o Chico",
+      "subtitle": "Pergunte o que precisar; respondemos no tom de cada mascote.",
+      "close": "Fechar",
+      "closeBackdrop": "Fechar conversa",
+      "send": "Enviar",
+      "placeholder": "Escreva a sua mensagem…",
+      "inputLabel": "Mensagem para o assistente",
+      "loading": "A pensar…",
+      "readAloud": "Ler em voz alta",
+      "contactLink": "Ir ao contacto",
+      "errorGeneric": "Não foi possível responder. Tente novamente ou escreva-nos.",
+      "errorUnavailable": "O assistente não está disponível de momento. Use o formulário de contacto.",
+      "errorNetwork": "Sem ligação ao servidor. Verifique a rede ou tente mais tarde.",
+      "errorBadRequest": "Verifique a mensagem e tente novamente."
+    }
   },
   "services": {
     "mantenimiento-informatico": { "title": "Manutenção informática para empresas", "description": "Gestão preventiva e corretiva de equipamentos e sistemas." },

@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   # PostgreSQL Database
   db:
@@ -13,7 +11,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      - ../database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -23,8 +21,10 @@ services:
   # Backend Node.js
   backend:
     build:
-      context: ./backend
+      context: ../backend
       dockerfile: Dockerfile
+      args:
+        INSTALL_DEV: "true"
     container_name: argos-backend
     environment:
       NODE_ENV: development
@@ -32,7 +32,8 @@ services:
       DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-CAMBIAR_PASSWORD_DB_LOCAL}@db:5432/argos_it
       JWT_SECRET: ${JWT_SECRET:-cambiar_este_jwt_secret_minimo_32_chars}
       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-cambiar_este_refresh_secret_minimo_32_chars}
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      ENABLE_SOCKET_IO: ${ENABLE_SOCKET_IO:-true}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       FRONTEND_URL: http://localhost:3000
       CORS_ORIGINS: http://localhost:3000
       CONTACT_FORM_ENDPOINT: https://formspree.io/f/xpqooedl
@@ -42,14 +43,14 @@ services:
       db:
         condition: service_healthy
     volumes:
-      - ./backend:/app
+      - ../backend:/app
       - /app/node_modules
     command: npm run dev
 
   # Frontend Next.js
   frontend:
     build:
-      context: ./frontend
+      context: ../frontend
       dockerfile: Dockerfile
     container_name: argos-frontend
     environment:
@@ -59,9 +60,9 @@ services:
     depends_on:
       - backend
     volumes:
-      - ./frontend:/app
+      - ../frontend:/app
       - /app/node_modules
-    command: npm run dev
+    command: npm run dev:docker
 
 volumes:
   postgres_data:

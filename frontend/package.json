@@ -4,6 +4,7 @@
   "description": "Frontend Next.js para Argos IT Pro",
   "scripts": {
     "dev": "next dev --hostname 127.0.0.1",
+    "dev:docker": "next dev --hostname 0.0.0.0 --port 3000",
     "build": "next build",
     "start": "next start --hostname 127.0.0.1",
     "preview": "next start --hostname 127.0.0.1",
@@ -17,7 +18,6 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",
-    "socket.io-client": "^4.7.2",
     "zustand": "^4.4.1"
   },
   "devDependencies": {

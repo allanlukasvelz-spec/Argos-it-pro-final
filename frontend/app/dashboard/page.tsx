@@ -9,12 +9,52 @@ import toast from "react-hot-toast";
 
 type Locale = "es" | "en" | "ca";
 
+type PortalUser = {
+  id: number;
+  email: string;
+  name: string | null;
+  company: string | null;
+  created_at?: string;
+  role: string;
+  clientVerified: boolean;
+};
+
+type AuditCheck = { label: string; status: string; priority?: string };
+
+type WebsiteAudit = {
+  status: string;
+  score: number | null;
+  reviewedAt: string | null;
+  websiteUrl: string | null;
+  checks: AuditCheck[];
+};
+
+type ClientPortalPayload = {
+  user: PortalUser;
+  roles: string[];
+  clientVerified: boolean;
+  companyProfile: {
+    name: string;
+    contactEmail: string;
+    status: string;
+    nextStep: string;
+  };
+  activeServices: { slug: string; name: string; status: string; startedAt?: string | null }[];
+  websiteAudit: WebsiteAudit;
+  suggestedImprovements: string[];
+  improvementPanel: { statusOptions: string[]; fields: string[] };
+  messages: unknown[];
+  submissions: { id: number; data: Record<string, unknown>; status: string; created_at: string }[];
+  activity: unknown[];
+};
+
 const copy = {
   es: {
     portal: "Portal de cliente",
     subtitle: "Administra tu cuenta, revisa mejoras y envía nuevas necesidades técnicas.",
     logout: "Cerrar sesión",
     verified: "Cuenta verificada",
+    pendingVerification: "Verificación pendiente",
     company: "Empresa",
     website: "Visualización web",
     score: "Puntuación operativa",
@@ -31,13 +71,20 @@ const copy = {
     urgency: "Urgencia",
     recent: "Solicitudes recientes",
     empty: "Aún no hay solicitudes registradas.",
-    saved: "Enviado correctamente"
+    saved: "Enviado correctamente",
+    noAuditChecks: "Aún no hay comprobaciones de auditoría. Cuando exista una auditoría en sistema, aparecerán aquí.",
+    noImprovementsList: "No hay mejoras pendientes registradas en base de datos.",
+    kindImprovement: "Solicitud de mejora",
+    kindMessage: "Mensaje directo",
+    kindGeneric: "Solicitud",
+    previewNone: "Sin detalle de texto."
   },
   en: {
     portal: "Client portal",
     subtitle: "Manage your account, review improvements and send technical needs.",
     logout: "Sign out",
     verified: "Verified account",
+    pendingVerification: "Verification pending",
     company: "Company",
     website: "Website overview",
     score: "Operational score",
@@ -54,13 +101,20 @@ const copy = {
     urgency: "Urgency",
     recent: "Recent requests",
     empty: "No requests yet.",
-    saved: "Sent successfully"
+    saved: "Sent successfully",
+    noAuditChecks: "No audit checks yet. They will appear here once a website audit exists in the system.",
+    noImprovementsList: "No pending improvements in the database.",
+    kindImprovement: "Improvement request",
+    kindMessage: "Direct message",
+    kindGeneric: "Request",
+    previewNone: "No text detail."
   },
   ca: {
     portal: "Portal de client",
     subtitle: "Administra el compte, revisa millores i envia necessitats tecniques.",
     logout: "Tancar sessio",
     verified: "Compte verificat",
+    pendingVerification: "Verificacio pendent",
     company: "Empresa",
     website: "Visualitzacio web",
     score: "Puntuacio operativa",
@@ -77,7 +131,13 @@ const copy = {
     urgency: "Urgencia",
     recent: "Sol.licituds recents",
     empty: "Encara no hi ha sol.licituds registrades.",
-    saved: "Enviat correctament"
+    saved: "Enviat correctament",
+    noAuditChecks: "Encara no hi ha comprovacions d'auditoria.",
+    noImprovementsList: "No hi ha millores pendents a la base de dades.",
+    kindImprovement: "Sol.licitud de millora",
+    kindMessage: "Missatge directe",
+    kindGeneric: "Sol.licitud",
+    previewNone: "Sense text de detall."
   }
 };
 
@@ -94,7 +154,7 @@ export default function Dashboard() {
   const router = useRouter();
   const { token, user, logout } = useAuthStore();
   const [locale, setLocale] = useState<Locale>("es");
-  const [portal, setPortal] = useState<any>(null);
+  const [portal, setPortal] = useState<ClientPortalPayload | null>(null);
   const [loading, setLoading] = useState(true);
   const [improvement, setImprovement] = useState({
     category: categories[0],
@@ -110,6 +170,28 @@ export default function Dashboard() {
   });
 
   const t = copy[locale];
+
+  const submissionKind = (data: Record<string, unknown>) => {
+    const type = String(data?.type || "");
+    if (type === "improvement_request") return t.kindImprovement;
+    if (type === "direct_message") return t.kindMessage;
+    return t.kindGeneric;
+  };
+
+  const submissionTitleLine = (data: Record<string, unknown>) => {
+    const raw = data?.title ?? data?.subject;
+    const s = String(raw || "").trim();
+    return s || submissionKind(data);
+  };
+
+  const submissionPreview = (data: Record<string, unknown>) => {
+    const msg = data?.message;
+    if (typeof msg === "string" && msg.trim()) {
+      const s = msg.trim();
+      return s.length > 160 ? `${s.slice(0, 160)}…` : s;
+    }
+    return t.previewNone;
+  };
 
   useEffect(() => {
     const language = navigator.language.toLowerCase();
@@ -129,7 +211,7 @@ export default function Dashboard() {
 
   const fetchPortal = async () => {
     try {
-      const res = await API.get("/api/client/portal");
+      const res = await API.get<ClientPortalPayload>("/api/client/portal");
       setPortal(res.data);
     } catch (error) {
       toast.error("No se pudo cargar el portal");
@@ -144,6 +226,12 @@ export default function Dashboard() {
   };
 
   const auditChecks = useMemo(() => portal?.websiteAudit?.checks || [], [portal]);
+  const isVerified =
+    Boolean(portal?.user?.clientVerified) || Boolean(user?.clientVerified);
+  const scoreLabel =
+    portal?.websiteAudit?.score != null && !Number.isNaN(portal.websiteAudit.score)
+      ? `${portal.websiteAudit.score}/100`
+      : "—";
 
   const submitImprovement = async (event: FormEvent) => {
     event.preventDefault();
@@ -202,8 +290,14 @@ export default function Dashboard() {
               <option value="en">EN</option>
               <option value="ca">CA</option>
             </select>
-            <span className="rounded-md border border-[#18D4F7]/40 bg-[#18D4F7]/10 px-3 py-2 text-sm font-bold text-[#39F4FF]">
-              {t.verified}
+            <span
+              className={
+                isVerified
+                  ? "rounded-md border border-[#18D4F7]/40 bg-[#18D4F7]/10 px-3 py-2 text-sm font-bold text-[#39F4FF]"
+                  : "rounded-md border border-amber-500/50 bg-amber-500/10 px-3 py-2 text-sm font-bold text-amber-200"
+              }
+            >
+              {isVerified ? t.verified : t.pendingVerification}
             </span>
             <button onClick={handleLogout} className="rounded-md border border-[#2563EB] bg-[#2563EB] px-4 py-2 text-sm font-bold text-white transition hover:bg-[#1D4ED8]">
               {t.logout}
@@ -222,30 +316,38 @@ export default function Dashboard() {
             </div>
             <div className="rounded-md border border-[#E5E7EB] bg-[#F9FAFB] px-4 py-3 text-right">
               <p className="text-sm font-bold text-[#2563EB]">{t.score}</p>
-              <strong className="text-3xl">{portal?.websiteAudit?.score || 0}/100</strong>
+              <strong className="text-3xl">{scoreLabel}</strong>
             </div>
           </div>
 
           <div className="mt-7">
             <h3 className="text-xl font-black">{t.website}</h3>
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
-              {auditChecks.map((check: any) => (
-                <div key={check.label} className="rounded-md border border-[#E5E7EB] bg-[#F9FAFB] p-4">
-                  <p className="font-bold">{check.label}</p>
-                  <p className="text-sm text-[#4B5563]">{check.status}</p>
-                </div>
-              ))}
+              {auditChecks.length === 0 ? (
+                <p className="col-span-full text-sm text-[#4B5563]">{t.noAuditChecks}</p>
+              ) : (
+                auditChecks.map((check) => (
+                  <div key={check.label} className="rounded-md border border-[#E5E7EB] bg-[#F9FAFB] p-4">
+                    <p className="font-bold">{check.label}</p>
+                    <p className="text-sm text-[#4B5563]">{check.status}</p>
+                  </div>
+                ))
+              )}
             </div>
           </div>
 
           <div className="mt-7">
             <h3 className="text-xl font-black">{t.improvements}</h3>
             <div className="mt-4 grid gap-3">
-              {(portal?.suggestedImprovements || []).map((item: string) => (
-                <div key={item} className="border-l-4 border-[#2563EB] bg-[#F9FAFB] p-4 font-semibold text-[#111827]">
-                  {item}
-                </div>
-              ))}
+              {(portal?.suggestedImprovements || []).length === 0 ? (
+                <p className="text-sm text-[#4B5563]">{t.noImprovementsList}</p>
+              ) : (
+                (portal?.suggestedImprovements || []).map((item: string) => (
+                  <div key={item} className="border-l-4 border-[#2563EB] bg-[#F9FAFB] p-4 font-semibold text-[#111827]">
+                    {item}
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </section>
@@ -363,10 +465,16 @@ export default function Dashboard() {
           <h2 className="text-2xl font-black">{t.recent}</h2>
           <div className="mt-5 space-y-3">
             {portal?.submissions?.length ? (
-              portal.submissions.map((submission: any) => (
+              portal.submissions.map((submission) => (
                 <div key={submission.id} className="rounded-md border border-[#E5E7EB] bg-[#F9FAFB] p-4">
-                  <p className="font-bold">{submission.data?.title || submission.data?.subject || submission.data?.type}</p>
-                  <p className="text-sm text-[#4B5563]">{submission.status} · {new Date(submission.created_at).toLocaleString()}</p>
+                  <p className="text-xs font-black uppercase tracking-wide text-[#2563EB]">
+                    {submissionKind(submission.data)}
+                  </p>
+                  <p className="mt-1 font-bold text-[#111827]">{submissionTitleLine(submission.data)}</p>
+                  <p className="mt-2 line-clamp-2 text-sm text-[#4B5563]">{submissionPreview(submission.data)}</p>
+                  <p className="mt-2 text-xs font-semibold text-[#6B7280]">
+                    {submission.status} · {new Date(submission.created_at).toLocaleString()}
+                  </p>
                 </div>
               ))
             ) : (

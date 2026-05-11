@@ -55,7 +55,83 @@
     ],
     "servicesEyebrow": "Servicios premium",
     "servicesTitle": "Seis áreas para proteger, gestionar y hacer evolucionar tu entorno digital.",
-    "servicesSubtitle": "Diseñados para empresas, autónomos y profesionales de cualquier lugar que necesitan soporte IT, seguridad, WordPress, IA y mejora continua de forma telemática, telefónica o presencial."
+    "servicesSubtitle": "Diseñados para empresas, autónomos y profesionales de cualquier lugar que necesitan soporte IT, seguridad, WordPress, IA y mejora continua de forma telemática, telefónica o presencial.",
+    "explainer": {
+      "eyebrow": "ARGOS-IT en movimiento",
+      "stagesAria": "Etapas de la historia interactiva",
+      "liveRegion": "Escena actual del relato Dumbo y Chico",
+      "pause": "Pausar animación automática",
+      "play": "Reanudar animación automática",
+      "prev": "Anterior",
+      "next": "Siguiente",
+      "ctaForm": "Rellenar formulario",
+      "ctaServices": "Ver servicios",
+      "altDumbo": "Dumbo, perro guía ARGOS-IT",
+      "altDumboGuide": "Dumbo de perfil, perro guía que encabeza el recorrido en la escena de soluciones",
+      "altDumboFront": "Dumbo de frente, perro guía que acompaña el mensaje en la escena de soluciones",
+      "altChico": "Chico, perro guardián ARGOS-IT",
+      "s0": {
+        "title": "Dumbo te guía. Chico te protege.",
+        "subtitle": "ARGOS-IT acompaña a empresas y profesionales para mejorar su web, seguridad, soporte y procesos digitales.",
+        "tab": "Introducción"
+      },
+      "s1": {
+        "title": "La plataforma también tiene fricción",
+        "subtitle": "Ventanas típicas en empresas y despachos antes de ordenar el entorno.",
+        "tab": "Problemas"
+      },
+      "s2": {
+        "title": "ARGOS-IT transforma el recorrido",
+        "subtitle": "Propuesta alineada con consultoría y soporte profesional.",
+        "tab": "Soluciones"
+      },
+      "s3": {
+        "title": "Entra Chico: seguridad y vigilancia",
+        "subtitle": "Seguridad, vigilancia y confianza digital. El entorno pasa a modo protección activa.",
+        "tab": "Guardián",
+        "badges": ["Escudo de accesos", "Monitorización", "Políticas claras"]
+      },
+      "s4": {
+        "title": "Áreas de protección",
+        "subtitle": "Chico cubre el perímetro digital de forma estructurada.",
+        "tab": "Protección"
+      },
+      "s5": {
+        "title": "Cuéntanos qué necesita tu empresa",
+        "subtitle": "Solicita tu diagnóstico inicial. Dumbo guía el siguiente paso; Chico mantiene el resguardo.",
+        "tab": "Contacto"
+      },
+      "problems": [
+        "Equipos lentos",
+        "Web desactualizada",
+        "Formularios que no funcionan",
+        "Correos inseguros",
+        "Procesos manuales",
+        "Falta de copias de seguridad",
+        "Sistemas desordenados",
+        "Pérdida de tiempo"
+      ],
+      "solutions": [
+        "Soporte IT",
+        "Diseño web profesional",
+        "Formularios funcionales",
+        "Seguridad de correo",
+        "Backups",
+        "Automatización",
+        "Diagnóstico técnico",
+        "Organización digital"
+      ],
+      "protection": [
+        "Protección de equipos",
+        "Control de accesos",
+        "Copias de seguridad",
+        "Seguridad web",
+        "Seguridad de correo",
+        "Revisión de vulnerabilidades",
+        "Prevención de amenazas",
+        "Continuidad del negocio"
+      ]
+    }
   },
   "servicesPage": {
     "title": "Servicios ARGOS-IT",
@@ -269,6 +345,23 @@
     },
     "buttons": {
       "speak": "Voz"
+    },
+    "chat": {
+      "titleDumbo": "Chat con Dumbo",
+      "titleChico": "Chat con Chico",
+      "subtitle": "Pregunta lo que necesites; te respondemos con el tono de cada mascota.",
+      "close": "Cerrar",
+      "closeBackdrop": "Cerrar conversación",
+      "send": "Enviar",
+      "placeholder": "Escribe tu mensaje…",
+      "inputLabel": "Mensaje para el asistente",
+      "loading": "Pensando…",
+      "readAloud": "Leer en voz alta",
+      "contactLink": "Ir a contacto",
+      "errorGeneric": "No se pudo responder. Inténtalo de nuevo o escríbenos.",
+      "errorUnavailable": "El asistente no está disponible ahora mismo. Escríbenos desde contacto.",
+      "errorNetwork": "No hay conexión con el servidor. Revisa tu red o vuelve más tarde.",
+      "errorBadRequest": "Revisa el mensaje e inténtalo de nuevo."
     }
   },
   "services": {

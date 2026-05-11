@@ -39,7 +39,83 @@
     ],
     "servicesEyebrow": "Servizi ARGOS-IT",
     "servicesTitle": "Servizi professionali per continuità, sicurezza e crescita.",
-    "servicesSubtitle": "Pensati per team che cercano tecnologia affidabile e supporto reale."
+    "servicesSubtitle": "Pensati per team che cercano tecnologia affidabile e supporto reale.",
+    "explainer": {
+      "eyebrow": "ARGOS-IT in movimento",
+      "stagesAria": "Fasi della storia interattiva",
+      "liveRegion": "Scena attuale della storia Dumbo e Chico",
+      "pause": "Metti in pausa l'animazione automatica",
+      "play": "Riprendi l'animazione automatica",
+      "prev": "Indietro",
+      "next": "Avanti",
+      "ctaForm": "Compila il modulo",
+      "ctaServices": "Vedi servizi",
+      "altDumbo": "Dumbo, cane guida ARGOS-IT",
+      "altDumboGuide": "Dumbo di profilo, cane guida che apre il percorso nella scena delle soluzioni",
+      "altDumboFront": "Dumbo di fronte, cane guida nella scena delle soluzioni",
+      "altChico": "Chico, cane guardiano ARGOS-IT",
+      "s0": {
+        "title": "Dumbo ti guida. Chico ti protegge.",
+        "subtitle": "ARGOS-IT accompagna aziende e professionisti su web, sicurezza, supporto e processi digitali.",
+        "tab": "Introduzione"
+      },
+      "s1": {
+        "title": "Anche la piattaforma crea attrito",
+        "subtitle": "Situazioni tipiche prima di mettere ordine all'ambiente.",
+        "tab": "Problemi"
+      },
+      "s2": {
+        "title": "ARGOS-IT trasforma il percorso",
+        "subtitle": "Proposta allineata a consulenza e supporto professionale.",
+        "tab": "Soluzioni"
+      },
+      "s3": {
+        "title": "Entra Chico: sicurezza e vigilanza",
+        "subtitle": "Sicurezza, vigilanza e fiducia digitale. Modalità protezione attiva.",
+        "tab": "Guardiano",
+        "badges": ["Scudo accessi", "Monitoraggio", "Policy chiare"]
+      },
+      "s4": {
+        "title": "Aree di protezione",
+        "subtitle": "Chico copre il perimetro digitale in modo strutturato.",
+        "tab": "Protezione"
+      },
+      "s5": {
+        "title": "Raccontaci di cosa ha bisogno la tua azienda",
+        "subtitle": "Richiedi la diagnosi iniziale. Dumbo guida il passo successivo; Chico mantiene la guardia.",
+        "tab": "Contatto"
+      },
+      "problems": [
+        "Dispositivi lenti",
+        "Sito datato",
+        "Moduli non funzionanti",
+        "Email insicura",
+        "Processi manuali",
+        "Backup assenti",
+        "Sistemi disordinati",
+        "Perdita di tempo"
+      ],
+      "solutions": [
+        "Supporto IT",
+        "Web design professionale",
+        "Moduli funzionanti",
+        "Sicurezza email",
+        "Backup",
+        "Automazione",
+        "Diagnosi tecnica",
+        "Organizzazione digitale"
+      ],
+      "protection": [
+        "Protezione dispositivi",
+        "Controllo accessi",
+        "Backup",
+        "Sicurezza web",
+        "Sicurezza email",
+        "Revisione vulnerabilità",
+        "Prevenzione minacce",
+        "Continuità operativa"
+      ]
+    }
   },
   "servicesPage": {
     "title": "Servizi ARGOS-IT",
@@ -148,7 +224,24 @@
       "cursorNearChico": { "chico": "Partiamo dal più critico." },
       "cursorNearDumbo": { "dumbo": "Se vuoi lo organizziamo passo dopo passo." }
     },
-    "buttons": { "speak": "Voce" }
+    "buttons": { "speak": "Voce" },
+    "chat": {
+      "titleDumbo": "Chat con Dumbo",
+      "titleChico": "Chat con Chico",
+      "subtitle": "Chiedi pure; rispondiamo con il tono di ogni mascotte.",
+      "close": "Chiudi",
+      "closeBackdrop": "Chiudi conversazione",
+      "send": "Invia",
+      "placeholder": "Scrivi il messaggio…",
+      "inputLabel": "Messaggio per l’assistente",
+      "loading": "Sto pensando…",
+      "readAloud": "Leggi ad alta voce",
+      "contactLink": "Vai al contatto",
+      "errorGeneric": "Impossibile rispondere. Riprova o scrivici.",
+      "errorUnavailable": "L’assistente non è disponibile ora. Usa il modulo di contatto.",
+      "errorNetwork": "Impossibile contattare il server. Controlla la rete o riprova dopo.",
+      "errorBadRequest": "Controlla il messaggio e riprova."
+    }
   },
   "services": {
     "mantenimiento-informatico": { "title": "Manutenzione informatica per aziende", "description": "Gestione preventiva e correttiva di dispositivi e sistemi." },

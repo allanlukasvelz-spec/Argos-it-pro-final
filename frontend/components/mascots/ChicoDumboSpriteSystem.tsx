@@ -4,8 +4,8 @@ import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { chicoSprites, dumboSprites } from "@/sprites/spriteManifest";
 import { useMascotController } from "@/hooks/useMascotController";
-import { useMascotSpeech } from "@/speech/useMascotSpeech";
 import { useI18n } from "@/i18n/useI18n";
+import { useMascotChat } from "@/components/mascots/MascotChatContext";
 
 export default function ChicoDumboSpriteSystem() {
   const {
@@ -20,7 +20,7 @@ export default function ChicoDumboSpriteSystem() {
   } = useMascotController();
   const { t } = useI18n();
   const reduceMotion = useReducedMotion();
-  const speak = useMascotSpeech();
+  const { openChat, panelId, isOpenFor } = useMascotChat();
   const chicoBubble = t(chicoMessageKey);
   const dumboBubble = t(dumboMessageKey);
 
@@ -40,8 +40,10 @@ export default function ChicoDumboSpriteSystem() {
         <button
           type="button"
           className="mascot__sprite-button"
-          onClick={() => speak(chicoBubble, "chico")}
+          onClick={() => openChat("chico")}
           aria-label={t("mascots.chicoAria")}
+          aria-expanded={isOpenFor("chico")}
+          aria-controls={panelId}
         >
           <Image
             src={chicoSprites[chico]}
@@ -67,8 +69,10 @@ export default function ChicoDumboSpriteSystem() {
         <button
           type="button"
           className="mascot__sprite-button"
-          onClick={() => speak(dumboBubble, "dumbo")}
+          onClick={() => openChat("dumbo")}
           aria-label={t("mascots.dumboAria")}
+          aria-expanded={isOpenFor("dumbo")}
+          aria-controls={panelId}
         >
           <Image
             src={dumboSprites[dumbo]}

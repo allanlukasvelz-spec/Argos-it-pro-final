@@ -32,6 +32,11 @@ Thumbs.db
 # Local tooling / caches
 .pydeps/
 
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
 # Build
 dist/
 build/

@@ -1,5 +1,14 @@
 const rateLimit = require("express-rate-limit");
 
+const EMAIL_REGEX =
+  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+
+function validateEmailFormat(email) {
+  if (!email || typeof email !== "string") return false;
+  const trimmed = email.trim().toLowerCase();
+  return trimmed.length <= 320 && EMAIL_REGEX.test(trimmed);
+}
+
 const generalLimiter = rateLimit({
   windowMs: Number(process.env.RATE_LIMIT_WINDOW_MS || 15 * 60 * 1000),
   max: Number(process.env.RATE_LIMIT_MAX || 120),
@@ -71,5 +80,6 @@ module.exports = {
   aiLimiter,
   contactLimiter,
   detectBot,
-  validatePassword
+  validatePassword,
+  validateEmailFormat
 };

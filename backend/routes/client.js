@@ -3,8 +3,27 @@ const pool = require("../db");
 
 const router = express.Router();
 
+const PORTAL_ROLES = ["visitante", "cliente", "cliente_verificado", "admin", "super_admin"];
+
+const IMPROVEMENT_PANEL = {
+  statusOptions: ["pending", "reviewed", "accepted", "in_progress", "done"],
+  fields: ["estado_web", "problema_detectado", "mejora_recomendada", "prioridad", "estado", "fecha_revision"]
+};
+
 function clean(value = "", limit = 2000) {
   return String(value).trim().slice(0, limit);
+}
+
+function mapFindingsToChecks(findings) {
+  if (!Array.isArray(findings)) return [];
+  return findings
+    .filter((f) => f && typeof f === "object")
+    .map((f) => ({
+      label: String(f.label || f.name || "").trim().slice(0, 200) || "Check",
+      status: String(f.status || "pendiente").trim().slice(0, 120),
+      priority: f.priority != null ? String(f.priority).trim().slice(0, 80) : "Media"
+    }))
+    .filter((c) => c.label);
 }
 
 async function notifyFormspree(subject, payload) {
@@ -30,9 +49,14 @@ router.get("/portal", async (req, res) => {
     const userId = req.user.id;
 
     const userResult = await pool.query(
-      "SELECT id, email, name, company, created_at FROM users WHERE id = $1",
+      `SELECT id, email, name, company, created_at, role, client_verified, company_profile
+       FROM users WHERE id = $1`,
       [userId]
     );
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ error: "Usuario no encontrado" });
+    }
+    const user = userResult.rows[0];
 
     const submissions = await pool.query(
       `SELECT id, data, status, created_at
@@ -52,49 +76,95 @@ router.get("/portal", async (req, res) => {
       [userId]
     );
 
+    const services = await pool.query(
+      `SELECT service_slug, status, metadata, started_at
+       FROM client_services
+       WHERE user_id = $1
+       ORDER BY started_at DESC NULLS LAST, id DESC`,
+      [userId]
+    );
+
+    const auditResult = await pool.query(
+      `SELECT website_url, score, status, findings, reviewed_at
+       FROM website_audits
+       WHERE user_id = $1
+       ORDER BY reviewed_at DESC NULLS LAST, id DESC
+       LIMIT 1`,
+      [userId]
+    );
+
+    const improvementsResult = await pool.query(
+      `SELECT id, title, priority, status, page_url, details, created_at
+       FROM client_improvements
+       WHERE user_id = $1
+         AND (status IS NULL OR status NOT IN ('done', 'rejected', 'cancelled'))
+       ORDER BY created_at DESC
+       LIMIT 20`,
+      [userId]
+    );
+
+    const auditRow = auditResult.rows[0];
+    const checks = auditRow ? mapFindingsToChecks(auditRow.findings) : [];
+
+    const websiteAudit = auditRow
+      ? {
+          status: auditRow.status || "pending",
+          score: auditRow.score != null ? Number(auditRow.score) : null,
+          reviewedAt: auditRow.reviewed_at,
+          websiteUrl: auditRow.website_url,
+          checks
+        }
+      : {
+          status: "pending",
+          score: null,
+          reviewedAt: null,
+          websiteUrl: null,
+          checks: []
+        };
+
+    const suggestedImprovements = improvementsResult.rows.map((row) => {
+      const d = row.details ? String(row.details).trim().slice(0, 120) : "";
+      return d ? `${row.title}: ${d}` : row.title;
+    });
+
+    const profile =
+      user.company_profile && typeof user.company_profile === "object" && !Array.isArray(user.company_profile)
+        ? user.company_profile
+        : {};
+
+    const clientVerified = Boolean(user.client_verified);
+
     res.json({
       user: {
-        ...userResult.rows[0],
-        role: req.user.role || "cliente",
-        clientVerified: true
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        company: user.company,
+        created_at: user.created_at,
+        role: user.role || "cliente",
+        clientVerified
       },
-      roles: ["visitante", "cliente", "cliente_verificado", "admin", "super_admin"],
-      clientVerified: true,
+      roles: PORTAL_ROLES,
+      clientVerified,
       companyProfile: {
-        name: userResult.rows[0]?.company || "Empresa pendiente",
-        contactEmail: userResult.rows[0]?.email,
-        status: "perfil_basico",
-        nextStep: "Completar dominio web, responsables y servicios contratados."
+        name: profile.name || user.company || "Empresa pendiente",
+        contactEmail: profile.contactEmail || user.email,
+        status: profile.status || "perfil_basico",
+        nextStep:
+          profile.nextStep || "Completar dominio web, responsables y servicios contratados."
       },
-      activeServices: [
-        { slug: "consultoria-it", name: "Consultoría IT premium", status: "available" },
-        { slug: "mantenimiento-informatico", name: "Mantenimiento informático", status: "available" },
-        { slug: "seguridad-informatica", name: "Seguridad informática", status: "available" },
-        { slug: "web-wordpress", name: "Web y WordPress", status: "available" },
-        { slug: "automatizacion-ia", name: "Automatización con IA", status: "available" },
-        { slug: "auditoria-digital", name: "Auditoría digital continua", status: "available" }
-      ],
-      websiteAudit: {
-        status: "pendiente_de_revision",
-        score: 82,
-        reviewedAt: new Date().toISOString(),
-        checks: [
-          { label: "SEO tecnico", status: "mejorable", priority: "Media" },
-          { label: "Rendimiento movil", status: "correcto", priority: "Baja" },
-          { label: "Seguridad WordPress", status: "prioritario", priority: "Alta" },
-          { label: "Captacion digital", status: "mejorable", priority: "Media" }
-        ]
-      },
-      suggestedImprovements: [
-        "Revisar Core Web Vitals y compresion de assets.",
-        "Activar backups automaticos y politica de actualizaciones.",
-        "Completar datos legales y banner de cookies si hay analitica.",
-        "Crear formularios segmentados por seguridad, soporte, IA y WordPress."
-      ],
-      improvementPanel: {
-        statusOptions: ["pending", "reviewed", "accepted", "in_progress", "done"],
-        fields: ["estado_web", "problema_detectado", "mejora_recomendada", "prioridad", "estado", "fecha_revision"]
-      },
+      activeServices: services.rows.map((row) => ({
+        slug: row.service_slug,
+        name:
+          row.metadata && typeof row.metadata === "object" && row.metadata.name
+            ? String(row.metadata.name)
+            : String(row.service_slug).replace(/-/g, " "),
+        status: row.status,
+        startedAt: row.started_at
+      })),
+      websiteAudit,
+      suggestedImprovements,
+      improvementPanel: IMPROVEMENT_PANEL,
       messages: submissions.rows
         .filter((submission) => submission.data?.type === "direct_message")
         .map((submission) => ({

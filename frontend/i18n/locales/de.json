@@ -39,7 +39,83 @@
     ],
     "servicesEyebrow": "ARGOS-IT Leistungen",
     "servicesTitle": "Professionelle Leistungen für Kontinuität, Sicherheit und Wachstum.",
-    "servicesSubtitle": "Für Teams, die zuverlässige Technologie und echten Support brauchen."
+    "servicesSubtitle": "Für Teams, die zuverlässige Technologie und echten Support brauchen.",
+    "explainer": {
+      "eyebrow": "ARGOS-IT in Bewegung",
+      "stagesAria": "Interaktive Kapitel der Geschichte",
+      "liveRegion": "Aktuelle Szene mit Dumbo und Chico",
+      "pause": "Automatische Animation pausieren",
+      "play": "Automatische Animation fortsetzen",
+      "prev": "Zurück",
+      "next": "Weiter",
+      "ctaForm": "Formular ausfüllen",
+      "ctaServices": "Leistungen ansehen",
+      "altDumbo": "Dumbo, Lead-Hund ARGOS-IT",
+      "altDumboGuide": "Dumbo im Profil, Lead-Hund, der in der Szenenfolge „Lösungen“ vorgeht",
+      "altDumboFront": "Dumbo von vorn, Lead-Hund in der Szenenfolge „Lösungen“",
+      "altChico": "Chico, Wachhund ARGOS-IT",
+      "s0": {
+        "title": "Dumbo führt Sie. Chico schützt Sie.",
+        "subtitle": "ARGOS-IT begleitet Unternehmen und Professionals bei Web, Sicherheit, Support und digitalen Prozessen.",
+        "tab": "Einstieg"
+      },
+      "s1": {
+        "title": "Auch Plattformen erzeugen Reibung",
+        "subtitle": "Typische Engpässe, bevor die Umgebung strukturiert wird.",
+        "tab": "Probleme"
+      },
+      "s2": {
+        "title": "ARGOS-IT verwandelt den Weg",
+        "subtitle": "Passend zu professioneller Beratung und Support.",
+        "tab": "Lösungen"
+      },
+      "s3": {
+        "title": "Chico tritt ein: Sicherheit und Wachsamkeit",
+        "subtitle": "Sicherheit, Überwachung und digitales Vertrauen. Aktiver Schutzmodus.",
+        "tab": "Wächter",
+        "badges": ["Zugriffsschutz", "Monitoring", "Klare Richtlinien"]
+      },
+      "s4": {
+        "title": "Schutzbereiche",
+        "subtitle": "Chico sichert den digitalen Umfang strukturiert ab.",
+        "tab": "Schutz"
+      },
+      "s5": {
+        "title": "Sagen Sie uns, was Ihr Unternehmen braucht",
+        "subtitle": "Fordern Sie die Erstdiagnose an. Dumbo leitet weiter; Chico bleibt wachsam.",
+        "tab": "Kontakt"
+      },
+      "problems": [
+        "Langsame Geräte",
+        "Veraltete Website",
+        "Formulare funktionieren nicht",
+        "Unsichere E-Mail",
+        "Manuelle Abläufe",
+        "Fehlende Backups",
+        "Ungeordnete Systeme",
+        "Zeitverlust"
+      ],
+      "solutions": [
+        "IT-Support",
+        "Professionelles Webdesign",
+        "Funktionierende Formulare",
+        "E-Mail-Sicherheit",
+        "Backups",
+        "Automatisierung",
+        "Technische Diagnose",
+        "Digitale Organisation"
+      ],
+      "protection": [
+        "Geräteschutz",
+        "Zugriffskontrolle",
+        "Backups",
+        "Web-Sicherheit",
+        "Mail-Sicherheit",
+        "Schwachstellenprüfung",
+        "Bedrohungsprävention",
+        "Business Continuity"
+      ]
+    }
   },
   "servicesPage": {
     "title": "ARGOS-IT Leistungen",
@@ -148,7 +224,24 @@
       "cursorNearChico": { "chico": "Lassen Sie uns zuerst das Kritische priorisieren." },
       "cursorNearDumbo": { "dumbo": "Wir können es Schritt für Schritt ordnen." }
     },
-    "buttons": { "speak": "Stimme" }
+    "buttons": { "speak": "Stimme" },
+    "chat": {
+      "titleDumbo": "Chat mit Dumbo",
+      "titleChico": "Chat mit Chico",
+      "subtitle": "Fragen Sie, was Sie brauchen; Antworten im Stil der jeweiligen Maske.",
+      "close": "Schließen",
+      "closeBackdrop": "Unterhaltung schließen",
+      "send": "Senden",
+      "placeholder": "Nachricht eingeben…",
+      "inputLabel": "Nachricht an den Assistenten",
+      "loading": "Denkt nach…",
+      "readAloud": "Vorlesen",
+      "contactLink": "Zum Kontakt",
+      "errorGeneric": "Keine Antwort möglich. Bitte erneut versuchen oder schreiben Sie uns.",
+      "errorUnavailable": "Der Assistent ist gerade nicht verfügbar. Nutzen Sie das Kontaktformular.",
+      "errorNetwork": "Server nicht erreichbar. Netzwerk prüfen oder später erneut versuchen.",
+      "errorBadRequest": "Nachricht prüfen und erneut versuchen."
+    }
   },
   "services": {
     "mantenimiento-informatico": { "title": "IT-Wartung für Unternehmen", "description": "Präventive und korrektive Verwaltung von Geräten und Systemen." },

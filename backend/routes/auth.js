@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const pool = require("../db");
-const { authLimiter, validatePassword } = require("../middleware/security");
+const { authLimiter, validatePassword, validateEmailFormat } = require("../middleware/security");
 
 function requireJwtSecret(res) {
   if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
@@ -28,23 +29,25 @@ router.post("/register", authLimiter, validatePassword, async (req, res) => {
       return res.status(400).json({ error: "Email y password requeridos" });
     }
 
+    const normalizedEmail = String(email).trim().toLowerCase();
+    if (!validateEmailFormat(normalizedEmail)) {
+      return res.status(400).json({ error: "Email no valido" });
+    }
+
     if (password.length < 10) {
       return res.status(400).json({ error: "La contraseña debe tener mínimo 10 caracteres" });
     }
 
-    // Verificar si existe
-    const existing = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
+    const existing = await pool.query("SELECT id FROM users WHERE email = $1", [normalizedEmail]);
     if (existing.rows.length > 0) {
       return res.status(409).json({ error: "Email ya registrado" });
     }
 
-    // Hashear password
     const hash = await bcrypt.hash(password, 10);
 
-    // Crear usuario
     const result = await pool.query(
       "INSERT INTO users(email, password, name, company) VALUES($1, $2, $3, $4) RETURNING id, email, name",
-      [email, hash, name || email, company || ""]
+      [normalizedEmail, hash, name || normalizedEmail, String(company || "").trim()]
     );
 
     res.status(201).json({
@@ -66,25 +69,27 @@ router.post("/login", authLimiter, async (req, res) => {
       return res.status(400).json({ error: "Email y password requeridos" });
     }
 
-    // Buscar usuario
-    const result = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
+    const normalizedEmail = String(email).trim().toLowerCase();
+    if (!validateEmailFormat(normalizedEmail)) {
+      return res.status(400).json({ error: "Email no valido" });
+    }
+
+    const result = await pool.query("SELECT * FROM users WHERE email = $1", [normalizedEmail]);
     if (result.rows.length === 0) {
-      // Log de intento fallido
       await pool.query(
-        "INSERT INTO security_logs(action, risk_level, details) VALUES($1, $2, $3)",
-        ["login_failed", "medium", JSON.stringify({ email, reason: "user_not_found" })]
+        "INSERT INTO security_logs(user_id, action, risk_level, details) VALUES($1, $2, $3, $4)",
+        [null, "login_failed", "medium", JSON.stringify({ email: normalizedEmail, reason: "user_not_found" })]
       );
       return res.status(401).json({ error: "Credenciales inválidas" });
     }
 
     const user = result.rows[0];
 
-    // Verificar password
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) {
       await pool.query(
-        "INSERT INTO security_logs(action, risk_level, details) VALUES($1, $2, $3)",
-        ["login_failed", "medium", JSON.stringify({ email, reason: "wrong_password" })]
+        "INSERT INTO security_logs(user_id, action, risk_level, details) VALUES($1, $2, $3, $4)",
+        [user.id, "login_failed", "medium", JSON.stringify({ email: normalizedEmail, reason: "wrong_password" })]
       );
       return res.status(401).json({ error: "Credenciales inválidas" });
     }
@@ -98,8 +103,15 @@ router.post("/login", authLimiter, async (req, res) => {
       { expiresIn: "24h" }
     );
 
+    const jti = crypto.randomUUID();
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    await pool.query(
+      "INSERT INTO refresh_sessions(user_id, jti, expires_at) VALUES($1, $2, $3)",
+      [user.id, jti, expiresAt]
+    );
+
     const refreshToken = jwt.sign(
-      { id: user.id },
+      { id: user.id, jti },
       process.env.JWT_REFRESH_SECRET,
       { expiresIn: "7d" }
     );
@@ -129,27 +141,63 @@ router.post("/login", authLimiter, async (req, res) => {
   }
 });
 
-// REFRESH TOKEN
-router.post("/refresh", authLimiter, (req, res) => {
+// REFRESH TOKEN (rol y email siempre desde BD)
+router.post("/refresh", authLimiter, async (req, res) => {
   try {
     if (!requireJwtSecret(res)) return;
 
-    const { refreshToken } = req.body;
+    const { refreshToken: bodyRefresh } = req.body;
 
-    if (!refreshToken) {
+    if (!bodyRefresh) {
       return res.status(400).json({ error: "Refresh token requerido" });
     }
 
-    const decoded = jwt.verify(
-      refreshToken,
-      process.env.JWT_REFRESH_SECRET
+    const decoded = jwt.verify(bodyRefresh, process.env.JWT_REFRESH_SECRET);
+
+    if (decoded.jti) {
+      const active = await pool.query(
+        `SELECT id FROM refresh_sessions
+         WHERE user_id = $1 AND jti = $2 AND revoked_at IS NULL AND expires_at > NOW()`,
+        [decoded.id, decoded.jti]
+      );
+      if (active.rows.length === 0) {
+        return res.status(401).json({ error: "Refresh token invalido" });
+      }
+      await pool.query("UPDATE refresh_sessions SET revoked_at = NOW() WHERE id = $1", [
+        active.rows[0].id
+      ]);
+    }
+
+    const userResult = await pool.query(
+      "SELECT id, email, role, client_verified FROM users WHERE id = $1 AND is_active IS NOT FALSE",
+      [decoded.id]
     );
 
+    if (userResult.rows.length === 0) {
+      return res.status(401).json({ error: "Refresh token invalido" });
+    }
+
+    const row = userResult.rows[0];
+    const role = row.role || "cliente";
+
     const newToken = jwt.sign(
-      { id: decoded.id, role: decoded.role || "cliente" },
+      { id: row.id, email: row.email, role },
       process.env.JWT_SECRET,
       { expiresIn: "24h" }
     );
+
+    if (decoded.jti) {
+      const newJti = crypto.randomUUID();
+      const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+      await pool.query(
+        "INSERT INTO refresh_sessions(user_id, jti, expires_at) VALUES($1, $2, $3)",
+        [row.id, newJti, expiresAt]
+      );
+      const refreshToken = jwt.sign({ id: row.id, jti: newJti }, process.env.JWT_REFRESH_SECRET, {
+        expiresIn: "7d"
+      });
+      return res.json({ token: newToken, refreshToken });
+    }
 
     res.json({ token: newToken });
   } catch (error) {

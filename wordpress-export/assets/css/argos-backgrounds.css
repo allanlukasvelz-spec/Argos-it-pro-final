@@ -79,10 +79,86 @@
 }
 
 .argos-page-shell .white,
-.argos-page-shell .brand-story,
-.argos-page-shell .testimonials {
+.argos-page-shell .brand-story {
   background: rgba(255, 255, 255, .96);
   color: var(--ink, #07111F);
+}
+
+/* Banda testimonios: base nocturna Argos (tras .white para ganar si hay white+testimonials en WP) */
+.argos-page-shell .testimonials {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(34, 211, 238, .18), transparent 32%),
+    linear-gradient(135deg, #07111f 0%, #0b1f2e 45%, #102a3a 100%);
+  color: #f8fafc;
+}
+
+.argos-page-shell .testimonials::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(34, 211, 238, .06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 238, .05) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, .55), rgba(0, 0, 0, .12) 55%, transparent);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.argos-page-shell .testimonials > * {
+  position: relative;
+  z-index: 1;
+}
+
+.argos-page-shell .testimonials .testimonial-card {
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, .24);
+  background: linear-gradient(
+    to bottom right,
+    rgba(30, 64, 175, .95) 0%,
+    rgba(14, 165, 233, .9) 50%,
+    rgba(34, 211, 238, .85) 100%
+  );
+  box-shadow:
+    0 20px 50px -12px rgba(0, 0, 0, .45),
+    0 0 0 1px rgba(255, 255, 255, .06) inset;
+  backdrop-filter: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.argos-page-shell .testimonials .testimonial-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 28px 62px -12px rgba(0, 0, 0, .52),
+    0 0 0 1px rgba(255, 255, 255, .1) inset;
+}
+
+.argos-page-shell section.testimonials .max-w-3xl > p:first-of-type,
+.argos-page-shell .section.testimonials .section-title .kicker {
+  color: #22d3ee;
+}
+
+.argos-page-shell section.testimonials h2,
+.argos-page-shell .section.testimonials .section-title h2 {
+  color: #f8fafc;
+}
+
+.argos-page-shell section.testimonials .max-w-3xl > h2 + p,
+.argos-page-shell .section.testimonials .section-title .muted {
+  color: #cbd5e1;
+}
+
+.argos-page-shell section.testimonials .testimonial-card p,
+.argos-page-shell .section.testimonials .testimonial-card p {
+  color: #ffffff;
+}
+
+.argos-page-shell section.testimonials .testimonial-card strong,
+.argos-page-shell .section.testimonials .testimonial-card strong {
+  color: rgba(255, 255, 255, .95);
 }
 
 .argos-page-shell .card,

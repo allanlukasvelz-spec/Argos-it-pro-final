@@ -2,6 +2,10 @@ const express = require("express");
 const router = express.Router();
 const OpenAI = require("openai");
 const pool = require("../db");
+const { normalizeChatMessage } = require("../lib/aiMessage");
+
+const CHICO_ACTION_MAX = 200;
+const CHICO_DETAILS_MAX_JSON = 4000;
 
 function getOpenAIClient() {
   if (!process.env.OPENAI_API_KEY) {
@@ -33,7 +37,11 @@ async function saveMemory(userId, role, message) {
 // DUMBO - Guía UX
 router.post("/dumbo", async (req, res) => {
   try {
-    const { message } = req.body;
+    const { message: rawMessage } = req.body;
+    const { ok, error, message } = normalizeChatMessage(rawMessage);
+    if (!ok) {
+      return res.status(400).json({ error });
+    }
     const userId = req.user.id;
 
     // Obtener contexto
@@ -41,7 +49,7 @@ router.post("/dumbo", async (req, res) => {
 
     const openai = getOpenAIClient();
     const completion = await openai.chat.completions.create({
-      model: process.env.OPENAI_MODEL || "gpt-4-turbo",
+      model: process.env.OPENAI_MODEL || "gpt-4o-mini",
       messages: [
         {
           role: "system",
@@ -71,12 +79,36 @@ Si el usuario pregunta sobre servicios, recomienda el adecuado.`
 // CHICO - Seguridad
 router.post("/chico", async (req, res) => {
   try {
-    const { action, details } = req.body;
+    const { action: rawAction, details } = req.body;
+    if (!rawAction || typeof rawAction !== "string") {
+      return res.status(400).json({ error: "El campo action es obligatorio." });
+    }
+    const action = rawAction.trim().slice(0, CHICO_ACTION_MAX);
+    if (!action) {
+      return res.status(400).json({ error: "El campo action no puede estar vacio." });
+    }
+
+    let detailsPayload = {};
+    if (details !== undefined && details !== null) {
+      if (typeof details !== "object" || Array.isArray(details)) {
+        return res.status(400).json({ error: "El campo details debe ser un objeto." });
+      }
+      try {
+        const json = JSON.stringify(details);
+        if (json.length > CHICO_DETAILS_MAX_JSON) {
+          return res.status(400).json({ error: "El campo details es demasiado grande." });
+        }
+        detailsPayload = details;
+      } catch {
+        return res.status(400).json({ error: "El campo details no es serializable." });
+      }
+    }
+
     const userId = req.user.id;
 
     const openai = getOpenAIClient();
     const completion = await openai.chat.completions.create({
-      model: process.env.OPENAI_MODEL || "gpt-4-turbo",
+      model: process.env.OPENAI_MODEL || "gpt-4o-mini",
       messages: [
         {
           role: "system",
@@ -92,17 +124,28 @@ Responde en JSON: { "risk_level": "low|medium|high", "alert": "mensaje", "action
         },
         {
           role: "user",
-          content: `Acción: ${action}\nDetalles: ${JSON.stringify(details)}`
+          content: `Acción: ${action}\nDetalles: ${JSON.stringify(detailsPayload)}`
         }
       ]
     });
 
-    const response = JSON.parse(completion.choices[0].message.content);
+    const rawContent = completion.choices[0]?.message?.content;
+    let response;
+    try {
+      response = JSON.parse(rawContent);
+    } catch {
+      return res.status(502).json({ error: "Respuesta del modelo no valida" });
+    }
+    if (!response || typeof response !== "object") {
+      return res.status(502).json({ error: "Respuesta del modelo incompleta" });
+    }
 
-    // Log de seguridad
+    const risk =
+      ["low", "medium", "high"].includes(String(response.risk_level)) ? response.risk_level : "low";
+
     await pool.query(
       "INSERT INTO security_logs(user_id, action, risk_level, details) VALUES($1, $2, $3, $4)",
-      [userId, action, response.risk_level, JSON.stringify(response)]
+      [userId, action, risk, JSON.stringify(response)]
     );
 
     res.json(response);

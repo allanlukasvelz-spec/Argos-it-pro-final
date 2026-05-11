@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const pool = require("../db");
+const requireRole = require("../middleware/requireRole");
 
 // Dashboard de seguridad
 router.get("/dashboard", async (req, res) => {
@@ -33,8 +34,8 @@ router.get("/dashboard", async (req, res) => {
   }
 });
 
-// Estadísticas de seguridad
-router.get("/stats", async (req, res) => {
+// Estadísticas globales de seguridad (solo administración)
+router.get("/stats", requireRole(["admin", "super_admin"]), async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT 

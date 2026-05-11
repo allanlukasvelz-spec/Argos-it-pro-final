@@ -112,12 +112,26 @@ CREATE TABLE IF NOT EXISTS client_messages (
 );
 
 -- Índices para optimización
-CREATE INDEX idx_users_email ON users(email);
-CREATE INDEX idx_ai_memory_user ON ai_memory(user_id);
-CREATE INDEX idx_activity_logs_user ON activity_logs(user_id);
-CREATE INDEX idx_security_logs_user ON security_logs(user_id);
-CREATE INDEX idx_security_logs_created ON security_logs(created_at);
-CREATE INDEX idx_client_services_user ON client_services(user_id);
-CREATE INDEX idx_website_audits_user ON website_audits(user_id);
-CREATE INDEX idx_client_improvements_user ON client_improvements(user_id);
-CREATE INDEX idx_client_messages_user ON client_messages(user_id);
+CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+CREATE INDEX IF NOT EXISTS idx_ai_memory_user ON ai_memory(user_id);
+CREATE INDEX IF NOT EXISTS idx_activity_logs_user ON activity_logs(user_id);
+CREATE INDEX IF NOT EXISTS idx_security_logs_user ON security_logs(user_id);
+CREATE INDEX IF NOT EXISTS idx_security_logs_created ON security_logs(created_at);
+CREATE INDEX IF NOT EXISTS idx_client_services_user ON client_services(user_id);
+CREATE INDEX IF NOT EXISTS idx_website_audits_user ON website_audits(user_id);
+CREATE INDEX IF NOT EXISTS idx_client_improvements_user ON client_improvements(user_id);
+CREATE INDEX IF NOT EXISTS idx_client_messages_user ON client_messages(user_id);
+
+-- Sesiones de refresh token (jti + rotación en POST /api/auth/refresh)
+CREATE TABLE IF NOT EXISTS refresh_sessions (
+  id SERIAL PRIMARY KEY,
+  user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  jti TEXT NOT NULL UNIQUE,
+  expires_at TIMESTAMPTZ NOT NULL,
+  revoked_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_refresh_sessions_user ON refresh_sessions(user_id);
+CREATE INDEX IF NOT EXISTS idx_refresh_sessions_jti ON refresh_sessions(jti);
+CREATE INDEX IF NOT EXISTS idx_refresh_sessions_expires ON refresh_sessions(expires_at);

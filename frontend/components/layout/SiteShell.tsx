@@ -12,11 +12,15 @@ type Props = {
 };
 
 function shouldHideChrome(pathname: string) {
-  return pathname.startsWith("/auth") || pathname.startsWith("/dashboard");
+  return (
+    pathname.startsWith("/auth") || pathname.startsWith("/dashboard") || pathname === "/explainer"
+  );
 }
 
 function shouldHideAssistants(pathname: string) {
-  return pathname.startsWith("/auth") || pathname.startsWith("/dashboard");
+  return (
+    pathname.startsWith("/auth") || pathname.startsWith("/dashboard") || pathname === "/explainer"
+  );
 }
 
 export default function SiteShell({ children }: Props) {
@@ -29,7 +33,7 @@ export default function SiteShell({ children }: Props) {
       {children}
       {!hideChrome && <SiteFooter />}
       {!shouldHideAssistants(pathname) && <ClientAssistants />}
-      {!pathname.startsWith("/dashboard") && <CookieBanner />}
+      {!pathname.startsWith("/dashboard") && pathname !== "/explainer" && <CookieBanner />}
     </>
   );
 }

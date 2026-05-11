@@ -53,7 +53,83 @@
     ],
     "servicesEyebrow": "ARGOS-IT services",
     "servicesTitle": "Professional services for continuity, security and growth.",
-    "servicesSubtitle": "Built for companies and teams that need reliable technology and real support."
+    "servicesSubtitle": "Built for companies and teams that need reliable technology and real support.",
+    "explainer": {
+      "eyebrow": "ARGOS-IT in motion",
+      "stagesAria": "Interactive story stages",
+      "liveRegion": "Current scene in the Dumbo and Chico story",
+      "pause": "Pause automatic animation",
+      "play": "Resume automatic animation",
+      "prev": "Previous",
+      "next": "Next",
+      "ctaForm": "Fill in the form",
+      "ctaServices": "View services",
+      "altDumbo": "Dumbo, ARGOS-IT guide dog",
+      "altDumboGuide": "Dumbo in profile, guide dog leading the journey in the solutions scene",
+      "altDumboFront": "Dumbo facing forward, guide dog in the solutions scene",
+      "altChico": "Chico, ARGOS-IT guardian dog",
+      "s0": {
+        "title": "Dumbo guides you. Chico protects you.",
+        "subtitle": "ARGOS-IT helps companies and professionals improve their website, security, support and digital processes.",
+        "tab": "Introduction"
+      },
+      "s1": {
+        "title": "Digital platforms create friction too",
+        "subtitle": "Common pain points in businesses before the environment is brought under control.",
+        "tab": "Problems"
+      },
+      "s2": {
+        "title": "ARGOS-IT transforms the journey",
+        "subtitle": "A proposition aligned with professional consulting and support.",
+        "tab": "Solutions"
+      },
+      "s3": {
+        "title": "Chico enters: security and vigilance",
+        "subtitle": "Security, vigilance and digital trust. The environment shifts to active protection.",
+        "tab": "Guardian",
+        "badges": ["Access shielding", "Monitoring", "Clear policies"]
+      },
+      "s4": {
+        "title": "Protection areas",
+        "subtitle": "Chico covers the digital perimeter in a structured way.",
+        "tab": "Protection"
+      },
+      "s5": {
+        "title": "Tell us what your company needs",
+        "subtitle": "Request your initial diagnosis. Dumbo guides the next step; Chico keeps the guard up.",
+        "tab": "Contact"
+      },
+      "problems": [
+        "Slow devices",
+        "Outdated website",
+        "Broken forms",
+        "Insecure email",
+        "Manual processes",
+        "Missing backups",
+        "Messy systems",
+        "Wasted time"
+      ],
+      "solutions": [
+        "IT support",
+        "Professional web design",
+        "Working forms",
+        "Email security",
+        "Backups",
+        "Automation",
+        "Technical diagnosis",
+        "Digital organisation"
+      ],
+      "protection": [
+        "Endpoint protection",
+        "Access control",
+        "Backups",
+        "Web security",
+        "Email security",
+        "Vulnerability review",
+        "Threat prevention",
+        "Business continuity"
+      ]
+    }
   },
   "servicesPage": {
     "title": "ARGOS-IT Services",
@@ -188,6 +264,23 @@
     },
     "buttons": {
       "speak": "Voice"
+    },
+    "chat": {
+      "titleDumbo": "Chat with Dumbo",
+      "titleChico": "Chat with Chico",
+      "subtitle": "Ask anything you need; replies match each mascot’s tone.",
+      "close": "Close",
+      "closeBackdrop": "Close conversation",
+      "send": "Send",
+      "placeholder": "Type your message…",
+      "inputLabel": "Message to the assistant",
+      "loading": "Thinking…",
+      "readAloud": "Read aloud",
+      "contactLink": "Go to contact",
+      "errorGeneric": "We couldn’t get a reply. Try again or contact us.",
+      "errorUnavailable": "The assistant is unavailable right now. Please use the contact form.",
+      "errorNetwork": "Couldn’t reach the server. Check your connection or try later.",
+      "errorBadRequest": "Check your message and try again."
     }
   },
   "services": {

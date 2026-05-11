@@ -30,7 +30,7 @@ export default function Login() {
     try {
       const res = await API.post("/api/auth/login", { email, password });
 
-      login(res.data.token, res.data.user);
+      login(res.data.token, res.data.user, res.data.refreshToken);
       toast.success("Sesion iniciada");
       router.push("/dashboard");
     } catch (error: any) {
