@@ -87,7 +87,11 @@
         "title": "Chico enters: security and vigilance",
         "subtitle": "Security, vigilance and digital trust. The environment shifts to active protection.",
         "tab": "Guardian",
-        "badges": ["Access shielding", "Monitoring", "Clear policies"]
+        "badges": [
+          "Access shielding",
+          "Monitoring",
+          "Clear policies"
+        ]
       },
       "s4": {
         "title": "Protection areas",
@@ -148,10 +152,26 @@
     "title": "ARGOS-IT Method",
     "subtitle": "A clear framework so every technical improvement has real and sustainable impact.",
     "steps": [
-      { "id": "01", "title": "Diagnosis", "description": "Initial review of systems, risks, processes and business priorities." },
-      { "id": "02", "title": "Improvement plan", "description": "Prioritized proposal with realistic actions, timelines and ownership." },
-      { "id": "03", "title": "Implementation", "description": "Structured execution, documentation and continuity-oriented delivery." },
-      { "id": "04", "title": "Follow-up", "description": "Result tracking, adjustments and continuous prevention." }
+      {
+        "id": "01",
+        "title": "Diagnosis",
+        "description": "Initial review of systems, risks, processes and business priorities."
+      },
+      {
+        "id": "02",
+        "title": "Improvement plan",
+        "description": "Prioritized proposal with realistic actions, timelines and ownership."
+      },
+      {
+        "id": "03",
+        "title": "Implementation",
+        "description": "Structured execution, documentation and continuity-oriented delivery."
+      },
+      {
+        "id": "04",
+        "title": "Follow-up",
+        "description": "Result tracking, adjustments and continuous prevention."
+      }
     ]
   },
   "about": {
@@ -264,8 +284,12 @@
         "chico": "I stay on guard, whenever you need me.",
         "dumbo": "I am right here if you need help."
       },
-      "cursorNearChico": { "chico": "I am with you. Let us check the critical part first." },
-      "cursorNearDumbo": { "dumbo": "If you want, we can organize this step by step." }
+      "cursorNearChico": {
+        "chico": "I am with you. Let us check the critical part first."
+      },
+      "cursorNearDumbo": {
+        "dumbo": "If you want, we can organize this step by step."
+      }
     },
     "buttons": {
       "speak": "Voice"
@@ -320,6 +344,10 @@
     "desarrollo-web": {
       "title": "Web development and optimization",
       "description": "Professional websites focused on trust, conversion and digital presence."
+    },
+    "auditoria-digital": {
+      "title": "Digital audit",
+      "description": "Technical review of your website, systems, security, performance and improvement opportunities."
     }
   }
 }

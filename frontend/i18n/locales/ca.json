@@ -77,7 +77,11 @@
         "title": "Arriba Chico: seguretat i vigilància",
         "subtitle": "Seguretat, vigilància i confiança digital. Mode protecció activa.",
         "tab": "Guardià",
-        "badges": ["Escut d'accés", "Monitorització", "Polítiques clares"]
+        "badges": [
+          "Escut d'accés",
+          "Monitorització",
+          "Polítiques clares"
+        ]
       },
       "s4": {
         "title": "Àrees de protecció",
@@ -138,10 +142,26 @@
     "title": "Mètode ARGOS-IT",
     "subtitle": "Un marc clar perquè cada millora tecnològica tingui impacte real.",
     "steps": [
-      { "id": "01", "title": "Diagnosi", "description": "Revisió inicial de sistemes, riscos i prioritats." },
-      { "id": "02", "title": "Pla de millora", "description": "Accions prioritzades, realistes i executables." },
-      { "id": "03", "title": "Implementació", "description": "Execució ordenada amb documentació." },
-      { "id": "04", "title": "Seguiment", "description": "Control de resultats i prevenció contínua." }
+      {
+        "id": "01",
+        "title": "Diagnosi",
+        "description": "Revisió inicial de sistemes, riscos i prioritats."
+      },
+      {
+        "id": "02",
+        "title": "Pla de millora",
+        "description": "Accions prioritzades, realistes i executables."
+      },
+      {
+        "id": "03",
+        "title": "Implementació",
+        "description": "Execució ordenada amb documentació."
+      },
+      {
+        "id": "04",
+        "title": "Seguiment",
+        "description": "Control de resultats i prevenció contínua."
+      }
     ]
   },
   "about": {
@@ -201,9 +221,18 @@
     }
   },
   "legal": {
-    "aviso": { "title": "Avís legal", "intro": "Informació legal i condicions d'ús del web d'ARGOS-IT." },
-    "privacy": { "title": "Política de privacitat", "intro": "Com tractem les dades personals." },
-    "cookies": { "title": "Política de cookies", "intro": "Ús de cookies i tecnologies similars." }
+    "aviso": {
+      "title": "Avís legal",
+      "intro": "Informació legal i condicions d'ús del web d'ARGOS-IT."
+    },
+    "privacy": {
+      "title": "Política de privacitat",
+      "intro": "Com tractem les dades personals."
+    },
+    "cookies": {
+      "title": "Política de cookies",
+      "intro": "Ús de cookies i tecnologies similars."
+    }
   },
   "cookiesBanner": {
     "message": "Utilitzem cookies tècniques i analítiques per millorar l'experiència. Pots acceptar o rebutjar les no essencials.",
@@ -229,14 +258,32 @@
         "chico": "Estic atent a la seguretat del teu entorn.",
         "dumbo": "T'acompanyo perquè tot sigui més clar."
       },
-      "formStart": { "chico": "Perfecte, revisem les dades clau.", "dumbo": "Comença amb calma, et guio." },
-      "formSuccess": { "chico": "Sol·licitud enviada.", "dumbo": "Genial, següent pas fet." },
-      "formError": { "chico": "Veig un detall pendent.", "dumbo": "Et marco el camp." },
-      "inactive": { "chico": "Em quedo en guàrdia.", "dumbo": "Soc aquí si em necessites." },
-      "cursorNearChico": { "chico": "Prioritzem el crític primer." },
-      "cursorNearDumbo": { "dumbo": "Si vols, ho ordenem pas a pas." }
+      "formStart": {
+        "chico": "Perfecte, revisem les dades clau.",
+        "dumbo": "Comença amb calma, et guio."
+      },
+      "formSuccess": {
+        "chico": "Sol·licitud enviada.",
+        "dumbo": "Genial, següent pas fet."
+      },
+      "formError": {
+        "chico": "Veig un detall pendent.",
+        "dumbo": "Et marco el camp."
+      },
+      "inactive": {
+        "chico": "Em quedo en guàrdia.",
+        "dumbo": "Soc aquí si em necessites."
+      },
+      "cursorNearChico": {
+        "chico": "Prioritzem el crític primer."
+      },
+      "cursorNearDumbo": {
+        "dumbo": "Si vols, ho ordenem pas a pas."
+      }
     },
-    "buttons": { "speak": "Veu" },
+    "buttons": {
+      "speak": "Veu"
+    },
     "chat": {
       "titleDumbo": "Xat amb en Dumbo",
       "titleChico": "Xat amb en Chico",
@@ -256,13 +303,41 @@
     }
   },
   "services": {
-    "mantenimiento-informatico": { "title": "Manteniment informàtic per a empreses", "description": "Gestió preventiva i correctiva d'equips i sistemes." },
-    "soporte-tecnico": { "title": "Suport tècnic professional", "description": "Suport clar i ordenat per resoldre incidències." },
-    "ciberseguridad": { "title": "Ciberseguretat preventiva", "description": "Protecció per reduir riscos i assegurar la informació." },
-    "redes-sistemas": { "title": "Xarxes, sistemes i servidors", "description": "Configuració i millora de connectivitat empresarial." },
-    "backup-recuperacion": { "title": "Backup i recuperació", "description": "Còpies de seguretat i recuperació de dades crítiques." },
-    "automatizacion-ia": { "title": "Automatització amb IA", "description": "Automatització de processos repetitius amb criteri." },
-    "consultoria-digital": { "title": "Consultoria digital", "description": "Anàlisi tecnològica i full de ruta de millora." },
-    "desarrollo-web": { "title": "Desenvolupament i optimització web", "description": "Webs professionals orientades a confiança i conversió." }
+    "mantenimiento-informatico": {
+      "title": "Manteniment informàtic per a empreses",
+      "description": "Gestió preventiva i correctiva d'equips i sistemes."
+    },
+    "soporte-tecnico": {
+      "title": "Suport tècnic professional",
+      "description": "Suport clar i ordenat per resoldre incidències."
+    },
+    "ciberseguridad": {
+      "title": "Ciberseguretat preventiva",
+      "description": "Protecció per reduir riscos i assegurar la informació."
+    },
+    "redes-sistemas": {
+      "title": "Xarxes, sistemes i servidors",
+      "description": "Configuració i millora de connectivitat empresarial."
+    },
+    "backup-recuperacion": {
+      "title": "Backup i recuperació",
+      "description": "Còpies de seguretat i recuperació de dades crítiques."
+    },
+    "automatizacion-ia": {
+      "title": "Automatització amb IA",
+      "description": "Automatització de processos repetitius amb criteri."
+    },
+    "consultoria-digital": {
+      "title": "Consultoria digital",
+      "description": "Anàlisi tecnològica i full de ruta de millora."
+    },
+    "desarrollo-web": {
+      "title": "Desenvolupament i optimització web",
+      "description": "Webs professionals orientades a confiança i conversió."
+    },
+    "auditoria-digital": {
+      "title": "Auditoria digital",
+      "description": "Revisió tècnica del teu web, sistemes, seguretat, rendiment i oportunitats de millora."
+    }
   }
 }

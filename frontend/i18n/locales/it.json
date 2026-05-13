@@ -73,7 +73,11 @@
         "title": "Entra Chico: sicurezza e vigilanza",
         "subtitle": "Sicurezza, vigilanza e fiducia digitale. Modalità protezione attiva.",
         "tab": "Guardiano",
-        "badges": ["Scudo accessi", "Monitoraggio", "Policy chiare"]
+        "badges": [
+          "Scudo accessi",
+          "Monitoraggio",
+          "Policy chiare"
+        ]
       },
       "s4": {
         "title": "Aree di protezione",
@@ -134,10 +138,26 @@
     "title": "Metodo ARGOS-IT",
     "subtitle": "Un quadro chiaro per miglioramenti tecnici sostenibili.",
     "steps": [
-      { "id": "01", "title": "Diagnosi", "description": "Analisi iniziale di sistemi, rischi e priorità." },
-      { "id": "02", "title": "Piano di miglioramento", "description": "Azioni prioritarie e realistiche." },
-      { "id": "03", "title": "Implementazione", "description": "Esecuzione ordinata con documentazione." },
-      { "id": "04", "title": "Monitoraggio", "description": "Controllo risultati e prevenzione continua." }
+      {
+        "id": "01",
+        "title": "Diagnosi",
+        "description": "Analisi iniziale di sistemi, rischi e priorità."
+      },
+      {
+        "id": "02",
+        "title": "Piano di miglioramento",
+        "description": "Azioni prioritarie e realistiche."
+      },
+      {
+        "id": "03",
+        "title": "Implementazione",
+        "description": "Esecuzione ordinata con documentazione."
+      },
+      {
+        "id": "04",
+        "title": "Monitoraggio",
+        "description": "Controllo risultati e prevenzione continua."
+      }
     ]
   },
   "about": {
@@ -197,9 +217,18 @@
     }
   },
   "legal": {
-    "aviso": { "title": "Note legali", "intro": "Informazioni legali e condizioni d'uso del sito ARGOS-IT." },
-    "privacy": { "title": "Privacy policy", "intro": "Come trattiamo i dati personali." },
-    "cookies": { "title": "Cookie policy", "intro": "Uso dei cookie e tecnologie simili." }
+    "aviso": {
+      "title": "Note legali",
+      "intro": "Informazioni legali e condizioni d'uso del sito ARGOS-IT."
+    },
+    "privacy": {
+      "title": "Privacy policy",
+      "intro": "Come trattiamo i dati personali."
+    },
+    "cookies": {
+      "title": "Cookie policy",
+      "intro": "Uso dei cookie e tecnologie simili."
+    }
   },
   "cookiesBanner": {
     "message": "Utilizziamo cookie tecnici e analitici per migliorare l'esperienza utente.",
@@ -221,15 +250,36 @@
     "pauseMotion": "Metti in pausa le mascotte",
     "resumeMotion": "Riattiva le mascotte",
     "messages": {
-      "idle": { "chico": "Controllo la sicurezza del tuo ambiente.", "dumbo": "Sono qui per rendere tutto più chiaro." },
-      "formStart": { "chico": "Perfetto, rivediamo i dati chiave.", "dumbo": "Vai con calma, ti guido io." },
-      "formSuccess": { "chico": "Richiesta inviata.", "dumbo": "Ottimo, passo completato." },
-      "formError": { "chico": "C'è un dettaglio da completare.", "dumbo": "Ti indico il campo." },
-      "inactive": { "chico": "Resto in guardia.", "dumbo": "Sono qui se hai bisogno." },
-      "cursorNearChico": { "chico": "Partiamo dal più critico." },
-      "cursorNearDumbo": { "dumbo": "Se vuoi lo organizziamo passo dopo passo." }
+      "idle": {
+        "chico": "Controllo la sicurezza del tuo ambiente.",
+        "dumbo": "Sono qui per rendere tutto più chiaro."
+      },
+      "formStart": {
+        "chico": "Perfetto, rivediamo i dati chiave.",
+        "dumbo": "Vai con calma, ti guido io."
+      },
+      "formSuccess": {
+        "chico": "Richiesta inviata.",
+        "dumbo": "Ottimo, passo completato."
+      },
+      "formError": {
+        "chico": "C'è un dettaglio da completare.",
+        "dumbo": "Ti indico il campo."
+      },
+      "inactive": {
+        "chico": "Resto in guardia.",
+        "dumbo": "Sono qui se hai bisogno."
+      },
+      "cursorNearChico": {
+        "chico": "Partiamo dal più critico."
+      },
+      "cursorNearDumbo": {
+        "dumbo": "Se vuoi lo organizziamo passo dopo passo."
+      }
     },
-    "buttons": { "speak": "Voce" },
+    "buttons": {
+      "speak": "Voce"
+    },
     "chat": {
       "titleDumbo": "Chat con Dumbo",
       "titleChico": "Chat con Chico",
@@ -249,13 +299,41 @@
     }
   },
   "services": {
-    "mantenimiento-informatico": { "title": "Manutenzione informatica per aziende", "description": "Gestione preventiva e correttiva di dispositivi e sistemi." },
-    "soporte-tecnico": { "title": "Supporto tecnico professionale", "description": "Supporto chiaro e strutturato per risolvere incidenti tecnici." },
-    "ciberseguridad": { "title": "Cybersecurity preventiva", "description": "Protezione per ridurre rischi e mettere in sicurezza le informazioni." },
-    "redes-sistemas": { "title": "Reti, sistemi e server", "description": "Configurazione e ottimizzazione della connettività aziendale." },
-    "backup-recuperacion": { "title": "Backup e recupero", "description": "Sistemi di backup e recupero per dati critici." },
-    "automatizacion-ia": { "title": "Automazione con IA", "description": "Automazione di processi ripetitivi per migliorare l'efficienza." },
-    "consultoria-digital": { "title": "Consulenza digitale", "description": "Analisi tecnologica e piano di miglioramento realistico." },
-    "desarrollo-web": { "title": "Sviluppo e ottimizzazione web", "description": "Siti professionali orientati a fiducia e conversione." }
+    "mantenimiento-informatico": {
+      "title": "Manutenzione informatica per aziende",
+      "description": "Gestione preventiva e correttiva di dispositivi e sistemi."
+    },
+    "soporte-tecnico": {
+      "title": "Supporto tecnico professionale",
+      "description": "Supporto chiaro e strutturato per risolvere incidenti tecnici."
+    },
+    "ciberseguridad": {
+      "title": "Cybersecurity preventiva",
+      "description": "Protezione per ridurre rischi e mettere in sicurezza le informazioni."
+    },
+    "redes-sistemas": {
+      "title": "Reti, sistemi e server",
+      "description": "Configurazione e ottimizzazione della connettività aziendale."
+    },
+    "backup-recuperacion": {
+      "title": "Backup e recupero",
+      "description": "Sistemi di backup e recupero per dati critici."
+    },
+    "automatizacion-ia": {
+      "title": "Automazione con IA",
+      "description": "Automazione di processi ripetitivi per migliorare l'efficienza."
+    },
+    "consultoria-digital": {
+      "title": "Consulenza digitale",
+      "description": "Analisi tecnologica e piano di miglioramento realistico."
+    },
+    "desarrollo-web": {
+      "title": "Sviluppo e ottimizzazione web",
+      "description": "Siti professionali orientati a fiducia e conversione."
+    },
+    "auditoria-digital": {
+      "title": "Audit digitale",
+      "description": "Revisione tecnica del sito web, dei sistemi, della sicurezza, delle prestazioni e delle opportunità di miglioramento."
+    }
   }
 }

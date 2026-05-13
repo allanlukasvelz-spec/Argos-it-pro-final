@@ -73,7 +73,11 @@
         "title": "Chico tritt ein: Sicherheit und Wachsamkeit",
         "subtitle": "Sicherheit, Überwachung und digitales Vertrauen. Aktiver Schutzmodus.",
         "tab": "Wächter",
-        "badges": ["Zugriffsschutz", "Monitoring", "Klare Richtlinien"]
+        "badges": [
+          "Zugriffsschutz",
+          "Monitoring",
+          "Klare Richtlinien"
+        ]
       },
       "s4": {
         "title": "Schutzbereiche",
@@ -134,10 +138,26 @@
     "title": "ARGOS-IT Methode",
     "subtitle": "Ein klarer Rahmen für nachhaltige technische Verbesserungen.",
     "steps": [
-      { "id": "01", "title": "Analyse", "description": "Erstprüfung von Systemen, Risiken und Prioritäten." },
-      { "id": "02", "title": "Verbesserungsplan", "description": "Priorisierte und realistische Maßnahmen." },
-      { "id": "03", "title": "Umsetzung", "description": "Strukturierte Ausführung mit Dokumentation." },
-      { "id": "04", "title": "Nachverfolgung", "description": "Ergebniskontrolle und kontinuierliche Prävention." }
+      {
+        "id": "01",
+        "title": "Analyse",
+        "description": "Erstprüfung von Systemen, Risiken und Prioritäten."
+      },
+      {
+        "id": "02",
+        "title": "Verbesserungsplan",
+        "description": "Priorisierte und realistische Maßnahmen."
+      },
+      {
+        "id": "03",
+        "title": "Umsetzung",
+        "description": "Strukturierte Ausführung mit Dokumentation."
+      },
+      {
+        "id": "04",
+        "title": "Nachverfolgung",
+        "description": "Ergebniskontrolle und kontinuierliche Prävention."
+      }
     ]
   },
   "about": {
@@ -197,9 +217,18 @@
     }
   },
   "legal": {
-    "aviso": { "title": "Impressum", "intro": "Rechtliche Informationen und Nutzungsbedingungen." },
-    "privacy": { "title": "Datenschutz", "intro": "Wie wir personenbezogene Daten verarbeiten." },
-    "cookies": { "title": "Cookie-Richtlinie", "intro": "Verwendung von Cookies und ähnlichen Technologien." }
+    "aviso": {
+      "title": "Impressum",
+      "intro": "Rechtliche Informationen und Nutzungsbedingungen."
+    },
+    "privacy": {
+      "title": "Datenschutz",
+      "intro": "Wie wir personenbezogene Daten verarbeiten."
+    },
+    "cookies": {
+      "title": "Cookie-Richtlinie",
+      "intro": "Verwendung von Cookies und ähnlichen Technologien."
+    }
   },
   "cookiesBanner": {
     "message": "Wir verwenden technische und analytische Cookies zur Verbesserung der Nutzererfahrung.",
@@ -221,15 +250,36 @@
     "pauseMotion": "Maskottchen pausieren",
     "resumeMotion": "Maskottchen aktivieren",
     "messages": {
-      "idle": { "chico": "Ich überwache die Sicherheit Ihrer Umgebung.", "dumbo": "Ich helfe dabei, alles klarer zu machen." },
-      "formStart": { "chico": "Perfekt, wir prüfen die wichtigsten Daten.", "dumbo": "Schritt für Schritt, ich begleite Sie." },
-      "formSuccess": { "chico": "Anfrage gesendet.", "dumbo": "Super, nächster Schritt erledigt." },
-      "formError": { "chico": "Ein Detail fehlt noch.", "dumbo": "Ich markiere das Feld." },
-      "inactive": { "chico": "Ich bleibe in Bereitschaft.", "dumbo": "Ich bin hier, wenn Sie mich brauchen." },
-      "cursorNearChico": { "chico": "Lassen Sie uns zuerst das Kritische priorisieren." },
-      "cursorNearDumbo": { "dumbo": "Wir können es Schritt für Schritt ordnen." }
+      "idle": {
+        "chico": "Ich überwache die Sicherheit Ihrer Umgebung.",
+        "dumbo": "Ich helfe dabei, alles klarer zu machen."
+      },
+      "formStart": {
+        "chico": "Perfekt, wir prüfen die wichtigsten Daten.",
+        "dumbo": "Schritt für Schritt, ich begleite Sie."
+      },
+      "formSuccess": {
+        "chico": "Anfrage gesendet.",
+        "dumbo": "Super, nächster Schritt erledigt."
+      },
+      "formError": {
+        "chico": "Ein Detail fehlt noch.",
+        "dumbo": "Ich markiere das Feld."
+      },
+      "inactive": {
+        "chico": "Ich bleibe in Bereitschaft.",
+        "dumbo": "Ich bin hier, wenn Sie mich brauchen."
+      },
+      "cursorNearChico": {
+        "chico": "Lassen Sie uns zuerst das Kritische priorisieren."
+      },
+      "cursorNearDumbo": {
+        "dumbo": "Wir können es Schritt für Schritt ordnen."
+      }
     },
-    "buttons": { "speak": "Stimme" },
+    "buttons": {
+      "speak": "Stimme"
+    },
     "chat": {
       "titleDumbo": "Chat mit Dumbo",
       "titleChico": "Chat mit Chico",
@@ -249,13 +299,41 @@
     }
   },
   "services": {
-    "mantenimiento-informatico": { "title": "IT-Wartung für Unternehmen", "description": "Präventive und korrektive Verwaltung von Geräten und Systemen." },
-    "soporte-tecnico": { "title": "Professioneller technischer Support", "description": "Klarer und strukturierter Support zur Lösung von Vorfällen." },
-    "ciberseguridad": { "title": "Präventive Cybersicherheit", "description": "Schutz zur Risikominimierung und Sicherung von Unternehmensdaten." },
-    "redes-sistemas": { "title": "Netzwerke, Systeme und Server", "description": "Konfiguration und Optimierung der Unternehmenskonnektivität." },
-    "backup-recuperacion": { "title": "Backup und Wiederherstellung", "description": "Sicherung und Wiederherstellung kritischer Daten." },
-    "automatizacion-ia": { "title": "Automatisierung mit KI", "description": "Automatisierung wiederkehrender Prozesse für mehr Effizienz." },
-    "consultoria-digital": { "title": "Digitale Beratung", "description": "Technologische Analyse und realistischer Verbesserungsplan." },
-    "desarrollo-web": { "title": "Webentwicklung und Optimierung", "description": "Professionelle Websites mit Fokus auf Vertrauen und Conversion." }
+    "mantenimiento-informatico": {
+      "title": "IT-Wartung für Unternehmen",
+      "description": "Präventive und korrektive Verwaltung von Geräten und Systemen."
+    },
+    "soporte-tecnico": {
+      "title": "Professioneller technischer Support",
+      "description": "Klarer und strukturierter Support zur Lösung von Vorfällen."
+    },
+    "ciberseguridad": {
+      "title": "Präventive Cybersicherheit",
+      "description": "Schutz zur Risikominimierung und Sicherung von Unternehmensdaten."
+    },
+    "redes-sistemas": {
+      "title": "Netzwerke, Systeme und Server",
+      "description": "Konfiguration und Optimierung der Unternehmenskonnektivität."
+    },
+    "backup-recuperacion": {
+      "title": "Backup und Wiederherstellung",
+      "description": "Sicherung und Wiederherstellung kritischer Daten."
+    },
+    "automatizacion-ia": {
+      "title": "Automatisierung mit KI",
+      "description": "Automatisierung wiederkehrender Prozesse für mehr Effizienz."
+    },
+    "consultoria-digital": {
+      "title": "Digitale Beratung",
+      "description": "Technologische Analyse und realistischer Verbesserungsplan."
+    },
+    "desarrollo-web": {
+      "title": "Webentwicklung und Optimierung",
+      "description": "Professionelle Websites mit Fokus auf Vertrauen und Conversion."
+    },
+    "auditoria-digital": {
+      "title": "Digitale Prüfung",
+      "description": "Technische Überprüfung von Website, Systemen, Sicherheit, Leistung und Verbesserungsmöglichkeiten."
+    }
   }
 }
