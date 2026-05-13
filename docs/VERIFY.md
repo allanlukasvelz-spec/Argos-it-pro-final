@@ -16,7 +16,7 @@ Guía repetible: API, calidad automatizada, checklists **local**, **staging** y 
 - [ ] `npx playwright install chromium` (primera vez o tras actualizar Playwright).
 - [ ] `CI=1 npm run test:e2e` sin fallos.
 - [ ] `npm run build` (o confiar en que `verify` ya construyó; útil para comprobar build aislado).
-- [ ] Si aparece **“Another next build process is already running”**: cerrar otros `next build` / reiniciar terminal; en macOS/Linux `pgrep -fl "next build"` y terminar proceso duplicado con cuidado.
+- [ ] Si aparece **“Another next build process is already running”**: cerrar otros `next build` / reiniciar terminal; en macOS/Linux `pgrep -fl "next build"` y terminar proceso duplicado con cuidado. Si no hay otro proceso, borrar `frontend/.next` y repetir el build. Si `next build` falla con módulos internos de `framer-motion` faltantes, reinstalar solo ese paquete: `rm -rf frontend/node_modules/framer-motion && npm --prefix frontend install`.
 - [ ] Con backend levantado y `DATABASE_URL`: `./scripts/verify-api.sh` (opcionalmente con `TOKEN_*`).
 
 ---
@@ -137,3 +137,19 @@ Equivale a `tsc` + `next build` en frontend y `node --check` en archivos clave d
 ---
 
 Para variables detalladas y Docker, ver el [README.md](../README.md).
+
+---
+
+## Plan maestro y cierre
+
+- Estrategia, auditoría ampliada, fases 0–F, matriz de riesgos e ideas de mejora: [PLAN_FINAL_OPTIMIZACION_ARGOS.md](PLAN_FINAL_OPTIMIZACION_ARGOS.md).
+- Este archivo (**VERIFY**) sigue siendo el **checklist operativo** (comandos y staging/prod).
+
+**Recordatorio local (build / dependencias):**
+
+- Build Next: si aparece *Another next build…*, cerrar procesos duplicados; si no hay ninguno, `rm -rf frontend/.next` y repetir (ver [README.md](../README.md)).
+- `framer-motion` incompleto: `rm -rf frontend/node_modules/framer-motion && npm --prefix frontend install`.
+- Playwright roto en raíz: `rm -rf node_modules && npm ci`.
+
+**Siguiente:** staging con `./scripts/verify-api.sh` y `BASE_URL` real; aplicar parches de código descritos en el **Anexo A** de `PLAN_FINAL_OPTIMIZACION_ARGOS.md` (modo Agent en Cursor si Plan mode bloquea `.js`).
+

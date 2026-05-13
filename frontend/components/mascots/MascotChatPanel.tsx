@@ -121,9 +121,17 @@ export default function MascotChatPanel() {
         </div>
 
         {error ? (
-          <div className="border-t border-red-500/20 bg-red-950/30 px-4 py-2 text-xs text-red-100">
+          <div
+            className="border-t border-red-500/20 bg-red-950/30 px-4 py-2 text-xs text-red-100"
+            role="alert"
+            aria-live="assertive"
+          >
             <p>{error}</p>
-            <Link href="/contacto" className="mt-1 inline-block font-bold text-cyan-300 underline">
+            <Link
+              href="/contacto"
+              className="relative z-[90] mt-1 inline-block font-bold text-cyan-300 underline"
+              onClick={() => closeChat()}
+            >
               {t("mascots.chat.contactLink")}
             </Link>
           </div>

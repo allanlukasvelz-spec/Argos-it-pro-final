@@ -18,9 +18,22 @@ function shouldHideChrome(pathname: string) {
 }
 
 function shouldHideAssistants(pathname: string) {
-  return (
-    pathname.startsWith("/auth") || pathname.startsWith("/dashboard") || pathname === "/explainer"
-  );
+  if (
+    pathname.startsWith("/auth") ||
+    pathname.startsWith("/dashboard") ||
+    pathname === "/explainer"
+  ) {
+    return true;
+  }
+  if (
+    pathname === "/privacidad" ||
+    pathname === "/cookies" ||
+    pathname === "/aviso-legal" ||
+    pathname.startsWith("/legal/")
+  ) {
+    return true;
+  }
+  return false;
 }
 
 export default function SiteShell({ children }: Props) {

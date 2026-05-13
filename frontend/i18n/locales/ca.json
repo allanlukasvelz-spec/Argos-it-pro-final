@@ -195,7 +195,8 @@
         "email": "Introdueix un email vàlid.",
         "phone": "Introdueix un telèfon vàlid.",
         "privacy": "Has d'acceptar la política de privacitat.",
-        "service": "Selecciona un servei."
+        "service": "Selecciona un servei.",
+        "maxLength": "Com a màxim 2000 caràcters en aquest camp (límit tècnic)."
       }
     }
   },
@@ -219,6 +220,10 @@
     "dumboName": "Dumbo",
     "chicoAria": "Interactuar amb Chico, assistent de protecció",
     "dumboAria": "Interactuar amb Dumbo, assistent d'acompanyament",
+    "pauseMascots": "Pausar mascotes",
+    "activateMascots": "Activar mascotes",
+    "pauseMotion": "Pausar mascotes",
+    "resumeMotion": "Activar mascotes",
     "messages": {
       "idle": {
         "chico": "Estic atent a la seguretat del teu entorn.",

@@ -5,7 +5,7 @@
 
 **Nota profesional:** no se garantiza “cero errores absolutos” en producción sin validación en el entorno real (TLS, CORS, Postgres, cuotas OpenAI, tráfico). Sí se define **cierre verificable** con comandos y checklists.
 
----
+**Plan maestro (fases 0–F, riesgos, ideas, storyboard):** [PLAN_FINAL_OPTIMIZACION_ARGOS.md](PLAN_FINAL_OPTIMIZACION_ARGOS.md).
 
 ## 1. Estado actual del proyecto
 

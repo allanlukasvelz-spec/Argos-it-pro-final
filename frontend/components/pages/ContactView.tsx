@@ -35,6 +35,9 @@ const initialState: FormState = {
   privacy: false
 };
 
+/** Misma política que `backend/routes/contact.js` (`clean` trunca a 2000 por campo). */
+const CONTACT_FIELD_MAX_LEN = 2000;
+
 export default function ContactView() {
   const { t, get } = useI18n();
   const services = useLocalizedServices();
@@ -69,14 +72,22 @@ export default function ContactView() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneRegex = /^[+]?[\d\s().-]{7,20}$/;
 
+    const tooLong = (v: string) => v.length > CONTACT_FIELD_MAX_LEN;
+
     if (!form.name.trim()) nextErrors.name = t("contact.form.errors.required");
+    else if (tooLong(form.name)) nextErrors.name = t("contact.form.errors.maxLength");
     if (!form.email.trim()) nextErrors.email = t("contact.form.errors.required");
     else if (!emailRegex.test(form.email)) nextErrors.email = t("contact.form.errors.email");
+    else if (tooLong(form.email)) nextErrors.email = t("contact.form.errors.maxLength");
     if (!form.phone.trim()) nextErrors.phone = t("contact.form.errors.required");
     else if (!phoneRegex.test(form.phone)) nextErrors.phone = t("contact.form.errors.phone");
+    else if (tooLong(form.phone)) nextErrors.phone = t("contact.form.errors.maxLength");
     if (!form.company.trim()) nextErrors.company = t("contact.form.errors.required");
+    else if (tooLong(form.company)) nextErrors.company = t("contact.form.errors.maxLength");
     if (!form.service.trim()) nextErrors.service = t("contact.form.errors.service");
+    else if (tooLong(form.service)) nextErrors.service = t("contact.form.errors.maxLength");
     if (!form.message.trim()) nextErrors.message = t("contact.form.errors.required");
+    else if (tooLong(form.message)) nextErrors.message = t("contact.form.errors.maxLength");
     if (!form.privacy) nextErrors.privacy = t("contact.form.errors.privacy");
 
     setErrors(nextErrors);
@@ -193,6 +204,7 @@ export default function ContactView() {
                   type="text"
                   name="name"
                   value={form.name}
+                  maxLength={CONTACT_FIELD_MAX_LEN}
                   onChange={(event) => updateField("name", event.target.value)}
                   className="w-full rounded-lg border border-[#E5E7EB] bg-white px-4 py-3 outline-none transition focus:border-[#2563EB]"
                   placeholder={t("contact.form.namePlaceholder")}
@@ -207,6 +219,7 @@ export default function ContactView() {
                   type="email"
                   name="email"
                   value={form.email}
+                  maxLength={CONTACT_FIELD_MAX_LEN}
                   onChange={(event) => updateField("email", event.target.value)}
                   className="w-full rounded-lg border border-[#E5E7EB] bg-white px-4 py-3 outline-none transition focus:border-[#2563EB]"
                   placeholder={t("contact.form.emailPlaceholder")}
@@ -223,6 +236,7 @@ export default function ContactView() {
                   type="tel"
                   name="phone"
                   value={form.phone}
+                  maxLength={CONTACT_FIELD_MAX_LEN}
                   onChange={(event) => updateField("phone", event.target.value)}
                   className="w-full rounded-lg border border-[#E5E7EB] bg-white px-4 py-3 outline-none transition focus:border-[#2563EB]"
                   placeholder={t("contact.form.phonePlaceholder")}
@@ -237,6 +251,7 @@ export default function ContactView() {
                   type="text"
                   name="company"
                   value={form.company}
+                  maxLength={CONTACT_FIELD_MAX_LEN}
                   onChange={(event) => updateField("company", event.target.value)}
                   className="w-full rounded-lg border border-[#E5E7EB] bg-white px-4 py-3 outline-none transition focus:border-[#2563EB]"
                   placeholder={t("contact.form.companyPlaceholder")}
@@ -270,6 +285,7 @@ export default function ContactView() {
               <textarea
                 name="message"
                 value={form.message}
+                maxLength={CONTACT_FIELD_MAX_LEN}
                 onChange={(event) => updateField("message", event.target.value)}
                 rows={6}
                 className="w-full rounded-lg border border-[#E5E7EB] bg-white px-4 py-3 outline-none transition focus:border-[#2563EB]"

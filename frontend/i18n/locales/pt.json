@@ -191,7 +191,8 @@
         "email": "Introduce um email válido.",
         "phone": "Introduce um telefone válido.",
         "privacy": "Deves aceitar a política de privacidade.",
-        "service": "Seleciona um serviço."
+        "service": "Seleciona um serviço.",
+        "maxLength": "Máximo 2000 caracteres neste campo (limite técnico)."
       }
     }
   },
@@ -215,6 +216,10 @@
     "dumboName": "Dumbo",
     "chicoAria": "Interagir com Chico, assistente de proteção",
     "dumboAria": "Interagir com Dumbo, assistente de acompanhamento",
+    "pauseMascots": "Pausar as mascotes",
+    "activateMascots": "Ativar as mascotes",
+    "pauseMotion": "Pausar as mascotes",
+    "resumeMotion": "Ativar as mascotes",
     "messages": {
       "idle": { "chico": "Estou atento à segurança do teu ambiente.", "dumbo": "Estou aqui para tornar tudo mais claro." },
       "formStart": { "chico": "Perfeito, vamos rever os dados essenciais.", "dumbo": "Avança com calma, eu guio-te." },

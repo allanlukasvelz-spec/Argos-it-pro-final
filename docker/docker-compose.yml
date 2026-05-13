@@ -54,7 +54,10 @@ services:
       dockerfile: Dockerfile
     container_name: argos-frontend
     environment:
+      # El navegador en el host sigue llamando al API publicado en localhost:4000
       NEXT_PUBLIC_BACKEND_URL: http://localhost:4000
+      # Route handlers de Next (proxy chat mascotas) deben usar la red Docker
+      BACKEND_URL: http://backend:4000
     ports:
       - "3000:3000"
     depends_on:

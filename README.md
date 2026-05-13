@@ -109,7 +109,7 @@ Pruebas **E2E** mínimas (Playwright): `npx playwright install chromium` la prim
 
 ### Build bloqueado (“Another next build process is already running”)
 
-Si `next build` falla con ese mensaje, suele haber **otro** `next build` o el servidor de Playwright aún compilando. Cierre: esperar unos segundos; cerrar otras terminales o el IDE ejecutando build; en macOS/Linux puede localizarse con `pgrep -fl "next build"` y terminar el proceso duplicado (con cuidado de no matar el trabajo legítimo). Vuelve a ejecutar `npm run build` o `npm run verify`.
+Si `next build` falla con ese mensaje, suele haber **otro** `next build` o el servidor de Playwright aún compilando. Cierre: esperar unos segundos; cerrar otras terminales o el IDE ejecutando build; en macOS/Linux puede localizarse con `pgrep -fl "next build"` y terminar el proceso duplicado (con cuidado de no matar el trabajo legítimo). Si no ves ningún proceso, prueba `rm -rf frontend/.next` y vuelve a `npm run build` o `npm run verify`. Errores de resolución de módulos **dentro** de `node_modules/framer-motion` suelen deberse a una instalación incompleta: `rm -rf frontend/node_modules/framer-motion && npm --prefix frontend install`.
 
 ## CI en GitHub Actions
 
@@ -145,7 +145,9 @@ El **CI** en GitHub ejecuta los tres `npm ci` antes de `verify` (ver `.github/wo
 ## Desarrollo local
 
 - **Backend:** copia `backend/.env.example` a `backend/.env`, define `DATABASE_URL` y secretos JWT; `npm --prefix backend run dev` (o `start`).
-- **Frontend:** copia `frontend/.env.example` a `frontend/.env.local` con `NEXT_PUBLIC_BACKEND_URL` apuntando al API; desde la raíz `npm run dev` (equivale a `next dev` en `frontend/`).
+- **Frontend:** copia `frontend/.env.example` a `frontend/.env.local` con `BACKEND_URL` o `NEXT_PUBLIC_BACKEND_URL` apuntando al API (por defecto `http://127.0.0.1:4000`). El chat de Chico/Dumbo llama al mismo origen (`POST /api/ai/public/mascot-chat`) y Next **reenvía** al backend (menos problemas de CORS entre puertos). Desde la raíz `npm run dev` (equivale a `next dev` en `frontend/`).
+
+**Chat IA:** el backend debe estar en marcha y tener `OPENAI_API_KEY` si quieres respuestas reales; si no, el API devuelve 503 y la UI enlaza a contacto.
 
 ```bash
 npm run dev

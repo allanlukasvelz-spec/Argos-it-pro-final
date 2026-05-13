@@ -32,8 +32,8 @@ test.describe("public and auth shell", () => {
     await expect(page.getByRole("dialog")).toHaveCount(0);
   });
 
-  test("home explainer section and CTA links", async ({ page }) => {
-    await page.goto("/");
+  test("explainer page section and CTA links", async ({ page }) => {
+    await page.goto("/explainer");
     const section = page.locator("#dumbo-chico-explainer");
     await expect(section).toBeVisible();
     const next = section.getByRole("button", { name: /Siguiente|Next/i });

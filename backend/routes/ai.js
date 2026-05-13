@@ -6,13 +6,17 @@ const { normalizeChatMessage } = require("../lib/aiMessage");
 
 const CHICO_ACTION_MAX = 200;
 const CHICO_DETAILS_MAX_JSON = 4000;
+const OPENAI_TIMEOUT_MS = Number(process.env.OPENAI_TIMEOUT_MS || 45000);
 
 function getOpenAIClient() {
   if (!process.env.OPENAI_API_KEY) {
     throw new Error("OPENAI_API_KEY no configurada");
   }
 
-  return new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  return new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+    timeout: OPENAI_TIMEOUT_MS
+  });
 }
 
 // Obtener memoria de usuario

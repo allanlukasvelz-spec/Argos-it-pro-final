@@ -1,12 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { Suspense } from "react";
-import ArgosExplainerAnimation from "@/components/ArgosExplainerAnimation";
 import ArgosPageShell from "@/components/layout/ArgosPageShell";
-import { useI18n } from "@/i18n/useI18n";
-import { useLocalizedServices } from "@/hooks/useLocalizedServices";
 import { usePageMeta } from "@/components/seo/usePageMeta";
+import { useLocalizedServices } from "@/hooks/useLocalizedServices";
+import { useI18n } from "@/i18n/useI18n";
 
 const argosMethodCards = [
   {
@@ -142,10 +140,6 @@ export default function HomeView() {
           </div>
         </div>
       </section>
-
-      <Suspense fallback={null}>
-        <ArgosExplainerAnimation />
-      </Suspense>
 
       <section className="px-5 py-16 lg:px-8" id="servicios">
         <div className="mx-auto max-w-7xl">

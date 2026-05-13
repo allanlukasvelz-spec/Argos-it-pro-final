@@ -13,8 +13,10 @@ export default defineConfig({
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
-    // `next dev` puede provocar EMFILE (too many open files) en macOS; producción evita watchers.
-    command: "npm run build && npm --prefix frontend run start",
+    // El build corre en `npm run test:e2e` (antes de Playwright), no aquí: así no hay dos `next build`
+    // concurrentes si verify/e2e se lanzan en paralelo o si queda lock en `.next` entre procesos.
+    // `next dev` puede provocar EMFILE en macOS; `next start` evita watchers.
+    command: "npm --prefix frontend run start",
     url: "http://127.0.0.1:3000",
     reuseExistingServer: !process.env.CI,
     timeout: 300_000,

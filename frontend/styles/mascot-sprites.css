@@ -3,9 +3,9 @@
   left:0;
   right:0;
   bottom:8px;
-  z-index:70;
+  z-index:45;
   pointer-events:none;
-  transform:translate3d(var(--mascot-xoffset, 0), 0, 0) scale(var(--mascot-scale, 1));
+  transform:scale(var(--mascot-scale, 1));
   transform-origin:bottom center;
 }
 .mascot-root.is-webgl-ready{will-change:transform}
@@ -15,15 +15,64 @@
   display:flex;
   align-items:flex-end;
   gap:12px;
-  pointer-events:auto;
+  pointer-events:none;
+  transition:transform .22s ease-out;
 }
-.mascot--chico{left:12px}
-.mascot--dumbo{right:12px}
+.mascot--chico{
+  left:12px;
+  transform:translate3d(var(--mascot-chico-tx, 0px), var(--mascot-chico-ty, 0px), 0);
+}
+.mascot--dumbo{
+  right:12px;
+  transform:translate3d(var(--mascot-dumbo-tx, 0px), var(--mascot-dumbo-ty, 0px), 0);
+}
+/* Banner cookies z-50 y dock z-45: en md la tarjeta va esquina inferior derecha y tapaba a Dumbo */
+@media(min-width:768px){
+  .mascot-root{bottom:118px}
+  .mascot{bottom:120px}
+  .mascot__pause{bottom:224px}
+}
+.mascot__pause{
+  position:fixed;
+  left:12px;
+  bottom:110px;
+  transform:none;
+  z-index:46;
+  pointer-events:auto;
+  max-width:min(200px,calc(100vw - 24px));
+  white-space:normal;
+  line-height:1.2;
+  text-align:center;
+  hyphens:auto;
+  border:1px solid #d4dbe6;
+  border-radius:999px;
+  padding:6px 10px;
+  font-size:11px;
+  font-weight:700;
+  color:#0f172a;
+  background:rgba(255,255,255,.92);
+  cursor:pointer;
+  box-shadow:0 8px 20px rgba(15,23,42,.12);
+}
+.mascot__pause:focus-visible{
+  outline:2px solid #22d3ee;
+  outline-offset:2px;
+}
 .mascot__sprite-button{
   border:0;
   background:transparent;
   cursor:pointer;
   padding:0;
+  pointer-events:auto;
+  transition:transform .18s ease-out;
+}
+@media (hover:hover){
+  .mascot__sprite-button:hover{
+    transform:translateY(-4px);
+  }
+}
+.mascot__sprite-button:active{
+  transform:translateY(0) scale(.98);
 }
 .mascot__img{
   width:220px;
@@ -36,15 +85,28 @@
 }
 .mascot__img--chico{width:232px;height:232px}
 .mascot__img--dumbo{width:208px;height:208px}
-.mascot__state--walk_01,.mascot__state--walk_02{animation:mascotWalk 1s ease-in-out infinite}
-.mascot__state--jump{animation:mascotJump .9s ease-in-out}
-.mascot__state--turn{animation:mascotTurn 1.1s ease-in-out}
-.mascot__state--alert,.mascot__state--guide,.mascot__state--look{
-  animation:mascotAlert 1.6s ease-in-out infinite;
+.mascot__state--walk_01,.mascot__state--walk_02,.mascot__state--walk_03,.mascot__state--walking{
+  animation:mascotWalk 1s ease-in-out infinite,mascotBlink 8.5s linear infinite;
 }
-.mascot__state--sleep,.mascot__state--lay,.mascot__state--sit{animation:mascotRest 4.4s ease-in-out infinite}
+.mascot__state--jump,.mascot__state--playing{animation:mascotJump .9s ease-in-out infinite,mascotBlink 8.5s linear infinite}
+.mascot__state--turn,.mascot__state--sniffing{animation:mascotTurn 1.1s ease-in-out,mascotBlink 8.5s linear infinite}
+.mascot__state--alert,.mascot__state--guide,.mascot__state--look,.mascot__state--guarding,.mascot__state--guiding,.mascot__state--looking,.mascot__state--waiting{
+  animation:mascotAlert 1.6s ease-in-out infinite,mascotBlink 8.5s linear infinite;
+}
+.mascot__state--surprised{animation:mascotJump .65s ease-in-out infinite,mascotBlink 8.5s linear infinite}
+.mascot__state--sleep,.mascot__state--sleeping,.mascot__state--lay,.mascot__state--sit,.mascot__state--resting{
+  animation:mascotRest 4.4s ease-in-out infinite,mascotBlink 8.5s linear infinite;
+}
+.mascot__state--active{animation:mascotBreath 4.8s ease-in-out infinite,mascotBlink 8.5s linear infinite}
+.mascot__state--meeting{
+  animation:mascotAlert 1.55s ease-in-out infinite,mascotBlink 8.5s linear infinite;
+}
+.mascot-root.is-session-resting .mascot__img:not(.mascot__state--sleep):not(.mascot__state--sleeping):not(.mascot__state--lay){
+  animation:mascotRest 8s ease-in-out infinite,mascotBlink 10s linear infinite;
+}
 .mascot__bubble{
   max-width:220px;
+  pointer-events:auto;
   border:1px solid #d4dbe6;
   border-radius:10px;
   background:rgba(255,255,255,.95);
@@ -61,6 +123,7 @@
   .mascot{bottom:2px}
   .mascot--chico{left:4px}
   .mascot--dumbo{right:4px}
+  .mascot__pause{bottom:96px;left:4px;font-size:10px;padding:3px 8px}
   .mascot__img{width:132px;height:132px}
   .mascot__img--chico{width:140px;height:140px}
   .mascot__img--dumbo{width:124px;height:124px}
@@ -75,9 +138,18 @@
 @keyframes mascotRest{0%,100%{transform:translateY(1px)}50%{transform:translateY(3px)}}
 
 @media (prefers-reduced-motion: reduce){
-  .mascot-root,.mascot,.mascot__img{
-    animation:none!important;
+  .mascot{
     transition:none!important;
-    transform:none!important;
+  }
+  .mascot__img{
+    animation:none!important;
+  }
+  .mascot__sprite-button{
+    transition:none!important;
+  }
+  @media (hover:hover){
+    .mascot__sprite-button:hover{
+      transform:none;
+    }
   }
 }

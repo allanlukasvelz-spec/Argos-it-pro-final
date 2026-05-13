@@ -1,10 +1,12 @@
 import axios, { type AxiosError } from "axios";
 
-const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000";
-
-/** Cliente público sin interceptores de sesión (chat mascotas). */
+/**
+ * Peticiones same-origin → Route Handler `app/api/ai/public/mascot-chat`
+ * (reenvío al backend). Evita CORS y errores cuando el navegador no puede
+ * llamar directamente a otro puerto u origen.
+ */
 const mascotHttp = axios.create({
-  baseURL,
+  baseURL: "",
   headers: { "Content-Type": "application/json" }
 });
 

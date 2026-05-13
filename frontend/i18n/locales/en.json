@@ -205,7 +205,8 @@
         "email": "Enter a valid email.",
         "phone": "Enter a valid phone number.",
         "privacy": "You must accept the privacy policy.",
-        "service": "Please select a service."
+        "service": "Please select a service.",
+        "maxLength": "Maximum 2000 characters in this field (technical limit)."
       }
     }
   },
@@ -238,6 +239,10 @@
     "dumboName": "Dumbo",
     "chicoAria": "Interact with Chico, protection assistant",
     "dumboAria": "Interact with Dumbo, guidance assistant",
+    "pauseMascots": "Pause mascots",
+    "activateMascots": "Activate mascots",
+    "pauseMotion": "Pause mascots",
+    "resumeMotion": "Activate mascots",
     "messages": {
       "idle": {
         "chico": "I am watching over your environment security.",
