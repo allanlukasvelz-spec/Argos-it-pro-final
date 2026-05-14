@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { supportedLocales, type Locale } from "@/i18n/config";
 import DiagnosticPromoBanner from "@/components/diagnostic/DiagnosticPromoBanner";
 import { useI18n } from "@/i18n/useI18n";
@@ -27,12 +27,6 @@ export default function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [diagPromoSlotClosed, setDiagPromoSlotClosed] = useState(false);
   const menuId = "site-navigation-menu";
-
-  useEffect(() => {
-    if (pathname !== "/") {
-      setDiagPromoSlotClosed(false);
-    }
-  }, [pathname]);
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -60,8 +54,8 @@ export default function SiteHeader() {
 
         {pathname === "/" && !diagPromoSlotClosed && (
           <div
-            className="relative z-10 hidden min-h-[10.5rem] min-w-0 max-w-none flex-1 overflow-x-hidden overflow-y-visible md:block"
-            aria-hidden={false}
+            className={`relative z-10 hidden min-h-[8rem] min-w-0 max-w-none flex-1 overflow-x-hidden overflow-y-visible lg:min-h-[9.375rem] ${open ? "md:hidden" : "md:block"}`}
+            aria-hidden={open}
           >
             <DiagnosticPromoBanner onSlotRelease={() => setDiagPromoSlotClosed(true)} />
           </div>
