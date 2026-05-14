@@ -14,6 +14,17 @@ type Props = {
 const SESSION_KEY = "argos-diagnostic-promo-dismissed";
 const DIAGNOSTIC_HREF = "/contacto?intent=diagnostico";
 
+/** Copias exactas del diseño de referencia (visible). */
+const PROMO_TEXT_MAIN = "Descubre en pocos minutos el estado real de tu web";
+const PROMO_TEXT_HIGHLIGHT = "Seguridad · Sistemas · Procesos";
+const PROMO_TEXT_CTA = "Iniciar diagnóstico ARGOS";
+
+/** Texto completo para nombre accesible de la región. */
+const PROMO_A11Y_DESCRIPTION =
+  "Descubre en pocos minutos el estado real de tu web, seguridad, sistemas y procesos digitales.";
+
+const PROMO_HIGHLIGHT_PARTS = PROMO_TEXT_HIGHLIGHT.split(" · ");
+
 /** Fases ciclo estándar. “dismissed” es boolean + sessionStorage aparte. */
 type PromoPhase = "idle" | "entering" | "parked" | "exiting" | "waitingRestart";
 
@@ -153,7 +164,7 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
     <div
       className="pointer-events-none absolute inset-0 overflow-hidden"
       role="region"
-      aria-label="Promoción: Diagnóstico ARGOS"
+      aria-label={PROMO_A11Y_DESCRIPTION}
       aria-hidden={!showPromoChrome}
     >
       {showPromoChrome && (
@@ -216,20 +227,20 @@ function PromoInner({
             </span>
           </button>
           <p className="pr-10 text-[11px] font-extrabold leading-snug tracking-tight text-[#081018] md:text-[12px]">
-            Descubre en pocos minutos el estado real de tu web
+            {PROMO_TEXT_MAIN}
           </p>
           <p className="mt-1 text-[10px] font-black leading-snug md:text-[11px]">
-            <span className="text-[#B91C1C]">Seguridad</span>
+            <span className="text-[#B91C1C]">{PROMO_HIGHLIGHT_PARTS[0]}</span>
             <span className="font-bold text-[#334155]"> · </span>
-            <span className="text-[#047857]">Sistemas</span>
+            <span className="text-[#047857]">{PROMO_HIGHLIGHT_PARTS[1]}</span>
             <span className="font-bold text-[#334155]"> · </span>
-            <span className="text-[#1D4ED8]">Procesos</span>
+            <span className="text-[#1D4ED8]">{PROMO_HIGHLIGHT_PARTS[2]}</span>
           </p>
           <Link
             href={DIAGNOSTIC_HREF}
             className="pointer-events-auto mt-2 inline-flex min-h-[36px] w-full items-center justify-center rounded-lg bg-[#0EA5E9] px-3 py-2 text-[11px] font-black tracking-tight text-[#081018] shadow-[0_8px_20px_-6px_rgba(14,165,233,0.55)] ring-2 ring-[#0891b2]/55 hover:bg-[#38BDF8] md:text-xs"
           >
-            Iniciar diagnóstico ARGOS
+            {PROMO_TEXT_CTA}
           </Link>
         </div>
         <div
@@ -309,7 +320,7 @@ function ReducedMotionCycle({
       transition={{ duration: show ? 0.4 : 0.9, ease: "easeOut" }}
       aria-hidden={!show}
       role="region"
-      aria-label="Promoción: Diagnóstico ARGOS"
+      aria-label={PROMO_A11Y_DESCRIPTION}
     >
       <div
         className={`flex max-w-full flex-wrap items-center gap-x-4 gap-y-2 rounded-xl border-2 border-[#18D4F7]/85 bg-gradient-to-r from-[#EDE9FE] via-[#E8F7FF] to-[#CCFBEF] px-3 py-2.5 shadow-[0_10px_30px_-8px_rgba(15,23,42,0.22)] ring-2 ring-black/[0.04] ${show ? "pointer-events-auto" : "pointer-events-none"}`}
@@ -318,20 +329,20 @@ function ReducedMotionCycle({
           <div className="flex items-end gap-2">
             <div className="text-[11px] font-bold leading-snug tracking-tight text-[#081018] md:text-[12px]">
               <p className="max-w-[22rem]">
-                Descubre en pocos minutos el estado real de tu web
+                {PROMO_TEXT_MAIN}
                 <span className="mt-1 block text-[10px] font-extrabold tracking-tight md:text-[11px]">
-                  <span className="text-[#B91C1C]">Seguridad</span>
+                  <span className="text-[#B91C1C]">{PROMO_HIGHLIGHT_PARTS[0]}</span>
                   <span className="font-bold text-[#334155]"> · </span>
-                  <span className="text-[#047857]">Sistemas</span>
+                  <span className="text-[#047857]">{PROMO_HIGHLIGHT_PARTS[1]}</span>
                   <span className="font-bold text-[#334155]"> · </span>
-                  <span className="text-[#1D4ED8]">Procesos</span>
+                  <span className="text-[#1D4ED8]">{PROMO_HIGHLIGHT_PARTS[2]}</span>
                 </span>
               </p>
               <Link
                 href={DIAGNOSTIC_HREF}
                 className="mt-2 inline-flex min-h-[38px] items-center rounded-lg bg-[#0EA5E9] px-3.5 py-2 text-[11px] font-black tracking-tight text-[#081018] shadow-sm ring-2 ring-[#0891b2]/50 hover:bg-[#38BDF8] md:text-xs"
               >
-                Iniciar diagnóstico ARGOS
+                {PROMO_TEXT_CTA}
               </Link>
             </div>
             <div className="hidden shrink-0 pt-6 sm:block" aria-hidden>
