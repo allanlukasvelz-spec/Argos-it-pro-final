@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import DiagnosticPromoBanner from "@/components/diagnostic/DiagnosticPromoBanner";
 import ArgosPageShell from "@/components/layout/ArgosPageShell";
 import { usePageMeta } from "@/components/seo/usePageMeta";
 import { useLocalizedServices } from "@/hooks/useLocalizedServices";
@@ -326,6 +327,8 @@ export default function HomeView() {
           </div>
         </div>
       </section>
+
+      <DiagnosticPromoBanner />
     </ArgosPageShell>
   );
 }
