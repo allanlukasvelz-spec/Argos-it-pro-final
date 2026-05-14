@@ -59,7 +59,7 @@ export default function SiteHeader() {
         </Link>
 
         {pathname === "/" && !diagPromoSlotClosed && (
-          <div className="relative z-10 hidden min-h-[3.5rem] min-w-0 flex-1 overflow-hidden md:block" aria-hidden={false}>
+          <div className="relative z-10 hidden min-h-[4.25rem] min-w-0 max-w-none flex-1 overflow-hidden md:block" aria-hidden={false}>
             <DiagnosticPromoBanner onSlotRelease={() => setDiagPromoSlotClosed(true)} />
           </div>
         )}
