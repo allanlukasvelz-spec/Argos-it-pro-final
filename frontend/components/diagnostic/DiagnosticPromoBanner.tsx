@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+
+import { DiagnosticSurveyModal } from "@/components/diagnostic/DiagnosticSurveyModal";
 
 type Props = {
   /** Solo al cerrar con X o sesión: colapsar slot del header. */
@@ -11,8 +12,6 @@ type Props = {
 };
 
 const SESSION_KEY = "argos-diagnostic-promo-dismissed";
-const DIAGNOSTIC_HREF = "/contacto?intent=diagnostico";
-
 /** Copias exactas del diseño de referencia (visible). */
 const PROMO_TEXT_MAIN = "Descubre en pocos minutos el estado real de tu web";
 const PROMO_TEXT_HIGHLIGHT = "Seguridad · Sistemas · Procesos";
@@ -97,6 +96,7 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
 
   const [hydrated, setHydrated] = useState(false);
   const [dismissed, setDismissed] = useState(false);
+  const [diagnosticOpen, setDiagnosticOpen] = useState(false);
   const [phase, setPhase] = useState<CyclePhase>("idle");
   const [motionKey, setMotionKey] = useState(0);
 
@@ -256,6 +256,7 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
   }, [bumpMotionKey, phase, setPhaseTracked]);
 
   const handleDismiss = () => {
+    setDiagnosticOpen(false);
     try {
       sessionStorage.setItem(SESSION_KEY, "1");
     } catch {
@@ -274,10 +275,14 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
 
   if (prefersReducedMotion) {
     return (
-      <ReducedMotionAlternate
-        entranceDelayMs={entranceDelayMs}
-        onDismiss={handleDismiss}
-      />
+      <>
+        <DiagnosticSurveyModal open={diagnosticOpen} onClose={() => setDiagnosticOpen(false)} />
+        <ReducedMotionAlternate
+          entranceDelayMs={entranceDelayMs}
+          onDismiss={handleDismiss}
+          onStartDiagnostic={() => setDiagnosticOpen(true)}
+        />
+      </>
     );
   }
 
@@ -302,7 +307,9 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
       : chicoAttentionSprite;
 
   return (
-    <div
+    <>
+      <DiagnosticSurveyModal open={diagnosticOpen} onClose={() => setDiagnosticOpen(false)} />
+      <div
       className="pointer-events-none absolute inset-0 overflow-visible"
       role="region"
       aria-label={regionAria}
@@ -336,7 +343,12 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
                 : { duration: 0 }
           }
         >
-          <DumboBannerInner walkFrame={walkFrameDumbo} sitting={sittingDumbo} onDismiss={handleDismiss} />
+          <DumboBannerInner
+            walkFrame={walkFrameDumbo}
+            sitting={sittingDumbo}
+            onDismiss={handleDismiss}
+            onStartDiagnostic={() => setDiagnosticOpen(true)}
+          />
         </motion.div>
       )}
 
@@ -400,18 +412,21 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
           </motion.div>
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 }
 
 function DumboBannerInner({
   walkFrame,
   sitting,
-  onDismiss
+  onDismiss,
+  onStartDiagnostic,
 }: {
   walkFrame: number;
   sitting: boolean;
   onDismiss: () => void;
+  onStartDiagnostic: () => void;
 }) {
   const ropeGradientId = useId().replace(/:/g, "");
   const sprite = sitting ? DUMBO_SIT_SPRITE : (WALK_FRAMES_DUMBO[walkFrame] ?? WALK_FRAMES_DUMBO[0]);
@@ -448,12 +463,13 @@ function DumboBannerInner({
           </div>
 
           <div className="relative z-[1] mt-3 shrink-0 md:mt-0 md:flex md:w-auto md:flex-col md:justify-center">
-            <Link
-              href={DIAGNOSTIC_HREF}
+            <button
+              type="button"
+              onClick={onStartDiagnostic}
               className="pointer-events-auto inline-flex min-h-[44px] w-full items-center justify-center whitespace-nowrap rounded-xl bg-[#22D3EE] px-5 py-2.5 text-center text-sm font-black leading-tight tracking-tight text-[#082f49] shadow-[0_8px_24px_-6px_rgba(6,182,212,0.85),inset_0_1px_0_0_rgba(255,255,255,0.45)] ring-2 ring-[#A5F3FC]/95 ring-offset-2 ring-offset-[#0f172a]/0 hover:bg-[#67E8F9] md:min-h-[46px] md:min-w-[11.5rem] md:px-5 md:text-sm lg:min-w-[12.5rem] lg:px-6 lg:py-2.5 lg:text-base"
             >
               {PROMO_TEXT_CTA}
-            </Link>
+            </button>
           </div>
         </div>
         <div
@@ -559,9 +575,11 @@ function ChicoSecurityBubble({ tip, onDismiss }: { tip: string; onDismiss: () =>
 function ReducedMotionAlternate({
   entranceDelayMs,
   onDismiss,
+  onStartDiagnostic,
 }: {
   entranceDelayMs: number;
   onDismiss: () => void;
+  onStartDiagnostic: () => void;
 }) {
   type RM = "idle" | "visibleDumbo" | "gapA" | "visibleChico" | "gapB";
   const [rmPhase, setRmPhase] = useState<RM>("idle");
@@ -635,7 +653,7 @@ function ReducedMotionAlternate({
       >
         <div className="flex min-h-[5.5rem] flex-1 items-end justify-start">
           <div className="pointer-events-none w-full max-w-full space-y-0">
-            <DumboReducedCard onDismiss={onDismiss} />
+            <DumboReducedCard onDismiss={onDismiss} onStartDiagnostic={onStartDiagnostic} />
           </div>
         </div>
         <div className="shrink-0" aria-hidden>
@@ -681,7 +699,13 @@ function ReducedMotionAlternate({
   );
 }
 
-function DumboReducedCard({ onDismiss }: { onDismiss: () => void }) {
+function DumboReducedCard({
+  onDismiss,
+  onStartDiagnostic,
+}: {
+  onDismiss: () => void;
+  onStartDiagnostic: () => void;
+}) {
   return (
     <div className="relative flex w-full max-w-[min(100%,700px)] flex-col gap-4 overflow-visible rounded-2xl border-[2.5px] border-[#39F4FF]/90 bg-gradient-to-br from-[#4c1d95] via-[#1e3a8a] to-[#0f766e] p-4 pr-[3rem] pb-5 pt-[2.75rem] shadow-[0_16px_40px_-10px_rgba(15,23,42,0.45),inset_0_1px_0_0_rgba(255,255,255,0.22)] ring-2 ring-black/25 md:flex-row md:items-center md:gap-6 md:p-5 md:pr-20 lg:gap-8 lg:p-6 lg:pr-20">
       <div aria-hidden className="pointer-events-none absolute inset-[2px] rounded-[0.9rem] bg-gradient-to-b from-white/16 via-transparent to-black/23 md:rounded-[1.05rem]" />
@@ -707,12 +731,13 @@ function DumboReducedCard({ onDismiss }: { onDismiss: () => void }) {
           <span className="text-[#7dd3fc]">{PROMO_HIGHLIGHT_PARTS[2]}</span>
         </p>
       </div>
-      <Link
-        href={DIAGNOSTIC_HREF}
+      <button
+        type="button"
+        onClick={onStartDiagnostic}
         className="relative z-[1] mb-24 inline-flex min-h-[44px] w-full shrink-0 items-center justify-center rounded-xl bg-[#22D3EE] px-6 py-2.5 text-center text-sm font-black leading-tight tracking-tight text-[#082f49] shadow-[0_8px_24px_-6px_rgba(6,182,212,0.85)] ring-2 ring-[#A5F3FC]/90 hover:bg-[#67E8F9] md:mb-[5.5rem] md:mr-4 md:inline-flex md:min-h-[46px] md:w-auto md:min-w-[11.5rem] md:self-center md:text-sm lg:min-w-[12.5rem] lg:text-base"
       >
         {PROMO_TEXT_CTA}
-      </Link>
+      </button>
     </div>
   );
 }
