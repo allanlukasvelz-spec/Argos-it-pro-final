@@ -41,10 +41,10 @@ export default function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-[#E5E7EB] bg-white/95 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-2 px-5 py-3 md:gap-4 lg:px-8">
+      <div className="mx-auto flex max-w-7xl items-end justify-between gap-2 px-5 py-3 md:gap-4 lg:px-8">
         <Link
           href="/"
-          className="relative z-[46] flex shrink-0 items-center"
+          className="relative z-[46] flex shrink-0 items-end overflow-visible"
           aria-label="ARGOS-IT home"
           onClick={() => setOpen(false)}
         >
@@ -53,20 +53,23 @@ export default function SiteHeader() {
             alt="Logo ARGOS-IT"
             width={360}
             height={138}
-            className="h-16 w-auto object-contain sm:h-20"
+            className="h-16 w-auto max-h-none object-contain object-bottom sm:h-20"
             priority
           />
         </Link>
 
         {pathname === "/" && !diagPromoSlotClosed && (
-          <div className="relative z-10 hidden min-h-[4.25rem] min-w-0 max-w-none flex-1 overflow-hidden md:block" aria-hidden={false}>
+          <div
+            className="relative z-10 hidden min-h-[10.5rem] min-w-0 max-w-none flex-1 overflow-x-hidden overflow-y-visible md:block"
+            aria-hidden={false}
+          >
             <DiagnosticPromoBanner onSlotRelease={() => setDiagPromoSlotClosed(true)} />
           </div>
         )}
 
         <button
           type="button"
-          className="relative z-[46] inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-[#D9E2EF] bg-white text-[#0B1E33] shadow-sm transition hover:border-[#2563EB] hover:text-[#2563EB]"
+          className="relative z-[46] inline-flex h-11 w-11 shrink-0 items-center justify-center self-end rounded-md border border-[#D9E2EF] bg-white text-[#0B1E33] shadow-sm transition hover:border-[#2563EB] hover:text-[#2563EB]"
           onClick={() => setOpen((prev) => !prev)}
           aria-label={t("nav.menu")}
           aria-controls={menuId}
