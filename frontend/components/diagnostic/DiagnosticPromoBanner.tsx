@@ -4,19 +4,36 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
+import { usePathname } from "next/navigation";
+
+type Props = {
+  /** Libera el slot del header (p. ej. tras el pase o al cerrar) para que no quede hueco. */
+  onSlotRelease?: () => void;
+};
 
 const SESSION_KEY = "argos-diagnostic-promo-dismissed";
-const CONTACT_FALLBACK_HREF = "/contacto?intent=diagnostico";
+const DIAGNOSTIC_HREF = "/contacto?intent=diagnostico";
 
-/** Temporal hasta exista la página de diagnóstico: enlazar cuando se añada la ruta. */
-const DIAGNOSTIC_HREF = CONTACT_FALLBACK_HREF;
+const WALK_FRAMES = [
+  "/mascots/dumbo/dumbo_caminando.png",
+  "/mascots/dumbo/dumbo_caminando_2.png",
+  "/mascots/dumbo/dumbo_caminando_3.png"
+] as const;
 
-export default function DiagnosticPromoBanner() {
+/* Espacio mínimo a reservar desde el borde izquierdo del área central (no invade logo). */
+const SAFE_GAP_LEFT_PX = 88;
+
+export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
+  const pathname = usePathname();
   const prefersReducedMotion = useReducedMotion() === true;
   const [hydrated, setHydrated] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const [runIn, setRunIn] = useState(false);
+  const [walkFrame, setWalkFrame] = useState(0);
+  const [rideDone, setRideDone] = useState(false);
   const entranceDelayMs = useMemo(() => 1200 + Math.random() * 800, []);
+
+  const isHome = pathname === "/";
 
   useEffect(() => {
     try {
@@ -24,16 +41,22 @@ export default function DiagnosticPromoBanner() {
         setDismissed(true);
       }
     } catch {
-      /* private mode / unavailable */
+      /* ignore */
     }
     setHydrated(true);
   }, []);
 
   useEffect(() => {
-    if (!hydrated || dismissed) return;
+    if (!hydrated || dismissed || !isHome) return;
     const id = window.setTimeout(() => setRunIn(true), entranceDelayMs);
     return () => window.clearTimeout(id);
-  }, [hydrated, dismissed, entranceDelayMs]);
+  }, [hydrated, dismissed, entranceDelayMs, isHome]);
+
+  useEffect(() => {
+    if (!runIn || prefersReducedMotion || dismissed || rideDone) return;
+    const id = window.setInterval(() => setWalkFrame((f) => (f + 1) % WALK_FRAMES.length), 160);
+    return () => window.clearInterval(id);
+  }, [runIn, prefersReducedMotion, dismissed, rideDone]);
 
   const handleDismiss = () => {
     try {
@@ -44,87 +67,147 @@ export default function DiagnosticPromoBanner() {
     setDismissed(true);
   };
 
-  if (!hydrated || dismissed) return null;
+  useEffect(() => {
+    if (hydrated && dismissed) {
+      onSlotRelease?.();
+    }
+  }, [hydrated, dismissed, onSlotRelease]);
 
-  const slidePixels = prefersReducedMotion ? 0 : Math.min(typeof window !== "undefined" ? window.innerWidth : 560, 560);
+  if (!hydrated || dismissed || !isHome) return null;
 
-  return (
-    <div className="pointer-events-none fixed bottom-[max(0.75rem,env(safe-area-inset-bottom,0px))] left-3 right-3 z-[40] flex max-w-none justify-end sm:bottom-28 sm:left-auto sm:right-4 sm:w-auto md:bottom-28">
-      <motion.div
-        role="region"
-        aria-label="Promoción: Diagnóstico ARGOS"
-        aria-hidden={!runIn}
-        className="pointer-events-none flex max-w-full items-end gap-0 pl-10 sm:max-w-[min(100%,28rem)] md:max-w-[min(100%,34rem)]"
-        initial={false}
-        animate={
-          prefersReducedMotion
-            ? {
-                opacity: runIn ? 1 : 0,
-                x: 0
-              }
-            : {
-                opacity: runIn ? 1 : 0.98,
-                x: runIn ? 0 : slidePixels
-              }
-        }
-        transition={
-          prefersReducedMotion
-            ? { duration: 0.35, ease: "easeOut" }
-            : { type: "spring", stiffness: 118, damping: 22, mass: 0.85 }
-        }
-      >
-        <div className="pointer-events-auto relative w-full min-w-0 rounded-xl border border-[#18D4F7]/35 bg-[#07111f]/88 px-3 py-3 pr-9 shadow-[0_12px_40px_rgba(0,0,0,0.35)] backdrop-blur-md sm:px-4 sm:py-3.5 sm:pr-10">
-          <button
-            type="button"
-            onClick={handleDismiss}
-            className="absolute right-2 top-2 rounded-md p-1.5 text-[#94a3b8] transition hover:bg-white/10 hover:text-white"
-            aria-label="Cerrar aviso del diagnóstico ARGOS"
-          >
-            <span aria-hidden className="block text-lg font-light leading-none">
-              ×
+  /* Versión estática accesible (sin recorrido). */
+  if (prefersReducedMotion) {
+    return (
+      <div className="pointer-events-none flex h-full min-h-[3.5rem] items-center justify-center px-1">
+        <div className="pointer-events-auto flex max-w-full flex-wrap items-center gap-x-3 gap-y-2 rounded-lg border border-[#E5E7EB] bg-gradient-to-r from-violet-50/95 to-cyan-50/95 px-2 py-1.5 shadow-sm">
+          <p className="max-w-[20rem] text-[10px] font-bold leading-tight text-[#0B1E33] md:text-[11px]">
+            Descubre en pocos minutos el estado real de tu web
+            <span className="mt-0.5 block text-[9px] font-extrabold md:text-[10px]">
+              <span className="text-[#DC2626]">Seguridad</span>
+              <span className="text-[#64748B]"> · </span>
+              <span className="text-[#059669]">Sistemas</span>
+              <span className="text-[#64748B]"> · </span>
+              <span className="text-[#2563EB]">Procesos</span>
             </span>
-          </button>
-
-          <h3 className="text-sm font-black tracking-tight text-[#39F4FF] sm:text-base">Diagnóstico ARGOS</h3>
-          <p className="mt-1 text-xs leading-snug text-[#D7E8F6] sm:text-[0.8125rem] sm:leading-relaxed">
-            Descubre en pocos minutos el estado real de tu web, seguridad, sistemas y procesos digitales.
           </p>
-          <div className="mt-3">
+          <div className="flex items-center gap-2">
             <Link
               href={DIAGNOSTIC_HREF}
-              className="inline-flex w-full min-h-[44px] items-center justify-center rounded-lg bg-[#18D4F7]/90 px-3 py-2.5 text-center text-xs font-black text-[#030812] shadow-md shadow-cyan-500/15 transition hover:bg-[#39F4FF] sm:w-auto sm:px-4 sm:text-sm"
+              className="inline-flex min-h-[36px] items-center rounded-md bg-[#2563EB] px-3 py-1.5 text-[10px] font-black text-white md:text-xs"
             >
               Iniciar diagnóstico ARGOS
             </Link>
+            <button
+              type="button"
+              onClick={handleDismiss}
+              className="rounded p-1 text-[#64748B] hover:bg-black/5"
+              aria-label="Cerrar aviso del diagnóstico ARGOS"
+            >
+              <span aria-hidden className="text-lg leading-none">
+                ×
+              </span>
+            </button>
           </div>
         </div>
+      </div>
+    );
+  }
 
-        <div className="pointer-events-none relative -ml-6 flex shrink-0 items-end sm:-ml-7" aria-hidden>
+  /* Tras el pase animado, desmontar para no dejar capas ni huecos raros. */
+  if (rideDone) return null;
+
+  const releaseAfterRide = () => {
+    if (!runIn) return;
+    setRideDone(true);
+    onSlotRelease?.();
+  };
+
+  return (
+    <div
+      className="pointer-events-none absolute inset-0 overflow-hidden"
+      role="region"
+      aria-label="Promoción: Diagnóstico ARGOS"
+    >
+      <motion.div
+        className="absolute bottom-0 left-0 flex items-end gap-0 will-change-transform"
+        style={{ paddingLeft: SAFE_GAP_LEFT_PX }}
+        initial={false}
+        animate={
+          runIn
+            ? {
+                x: ["36vw", "12vw", "1vw", "-30vw"],
+                opacity: [0, 1, 0.98, 0]
+              }
+            : { x: "36vw", opacity: 0 }
+        }
+        transition={{
+          duration: 6.2,
+          times: [0, 0.22, 0.52, 1],
+          ease: "easeInOut"
+        }}
+        onAnimationComplete={releaseAfterRide}
+      >
+        <div className="pointer-events-none flex items-end">
+          <div className="relative max-w-[min(52vw,280px)] shrink-0 md:max-w-[300px]">
+            <div className="pointer-events-auto relative rounded-lg border border-violet-200/70 bg-gradient-to-r from-violet-100/95 via-fuchsia-50/90 to-teal-100/95 px-2 py-1.5 pl-2.5 shadow-md">
+              <button
+                type="button"
+                onClick={handleDismiss}
+                className="absolute -right-1 -top-1 z-[5] flex h-6 w-6 items-center justify-center rounded-full bg-white/90 text-[#64748B] shadow-sm hover:bg-white pointer-events-auto"
+                aria-label="Cerrar aviso del diagnóstico ARGOS"
+              >
+                <span aria-hidden className="text-sm leading-none">
+                  ×
+                </span>
+              </button>
+              <p className="pr-4 text-[10px] font-extrabold leading-snug text-[#0B1E33] md:text-[11px]">
+                Descubre en pocos minutos el estado real de tu web
+              </p>
+              <p className="mt-0.5 text-[9px] font-black leading-tight md:text-[10px]">
+                <span className="text-[#DC2626]">Seguridad</span>
+                <span className="text-[#64748B]"> · </span>
+                <span className="text-[#059669]">Sistemas</span>
+                <span className="text-[#64748B]"> · </span>
+                <span className="text-[#2563EB]">Procesos</span>
+              </p>
+              <Link
+                href={DIAGNOSTIC_HREF}
+                className="mt-1.5 inline-flex min-h-[32px] w-full items-center justify-center rounded-md bg-[#2563EB] px-2 py-1 text-[10px] font-black text-white shadow-sm hover:bg-[#1D4ED8] pointer-events-auto md:text-[11px]"
+              >
+                Iniciar diagnóstico ARGOS
+              </Link>
+            </div>
+            <div
+              className="absolute -right-1.5 bottom-2 h-3 w-3 rotate-45 border-b border-r border-violet-200/70 bg-teal-100/90"
+              style={{ clipPath: "polygon(100% 0, 100% 100%, 0 100%)" }}
+              aria-hidden
+            />
+          </div>
+
           <svg
-            width={44}
-            height={56}
-            viewBox="0 0 44 56"
-            className="-mb-1 shrink-0 text-[#22d3ee]/55"
-            xmlns="http://www.w3.org/2000/svg"
+            width={36}
+            height={20}
+            viewBox="0 0 36 20"
+            className="-mx-0.5 mb-3 shrink-0 text-violet-400/80"
+            aria-hidden
           >
             <path
-              d="M2 54 C 24 52, 32 42, 40 36 C 40 46, 18 54, 2 54 Z"
+              d="M0 10 C 10 12, 18 8, 36 6"
               fill="none"
               stroke="currentColor"
-              strokeWidth={2.25}
+              strokeWidth={1.35}
               strokeLinecap="round"
             />
-            <path d="M0 53 L 40 46" stroke="currentColor" strokeWidth={1.8} opacity={0.6} />
           </svg>
 
-          <div className="-ml-8 flex flex-col items-center">
+          <div className="relative -ml-1 shrink-0" style={{ transform: "scaleX(-1)" }} aria-hidden>
             <Image
-              src="/mascots/dumbo/dumbo_guide.png"
+              src={WALK_FRAMES[walkFrame] ?? WALK_FRAMES[0]}
               alt=""
-              width={112}
-              height={112}
-              sizes="(max-width: 640px) 78px, 108px"
-              className="-mb-1 h-auto w-[4.85rem] select-none drop-shadow-[0_6px_16px_rgba(0,0,0,0.35)] sm:w-[6.75rem]"
+              width={88}
+              height={88}
+              sizes="88px"
+              className="h-[3.25rem] w-auto object-contain drop-shadow md:h-[3.75rem]"
               priority={false}
             />
           </div>

@@ -3,8 +3,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supportedLocales, type Locale } from "@/i18n/config";
+import DiagnosticPromoBanner from "@/components/diagnostic/DiagnosticPromoBanner";
 import { useI18n } from "@/i18n/useI18n";
 
 type NavItem = {
@@ -24,7 +25,14 @@ export default function SiteHeader() {
   const pathname = usePathname();
   const { locale, setLocale, t } = useI18n();
   const [open, setOpen] = useState(false);
+  const [diagPromoSlotClosed, setDiagPromoSlotClosed] = useState(false);
   const menuId = "site-navigation-menu";
+
+  useEffect(() => {
+    if (pathname !== "/") {
+      setDiagPromoSlotClosed(false);
+    }
+  }, [pathname]);
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -33,10 +41,10 @@ export default function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-[#E5E7EB] bg-white/95 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-4 lg:px-8">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-2 px-5 py-3 md:gap-4 lg:px-8">
         <Link
           href="/"
-          className="flex shrink-0 items-center"
+          className="relative z-[46] flex shrink-0 items-center"
           aria-label="ARGOS-IT home"
           onClick={() => setOpen(false)}
         >
@@ -50,9 +58,15 @@ export default function SiteHeader() {
           />
         </Link>
 
+        {pathname === "/" && !diagPromoSlotClosed && (
+          <div className="relative z-10 hidden min-h-[3.5rem] min-w-0 flex-1 overflow-hidden md:block" aria-hidden={false}>
+            <DiagnosticPromoBanner onSlotRelease={() => setDiagPromoSlotClosed(true)} />
+          </div>
+        )}
+
         <button
           type="button"
-          className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-[#D9E2EF] bg-white text-[#0B1E33] shadow-sm transition hover:border-[#2563EB] hover:text-[#2563EB]"
+          className="relative z-[46] inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-[#D9E2EF] bg-white text-[#0B1E33] shadow-sm transition hover:border-[#2563EB] hover:text-[#2563EB]"
           onClick={() => setOpen((prev) => !prev)}
           aria-label={t("nav.menu")}
           aria-controls={menuId}
@@ -68,7 +82,7 @@ export default function SiteHeader() {
       </div>
 
       {open && (
-        <div id={menuId} className="border-t border-[#E5E7EB] bg-white/95 px-5 py-5 shadow-lg">
+        <div id={menuId} className="relative z-[55] border-t border-[#E5E7EB] bg-white/95 px-5 py-5 shadow-lg">
           <div className="mx-auto grid max-w-7xl gap-5 lg:grid-cols-[1fr_auto] lg:px-3">
             <nav className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5" aria-label={t("nav.menu")}>
               {navItems.map((item) => (
