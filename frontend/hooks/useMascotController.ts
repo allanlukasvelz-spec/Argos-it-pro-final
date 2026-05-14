@@ -346,8 +346,8 @@ export function useMascotController() {
         if (!motionAllowedRef.current) return;
 
         gsap.to(motionRef.current, {
-          chicoTy: randBetween(-2.5, 2.5),
-          dumboTy: randBetween(-2.5, 2.5),
+          chicoTy: randBetween(-1.75, 1.75),
+          dumboTy: randBetween(-1.75, 1.75),
           duration: randBetween(1.8, 2.9),
           ease: "sine.inOut",
           yoyo: true,

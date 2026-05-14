@@ -54,7 +54,7 @@ export default function SiteHeader() {
 
         {pathname === "/" && !diagPromoSlotClosed && (
           <div
-            className={`relative z-10 hidden min-h-[8rem] min-w-0 max-w-none flex-1 overflow-x-hidden overflow-y-visible lg:min-h-[9.375rem] ${open ? "md:hidden" : "md:block"}`}
+            className={`relative z-10 hidden min-h-[9.5rem] min-w-0 max-w-none flex-1 overflow-visible lg:min-h-[10.5rem] ${open ? "md:hidden" : "md:block"}`}
             aria-hidden={open}
           >
             <DiagnosticPromoBanner onSlotRelease={() => setDiagPromoSlotClosed(true)} />
@@ -63,17 +63,21 @@ export default function SiteHeader() {
 
         <button
           type="button"
-          className="relative z-[46] inline-flex h-11 w-11 shrink-0 items-center justify-center self-end rounded-md border border-[#D9E2EF] bg-white text-[#0B1E33] shadow-sm transition hover:border-[#2563EB] hover:text-[#2563EB]"
+          className="relative z-[46] inline-flex min-h-[3rem] min-w-[3rem] shrink-0 items-center justify-center self-end rounded-lg border border-[#D9E2EF] bg-white px-3 py-3 text-[#0B1E33] shadow-sm transition hover:border-[#2563EB] hover:text-[#2563EB]"
           onClick={() => setOpen((prev) => !prev)}
           aria-label={t("nav.menu")}
           aria-controls={menuId}
           aria-expanded={open}
         >
           <span className="sr-only">{t("nav.menu")}</span>
-          <span className="flex w-5 flex-col gap-1.5" aria-hidden="true">
-            <span className={`h-0.5 rounded-full bg-current transition ${open ? "translate-y-2 rotate-45" : ""}`} />
-            <span className={`h-0.5 rounded-full bg-current transition ${open ? "opacity-0" : ""}`} />
-            <span className={`h-0.5 rounded-full bg-current transition ${open ? "-translate-y-2 -rotate-45" : ""}`} />
+          <span className="flex w-[1.375rem] flex-col gap-[6px]" aria-hidden="true">
+            <span
+              className={`h-[3px] rounded-full bg-current transition ${open ? "translate-y-[10px] rotate-45" : ""}`}
+            />
+            <span className={`h-[3px] rounded-full bg-current transition ${open ? "opacity-0" : ""}`} />
+            <span
+              className={`h-[3px] rounded-full bg-current transition ${open ? "-translate-y-[10px] -rotate-45" : ""}`}
+            />
           </span>
         </button>
       </div>

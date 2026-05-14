@@ -54,9 +54,9 @@ const WALK_FRAMES_DUMBO = [
 
 const DUMBO_SIT_SPRITE = "/mascots/dumbo/dumbo_sentado_atento.png";
 
-/** Entrada desde la derecha (Dumbo). */
+/** Entrada desde la derecha (Dumbo). Parkado más centrado respecto al slot y menos pegado al menú. */
 const X_DUMBO_ENTER_FROM = "38vw";
-const X_DUMBO_PARKED = "4vw";
+const X_DUMBO_PARKED = "-5vw";
 const X_DUMBO_EXIT = "-44vw";
 
 const DUMBO_ENTER_S = 3.5;
@@ -70,10 +70,10 @@ const CHICO_WALK_FRAMES = [
 const CHICO_ATTENTIVE = "/mascots/chico/chico_mirandoatento.png";
 const CHICO_ALERT_WAIT = "/mascots/chico/chico_esperando2.png";
 
-/** Chico entra desde la izquierda. */
-const X_CHICO_ENTER_FROM = "-40vw";
-const X_CHICO_PARKED = "1.5vw";
-const X_CHICO_EXIT = "-48vw";
+/** Chico en bloque centrado: offsets locales (px) respecto al cluster globo+mascota. */
+const CHICO_CLUSTER_ENTER_X = -56;
+const CHICO_CLUSTER_PARKED_X = 0;
+const CHICO_CLUSTER_EXIT_X = -88;
 
 const CHICO_ENTER_S = 3;
 const CHICO_EXIT_S = 3.2;
@@ -303,7 +303,7 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
 
   return (
     <div
-      className="pointer-events-none absolute inset-0 overflow-x-hidden overflow-y-visible"
+      className="pointer-events-none absolute inset-0 overflow-visible"
       role="region"
       aria-label={regionAria}
       aria-hidden={!showChrome}
@@ -312,7 +312,7 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
       {showChrome && isDumboLive && (
         <motion.div
           key={`dumbo-slot-${motionKey}`}
-          className="absolute bottom-0 left-0 flex items-end gap-0 will-change-transform"
+          className="absolute inset-x-0 bottom-0 flex items-end gap-0 pr-12 will-change-transform md:pr-16 lg:pr-[4.75rem]"
           style={{ paddingLeft: SAFE_GAP_LEFT_PX }}
           initial={
             phase === "dumboEntering"
@@ -341,40 +341,23 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
       )}
 
       {showChrome && isChicoLive && (
-        <>
-          {/* Globo centrado en el hueco del header (entre logo y menú) */}
-          <motion.div
-            key={`chico-bubble-${motionKey}-${activeChicoTip}`}
-            className="absolute bottom-[0.62rem] left-1/2 z-[2] flex w-[min(92%,26rem)] -translate-x-1/2 justify-center px-3 md:w-[min(88%,34rem)]"
-            initial={{ opacity: 0, y: 8, scale: 0.96 }}
-            animate={
-              phase === "chicoEntering"
-                ? { opacity: 0.15, y: 6, scale: 0.97 }
-                : phase === "chicoSpeaking" || phase === "chicoExiting"
-                  ? { opacity: 1, y: 0, scale: 1 }
-                  : { opacity: 0, y: 8, scale: 0.96 }
-            }
-            transition={{ duration: phase === "chicoEntering" ? CHICO_ENTER_S * 0.55 : 0.35, ease: "easeOut" }}
-          >
-            <ChicoSecurityBubble tip={activeChicoTip} onDismiss={handleDismiss} />
-          </motion.div>
-
+        <div className="pointer-events-none absolute bottom-0 left-1/2 z-[2] flex -translate-x-1/2 items-end gap-1.5 pb-[0.45rem] md:gap-2 md:pb-2">
           <motion.div
             key={`chico-mascot-${motionKey}`}
-            className="absolute bottom-0 left-0 flex items-end"
+            className="flex shrink-0 items-end"
             initial={
               phase === "chicoEntering"
-                ? { x: X_CHICO_ENTER_FROM, opacity: 1 }
-                : { x: X_CHICO_PARKED, opacity: 1 }
+                ? { x: CHICO_CLUSTER_ENTER_X, opacity: 1 }
+                : { x: CHICO_CLUSTER_PARKED_X, opacity: 1 }
             }
             animate={
               phase === "chicoEntering"
-                ? { x: X_CHICO_PARKED, opacity: 1 }
+                ? { x: CHICO_CLUSTER_PARKED_X, opacity: 1 }
                 : phase === "chicoSpeaking"
-                  ? { x: X_CHICO_PARKED, opacity: 1 }
+                  ? { x: CHICO_CLUSTER_PARKED_X, opacity: 1 }
                   : phase === "chicoExiting"
-                    ? { x: X_CHICO_EXIT, opacity: 0 }
-                    : { x: X_CHICO_PARKED, opacity: 1 }
+                    ? { x: CHICO_CLUSTER_EXIT_X, opacity: 0 }
+                    : { x: CHICO_CLUSTER_PARKED_X, opacity: 1 }
             }
             transition={
               phase === "chicoEntering"
@@ -399,7 +382,23 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
               />
             </div>
           </motion.div>
-        </>
+
+          <motion.div
+            key={`chico-bubble-${motionKey}-${activeChicoTip}`}
+            className="pointer-events-auto flex w-[min(86vw,26rem)] max-w-full shrink justify-center md:w-[min(78vw,32rem)] lg:w-[min(72vw,34rem)]"
+            initial={{ opacity: 0, y: 8, scale: 0.96 }}
+            animate={
+              phase === "chicoEntering"
+                ? { opacity: 0.15, y: 6, scale: 0.97 }
+                : phase === "chicoSpeaking" || phase === "chicoExiting"
+                  ? { opacity: 1, y: 0, scale: 1 }
+                  : { opacity: 0, y: 8, scale: 0.96 }
+            }
+            transition={{ duration: phase === "chicoEntering" ? CHICO_ENTER_S * 0.55 : 0.35, ease: "easeOut" }}
+          >
+            <ChicoSecurityBubble tip={activeChicoTip} onDismiss={handleDismiss} />
+          </motion.div>
+        </div>
       )}
     </div>
   );
@@ -419,9 +418,9 @@ function DumboBannerInner({
 
   return (
     <div className="pointer-events-none flex items-end gap-1 md:gap-1.5">
-      <div className="relative max-w-[min(72vw,440px)] shrink-0 lg:max-w-[min(600px,48vw)]">
+      <div className="relative w-full max-w-[min(82vw,540px)] shrink-0 lg:max-w-[min(700px,56vw)]">
         <div
-          className="pointer-events-auto relative overflow-visible rounded-2xl border-[2.5px] border-[#39F4FF]/90 bg-gradient-to-br from-[#4c1d95] via-[#1e3a8a] to-[#0f766e] p-3.5 pb-3 shadow-[0_16px_40px_-10px_rgba(15,23,42,0.45),0_0_36px_-8px_rgba(34,211,238,0.35),inset_0_1px_0_0_rgba(255,255,255,0.22)] ring-2 ring-black/25 md:flex md:flex-row md:items-stretch md:gap-5 md:p-4 md:pb-4 lg:p-5"
+          className="pointer-events-auto relative overflow-visible rounded-2xl border-[2.5px] border-[#39F4FF]/90 bg-gradient-to-br from-[#4c1d95] via-[#1e3a8a] to-[#0f766e] px-4 py-3 pb-3 shadow-[0_16px_40px_-10px_rgba(15,23,42,0.45),0_0_36px_-8px_rgba(34,211,238,0.35),inset_0_1px_0_0_rgba(255,255,255,0.22)] ring-2 ring-black/25 md:flex md:flex-row md:items-center md:gap-6 md:px-5 md:py-3.5 md:pb-3.5 lg:gap-8 lg:px-6 lg:py-4"
         >
           <div aria-hidden className="pointer-events-none absolute inset-[2px] rounded-[0.875rem] bg-gradient-to-b from-white/18 via-transparent to-black/22 md:rounded-[1.05rem]" />
           <button
@@ -435,11 +434,11 @@ function DumboBannerInner({
             </span>
           </button>
 
-          <div className="relative z-[1] min-w-0 flex-1 pt-3 pr-9 md:pt-5 md:pr-10 lg:pr-12">
-            <p className="text-[13px] font-bold leading-snug tracking-tight text-white drop-shadow md:text-sm lg:text-[15px] lg:leading-tight">
+          <div className="relative z-[1] min-w-0 flex-1 pt-2.5 pr-9 md:min-w-[14rem] md:pt-0 md:pr-10 lg:pr-12">
+            <p className="text-base font-bold leading-tight tracking-tight text-white drop-shadow md:text-lg lg:text-xl">
               {PROMO_TEXT_MAIN}
             </p>
-            <p className="mt-2 text-[11px] font-black leading-snug md:text-[12px] lg:text-[13px]">
+            <p className="mt-1.5 text-sm font-black leading-tight text-balance md:text-[0.9375rem] lg:text-base">
               <span className="text-[#fca5a5]">{PROMO_HIGHLIGHT_PARTS[0]}</span>
               <span className="font-bold tracking-wide text-white/55">{" · "}</span>
               <span className="text-[#6ee7b7]">{PROMO_HIGHLIGHT_PARTS[1]}</span>
@@ -448,10 +447,10 @@ function DumboBannerInner({
             </p>
           </div>
 
-          <div className="relative z-[1] mt-3 shrink-0 md:mt-[2rem] md:flex md:w-auto md:flex-col md:justify-center lg:mt-[2.25rem]">
+          <div className="relative z-[1] mt-3 shrink-0 md:mt-0 md:flex md:w-auto md:flex-col md:justify-center">
             <Link
               href={DIAGNOSTIC_HREF}
-              className="pointer-events-auto inline-flex min-h-[44px] w-full items-center justify-center whitespace-nowrap rounded-xl bg-[#22D3EE] px-5 py-2.5 text-center text-[12px] font-black tracking-tight text-[#082f49] shadow-[0_8px_24px_-6px_rgba(6,182,212,0.85),inset_0_1px_0_0_rgba(255,255,255,0.45)] ring-2 ring-[#A5F3FC]/95 ring-offset-2 ring-offset-[#0f172a]/0 hover:bg-[#67E8F9] md:min-h-[46px] md:min-w-[12.5rem] md:px-6 md:text-[13px] lg:py-3"
+              className="pointer-events-auto inline-flex min-h-[44px] w-full items-center justify-center whitespace-nowrap rounded-xl bg-[#22D3EE] px-5 py-2.5 text-center text-sm font-black leading-tight tracking-tight text-[#082f49] shadow-[0_8px_24px_-6px_rgba(6,182,212,0.85),inset_0_1px_0_0_rgba(255,255,255,0.45)] ring-2 ring-[#A5F3FC]/95 ring-offset-2 ring-offset-[#0f172a]/0 hover:bg-[#67E8F9] md:min-h-[46px] md:min-w-[11.5rem] md:px-5 md:text-sm lg:min-w-[12.5rem] lg:px-6 lg:py-2.5 lg:text-base"
             >
               {PROMO_TEXT_CTA}
             </Link>
@@ -534,10 +533,10 @@ function ChicoSecurityBubble({ tip, onDismiss }: { tip: string; onDismiss: () =>
       >
         <div aria-hidden className={`pointer-events-none absolute inset-0 rounded-[calc(1rem-1px)] opacity-95 bg-[linear-gradient(145deg,#0c1929_0%,#082f49_52%,#0e7490_120%)]`} />
         <div className={`absolute inset-[1px] rounded-[calc(1rem-2px)] bg-[linear-gradient(180deg,rgba(148,239,238,0.14)_0%,transparent_45%,rgba(15,118,110,0.08)_100%)]`} aria-hidden />
-        <p className="relative z-[1] mb-1.5 text-[10px] font-black uppercase tracking-[0.08em] text-[#67E8F9] md:text-[11px]">
+        <p className="relative z-[1] mb-1 text-xs font-black uppercase leading-tight tracking-[0.08em] text-[#67E8F9] md:text-sm">
           Consejo de seguridad
         </p>
-        <p className="relative z-[1] text-[12px] font-semibold leading-snug tracking-tight text-[#ECFEFF] md:text-[13px]" id={`chico-tip-body-${gradId.slice(0, 8)}`}>
+        <p className="relative z-[1] text-sm font-semibold leading-tight tracking-tight text-[#ECFEFF] md:text-base lg:text-lg" id={`chico-tip-body-${gradId.slice(0, 8)}`}>
           <span className="font-black text-[#A5F3FC]">Consejo de Chico:&nbsp;</span>
           <span>{tip}</span>
         </p>
@@ -626,7 +625,7 @@ function ReducedMotionAlternate({
     >
       {/* Dumbo: misma tarjeta y botón */}
       <motion.div
-        className={`relative flex w-full max-w-[min(100%,52rem)] items-end gap-5 ${showDumbo ? "pointer-events-auto" : "pointer-events-none"}`}
+        className={`relative flex w-full max-w-[min(100%,52rem)] items-end gap-5 pr-12 md:pr-16 lg:pr-[4.75rem] ${showDumbo ? "pointer-events-auto" : "pointer-events-none"}`}
         initial={false}
         animate={{ opacity: showDumbo ? 1 : 0, y: showDumbo ? 0 : 14 }}
         transition={{ duration: 0.42, ease: "easeOut" }}
@@ -650,9 +649,9 @@ function ReducedMotionAlternate({
         </div>
       </motion.div>
 
-      {/* Chico: globo + sprite estático a la derecha */}
+      {/* Chico: grupo centrado — mascota junto al globo */}
       <motion.div
-        className={`relative mt-0 flex w-full max-w-[min(100%,52rem)] items-center justify-between gap-3 py-3 ${showChico ? "pointer-events-auto" : "pointer-events-none"} md:gap-8`}
+        className={`relative mt-0 flex w-full items-end justify-center gap-1.5 py-2 md:gap-2 md:py-2.5 ${showChico ? "pointer-events-auto" : "pointer-events-none"}`}
         initial={false}
         animate={{
           opacity: showChico ? 1 : 0,
@@ -666,10 +665,6 @@ function ReducedMotionAlternate({
         aria-label={`${CHICO_SECURITY_A11Y_ROLE}. ${activeChicoAdvice}`}
         aria-live={showChico ? "polite" : undefined}
       >
-        <div className="min-h-0 min-w-0 flex-1" />
-        <div className="max-w-[min(100%,30rem)] flex-1">
-          <ChicoSecurityBubble tip={chicoSlice} onDismiss={onDismiss} />
-        </div>
         <Image
           src={CHICO_ATTENTIVE}
           alt=""
@@ -678,6 +673,9 @@ function ReducedMotionAlternate({
           className="h-[4rem] shrink-0 object-contain drop-shadow-[0_12px_22px_-6px_rgba(15,23,42,0.5)] md:h-[4.5rem]"
           aria-hidden
         />
+        <div className="max-w-[min(100%,30rem)] shrink">
+          <ChicoSecurityBubble tip={chicoSlice} onDismiss={onDismiss} />
+        </div>
       </motion.div>
     </div>
   );
@@ -685,7 +683,7 @@ function ReducedMotionAlternate({
 
 function DumboReducedCard({ onDismiss }: { onDismiss: () => void }) {
   return (
-    <div className="relative flex w-full flex-col gap-4 overflow-visible rounded-2xl border-[2.5px] border-[#39F4FF]/90 bg-gradient-to-br from-[#4c1d95] via-[#1e3a8a] to-[#0f766e] p-4 pr-[3rem] pb-5 pt-[2.75rem] shadow-[0_16px_40px_-10px_rgba(15,23,42,0.45),inset_0_1px_0_0_rgba(255,255,255,0.22)] ring-2 ring-black/25 md:flex-row md:items-center md:gap-8 md:p-6 md:pr-20 lg:gap-12">
+    <div className="relative flex w-full max-w-[min(100%,700px)] flex-col gap-4 overflow-visible rounded-2xl border-[2.5px] border-[#39F4FF]/90 bg-gradient-to-br from-[#4c1d95] via-[#1e3a8a] to-[#0f766e] p-4 pr-[3rem] pb-5 pt-[2.75rem] shadow-[0_16px_40px_-10px_rgba(15,23,42,0.45),inset_0_1px_0_0_rgba(255,255,255,0.22)] ring-2 ring-black/25 md:flex-row md:items-center md:gap-6 md:p-5 md:pr-20 lg:gap-8 lg:p-6 lg:pr-20">
       <div aria-hidden className="pointer-events-none absolute inset-[2px] rounded-[0.9rem] bg-gradient-to-b from-white/16 via-transparent to-black/23 md:rounded-[1.05rem]" />
       <button
         type="button"
@@ -697,11 +695,11 @@ function DumboReducedCard({ onDismiss }: { onDismiss: () => void }) {
           ×
         </span>
       </button>
-      <div className="relative z-[1] min-w-0 flex-1 pt-6 md:pt-0 lg:pb-8">
-        <p className="text-[13px] font-bold leading-snug tracking-tight text-white drop-shadow-md md:text-[14px] lg:text-[15px]">
+      <div className="relative z-[1] min-w-0 flex-1 pt-6 md:min-w-[14rem] md:pt-0 lg:pb-6">
+        <p className="text-base font-bold leading-tight tracking-tight text-white drop-shadow-md md:text-lg lg:text-xl">
           {PROMO_TEXT_MAIN}
         </p>
-        <p className="mt-2 text-[11px] font-black md:text-[12px] lg:text-[13px]">
+        <p className="mt-1.5 text-sm font-black leading-tight text-balance md:text-[0.9375rem] lg:text-base">
           <span className="text-[#fca5a5]">{PROMO_HIGHLIGHT_PARTS[0]}</span>
           <span className="font-bold text-white/55">{" · "}</span>
           <span className="text-[#6ee7b7]">{PROMO_HIGHLIGHT_PARTS[1]}</span>
@@ -711,7 +709,7 @@ function DumboReducedCard({ onDismiss }: { onDismiss: () => void }) {
       </div>
       <Link
         href={DIAGNOSTIC_HREF}
-        className="relative z-[1] mb-24 inline-flex min-h-[44px] w-full shrink-0 items-center justify-center rounded-xl bg-[#22D3EE] px-6 py-2.5 text-center text-[12px] font-black tracking-tight text-[#082f49] shadow-[0_8px_24px_-6px_rgba(6,182,212,0.85)] ring-2 ring-[#A5F3FC]/90 hover:bg-[#67E8F9] md:mb-[5.5rem] md:mr-4 md:inline-flex md:min-h-[46px] md:w-auto md:min-w-[12.5rem] md:self-end md:text-[13px]"
+        className="relative z-[1] mb-24 inline-flex min-h-[44px] w-full shrink-0 items-center justify-center rounded-xl bg-[#22D3EE] px-6 py-2.5 text-center text-sm font-black leading-tight tracking-tight text-[#082f49] shadow-[0_8px_24px_-6px_rgba(6,182,212,0.85)] ring-2 ring-[#A5F3FC]/90 hover:bg-[#67E8F9] md:mb-[5.5rem] md:mr-4 md:inline-flex md:min-h-[46px] md:w-auto md:min-w-[11.5rem] md:self-center md:text-sm lg:min-w-[12.5rem] lg:text-base"
       >
         {PROMO_TEXT_CTA}
       </Link>
