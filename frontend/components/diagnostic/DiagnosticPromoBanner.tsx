@@ -162,7 +162,7 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
 
   return (
     <div
-      className="pointer-events-none absolute inset-0 overflow-hidden"
+      className="pointer-events-none absolute inset-0 overflow-x-hidden overflow-y-visible"
       role="region"
       aria-label={PROMO_A11Y_DESCRIPTION}
       aria-hidden={!showPromoChrome}
@@ -219,7 +219,7 @@ function PromoInner({
           <button
             type="button"
             onClick={onDismiss}
-            className="pointer-events-auto absolute -right-1 -top-1 z-[5] flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 bg-white text-[#334155] shadow-md hover:bg-slate-50"
+            className="pointer-events-auto absolute -right-1 top-2 z-[5] flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 bg-white text-[#334155] shadow-md hover:bg-slate-50"
             aria-label="Cerrar aviso del diagnóstico ARGOS"
           >
             <span aria-hidden className="text-base font-semibold leading-none">
@@ -314,7 +314,7 @@ function ReducedMotionCycle({
 
   return (
     <motion.div
-      className="pointer-events-none absolute inset-0 flex items-center justify-center px-1"
+      className="pointer-events-none absolute inset-0 flex items-end justify-center px-1 pb-0"
       initial={false}
       animate={{ opacity: show ? 1 : 0 }}
       transition={{ duration: show ? 0.4 : 0.9, ease: "easeOut" }}
