@@ -25,6 +25,9 @@ type FormState = {
   privacy: boolean;
 };
 
+const contactFormEndpoint =
+  process.env.NEXT_PUBLIC_CONTACT_FORM_ENDPOINT || "https://formspree.io/f/xpqooedl";
+
 const initialState: FormState = {
   name: "",
   email: "",
@@ -128,7 +131,7 @@ export default function ContactView() {
     payload.append("privacy", "accepted");
 
     try {
-      const response = await fetch("https://formspree.io/f/xpqooedl", {
+      const response = await fetch(contactFormEndpoint, {
         method: "POST",
         body: payload,
         headers: {
