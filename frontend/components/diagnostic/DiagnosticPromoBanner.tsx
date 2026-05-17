@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 import { DiagnosticSurveyModal } from "@/components/diagnostic/DiagnosticSurveyModal";
 import { chicoTips, type ChicoTip } from "@/components/diagnostic/chicoTips";
@@ -68,6 +69,8 @@ const CHICO_ENTER_S = 3;
 const CHICO_EXIT_S = 3.2;
 
 const RESTART_MS = 5000;
+/** Tras cerrar el modal de consejo: tiempo mínimo antes de que Chico salga del banner. */
+const CHICO_SPEAK_AFTER_DETAIL_MS = 14000;
 
 const SAFE_GAP_LEFT_PX = 88;
 
@@ -83,6 +86,7 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
   /** Incrementa por cada llegada a dumboParked / chicoSpeaking para timeouts únicos con duración aleatoria. */
   const dumboParkedEpochRef = useRef(0);
   const chicoSpeakEpochRef = useRef(0);
+  const chicoSpeakDelayMsRef = useRef<number | null>(null);
 
   const [hydrated, setHydrated] = useState(false);
   const [dismissed, setDismissed] = useState(false);
@@ -94,8 +98,15 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
   const [activeChicoTip, setActiveChicoTip] = useState<ChicoTip | null>(null);
   const [walkFrameDumbo, setWalkFrameDumbo] = useState(0);
   const [walkFrameChico, setWalkFrameChico] = useState(0);
+  const [tipDetailOpen, setTipDetailOpen] = useState(false);
 
   const entranceDelayMs = useMemo(() => 1200 + Math.random() * 800, []);
+
+  const handleTipDetailOpen = useCallback(() => setTipDetailOpen(true), []);
+  const handleTipDetailClose = useCallback(() => {
+    chicoSpeakDelayMsRef.current = Math.round(CHICO_SPEAK_AFTER_DETAIL_MS + Math.random() * 4000);
+    setTipDetailOpen(false);
+  }, []);
 
   const setPhaseTracked = useCallback((p: CyclePhase) => {
     phaseRef.current = p;
@@ -200,18 +211,25 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
     return () => window.clearTimeout(id);
   }, [motionKey, phase, setPhaseTracked]);
 
-  /** Chico globo: 12–18 s. */
+  /** Chico globo: 12–18 s (pausado mientras el modal de explicación está abierto). */
   useEffect(() => {
-    if (phase !== "chicoSpeaking") return;
+    if (phase !== "chicoSpeaking") {
+      chicoSpeakDelayMsRef.current = null;
+      return;
+    }
+    if (tipDetailOpen) return;
+    if (chicoSpeakDelayMsRef.current === null) {
+      chicoSpeakDelayMsRef.current = Math.round(12000 + Math.random() * 6000);
+    }
     chicoSpeakEpochRef.current += 1;
     const epoch = chicoSpeakEpochRef.current;
-    const speakMs = Math.round(12000 + Math.random() * 6000);
+    const speakMs = chicoSpeakDelayMsRef.current;
     const id = window.setTimeout(() => {
       if (phaseRef.current !== "chicoSpeaking" || chicoSpeakEpochRef.current !== epoch) return;
       setPhaseTracked("chicoExiting");
     }, speakMs);
     return () => window.clearTimeout(id);
-  }, [phase, setPhaseTracked]);
+  }, [phase, setPhaseTracked, tipDetailOpen]);
 
   /** Chico salida. */
   useEffect(() => {
@@ -398,7 +416,12 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
             }
             transition={{ duration: phase === "chicoEntering" ? CHICO_ENTER_S * 0.55 : 0.35, ease: "easeOut" }}
           >
-            <ChicoSecurityBubble tip={activeChicoTip} onDismiss={handleDismiss} />
+            <ChicoSecurityBubble
+              tip={activeChicoTip}
+              onDismiss={handleDismiss}
+              onDetailOpen={handleTipDetailOpen}
+              onDetailClose={handleTipDetailClose}
+            />
           </motion.div>
         </div>
       )}
@@ -516,20 +539,41 @@ function DumboBannerInner({
   );
 }
 
-function ChicoSecurityBubble({ tip, onDismiss }: { tip: ChicoTip | null; onDismiss: () => void }) {
+function ChicoSecurityBubble({
+  tip,
+  onDismiss,
+  onDetailOpen,
+  onDetailClose
+}: {
+  tip: ChicoTip | null;
+  onDismiss: () => void;
+  onDetailOpen?: () => void;
+  onDetailClose?: () => void;
+}) {
   const gradId = useId().replace(/:/g, "");
-  const detailPanelId = `chico-tip-detail-${gradId.slice(0, 8)}`;
-  const [expanded, setExpanded] = useState(false);
+  const [detailModalOpen, setDetailModalOpen] = useState(false);
 
   useEffect(() => {
-    setExpanded(false);
+    setDetailModalOpen(false);
   }, [tip?.id]);
+
+  const openDetail = () => {
+    setDetailModalOpen(true);
+    onDetailOpen?.();
+  };
+
+  const closeDetail = () => {
+    setDetailModalOpen(false);
+    onDetailClose?.();
+  };
 
   if (!tip) return null;
 
   const advice = formatChicoAdviceForA11y(tip);
+  const titleId = `chico-tip-title-${gradId.slice(0, 8)}`;
 
   return (
+    <>
     <aside
       className="pointer-events-none relative z-[6] max-w-[100%]"
       aria-label={`${CHICO_SECURITY_A11Y_ROLE}. ${advice}`}
@@ -551,51 +595,20 @@ function ChicoSecurityBubble({ tip, onDismiss }: { tip: ChicoTip | null; onDismi
         <p className="relative z-[1] mb-1 text-xs font-black uppercase leading-tight tracking-[0.08em] text-[#67E8F9] md:text-sm">
           Consejo práctico
         </p>
-        <h3
-          className="relative z-[1] text-sm font-black leading-snug text-[#ECFEFF] md:text-base"
-          id={`chico-tip-title-${gradId.slice(0, 8)}`}
-        >
+        <h3 className="relative z-[1] text-sm font-black leading-snug text-[#ECFEFF] md:text-base" id={titleId}>
           {tip.titulo}
         </h3>
-        <p
-          className="relative z-[1] mt-2 text-sm font-medium leading-snug text-[#E0F2FE]/95 md:text-[0.9375rem]"
-          id={`chico-tip-body-${gradId.slice(0, 8)}`}
-        >
+        <p className="relative z-[1] mt-2 text-sm font-medium leading-snug text-[#E0F2FE]/95 md:text-[0.9375rem]">
           {tip.mensajeCorto}
         </p>
         <button
           type="button"
-          onClick={() => setExpanded((e) => !e)}
-          aria-expanded={expanded}
-          aria-controls={detailPanelId}
+          onClick={openDetail}
+          aria-haspopup="dialog"
           className="relative z-[1] mt-3 inline-flex min-h-[40px] items-center rounded-lg border border-[#5EEAD4]/45 bg-[#082f49]/80 px-3 py-2 text-left text-xs font-black uppercase tracking-wide text-[#A5F3FC] shadow-sm ring-1 ring-[#2DD4BF]/30 transition hover:bg-[#0c4a6e]/90 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 md:text-[13px]"
         >
-          {expanded ? "Ocultar explicación y pasos" : "Ver explicación y pasos"}
+          Ver explicación y pasos
         </button>
-        {expanded && (
-          <div
-            id={detailPanelId}
-            role="region"
-            aria-labelledby={`chico-tip-title-${gradId.slice(0, 8)}`}
-            className="relative z-[1] mt-4 max-h-[min(52vh,360px)] space-y-4 overflow-y-auto overflow-x-hidden border-t border-[#2DD4BF]/35 pt-4"
-          >
-            <p className="text-sm leading-relaxed text-[#ECFEFF]/95">{tip.explicacion}</p>
-            <div>
-              <p className="text-[11px] font-black uppercase tracking-wider text-[#67E8F9]">Pasos prácticos</p>
-              <ol className="mt-2 list-decimal space-y-2 pl-5 text-sm leading-snug text-[#E0F2FE] marker:text-[#5EEAD4]">
-                {tip.pasos.map((paso, index) => (
-                  <li key={`${tip.id}-paso-${String(index)}`} className="pl-0.5">
-                    {paso}
-                  </li>
-                ))}
-              </ol>
-            </div>
-            <div className="rounded-xl border border-[#0d9488]/55 bg-[#042f2e]/65 p-3 shadow-inner">
-              <p className="text-[11px] font-black uppercase tracking-wider text-[#99F6E4]">Acción recomendada</p>
-              <p className="mt-1.5 text-sm font-semibold leading-snug text-[#ECFEFF]">{tip.accionRecomendada}</p>
-            </div>
-          </div>
-        )}
         <button
           type="button"
           onClick={onDismiss}
@@ -608,6 +621,119 @@ function ChicoSecurityBubble({ tip, onDismiss }: { tip: ChicoTip | null; onDismi
         </button>
       </div>
     </aside>
+      <ChicoTipDetailModal open={detailModalOpen} tip={tip} titleId={titleId} onClose={closeDetail} />
+    </>
+  );
+}
+
+function ChicoTipDetailModal({
+  open,
+  tip,
+  titleId,
+  onClose
+}: {
+  open: boolean;
+  tip: ChicoTip;
+  titleId: string;
+  onClose: () => void;
+}) {
+  const dialogTitleId = `${titleId}-modal`;
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [open, onClose]);
+
+  if (!open || typeof document === "undefined") return null;
+
+  return createPortal(
+    <motion.div
+      className="fixed inset-0 z-[220] flex items-end justify-center p-3 sm:items-center sm:p-6"
+      role="presentation"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.2 }}
+    >
+      <button
+        type="button"
+        className="absolute inset-0 bg-[#020617]/72 backdrop-blur-[3px]"
+        aria-label="Cerrar explicación del consejo"
+        onClick={onClose}
+      />
+      <motion.div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={dialogTitleId}
+        className="relative z-[1] flex max-h-[min(92vh,720px)] w-full max-w-lg flex-col overflow-hidden rounded-2xl border-2 border-[#2DD4BF]/80 bg-[#0f172a] shadow-[0_24px_64px_-12px_rgba(2,6,23,0.85),0_0_0_1px_rgba(45,212,191,0.15)] sm:max-w-xl md:max-w-2xl"
+        initial={{ opacity: 0, y: 24, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.28, ease: [0.22, 0.72, 0.36, 1] }}
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-[linear-gradient(145deg,#0c1929_0%,#082f49_48%,#0e7490_115%)]"
+        />
+        <div className="relative z-[1] flex shrink-0 items-start justify-between gap-3 border-b border-[#2DD4BF]/35 px-5 py-4 md:px-6 md:py-5">
+          <div className="min-w-0">
+            <p className="text-[11px] font-black uppercase tracking-[0.1em] text-[#67E8F9] md:text-xs">
+              Consejo práctico · Chico
+            </p>
+            <h2 id={dialogTitleId} className="mt-1 text-lg font-black leading-snug text-[#ECFEFF] md:text-xl">
+              {tip.titulo}
+            </h2>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-teal-200/35 bg-black/45 text-teal-50 shadow backdrop-blur-sm transition hover:bg-teal-950/70"
+            aria-label="Cerrar explicación"
+          >
+            <span aria-hidden className="text-xl font-light leading-none">
+              ×
+            </span>
+          </button>
+        </div>
+        <div className="relative z-[1] flex-1 space-y-5 overflow-y-auto px-5 py-4 md:space-y-6 md:px-6 md:py-5">
+          <p className="text-sm leading-relaxed text-[#E0F2FE]/95 md:text-[0.9375rem]">{tip.explicacion}</p>
+          <div>
+            <p className="text-[11px] font-black uppercase tracking-wider text-[#67E8F9]">Pasos prácticos</p>
+            <ol className="mt-2.5 list-decimal space-y-2.5 pl-5 text-sm leading-snug text-[#E0F2FE] marker:font-bold marker:text-[#5EEAD4] md:text-[0.9375rem]">
+              {tip.pasos.map((paso, index) => (
+                <li key={`${tip.id}-modal-paso-${String(index)}`} className="pl-0.5">
+                  {paso}
+                </li>
+              ))}
+            </ol>
+          </div>
+          <div className="rounded-xl border border-[#0d9488]/55 bg-[#042f2e]/70 p-4 shadow-inner">
+            <p className="text-[11px] font-black uppercase tracking-wider text-[#99F6E4]">Acción recomendada</p>
+            <p className="mt-2 text-sm font-semibold leading-snug text-[#ECFEFF] md:text-[0.9375rem]">
+              {tip.accionRecomendada}
+            </p>
+          </div>
+        </div>
+        <div className="relative z-[1] shrink-0 border-t border-[#2DD4BF]/30 px-5 py-4 md:px-6">
+          <button
+            type="button"
+            onClick={onClose}
+            className="inline-flex min-h-[44px] w-full items-center justify-center rounded-xl border border-[#5EEAD4]/50 bg-[#082f49] px-4 py-2.5 text-sm font-black uppercase tracking-wide text-[#A5F3FC] shadow-sm transition hover:bg-[#0c4a6e] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300"
+          >
+            Volver al consejo
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>,
+    document.body
   );
 }
 
@@ -626,6 +752,13 @@ function ReducedMotionAlternate({
   const tipIxRef = useRef(0);
   const [, tipBump] = useState(0);
   const [chicoSlice, setChicoSlice] = useState<ChicoTip | null>(null);
+  const [tipDetailOpen, setTipDetailOpen] = useState(false);
+  const rmChicoVisibleMsRef = useRef<number | null>(null);
+  const handleTipDetailOpen = useCallback(() => setTipDetailOpen(true), []);
+  const handleTipDetailClose = useCallback(() => {
+    rmChicoVisibleMsRef.current = Math.round(CHICO_SPEAK_AFTER_DETAIL_MS + Math.random() * 4000);
+    setTipDetailOpen(false);
+  }, []);
   const activeChicoAdvice = useMemo(
     () => (chicoSlice ? formatChicoAdviceForA11y(chicoSlice) : ""),
     [chicoSlice]
@@ -658,11 +791,18 @@ function ReducedMotionAlternate({
   }, [rmPhase]);
 
   useEffect(() => {
-    if (rmPhase !== "visibleChico") return;
-    const ms = Math.round(13000 + Math.random() * 5000);
+    if (rmPhase !== "visibleChico") {
+      rmChicoVisibleMsRef.current = null;
+      return;
+    }
+    if (tipDetailOpen) return;
+    if (rmChicoVisibleMsRef.current === null) {
+      rmChicoVisibleMsRef.current = Math.round(13000 + Math.random() * 5000);
+    }
+    const ms = rmChicoVisibleMsRef.current;
     const id = window.setTimeout(() => setRmPhase("gapB"), ms);
     return () => window.clearTimeout(id);
-  }, [rmPhase]);
+  }, [rmPhase, tipDetailOpen]);
 
   useEffect(() => {
     if (rmPhase !== "gapB") return;
@@ -732,7 +872,12 @@ function ReducedMotionAlternate({
           aria-hidden
         />
         <div className="max-w-[min(100%,30rem)] shrink">
-          <ChicoSecurityBubble tip={chicoSlice} onDismiss={onDismiss} />
+          <ChicoSecurityBubble
+            tip={chicoSlice}
+            onDismiss={onDismiss}
+            onDetailOpen={handleTipDetailOpen}
+            onDetailClose={handleTipDetailClose}
+          />
         </div>
       </motion.div>
     </div>
