@@ -5,8 +5,8 @@ import { motion, useReducedMotion } from "framer-motion";
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
-import { DiagnosticSurveyModal } from "@/components/diagnostic/DiagnosticSurveyModal";
-import { chicoTips, type ChicoTip } from "@/components/diagnostic/chicoTips";
+import { DiagnosticSurveyModal } from "./DiagnosticSurveyModal";
+import { chicoTips, type ChicoTip } from "./chicoTips";
 
 type Props = {
   /** Solo al cerrar con X o sesión: colapsar slot del header. */
