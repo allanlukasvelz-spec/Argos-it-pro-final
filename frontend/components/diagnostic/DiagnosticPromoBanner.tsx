@@ -343,7 +343,11 @@ export default function DiagnosticPromoBanner({ embeddedInHeader = false }: Prop
       )}
 
       {showChrome && isChicoLive && (
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] flex justify-center px-2 pb-[0.45rem] md:px-4 md:pb-2">
+        <div
+          className={`pointer-events-none absolute inset-x-0 bottom-0 z-[2] flex justify-center px-2 md:px-3 ${
+            embeddedInHeader ? "pb-0.5 md:pb-1" : "pb-[0.45rem] md:px-4 md:pb-2"
+          }`}
+        >
           <div className="flex w-full max-w-[min(100%,44rem)] items-end justify-center gap-1.5 md:gap-2">
           <motion.div
             key={`chico-mascot-${motionKey}`}
@@ -401,6 +405,7 @@ export default function DiagnosticPromoBanner({ embeddedInHeader = false }: Prop
           >
             <ChicoSecurityBubble
               tip={activeChicoTip}
+              embeddedInHeader={embeddedInHeader}
               onDetailOpen={handleTipDetailOpen}
               onDetailClose={handleTipDetailClose}
             />
@@ -511,10 +516,12 @@ function DumboBannerInner({
 
 function ChicoSecurityBubble({
   tip,
+  embeddedInHeader = false,
   onDetailOpen,
   onDetailClose
 }: {
   tip: ChicoTip | null;
+  embeddedInHeader?: boolean;
   onDetailOpen?: () => void;
   onDetailClose?: () => void;
 }) {
@@ -543,7 +550,9 @@ function ChicoSecurityBubble({
   return (
     <>
     <aside
-      className="pointer-events-none relative z-[6] w-full max-w-full overflow-visible pb-1"
+      className={`pointer-events-none relative z-[6] w-full max-w-full overflow-visible ${
+        embeddedInHeader ? "pb-3 md:pb-3.5" : "pb-1"
+      }`}
       aria-label={`${CHICO_SECURITY_A11Y_ROLE}. ${advice}`}
     >
       <div

@@ -22,9 +22,9 @@ const navItems: NavItem[] = [
 ];
 
 /** Una sola barra superior: logo + slot promo + menú (altura estable en rutas públicas). */
-const HEADER_BAR_MIN_H = "min-h-[5.5rem] md:min-h-[8rem] lg:min-h-[8.5rem]";
-/** Altura del área central blanca para Chico/Dumbo (tablet+). */
-const PROMO_SLOT_MIN_H = "min-h-[4.75rem] md:min-h-[7rem] lg:min-h-[7.5rem]";
+const HEADER_BAR_MIN_H = "min-h-[5.5rem] md:min-h-[10.25rem] lg:min-h-[11rem]";
+/** Altura del área central: globo Chico (~12rem) + cola/sombras + mascota Dumbo. */
+const PROMO_SLOT_MIN_H = "min-h-[4.75rem] md:min-h-[9rem] lg:min-h-[9.75rem]";
 
 export default function SiteHeader() {
   const pathname = usePathname();
@@ -39,7 +39,7 @@ export default function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 overflow-visible border-b border-[#E5E7EB] bg-white/95 backdrop-blur">
-      <div className={`mx-auto flex max-w-7xl items-stretch gap-2 px-5 py-2 md:gap-3 md:py-2 lg:px-8 ${HEADER_BAR_MIN_H}`}>
+      <div className={`mx-auto flex max-w-7xl items-stretch gap-2 px-5 py-2 md:gap-3 md:py-2.5 lg:px-8 ${HEADER_BAR_MIN_H}`}>
         <Link
           href="/"
           className="relative z-[46] flex shrink-0 items-center self-center overflow-visible"
@@ -57,7 +57,7 @@ export default function SiteHeader() {
         </Link>
 
         <div
-          className={`relative hidden min-w-0 flex-1 overflow-visible transition-opacity duration-300 ease-out md:block ${PROMO_SLOT_MIN_H} ${
+          className={`relative hidden min-w-0 flex-1 overflow-visible pb-2 transition-opacity duration-300 ease-out md:block md:pb-2.5 ${PROMO_SLOT_MIN_H} ${
             open ? "pointer-events-none invisible opacity-0" : "opacity-100"
           }`}
           aria-hidden={open}
