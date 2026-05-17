@@ -2,9 +2,13 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import API from "@/lib/api";
+import { useAuthStore } from "@/lib/auth";
+import { buildDiagnosticSubmitBody } from "./diagnosticPersistPayload";
 import {
   DIAGNOSTIC_CONTACT_HREF_AFTER,
   DIAGNOSTIC_OPTION_LABELS,
+  DIAGNOSTIC_REGISTER_HREF_AFTER,
   diagnosticQuestions,
   type DiagnosticOptionIndex
 } from "./diagnosticQuestions";
@@ -34,9 +38,16 @@ function emptyAnswers(): undefined[] {
 }
 
 export function DiagnosticSurvey({ ariaTitleId, onRequestClose }: Props) {
+  const token = useAuthStore((s) => s.token);
+  const isLoggedIn = Boolean(token);
+
   const [phase, setPhase] = useState<"survey" | "results">("survey");
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<(number | undefined)[]>(() => emptyAnswers());
+
+  /** Guardado servidor (solo usuarios logueados). */
+  const [persistState, setPersistState] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const [persistMsg, setPersistMsg] = useState<string | null>(null);
 
   const progress =
     diagnosticQuestions.length > 0 ? ((step + 1) / diagnosticQuestions.length) * 100 : 0;
@@ -77,6 +88,32 @@ export function DiagnosticSurvey({ ariaTitleId, onRequestClose }: Props) {
     setPhase("survey");
     setStep(0);
     setAnswers(emptyAnswers());
+    setPersistState("idle");
+    setPersistMsg(null);
+  };
+
+  const saveToPortal = async () => {
+    if (!isLoggedIn || !result) return;
+    const body = buildDiagnosticSubmitBody(result, answers);
+    if (!body) {
+      setPersistState("error");
+      setPersistMsg(
+        "Faltan respuestas para generar el informe completo. Repite las preguntas pendientes antes de guardar."
+      );
+      return;
+    }
+    setPersistState("saving");
+    setPersistMsg(null);
+    try {
+      await API.post("/api/client/diagnostics", body);
+      setPersistState("saved");
+      setPersistMsg(null);
+    } catch {
+      setPersistState("error");
+      setPersistMsg(
+        "No pudimos guardar el diagnóstico ahora. Tu resultado sigue visible; inténtalo de nuevo más tarde o solicita revisión desde contacto."
+      );
+    }
   };
 
   const q = diagnosticQuestions[step];
@@ -250,27 +287,93 @@ export function DiagnosticSurvey({ ariaTitleId, onRequestClose }: Props) {
             </ol>
           </section>
 
-          <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:justify-between">
-            <button
-              type="button"
-              onClick={resetAll}
-              className="inline-flex min-h-[48px] min-w-[180px] items-center justify-center rounded-xl border border-slate-900/25 px-8 text-[13px] font-black text-[#1e293b] transition hover:bg-slate-200/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500"
+          {!isLoggedIn && (
+            <div
+              className="mt-8 rounded-xl border border-slate-300/90 bg-[#f1f5f9] px-5 py-4 text-[13px] font-semibold leading-relaxed text-slate-800 shadow-sm"
+              role="note"
             >
-              Repetir diagnóstico
-            </button>
-            <Link
-              href={DIAGNOSTIC_CONTACT_HREF_AFTER}
-              className="inline-flex min-h-[48px] min-w-[200px] flex-1 items-center justify-center rounded-xl bg-[#0891b2] px-8 text-[13px] font-black uppercase tracking-[0.02em] text-white shadow-xl ring-2 ring-cyan-100 transition hover:bg-[#0e7490] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0891b2]"
+              Tu resultado está listo. Para guardarlo en tu área privada, inicia sesión o crea una cuenta.
+            </div>
+          )}
+
+          {isLoggedIn && persistState === "saved" && (
+            <div
+              className="mt-8 rounded-xl border border-emerald-400/75 bg-emerald-50 px-5 py-4 text-[13px] font-bold leading-relaxed text-emerald-950 shadow-sm"
+              role="status"
             >
-              Solicitar revisión ARGOS
-            </Link>
-            <button
-              type="button"
-              onClick={onRequestClose}
-              className="inline-flex min-h-[48px] items-center justify-center rounded-xl px-6 text-[13px] font-bold text-slate-600 underline underline-offset-4 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-500"
-            >
-              Cerrar
-            </button>
+              Diagnóstico guardado en tu área de cliente.
+              <Link
+                href="/dashboard"
+                className="mt-2 block text-[13px] font-black text-teal-800 underline underline-offset-4 hover:text-teal-950"
+              >
+                Ir al panel de cliente
+              </Link>
+            </div>
+          )}
+
+          {persistState === "error" && persistMsg && (
+            <div className="mt-6 rounded-xl border border-amber-400/80 bg-amber-50 px-5 py-4 text-[13px] font-semibold leading-relaxed text-amber-950">
+              <p>{persistMsg}</p>
+              {isLoggedIn && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPersistState("idle");
+                    setPersistMsg(null);
+                    void saveToPortal();
+                  }}
+                  className="mt-4 inline-flex min-h-[44px] items-center justify-center rounded-lg border border-amber-700/50 bg-white px-5 text-[12px] font-black uppercase tracking-wide text-amber-950 transition hover:bg-amber-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-600"
+                >
+                  Reintentar guardado
+                </button>
+              )}
+            </div>
+          )}
+
+          <div className="mt-10 flex flex-col gap-4">
+            <div className="flex flex-wrap items-stretch gap-3 md:flex-nowrap">
+              <Link
+                href={DIAGNOSTIC_CONTACT_HREF_AFTER}
+                className="inline-flex min-h-[48px] min-w-[min(100%,280px)] flex-1 items-center justify-center rounded-xl bg-[#0891b2] px-6 text-[13px] font-black uppercase tracking-[0.02em] text-white shadow-xl ring-2 ring-cyan-100 transition hover:bg-[#0e7490] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0891b2]"
+              >
+                Solicitar revisión ARGOS
+              </Link>
+
+              {!isLoggedIn ? (
+                <Link
+                  href={DIAGNOSTIC_REGISTER_HREF_AFTER}
+                  className="inline-flex min-h-[48px] flex-1 items-center justify-center rounded-xl border-2 border-[#0f172a] bg-white px-6 text-[13px] font-black uppercase tracking-[0.02em] text-[#0f172a] shadow-sm transition hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0891b2] md:min-w-[220px]"
+                >
+                  Crear cuenta para guardar mi diagnóstico
+                </Link>
+              ) : persistState !== "saved" ? (
+                <button
+                  type="button"
+                  disabled={persistState === "saving"}
+                  onClick={() => void saveToPortal()}
+                  className="inline-flex min-h-[48px] flex-1 items-center justify-center rounded-xl border-2 border-[#0e7490] bg-[#ecfeff] px-6 text-[13px] font-black uppercase tracking-[0.02em] text-[#064e3b] shadow-inner transition hover:bg-cyan-100 disabled:pointer-events-none disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700 md:min-w-[220px]"
+                >
+                  {persistState === "saving" ? "Guardando…" : "Guardar en mi área de cliente"}
+                </button>
+              ) : null}
+            </div>
+
+            <div className="flex flex-wrap gap-4 sm:justify-between">
+              <button
+                type="button"
+                onClick={resetAll}
+                className="inline-flex min-h-[48px] min-w-[180px] items-center justify-center rounded-xl border border-slate-900/25 px-8 text-[13px] font-black text-[#1e293b] transition hover:bg-slate-200/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500"
+              >
+                Repetir diagnóstico
+              </button>
+              <button
+                type="button"
+                onClick={onRequestClose}
+                className="inline-flex min-h-[48px] items-center justify-center rounded-xl px-6 text-[13px] font-bold text-slate-600 underline underline-offset-4 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-500 sm:ml-auto"
+              >
+                Cerrar
+              </button>
+            </div>
           </div>
         </div>
       )}

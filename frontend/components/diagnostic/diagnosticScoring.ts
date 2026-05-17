@@ -77,7 +77,7 @@ export function computeDiagnosticResult(answers: readonly (number | undefined)[]
     const v = answers[i];
     if (v === undefined) return;
     if (v === 0) {
-      strengths.push(`Punto fuerte: dominio estable en ${q.area} («${q.shortLabel}»).`);
+      strengths.push(`Punto fuerte en ${q.area}: «${q.shortLabel}».`);
     }
     const r = riskSentence(q, v);
     if (r) risksDetected.push(r);

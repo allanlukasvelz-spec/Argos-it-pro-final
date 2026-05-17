@@ -29,6 +29,31 @@ type WebsiteAudit = {
   checks: AuditCheck[];
 };
 
+type ArgosDiagnosticListItem = {
+  id: number;
+  score: number;
+  max_score: number;
+  risk_level: string;
+  risk_label: string;
+  summary_preview: string;
+  created_at: string;
+};
+
+type DiagnosticDetailResponse = {
+  id: string;
+  createdAt: string;
+  source: string;
+  score: number;
+  maxScore: number;
+  riskLevel: string;
+  riskLabel: string;
+  summary: string;
+  strengths: string[];
+  risks: string[];
+  priorities: string[];
+  answers: { questionId: string; question: string; answerLabel: string; riskPoints: number }[];
+};
+
 type ClientPortalPayload = {
   user: PortalUser;
   roles: string[];
@@ -46,6 +71,7 @@ type ClientPortalPayload = {
   messages: unknown[];
   submissions: { id: number; data: Record<string, unknown>; status: string; created_at: string }[];
   activity: unknown[];
+  argosDiagnostics?: ArgosDiagnosticListItem[];
 };
 
 const copy = {
@@ -77,7 +103,20 @@ const copy = {
     kindImprovement: "Solicitud de mejora",
     kindMessage: "Mensaje directo",
     kindGeneric: "Solicitud",
-    previewNone: "Sin detalle de texto."
+    previewNone: "Sin detalle de texto.",
+    diagTitle: "Diagnósticos ARGOS",
+    diagEmpty: "Aún no hay diagnósticos guardados.",
+    diagDate: "Fecha",
+    diagRisk: "Nivel de riesgo",
+    diagScore: "Puntuación",
+    diagSummary: "Resumen",
+    diagDetail: "Ver detalle",
+    diagHide: "Ocultar detalle",
+    diagDetailLoad: "Cargando detalle…",
+    diagAnswers: "Respuestas enviadas",
+    diagPriorities: "Prioridades",
+    diagRisksTitle: "Riesgos detectados",
+    diagStrengthsTitle: "Puntos fuertes"
   },
   en: {
     portal: "Client portal",
@@ -107,7 +146,20 @@ const copy = {
     kindImprovement: "Improvement request",
     kindMessage: "Direct message",
     kindGeneric: "Request",
-    previewNone: "No text detail."
+    previewNone: "No text detail.",
+    diagTitle: "ARGOS diagnostics",
+    diagEmpty: "No saved diagnostics yet.",
+    diagDate: "Date",
+    diagRisk: "Risk level",
+    diagScore: "Score",
+    diagSummary: "Summary",
+    diagDetail: "View detail",
+    diagHide: "Hide detail",
+    diagDetailLoad: "Loading detail…",
+    diagAnswers: "Answers submitted",
+    diagPriorities: "Priorities",
+    diagRisksTitle: "Detected risks",
+    diagStrengthsTitle: "Strengths"
   },
   ca: {
     portal: "Portal de client",
@@ -137,7 +189,20 @@ const copy = {
     kindImprovement: "Sol.licitud de millora",
     kindMessage: "Missatge directe",
     kindGeneric: "Sol.licitud",
-    previewNone: "Sense text de detall."
+    previewNone: "Sense text de detall.",
+    diagTitle: "Diagnostics ARGOS",
+    diagEmpty: "Encara no hi ha diagnostics guardats.",
+    diagDate: "Data",
+    diagRisk: "Nivell de risc",
+    diagScore: "Puntuacio",
+    diagSummary: "Resum",
+    diagDetail: "Veure detall",
+    diagHide: "Ocultar detall",
+    diagDetailLoad: "Carregant detall…",
+    diagAnswers: "Respostes enviades",
+    diagPriorities: "Prioritats",
+    diagRisksTitle: "Riscos detectats",
+    diagStrengthsTitle: "Punts forts"
   }
 };
 
@@ -149,6 +214,21 @@ const categories = [
   "SEO y captación",
   "Nueva funcionalidad"
 ];
+
+function diagRiskChipTone(level: string) {
+  switch (level) {
+    case "low":
+      return "border-emerald-300 bg-emerald-50 text-emerald-950";
+    case "medium":
+      return "border-amber-300 bg-amber-50 text-amber-950";
+    case "high":
+      return "border-orange-400 bg-orange-50 text-orange-950";
+    case "critical":
+      return "border-red-400 bg-red-50 text-red-950";
+    default:
+      return "border-slate-200 bg-slate-100 text-slate-900";
+  }
+}
 
 export default function Dashboard() {
   const router = useRouter();
@@ -168,6 +248,10 @@ export default function Dashboard() {
     urgency: "Normal",
     message: ""
   });
+
+  const [diagExpandedId, setDiagExpandedId] = useState<number | null>(null);
+  const [diagDetailData, setDiagDetailData] = useState<DiagnosticDetailResponse | null>(null);
+  const [diagLoadingId, setDiagLoadingId] = useState<number | null>(null);
 
   const t = copy[locale];
 
@@ -260,6 +344,26 @@ export default function Dashboard() {
       fetchPortal();
     } catch (error: any) {
       toast.error(error.response?.data?.error || "No se pudo enviar el mensaje");
+    }
+  };
+
+  const argosDiagList = portal?.argosDiagnostics ?? [];
+
+  const toggleDiagDetail = async (id: number) => {
+    if (diagExpandedId === id) {
+      setDiagExpandedId(null);
+      setDiagDetailData(null);
+      return;
+    }
+    setDiagLoadingId(id);
+    try {
+      const res = await API.get<DiagnosticDetailResponse>(`/api/client/diagnostics/${id}`);
+      setDiagDetailData(res.data);
+      setDiagExpandedId(id);
+    } catch {
+      toast.error("No se pudo cargar el detalle del diagnóstico.");
+    } finally {
+      setDiagLoadingId(null);
     }
   };
 
@@ -459,6 +563,93 @@ export default function Dashboard() {
               {t.send}
             </button>
           </form>
+        </section>
+
+        <section className="lg:col-span-2 rounded-lg border border-[#E5E7EB] bg-white p-6 shadow-sm">
+          <h2 className="text-2xl font-black">{t.diagTitle}</h2>
+          <div className="mt-5 space-y-4">
+            {argosDiagList.length === 0 ? (
+              <p className="text-sm font-semibold text-[#4B5563]">{t.diagEmpty}</p>
+            ) : (
+              argosDiagList.map((row) => (
+                <div key={row.id} className="rounded-md border border-[#E5E7EB] bg-[#F9FAFB] p-5">
+                  <div className="flex flex-wrap items-start justify-between gap-4">
+                    <div className="min-w-0 space-y-1">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-[#6B7280]">
+                        {t.diagDate}: {new Date(row.created_at).toLocaleString()}
+                      </p>
+                      <span
+                        className={`inline-flex rounded-md border px-3 py-1 text-xs font-black ${diagRiskChipTone(row.risk_level)}`}
+                      >
+                        {row.risk_label}
+                      </span>
+                      <p className="pt-2 text-sm font-black text-[#111827]">
+                        {t.diagScore}: {row.score}/{row.max_score}
+                      </p>
+                      <p className="mt-2 text-sm text-[#4B5563]">
+                        <span className="font-bold">{t.diagSummary}:</span> {row.summary_preview}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => void toggleDiagDetail(row.id)}
+                      className="shrink-0 rounded-md border border-[#2563EB] px-4 py-2 text-sm font-black text-[#2563EB] transition hover:bg-[#EFF6FF]"
+                    >
+                      {diagExpandedId === row.id ? t.diagHide : t.diagDetail}
+                    </button>
+                  </div>
+                  {diagLoadingId === row.id && (
+                    <p className="mt-4 text-xs font-semibold text-[#2563EB]">{t.diagDetailLoad}</p>
+                  )}
+                  {diagExpandedId === row.id && diagDetailData && diagDetailData.id === String(row.id) && (
+                    <div className="mt-5 space-y-5 border-t border-[#E5E7EB] pt-5">
+                      <p className="text-sm font-semibold leading-relaxed text-[#111827]">{diagDetailData.summary}</p>
+                      <div className="grid gap-5 md:grid-cols-3">
+                        <div>
+                          <p className="text-xs font-black uppercase tracking-wide text-emerald-800">{t.diagStrengthsTitle}</p>
+                          <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-[#374151]">
+                            {diagDetailData.strengths.slice(0, 15).map((line, index) => (
+                              <li key={`st-${index}-${String(line).slice(0, 40)}`}>{line}</li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div>
+                          <p className="text-xs font-black uppercase tracking-wide text-orange-900">{t.diagRisksTitle}</p>
+                          <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-[#92400e]">
+                            {(diagDetailData.risks || []).slice(0, 15).map((line, index) => (
+                              <li key={`rk-${index}-${String(line).slice(0, 40)}`}>{line}</li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div>
+                          <p className="text-xs font-black uppercase tracking-wide text-cyan-950">{t.diagPriorities}</p>
+                          <ol className="mt-2 list-inside list-decimal space-y-1 text-sm font-semibold text-[#374151]">
+                            {diagDetailData.priorities.slice(0, 15).map((line, index) => (
+                              <li key={`pr-${index}-${String(line).slice(0, 40)}`}>{line}</li>
+                            ))}
+                          </ol>
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-xs font-black uppercase tracking-wide text-slate-800">{t.diagAnswers}</p>
+                        <ul className="mt-3 space-y-2 text-sm text-[#374151]">
+                          {diagDetailData.answers.map((a) => (
+                            <li key={a.questionId} className="rounded border border-[#E5E7EB] bg-white px-3 py-2">
+                              <p className="font-bold">{a.question}</p>
+                              <p className="text-xs font-semibold text-[#2563EB]">
+                                {a.answerLabel}{" "}
+                                <span className="text-[#6B7280]">({a.riskPoints} pts de riesgo)</span>
+                              </p>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))
+            )}
+          </div>
         </section>
 
         <section className="rounded-lg border border-[#E5E7EB] bg-white p-6 shadow-sm">

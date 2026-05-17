@@ -103,6 +103,39 @@ router.get("/portal", async (req, res) => {
       [userId]
     );
 
+    let argosDiagnostics = [];
+    try {
+      const diagnosticsResult = await pool.query(
+        `SELECT id,
+                score,
+                max_score,
+                risk_level,
+                risk_label,
+                summary,
+                created_at
+         FROM client_diagnostics
+         WHERE user_id = $1
+         ORDER BY created_at DESC
+         LIMIT 25`,
+        [userId]
+      );
+      argosDiagnostics = diagnosticsResult.rows.map((row) => ({
+        id: row.id,
+        score: Number(row.score),
+        max_score: Number(row.max_score),
+        risk_level: row.risk_level,
+        risk_label: row.risk_label,
+        summary_preview:
+          typeof row.summary === "string"
+            ? row.summary.slice(0, 280)
+            : "",
+        created_at: row.created_at
+      }));
+    } catch (diagErr) {
+      console.warn("[CLIENT] Lista de diagnosticos omitida:", diagErr?.message || diagErr);
+      argosDiagnostics = [];
+    }
+
     const auditRow = auditResult.rows[0];
     const checks = auditRow ? mapFindingsToChecks(auditRow.findings) : [];
 
@@ -176,7 +209,8 @@ router.get("/portal", async (req, res) => {
           created_at: submission.created_at
         })),
       submissions: submissions.rows,
-      activity: activity.rows
+      activity: activity.rows,
+      argosDiagnostics
     });
   } catch (error) {
     console.error("[CLIENT] Error portal:", error);
@@ -222,6 +256,8 @@ router.post("/improvements", async (req, res) => {
     res.status(500).json({ error: "Error enviando la mejora." });
   }
 });
+
+router.use(require("./clientDiagnostics"));
 
 router.post("/messages", async (req, res) => {
   try {

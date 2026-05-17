@@ -21,77 +21,82 @@ export type DiagnosticOptionIndex = 0 | 1 | 2;
 
 export const DIAGNOSTIC_CONTACT_HREF_AFTER = "/contacto?source=diagnostico-argos";
 
+export const DIAGNOSTIC_REGISTER_HREF_AFTER = "/auth/register?source=diagnostico-argos";
+
+/** Origen estable para persistencia y analíticas en backend */
+export const DIAGNOSTIC_SOURCE = "diagnostico-argos" as const;
+
 export const diagnosticQuestions: readonly DiagnosticQuestion[] = [
+  {
+    id: "continuity",
+    area: "Continuidad del negocio",
+    text: "Si el sistema informático de tu empresa cae hoy, ¿sabrías cómo actuar sin perder datos, clientes ni tiempo?",
+    shortLabel: "Plan de actuación ante caída o parada crítica"
+  },
   {
     id: "web",
     area: "Web",
-    text: "¿Tu web está actualizada y revisada recientemente?",
-    shortLabel: "Web actualizada y revisada"
+    text: "¿La web de tu empresa se revisa y actualiza de forma periódica?",
+    shortLabel: "Revisión y actualización periódica de la web"
   },
   {
     id: "backups",
     area: "Copias de seguridad",
-    text: "¿Tienes copias de seguridad automáticas y comprobadas?",
-    shortLabel: "Copias automáticas y verificadas"
+    text: "¿Dispones de copias de seguridad automáticas y has comprobado que se pueden restaurar correctamente?",
+    shortLabel: "Copias automáticas y restauración comprobada"
   },
   {
     id: "security-auth",
     area: "Seguridad",
-    text: "¿Usas contraseñas seguras y doble verificación en cuentas críticas?",
-    shortLabel: "Contraseñas seguras y 2FA"
+    text: "¿Las cuentas críticas de tu empresa utilizan contraseñas seguras y doble verificación?",
+    shortLabel: "Contraseñas seguras y doble verificación en cuentas críticas"
   },
   {
     id: "access",
-    area: "Usuarios y accesos",
-    text: "¿Sabes quién tiene acceso a tu web, hosting, correos y herramientas?",
-    shortLabel: "Gestión clara de accesos"
+    area: "Accesos",
+    text: "¿Tienes controlado quién puede acceder a tu web, servidor, correos y herramientas digitales?",
+    shortLabel: "Control de accesos a web, servidor, correo y herramientas"
   },
   {
     id: "forms-mail",
-    area: "Correos y formularios",
-    text: "¿Tus formularios de contacto envían correos correctamente?",
-    shortLabel: "Formularios y entrega de correo"
+    area: "Formularios",
+    text: "¿Has comprobado recientemente que recibes correctamente por correo electrónico los datos enviados desde tus formularios de contacto?",
+    shortLabel: "Datos de formularios de contacto recibidos en el correo"
   },
   {
     id: "mobile-perf",
     area: "Rendimiento",
-    text: "¿Tu web carga rápido en móvil?",
-    shortLabel: "Rendimiento en móvil"
+    text: "¿Tu web carga rápido y ofrece una buena experiencia en dispositivos móviles?",
+    shortLabel: "Velocidad y experiencia en móvil"
   },
   {
     id: "updates",
     area: "Actualizaciones",
-    text: "¿Mantienes plugins, temas y sistemas clave siempre actualizados?",
-    shortLabel: "Actualizaciones al día"
+    text: "¿Mantienes actualizada la base de datos y actualizados todos los elementos necesarios para que tu web funcione correctamente?",
+    shortLabel: "Base de datos y soporte técnico de la web al día"
   },
   {
     id: "incidents",
-    area: "Procesos internos",
-    text: "¿Tu empresa tiene un proceso claro para incidencias técnicas?",
-    shortLabel: "Proceso ante incidencias"
+    area: "Incidencias",
+    text: "¿Tu empresa tiene un procedimiento claro para gestionar incidencias técnicas?",
+    shortLabel: "Procedimiento ante incidencias técnicas"
   },
   {
     id: "automation",
     area: "Automatización",
-    text: "¿Usas herramientas o automatizaciones para ahorrar tiempo y reducir errores?",
-    shortLabel: "Automatización y herramientas"
+    text: "¿Utilizas automatizaciones o herramientas digitales para reducir tareas manuales y repetitivas?",
+    shortLabel: "Automatización para reducir trabajo manual repetitivo"
   },
   {
     id: "legal",
-    area: "Cumplimiento / legal",
-    text: "¿Tienes textos legales, privacidad y cookies correctamente configurados?",
-    shortLabel: "Legal, privacidad y cookies"
+    area: "Documentos legales",
+    text: "¿Tu web cuenta con aviso legal, política de privacidad y política de cookies, correctamente configurados?",
+    shortLabel: "Aviso legal, privacidad y cookies"
   },
   {
     id: "maintenance",
-    area: "Soporte y mantenimiento",
-    text: "¿Tienes mantenimiento preventivo o solo actúas cuando algo falla?",
-    shortLabel: "Mantenimiento preventivo vs reactivo"
-  },
-  {
-    id: "continuity",
-    area: "Continuidad",
-    text: "¿Sabes cuánto tardarías en recuperar tu web si hoy dejara de funcionar?",
-    shortLabel: "Plan de recuperación y tiempo de recuperación"
+    area: "Mantenimiento",
+    text: "¿Tu empresa realiza mantenimiento preventivo o solo actúa cuando surge un problema?",
+    shortLabel: "Mantenimiento preventivo frente a actuar solo ante urgencias"
   }
 ];

@@ -9,6 +9,7 @@ const { Server } = require("socket.io");
 const pool = require("./db");
 const { isAllowedWsActionType, sanitizeWsDetails } = require("./lib/wsActions");
 const { ensureRefreshSessionsTable } = require("./lib/ensureRefreshSessions");
+const { ensureClientDiagnosticsTable } = require("./lib/ensureClientDiagnosticsTable");
 
 const authRoutes = require("./routes/auth");
 const aiRoutes = require("./routes/ai");
@@ -175,6 +176,7 @@ server.on("error", (err) => {
 async function start() {
   try {
     await ensureRefreshSessionsTable(pool);
+    await ensureClientDiagnosticsTable(pool);
   } catch (err) {
     console.error("❌ No se pudo asegurar la tabla refresh_sessions:", err.message);
     process.exit(1);
