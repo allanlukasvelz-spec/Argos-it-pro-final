@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 
 import { DiagnosticSurveyModal } from "@/components/diagnostic/DiagnosticSurveyModal";
+import { chicoTips, type ChicoTip } from "@/components/diagnostic/chicoTips";
 
 type Props = {
   /** Solo al cerrar con X o sesión: colapsar slot del header. */
@@ -21,19 +22,8 @@ const PROMO_TEXT_CTA = "Iniciar diagnóstico ARGOS";
 const PROMO_A11Y_DESCRIPTION =
   "Descubre en pocos minutos el estado real de tu web, seguridad, sistemas y procesos digitales.";
 
-const CHICO_SECURITY_A11Y_ROLE = "Consejo de seguridad ARGOS sobre protección empresarial";
+const CHICO_SECURITY_A11Y_ROLE = "Consejos prácticos ARGOS para mejorar tu presencia digital";
 const PROMO_HIGHLIGHT_PARTS = PROMO_TEXT_HIGHLIGHT.split(" · ");
-
-/** Consejos rotativos para el ciclo Chico (texto después del prefijo “Consejo de Chico:”). Orden fijo por aparición. */
-const chicoSecurityTips = [
-  "revisa quién tiene acceso a tu web y elimina usuarios que ya no trabajen contigo.",
-  "una copia de seguridad no sirve si nunca has comprobado que se puede restaurar.",
-  "si todos usan la misma contraseña, tu empresa no tiene control real de acceso.",
-  "los plugins sin actualizar son una de las puertas más comunes para ataques.",
-  "un formulario que no envía correos puede hacerte perder clientes sin darte cuenta.",
-  "activa doble verificación en cuentas críticas siempre que sea posible.",
-  "revisa permisos, usuarios y copias antes de que exista una urgencia.",
-] as const;
 
 type CyclePhase =
   | "idle"
@@ -81,8 +71,8 @@ const RESTART_MS = 5000;
 
 const SAFE_GAP_LEFT_PX = 88;
 
-function formatChicoAdviceLine(tip: string) {
-  return `Consejo de Chico: ${tip}`;
+function formatChicoAdviceForA11y(tip: ChicoTip) {
+  return `Consejo de Chico: ${tip.titulo}. ${tip.mensajeCorto}`;
 }
 
 export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
@@ -101,7 +91,7 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
   const [motionKey, setMotionKey] = useState(0);
 
   /** Texto consejo vigente cuando Chico está en pantalla / accesibilidad del globo. */
-  const [activeChicoTip, setActiveChicoTip] = useState("");
+  const [activeChicoTip, setActiveChicoTip] = useState<ChicoTip | null>(null);
   const [walkFrameDumbo, setWalkFrameDumbo] = useState(0);
   const [walkFrameChico, setWalkFrameChico] = useState(0);
 
@@ -139,7 +129,7 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
       } else {
         const ord = tipOrderRef.current;
         tipOrderRef.current += 1;
-        const tip = chicoSecurityTips[ord % chicoSecurityTips.length];
+        const tip = chicoTips[ord % chicoTips.length];
         setActiveChicoTip(tip);
         setPhaseTracked("chicoEntering");
       }
@@ -247,7 +237,7 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
       } else {
         const ord = tipOrderRef.current;
         tipOrderRef.current += 1;
-        const tip = chicoSecurityTips[ord % chicoSecurityTips.length];
+        const tip = chicoTips[ord % chicoTips.length];
         setActiveChicoTip(tip);
         setPhaseTracked("chicoEntering");
       }
@@ -294,7 +284,7 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
 
   const regionAria =
     isChicoLive && activeChicoTip
-      ? `${CHICO_SECURITY_A11Y_ROLE}. ${formatChicoAdviceLine(activeChicoTip)}`
+      ? `${CHICO_SECURITY_A11Y_ROLE}. ${formatChicoAdviceForA11y(activeChicoTip)}`
       : PROMO_A11Y_DESCRIPTION;
 
   const sittingDumbo = phase === "dumboParked";
@@ -396,7 +386,7 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
           </motion.div>
 
           <motion.div
-            key={`chico-bubble-${motionKey}-${activeChicoTip}`}
+            key={`chico-bubble-${motionKey}-${activeChicoTip?.id ?? "none"}`}
             className="pointer-events-auto flex w-[min(86vw,26rem)] max-w-full shrink justify-center md:w-[min(78vw,32rem)] lg:w-[min(72vw,34rem)]"
             initial={{ opacity: 0, y: 8, scale: 0.96 }}
             animate={
@@ -526,9 +516,18 @@ function DumboBannerInner({
   );
 }
 
-function ChicoSecurityBubble({ tip, onDismiss }: { tip: string; onDismiss: () => void }) {
+function ChicoSecurityBubble({ tip, onDismiss }: { tip: ChicoTip | null; onDismiss: () => void }) {
   const gradId = useId().replace(/:/g, "");
-  const advice = formatChicoAdviceLine(tip);
+  const detailPanelId = `chico-tip-detail-${gradId.slice(0, 8)}`;
+  const [expanded, setExpanded] = useState(false);
+
+  useEffect(() => {
+    setExpanded(false);
+  }, [tip?.id]);
+
+  if (!tip) return null;
+
+  const advice = formatChicoAdviceForA11y(tip);
 
   return (
     <aside
@@ -550,12 +549,53 @@ function ChicoSecurityBubble({ tip, onDismiss }: { tip: string; onDismiss: () =>
         <div aria-hidden className={`pointer-events-none absolute inset-0 rounded-[calc(1rem-1px)] opacity-95 bg-[linear-gradient(145deg,#0c1929_0%,#082f49_52%,#0e7490_120%)]`} />
         <div className={`absolute inset-[1px] rounded-[calc(1rem-2px)] bg-[linear-gradient(180deg,rgba(148,239,238,0.14)_0%,transparent_45%,rgba(15,118,110,0.08)_100%)]`} aria-hidden />
         <p className="relative z-[1] mb-1 text-xs font-black uppercase leading-tight tracking-[0.08em] text-[#67E8F9] md:text-sm">
-          Consejo de seguridad
+          Consejo práctico
         </p>
-        <p className="relative z-[1] text-sm font-semibold leading-tight tracking-tight text-[#ECFEFF] md:text-base lg:text-lg" id={`chico-tip-body-${gradId.slice(0, 8)}`}>
-          <span className="font-black text-[#A5F3FC]">Consejo de Chico:&nbsp;</span>
-          <span>{tip}</span>
+        <h3
+          className="relative z-[1] text-sm font-black leading-snug text-[#ECFEFF] md:text-base"
+          id={`chico-tip-title-${gradId.slice(0, 8)}`}
+        >
+          {tip.titulo}
+        </h3>
+        <p
+          className="relative z-[1] mt-2 text-sm font-medium leading-snug text-[#E0F2FE]/95 md:text-[0.9375rem]"
+          id={`chico-tip-body-${gradId.slice(0, 8)}`}
+        >
+          {tip.mensajeCorto}
         </p>
+        <button
+          type="button"
+          onClick={() => setExpanded((e) => !e)}
+          aria-expanded={expanded}
+          aria-controls={detailPanelId}
+          className="relative z-[1] mt-3 inline-flex min-h-[40px] items-center rounded-lg border border-[#5EEAD4]/45 bg-[#082f49]/80 px-3 py-2 text-left text-xs font-black uppercase tracking-wide text-[#A5F3FC] shadow-sm ring-1 ring-[#2DD4BF]/30 transition hover:bg-[#0c4a6e]/90 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 md:text-[13px]"
+        >
+          {expanded ? "Ocultar explicación y pasos" : "Ver explicación y pasos"}
+        </button>
+        {expanded && (
+          <div
+            id={detailPanelId}
+            role="region"
+            aria-labelledby={`chico-tip-title-${gradId.slice(0, 8)}`}
+            className="relative z-[1] mt-4 max-h-[min(52vh,360px)] space-y-4 overflow-y-auto overflow-x-hidden border-t border-[#2DD4BF]/35 pt-4"
+          >
+            <p className="text-sm leading-relaxed text-[#ECFEFF]/95">{tip.explicacion}</p>
+            <div>
+              <p className="text-[11px] font-black uppercase tracking-wider text-[#67E8F9]">Pasos prácticos</p>
+              <ol className="mt-2 list-decimal space-y-2 pl-5 text-sm leading-snug text-[#E0F2FE] marker:text-[#5EEAD4]">
+                {tip.pasos.map((paso, index) => (
+                  <li key={`${tip.id}-paso-${String(index)}`} className="pl-0.5">
+                    {paso}
+                  </li>
+                ))}
+              </ol>
+            </div>
+            <div className="rounded-xl border border-[#0d9488]/55 bg-[#042f2e]/65 p-3 shadow-inner">
+              <p className="text-[11px] font-black uppercase tracking-wider text-[#99F6E4]">Acción recomendada</p>
+              <p className="mt-1.5 text-sm font-semibold leading-snug text-[#ECFEFF]">{tip.accionRecomendada}</p>
+            </div>
+          </div>
+        )}
         <button
           type="button"
           onClick={onDismiss}
@@ -585,9 +625,9 @@ function ReducedMotionAlternate({
   const [rmPhase, setRmPhase] = useState<RM>("idle");
   const tipIxRef = useRef(0);
   const [, tipBump] = useState(0);
-  const [chicoSlice, setChicoSlice] = useState("");
+  const [chicoSlice, setChicoSlice] = useState<ChicoTip | null>(null);
   const activeChicoAdvice = useMemo(
-    () => (chicoSlice ? formatChicoAdviceLine(chicoSlice) : ""),
+    () => (chicoSlice ? formatChicoAdviceForA11y(chicoSlice) : ""),
     [chicoSlice]
   );
 
@@ -609,7 +649,7 @@ function ReducedMotionAlternate({
     const id = window.setTimeout(() => {
       const n = tipIxRef.current;
       tipIxRef.current += 1;
-      const tip = chicoSecurityTips[n % chicoSecurityTips.length];
+      const tip = chicoTips[n % chicoTips.length];
       setChicoSlice(tip);
       tipBump((v) => v + 1);
       setRmPhase("visibleChico");
