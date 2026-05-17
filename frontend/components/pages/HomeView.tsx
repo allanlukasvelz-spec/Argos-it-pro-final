@@ -40,7 +40,7 @@ const argosMethodCards = [
 ];
 
 const techStackItems = [
-  "WordPress y Hostinger",
+  "Plataforma web y alojamiento profesional",
   "React / Next.js",
   "Node.js",
   "PostgreSQL",
@@ -311,7 +311,7 @@ export default function HomeView() {
         <div className="cta-preventive argos-hologram-card mx-auto max-w-5xl p-8 text-center">
           <h2 className="text-3xl font-black text-white">¿Quieres prevenir problemas antes de que afecten a tu negocio?</h2>
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-[#C9DDEC]">
-            Trabajamos con empresas de cualquier lugar que quieren seguridad, soporte, WordPress, automatización y mejora continua sin improvisar, ya sea de forma telemática, telefónica o presencial.
+            Trabajamos con empresas de cualquier lugar que quieren seguridad, soporte, presencia web, automatización y mejora continua sin improvisar, ya sea de forma telemática, telefónica o presencial.
           </p>
           <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
             <Link href="/contacto" className="inline-flex rounded-md bg-[#18D4F7] px-6 py-4 font-black text-[#030812] transition hover:bg-[#39F4FF]">

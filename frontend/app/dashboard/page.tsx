@@ -209,7 +209,7 @@ const copy = {
 const categories = [
   "Seguridad informática",
   "Soporte técnico",
-  "WordPress / Hosting",
+  "Web y alojamiento",
   "Automatización con IA",
   "SEO y captación",
   "Nueva funcionalidad"

@@ -71,18 +71,18 @@ export const chicoTips: readonly ChicoTip[] = [
       "Guarda los códigos de recuperación en un lugar seguro.",
       "Comprueba que puedes iniciar sesión correctamente."
     ],
-    accionRecomendada: "Actívala en correo, hosting, WordPress, redes sociales y herramientas de empresa."
+    accionRecomendada: "Actívala en correo, alojamiento, plataforma web, redes sociales y herramientas de empresa."
   },
   {
     id: "actualizaciones-web",
     titulo: "Mantén tu web actualizada",
-    mensajeCorto: "Actualiza tu web, plugins y herramientas para evitar fallos.",
+    mensajeCorto: "Actualiza tu web, extensiones y herramientas para evitar fallos.",
     explicacion:
       "Una web desactualizada puede volverse lenta, insegura o incompatible con nuevas versiones del sistema. Las actualizaciones ayudan a corregir errores y mejorar la seguridad.",
     pasos: [
       "Revisa si hay actualizaciones disponibles.",
       "Haz una copia de seguridad antes de actualizar.",
-      "Actualiza plugins, temas y sistema principal.",
+      "Actualiza extensiones, temas y sistema principal.",
       "Comprueba que la web siga funcionando bien.",
       "Si algo falla, restaura la copia o pide soporte."
     ],
@@ -95,7 +95,7 @@ export const chicoTips: readonly ChicoTip[] = [
     explicacion:
       "Las copias de seguridad permiten recuperar tu web si ocurre un error, ataque, borrado accidental o fallo del servidor. Sin copias, puedes perder información importante.",
     pasos: [
-      "Comprueba si tu hosting hace copias automáticas.",
+      "Comprueba si tu alojamiento hace copias automáticas.",
       "Guarda una copia antes de hacer cambios importantes.",
       "Asegúrate de guardar archivos y base de datos.",
       "Prueba que la copia pueda restaurarse.",

@@ -11,20 +11,20 @@ const methodDetails = [
     letter: "A",
     title: "Analizar",
     meaning: "Revisamos el estado real del entorno digital del cliente: web, sistemas, seguridad, rendimiento, herramientas, procesos y riesgos.",
-    work: "Inventariamos activos, revisamos accesos, hosting, WordPress, formularios, rendimiento, procesos internos y puntos de riesgo.",
+    work: "Inventariamos activos, revisamos accesos, alojamiento, plataforma web, formularios, rendimiento, procesos internos y puntos de riesgo.",
     clientGets: "Un diagnóstico claro, prioridades ordenadas y una hoja de ruta técnica entendible para tomar decisiones con criterio.",
     avoids: "Evita invertir a ciegas, repetir incidencias, mantener sistemas sin mapa y tomar decisiones sin saber dónde está el riesgo.",
-    tools: ["Auditoría web", "Revisión WordPress", "SEO técnico", "Monitorización", "Inventario de accesos", "Chico diagnóstico"]
+    tools: ["Auditoría web", "Revisión de plataforma web", "SEO técnico", "Monitorización", "Inventario de accesos", "Chico diagnóstico"]
   },
   {
     id: "reforzar",
     letter: "R",
     title: "Reforzar",
     meaning: "Aplicamos medidas preventivas para fortalecer seguridad, estabilidad, copias de seguridad, accesos, rendimiento y protección de datos.",
-    work: "Endurecemos configuraciones, revisamos permisos, copias, actualizaciones, formularios, hosting, dependencias y medidas de protección.",
+    work: "Endurecemos configuraciones, revisamos permisos, copias, actualizaciones, formularios, alojamiento, dependencias y medidas de protección.",
     clientGets: "Un entorno más controlado, con mejores prácticas, reducción de riesgos y bases técnicas más sólidas para operar.",
     avoids: "Evita accesos débiles, pérdidas de información, caídas prevenibles, webs expuestas y dependencias técnicas mal gestionadas.",
-    tools: ["Copias de seguridad", "Protección de accesos", "Hardening WordPress", "Seguridad JWT", "Servidor propio", "Buenas prácticas RGPD"]
+    tools: ["Copias de seguridad", "Protección de accesos", "Endurecimiento de plataforma web", "Seguridad JWT", "Servidor propio", "Buenas prácticas RGPD"]
   },
   {
     id: "gestionar",

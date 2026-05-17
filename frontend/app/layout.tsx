@@ -10,8 +10,8 @@ import "../styles/mascot-sprites.css";
 export const metadata: Metadata = {
   metadataBase: new URL("https://argos-it.com"),
   title: "ARGOS-IT | Consultoría tecnológica premium",
-  description: "Tecnología que protege, acompaña y simplifica: soporte IT, seguridad informática, mantenimiento web, WordPress, automatización con IA y mejora continua.",
-  keywords: "consultoría informática, servicios informáticos, mantenimiento informático, soporte IT, seguridad informática, diseño web WordPress, automatización con IA",
+  description: "Tecnología que protege, acompaña y simplifica: soporte IT, seguridad informática, mantenimiento web, presencia web corporativa, automatización con IA y mejora continua.",
+  keywords: "consultoría informática, servicios informáticos, mantenimiento informático, soporte IT, seguridad informática, diseño web profesional, automatización con IA",
   authors: [{ name: "ARGOS-IT" }],
   icons: {
     icon: "/favicon.svg",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   // Open Graph
   openGraph: {
     title: "ARGOS-IT | Tecnología que protege, acompaña y simplifica",
-    description: "Socio tecnológico externo para soporte IT, ciberseguridad, WordPress, automatización con IA y mejora continua.",
+    description: "Socio tecnológico externo para soporte IT, ciberseguridad, presencia web corporativa, automatización con IA y mejora continua.",
     url: "https://argos-it.com",
     siteName: "Argos IT",
     images: [
@@ -71,12 +71,12 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     name: "ARGOS-IT",
-    description: "Consultoría tecnológica premium, soporte IT, seguridad informática, mantenimiento web, WordPress y automatización con IA para empresas y profesionales",
+    description: "Consultoría tecnológica premium, soporte IT, seguridad informática, mantenimiento web, presencia digital y automatización con IA para empresas y profesionales",
     areaServed: ["España", "Unión Europea", "Atención telemática", "Atención telefónica", "Atención presencial según proyecto"],
     url: "https://argos-it.com",
     email: "info@argos-it.com",
-    serviceType: ["Consultoría IT premium", "Mantenimiento informático para empresas", "Seguridad informática y protección digital", "Web, WordPress y presencia digital", "Automatización con IA", "Auditoría digital continua"],
-    knowsAbout: ["Soporte IT", "Seguridad informática", "WordPress", "Automatización con IA", "Auditoría digital continua", "Mantenimiento informático"]
+    serviceType: ["Consultoría IT premium", "Mantenimiento informático para empresas", "Seguridad informática y protección digital", "Web y presencia digital", "Automatización con IA", "Auditoría digital continua"],
+    knowsAbout: ["Soporte IT", "Seguridad informática", "Presencia web corporativa", "Automatización con IA", "Auditoría digital continua", "Mantenimiento informático"]
   };
 
   return (

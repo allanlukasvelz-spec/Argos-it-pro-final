@@ -1,13 +1,13 @@
 {
   "meta": {
     "defaultTitle": "ARGOS-IT | Consultoría tecnológica premium",
-    "defaultDescription": "Consultoría informática premium, soporte IT, seguridad informática, mantenimiento web, WordPress, automatización con IA y mejora continua para empresas y profesionales.",
-    "keywords": "consultoría informática, servicios informáticos, mantenimiento informático, soporte IT, seguridad informática, diseño web WordPress, automatización con IA",
+    "defaultDescription": "Consultoría informática premium, soporte IT, seguridad informática, mantenimiento web, presencia web corporativa, automatización con IA y mejora continua para empresas y profesionales.",
+    "keywords": "consultoría informática, servicios informáticos, mantenimiento informático, soporte IT, seguridad informática, diseño web profesional, automatización con IA",
     "author": "ARGOS-IT",
     "homeTitle": "ARGOS-IT | Tecnología que protege, acompaña y simplifica",
     "homeDescription": "Socio tecnológico externo para empresas y profesionales: soporte IT, ciberseguridad, mantenimiento web, automatización con IA y mejora continua.",
     "servicesTitle": "Servicios premium | ARGOS-IT",
-    "servicesDescription": "Consultoría IT premium, mantenimiento informático, seguridad, WordPress, automatización con IA y auditoría digital continua.",
+    "servicesDescription": "Consultoría IT premium, mantenimiento informático, seguridad, presencia web corporativa, automatización con IA y auditoría digital continua.",
     "methodTitle": "Método ARGOS | Analizar, Reforzar, Gestionar, Optimizar y Sostener",
     "methodDescription": "Método ARGOS para convertir problemas técnicos en diagnóstico, refuerzo, gestión, optimización y seguimiento sostenido.",
     "aboutTitle": "Sobre ARGOS-IT | Consultoría tecnológica premium",
@@ -50,12 +50,12 @@
     "trustItems": [
       "Diagnóstico y prioridades con criterio externo",
       "Seguridad, soporte y continuidad operativa",
-      "WordPress, presencia digital y formularios cuidados",
+      "Presencia web, formularios y captación cuidados",
       "Automatización con IA de forma controlada"
     ],
     "servicesEyebrow": "Servicios premium",
     "servicesTitle": "Seis áreas para proteger, gestionar y hacer evolucionar tu entorno digital.",
-    "servicesSubtitle": "Diseñados para empresas, autónomos y profesionales de cualquier lugar que necesitan soporte IT, seguridad, WordPress, IA y mejora continua de forma telemática, telefónica o presencial.",
+    "servicesSubtitle": "Diseñados para empresas, autónomos y profesionales de cualquier lugar que necesitan soporte IT, seguridad, presencia web corporativa, IA y mejora continua de forma telemática, telefónica o presencial.",
     "explainer": {
       "eyebrow": "ARGOS-IT en movimiento",
       "stagesAria": "Etapas de la historia interactiva",
@@ -135,7 +135,7 @@
   },
   "servicesPage": {
     "title": "Servicios ARGOS-IT",
-    "subtitle": "Consultoría IT premium, mantenimiento informático, seguridad informática, WordPress, automatización con IA y auditoría digital continua."
+    "subtitle": "Consultoría IT premium, mantenimiento informático, seguridad informática, presencia web corporativa, automatización con IA y auditoría digital continua."
   },
   "serviceDetail": {
     "includesTitle": "Incluye",
@@ -181,7 +181,7 @@
     "title": "Sobre ARGOS-IT",
     "paragraphs": [
       "ARGOS-IT es una consultoría tecnológica premium orientada a empresas, autónomos y profesionales que necesitan estabilidad operativa, seguridad y una hoja de ruta tecnológica clara.",
-      "Nuestro enfoque combina soporte IT, mantenimiento informático, ciberseguridad, mantenimiento web, WordPress, automatización con IA y auditoría digital continua, siempre con criterio profesional, documentación y continuidad."
+      "Nuestro enfoque combina soporte IT, mantenimiento informático, ciberseguridad, mantenimiento web, presencia web corporativa, automatización con IA y auditoría digital continua, siempre con criterio profesional, documentación y continuidad."
     ],
     "valuesTitle": "Cómo trabajamos",
     "values": [
@@ -194,7 +194,7 @@
   "contact": {
     "title": "Solicitar consulta técnica",
     "subtitle": "Cuéntanos el estado actual de tu infraestructura o proyecto y te responderemos con una propuesta clara, priorizada y orientada a resultados.",
-    "intro": "Trabajamos con empresas, autónomos y profesionales de cualquier lugar en soporte IT, seguridad, mantenimiento web, WordPress, automatización con IA y mejora continua, ya sea de forma telemática, telefónica o presencial.",
+    "intro": "Trabajamos con empresas, autónomos y profesionales de cualquier lugar en soporte IT, seguridad, mantenimiento web, presencia web corporativa, automatización con IA y mejora continua, ya sea de forma telemática, telefónica o presencial.",
     "cards": {
       "emailTitle": "Email",
       "phoneTitle": "Teléfono",
@@ -244,7 +244,7 @@
         },
         {
           "title": "Objeto del sitio",
-          "body": "Este sitio ofrece información sobre servicios profesionales de consultoría informática, mantenimiento informático, soporte IT, seguridad informática, WordPress, automatización con IA y auditoría digital continua."
+          "body": "Este sitio ofrece información sobre servicios profesionales de consultoría informática, mantenimiento informático, soporte IT, seguridad informática, presencia web corporativa, automatización con IA y auditoría digital continua."
         },
         {
           "title": "Propiedad intelectual",
@@ -408,7 +408,7 @@
         "Soporte remoto o presencial según necesidad",
         "Actualizaciones, limpieza y documentación",
         "Control de incidencias repetidas",
-        "Coordinación con proveedores de internet, hosting o software"
+        "Coordinación con terceros de conectividad, alojamiento web y software"
       ],
       "benefits": [
         "Menos paradas en la operativa diaria.",
@@ -430,12 +430,12 @@
     },
     "seguridad-informatica": {
       "title": "Seguridad informática y protección digital",
-      "description": "Revisión y refuerzo de accesos, copias, WordPress, usuarios, sistemas críticos y hábitos operativos.",
+      "description": "Revisión y refuerzo de accesos, copias, plataforma web, usuarios, sistemas críticos y hábitos operativos.",
       "problem": "Reduce exposición digital y prepara mejor al negocio ante incidencias, errores humanos o accesos indebidos.",
       "includes": [
         "Revisión de accesos, contraseñas, roles y doble factor",
         "Evaluación de copias de seguridad y recuperación",
-        "Protección básica de WordPress, hosting y formularios",
+        "Protección básica de la plataforma web, alojamiento y formularios",
         "Detección de sistemas críticos",
         "Recomendaciones priorizadas para reducir riesgos"
       ],
@@ -458,12 +458,12 @@
       ]
     },
     "web-wordpress": {
-      "title": "Web, WordPress y presencia digital",
-      "description": "Diseño web WordPress, mantenimiento, hosting, SEO técnico y mejoras de conversión para convertir presencia digital en confianza.",
+      "title": "Web y presencia digital",
+      "description": "Diseño web profesional, mantenimiento, alojamiento, SEO técnico y mejoras de conversión para convertir presencia digital en confianza.",
       "problem": "Mejora webs antiguas, lentas, poco profesionales o sin seguimiento técnico.",
       "includes": [
-        "Diseño o rediseño web WordPress orientado a clientes",
-        "Configuración de hosting, formularios y páginas legales",
+        "Diseño o rediseño web profesional orientado a clientes",
+        "Configuración de alojamiento, formularios y páginas legales",
         "SEO técnico básico y estructura de captación",
         "Mantenimiento, actualizaciones y rendimiento",
         "Mejoras de conversión, contenidos y confianza"
@@ -471,7 +471,7 @@
       "benefits": [
         "Presencia digital más clara y profesional.",
         "Formularios y CTA preparados para consultas reales.",
-        "Base WordPress más estable y mantenible."
+        "Base web más estable y mantenible."
       ],
       "process": [
         "Analizar objetivos, público y web actual.",
@@ -482,7 +482,7 @@
       ],
       "audience": [
         "Profesionales que necesitan una web seria.",
-        "Empresas con WordPress desactualizado.",
+        "Empresas con plataforma web desactualizada.",
         "Negocios que quieren mejorar captación y confianza."
       ]
     },
@@ -517,10 +517,10 @@
     },
     "auditoria-digital": {
       "title": "Auditoría digital continua",
-      "description": "Revisión periódica de web, WordPress, seguridad, rendimiento, formularios, SEO técnico y oportunidades de mejora.",
+      "description": "Revisión periódica de web, plataforma digital, seguridad, rendimiento, formularios, SEO técnico y oportunidades de mejora.",
       "problem": "Evita que la web y los sistemas queden abandonados hasta que aparezca una incidencia.",
       "includes": [
-        "Revisión de web, WordPress, velocidad y formularios",
+        "Revisión de web, plataforma, velocidad y formularios",
         "Control de seguridad básica, backups y actualizaciones",
         "SEO técnico y estructura de captación",
         "Registro de problemas detectados y mejoras recomendadas",
