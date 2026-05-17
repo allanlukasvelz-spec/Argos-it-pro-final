@@ -21,10 +21,10 @@ const navItems: NavItem[] = [
   { href: "/contacto", key: "nav.contact" }
 ];
 
-/** Una sola barra superior: logo + slot promo + menú (altura estable en rutas públicas). */
-const HEADER_BAR_MIN_H = "min-h-[5.5rem] md:min-h-[10.25rem] lg:min-h-[11rem]";
-/** Altura del área central: globo Chico (~12rem) + cola/sombras + mascota Dumbo. */
-const PROMO_SLOT_MIN_H = "min-h-[4.75rem] md:min-h-[9rem] lg:min-h-[9.75rem]";
+/** Una sola barra superior: ~180px (md) / ~190px (lg); máx. visual ~200px. */
+const HEADER_BAR_MIN_H = "min-h-[5.5rem] md:min-h-[11.25rem] lg:min-h-[11.875rem]";
+/** Slot central Chico/Dumbo: ~152px (md) / ~164px (lg). */
+const PROMO_SLOT_MIN_H = "min-h-[4.75rem] md:min-h-[9.5rem] lg:min-h-[10.25rem]";
 
 export default function SiteHeader() {
   const pathname = usePathname();
@@ -57,7 +57,7 @@ export default function SiteHeader() {
         </Link>
 
         <div
-          className={`relative hidden min-w-0 flex-1 overflow-visible pb-2 transition-opacity duration-300 ease-out md:block md:pb-2.5 ${PROMO_SLOT_MIN_H} ${
+          className={`relative hidden min-w-0 flex-1 overflow-visible pb-3 transition-opacity duration-300 ease-out md:block md:pb-3 ${PROMO_SLOT_MIN_H} ${
             open ? "pointer-events-none invisible opacity-0" : "opacity-100"
           }`}
           aria-hidden={open}
