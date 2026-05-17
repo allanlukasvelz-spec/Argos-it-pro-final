@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supportedLocales, type Locale } from "@/i18n/config";
 import DiagnosticPromoBanner from "@/components/diagnostic/DiagnosticPromoBanner";
 import { useI18n } from "@/i18n/useI18n";
@@ -21,12 +21,28 @@ const navItems: NavItem[] = [
   { href: "/contacto", key: "nav.contact" }
 ];
 
+/** Misma clave que DiagnosticPromoBanner (sessionStorage: se limpia al cerrar la pestaña). */
+const PROMO_DISMISS_SESSION_KEY = "argos-diagnostic-promo-dismissed";
+
+/** Altura reservada de la fila Chico/Dumbo (tablet+); evita saltos entre rutas públicas. */
+const PROMO_ROW_MIN_H = "min-h-[9.5rem] lg:min-h-[10.5rem]";
+
 export default function SiteHeader() {
   const pathname = usePathname();
   const { locale, setLocale, t } = useI18n();
   const [open, setOpen] = useState(false);
   const [diagPromoSlotClosed, setDiagPromoSlotClosed] = useState(false);
   const menuId = "site-navigation-menu";
+
+  useEffect(() => {
+    try {
+      if (sessionStorage.getItem(PROMO_DISMISS_SESSION_KEY) === "1") {
+        setDiagPromoSlotClosed(true);
+      }
+    } catch {
+      /* ignore */
+    }
+  }, []);
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -73,18 +89,22 @@ export default function SiteHeader() {
         </button>
       </div>
 
-      {pathname === "/" && !diagPromoSlotClosed && (
-        <div
-          className={`relative z-10 hidden w-full overflow-visible border-t border-[#E5E7EB]/70 bg-gradient-to-b from-white/95 to-white/90 ${
-            open ? "md:hidden" : "md:block"
-          }`}
-          aria-hidden={open}
-        >
-          <div className="relative mx-auto min-h-[9.5rem] max-w-7xl px-5 lg:min-h-[10.5rem] lg:px-8">
+      <div
+        className={`relative z-10 hidden w-full overflow-hidden border-t transition-[min-height,max-height,opacity,border-color] duration-300 ease-in-out md:block ${
+          diagPromoSlotClosed
+            ? "max-h-0 min-h-0 border-transparent opacity-0"
+            : open
+              ? "border-[#E5E7EB]/70 bg-gradient-to-b from-white/95 to-white/90 md:max-h-0 md:min-h-0 md:opacity-0 md:pointer-events-none"
+              : `${PROMO_ROW_MIN_H} border-[#E5E7EB]/70 bg-gradient-to-b from-white/95 to-white/90`
+        }`}
+        aria-hidden={diagPromoSlotClosed || open}
+      >
+        {!diagPromoSlotClosed && (
+          <div className={`relative mx-auto max-w-7xl overflow-visible px-5 lg:px-8 ${PROMO_ROW_MIN_H}`}>
             <DiagnosticPromoBanner onSlotRelease={() => setDiagPromoSlotClosed(true)} />
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {open && (
         <div id={menuId} className="relative z-[55] border-t border-[#E5E7EB] bg-white/95 px-5 py-5 shadow-lg">
