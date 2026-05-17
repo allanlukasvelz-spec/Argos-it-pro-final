@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { supportedLocales, type Locale } from "@/i18n/config";
 import DiagnosticPromoBanner from "@/components/diagnostic/DiagnosticPromoBanner";
 import { useI18n } from "@/i18n/useI18n";
@@ -21,28 +21,16 @@ const navItems: NavItem[] = [
   { href: "/contacto", key: "nav.contact" }
 ];
 
-/** Misma clave que DiagnosticPromoBanner (sessionStorage: se limpia al cerrar la pestaña). */
-const PROMO_DISMISS_SESSION_KEY = "argos-diagnostic-promo-dismissed";
-
-/** Altura reservada de la fila Chico/Dumbo (tablet+); evita saltos entre rutas públicas. */
-const PROMO_ROW_MIN_H = "min-h-[9.5rem] lg:min-h-[10.5rem]";
+/** Una sola barra superior: logo + slot promo + menú (altura estable en rutas públicas). */
+const HEADER_BAR_MIN_H = "min-h-[5.5rem] md:min-h-[8rem] lg:min-h-[8.5rem]";
+/** Altura del área central blanca para Chico/Dumbo (tablet+). */
+const PROMO_SLOT_MIN_H = "min-h-[4.75rem] md:min-h-[7rem] lg:min-h-[7.5rem]";
 
 export default function SiteHeader() {
   const pathname = usePathname();
   const { locale, setLocale, t } = useI18n();
   const [open, setOpen] = useState(false);
-  const [diagPromoSlotClosed, setDiagPromoSlotClosed] = useState(false);
   const menuId = "site-navigation-menu";
-
-  useEffect(() => {
-    try {
-      if (sessionStorage.getItem(PROMO_DISMISS_SESSION_KEY) === "1") {
-        setDiagPromoSlotClosed(true);
-      }
-    } catch {
-      /* ignore */
-    }
-  }, []);
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -50,11 +38,11 @@ export default function SiteHeader() {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[#E5E7EB] bg-white/95 backdrop-blur">
-      <div className="mx-auto flex min-h-[5.5rem] max-w-7xl items-center justify-between gap-3 px-5 py-2 md:min-h-[6rem] md:gap-4 md:py-2.5 lg:px-8">
+    <header className="sticky top-0 z-50 overflow-visible border-b border-[#E5E7EB] bg-white/95 backdrop-blur">
+      <div className={`mx-auto flex max-w-7xl items-stretch gap-2 px-5 py-2 md:gap-3 md:py-2 lg:px-8 ${HEADER_BAR_MIN_H}`}>
         <Link
           href="/"
-          className="relative z-[46] flex shrink-0 items-center overflow-visible"
+          className="relative z-[46] flex shrink-0 items-center self-center overflow-visible"
           aria-label="ARGOS-IT home"
           onClick={() => setOpen(false)}
         >
@@ -63,14 +51,23 @@ export default function SiteHeader() {
             alt="Logo ARGOS-IT"
             width={360}
             height={138}
-            className="h-16 w-auto max-h-none object-contain object-center sm:h-20"
+            className="h-16 w-auto max-h-none object-contain object-center sm:h-[4.5rem]"
             priority
           />
         </Link>
 
+        <div
+          className={`relative hidden min-w-0 flex-1 overflow-visible transition-opacity duration-300 ease-out md:block ${PROMO_SLOT_MIN_H} ${
+            open ? "pointer-events-none invisible opacity-0" : "opacity-100"
+          }`}
+          aria-hidden={open}
+        >
+          <DiagnosticPromoBanner embeddedInHeader />
+        </div>
+
         <button
           type="button"
-          className="relative z-[46] inline-flex min-h-[3rem] min-w-[3rem] shrink-0 items-center justify-center rounded-lg border border-[#D9E2EF] bg-white px-3 py-3 text-[#0B1E33] shadow-sm transition hover:border-[#2563EB] hover:text-[#2563EB]"
+          className="relative z-[46] inline-flex min-h-[3rem] min-w-[3rem] shrink-0 items-center justify-center self-center rounded-lg border border-[#D9E2EF] bg-white px-3 py-3 text-[#0B1E33] shadow-sm transition hover:border-[#2563EB] hover:text-[#2563EB]"
           onClick={() => setOpen((prev) => !prev)}
           aria-label={t("nav.menu")}
           aria-controls={menuId}
@@ -87,23 +84,6 @@ export default function SiteHeader() {
             />
           </span>
         </button>
-      </div>
-
-      <div
-        className={`relative z-10 hidden w-full overflow-hidden border-t transition-[min-height,max-height,opacity,border-color] duration-300 ease-in-out md:block ${
-          diagPromoSlotClosed
-            ? "max-h-0 min-h-0 border-transparent opacity-0"
-            : open
-              ? "border-[#E5E7EB]/70 bg-gradient-to-b from-white/95 to-white/90 md:max-h-0 md:min-h-0 md:opacity-0 md:pointer-events-none"
-              : `${PROMO_ROW_MIN_H} border-[#E5E7EB]/70 bg-gradient-to-b from-white/95 to-white/90`
-        }`}
-        aria-hidden={diagPromoSlotClosed || open}
-      >
-        {!diagPromoSlotClosed && (
-          <div className={`relative mx-auto max-w-7xl overflow-visible px-5 lg:px-8 ${PROMO_ROW_MIN_H}`}>
-            <DiagnosticPromoBanner onSlotRelease={() => setDiagPromoSlotClosed(true)} />
-          </div>
-        )}
       </div>
 
       {open && (

@@ -9,11 +9,9 @@ import { DiagnosticSurveyModal } from "./DiagnosticSurveyModal";
 import { chicoTips, type ChicoTip } from "./chicoTips";
 
 type Props = {
-  /** Solo al cerrar con X o sesión: colapsar slot del header. */
-  onSlotRelease?: () => void;
+  /** Banner dentro de la fila única del header (entre logo y menú). */
+  embeddedInHeader?: boolean;
 };
-
-const SESSION_KEY = "argos-diagnostic-promo-dismissed";
 /** Copias exactas del diseño de referencia (visible). */
 const PROMO_TEXT_MAIN = "Descubre en pocos minutos el estado real de tu web";
 const PROMO_TEXT_HIGHLIGHT = "Seguridad · Sistemas · Procesos";
@@ -45,9 +43,9 @@ const WALK_FRAMES_DUMBO = [
 const DUMBO_SIT_SPRITE = "/mascots/dumbo/dumbo_sentado_atento.png";
 
 /** Entrada desde la derecha (Dumbo). Parkado más centrado respecto al slot y menos pegado al menú. */
-const X_DUMBO_ENTER_FROM = "38vw";
-const X_DUMBO_PARKED = "-5vw";
-const X_DUMBO_EXIT = "-44vw";
+const X_DUMBO_ENTER_FROM = "28vw";
+const X_DUMBO_PARKED = "0px";
+const X_DUMBO_EXIT = "-38vw";
 
 const DUMBO_ENTER_S = 3.5;
 const DUMBO_EXIT_S = 4.2;
@@ -72,14 +70,23 @@ const RESTART_MS = 5000;
 /** Tras cerrar el modal de consejo: tiempo mínimo antes de que Chico salga del banner. */
 const CHICO_SPEAK_AFTER_DETAIL_MS = 14000;
 
-const SAFE_GAP_LEFT_PX = 88;
+/** Margen izquierdo del slot Dumbo en layout de fila separada (legado). */
+const SAFE_GAP_LEFT_PX = 72;
+const SAFE_GAP_LEFT_HEADER_PX = 4;
+/** Caja fija del sprite Dumbo: evita que el globo de texto salte al cambiar frame caminar/sentado. */
+const DUMBO_SPRITE_BOX = "h-[4.25rem] w-[4.25rem] md:h-[4.75rem] md:w-[4.75rem] lg:h-[5.25rem] lg:w-[5.25rem]";
+const CHICO_SPRITE_BOX = "h-[3.85rem] w-[3.85rem] md:h-[4.35rem] md:w-[4.35rem] lg:h-[4.75rem] lg:w-[4.75rem]";
 
 function formatChicoAdviceForA11y(tip: ChicoTip) {
   return `Consejo de Chico: ${tip.titulo}. ${tip.mensajeCorto}`;
 }
 
-export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
+export default function DiagnosticPromoBanner({ embeddedInHeader = false }: Props) {
   const prefersReducedMotion = useReducedMotion() === true;
+  const dumboGapLeftPx = embeddedInHeader ? SAFE_GAP_LEFT_HEADER_PX : SAFE_GAP_LEFT_PX;
+  const dumboEnterFrom = embeddedInHeader ? "72%" : X_DUMBO_ENTER_FROM;
+  const dumboExitTo = embeddedInHeader ? "-72%" : X_DUMBO_EXIT;
+  const dumboSlotPadEnd = embeddedInHeader ? "pr-1 md:pr-2" : "pr-6 md:pr-10 lg:pr-12";
   const phaseRef = useRef<CyclePhase>("idle");
   const pendingNextRef = useRef<"dumbo" | "chico">("dumbo");
   const tipOrderRef = useRef(0);
@@ -89,7 +96,6 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
   const chicoSpeakDelayMsRef = useRef<number | null>(null);
 
   const [hydrated, setHydrated] = useState(false);
-  const [dismissed, setDismissed] = useState(false);
   const [diagnosticOpen, setDiagnosticOpen] = useState(false);
   const [phase, setPhase] = useState<CyclePhase>("idle");
   const [motionKey, setMotionKey] = useState(0);
@@ -118,19 +124,12 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
   }, []);
 
   useEffect(() => {
-    try {
-      if (sessionStorage.getItem(SESSION_KEY) === "1") {
-        setDismissed(true);
-      }
-    } catch {
-      /* ignore */
-    }
     setHydrated(true);
   }, []);
 
   /** idle → siguiente mascota (según pendiente antes de espera). */
   useEffect(() => {
-    if (!hydrated || dismissed || prefersReducedMotion) return;
+    if (!hydrated || prefersReducedMotion) return;
     if (phase !== "idle") return;
     const id = window.setTimeout(() => {
       const next = pendingNextRef.current;
@@ -146,7 +145,7 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
       }
     }, entranceDelayMs);
     return () => window.clearTimeout(id);
-  }, [bumpMotionKey, dismissed, entranceDelayMs, hydrated, prefersReducedMotion, phase, setPhaseTracked]);
+  }, [bumpMotionKey, entranceDelayMs, hydrated, prefersReducedMotion, phase, setPhaseTracked]);
 
   const dumboWalkActive =
     !prefersReducedMotion && (phase === "dumboEntering" || phase === "dumboExiting");
@@ -263,23 +262,7 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
     return () => window.clearTimeout(id);
   }, [bumpMotionKey, phase, setPhaseTracked]);
 
-  const handleDismiss = () => {
-    setDiagnosticOpen(false);
-    try {
-      sessionStorage.setItem(SESSION_KEY, "1");
-    } catch {
-      /* ignore */
-    }
-    setDismissed(true);
-  };
-
-  useEffect(() => {
-    if (hydrated && dismissed) {
-      onSlotRelease?.();
-    }
-  }, [hydrated, dismissed, onSlotRelease]);
-
-  if (!hydrated || dismissed) return null;
+  if (!hydrated) return null;
 
   if (prefersReducedMotion) {
     return (
@@ -287,7 +270,7 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
         <DiagnosticSurveyModal open={diagnosticOpen} onClose={() => setDiagnosticOpen(false)} />
         <ReducedMotionAlternate
           entranceDelayMs={entranceDelayMs}
-          onDismiss={handleDismiss}
+          embeddedInHeader={embeddedInHeader}
           onStartDiagnostic={() => setDiagnosticOpen(true)}
         />
       </>
@@ -327,11 +310,11 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
       {showChrome && isDumboLive && (
         <motion.div
           key={`dumbo-slot-${motionKey}`}
-          className="absolute inset-x-0 bottom-0 flex items-end gap-0 pr-12 will-change-transform md:pr-16 lg:pr-[4.75rem]"
-          style={{ paddingLeft: SAFE_GAP_LEFT_PX }}
+          className={`absolute inset-x-0 bottom-0 flex w-full max-w-full items-end gap-0 will-change-transform ${dumboSlotPadEnd}`}
+          style={{ paddingLeft: dumboGapLeftPx }}
           initial={
             phase === "dumboEntering"
-              ? { x: X_DUMBO_ENTER_FROM, opacity: 1 }
+              ? { x: dumboEnterFrom, opacity: 1 }
               : { x: X_DUMBO_PARKED, opacity: 1 }
           }
           animate={
@@ -340,7 +323,7 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
               : phase === "dumboParked"
                 ? { x: X_DUMBO_PARKED, opacity: 1 }
                 : phase === "dumboExiting"
-                  ? { x: X_DUMBO_EXIT, opacity: 0 }
+                  ? { x: dumboExitTo, opacity: 0 }
                   : { x: X_DUMBO_PARKED, opacity: 1 }
           }
           transition={
@@ -354,14 +337,14 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
           <DumboBannerInner
             walkFrame={walkFrameDumbo}
             sitting={sittingDumbo}
-            onDismiss={handleDismiss}
             onStartDiagnostic={() => setDiagnosticOpen(true)}
           />
         </motion.div>
       )}
 
       {showChrome && isChicoLive && (
-        <div className="pointer-events-none absolute bottom-0 left-1/2 z-[2] flex -translate-x-1/2 items-end gap-1.5 pb-[0.45rem] md:gap-2 md:pb-2">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] flex justify-center px-2 pb-[0.45rem] md:px-4 md:pb-2">
+          <div className="flex w-full max-w-[min(100%,44rem)] items-end justify-center gap-1.5 md:gap-2">
           <motion.div
             key={`chico-mascot-${motionKey}`}
             className="flex shrink-0 items-end"
@@ -388,7 +371,7 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
             }
           >
             <div
-              className="relative shrink-0 brightness-[1.04] saturate-[1.08] contrast-[1.02] drop-shadow-[0_12px_28px_-6px_rgba(15,23,42,0.5)]"
+              className={`relative shrink-0 ${CHICO_SPRITE_BOX} brightness-[1.04] saturate-[1.08] contrast-[1.02] drop-shadow-[0_12px_28px_-6px_rgba(15,23,42,0.5)]`}
               aria-hidden
             >
               <Image
@@ -396,8 +379,8 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
                 alt=""
                 width={120}
                 height={120}
-                sizes="(max-width: 1024px) 88px, 104px"
-                className="h-[4.35rem] w-auto object-contain md:h-[5rem] lg:h-[5.5rem]"
+                sizes="(max-width: 1024px) 72px, 88px"
+                className="h-full w-full object-contain object-bottom"
                 priority={false}
               />
             </div>
@@ -405,24 +388,24 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
 
           <motion.div
             key={`chico-bubble-${motionKey}-${activeChicoTip?.id ?? "none"}`}
-            className="pointer-events-auto flex w-[min(86vw,26rem)] max-w-full shrink justify-center md:w-[min(78vw,32rem)] lg:w-[min(72vw,34rem)]"
-            initial={{ opacity: 0, y: 8, scale: 0.96 }}
+            className="pointer-events-auto min-w-0 flex-1 max-w-[min(100%,30rem)]"
+            initial={{ opacity: 0 }}
             animate={
               phase === "chicoEntering"
-                ? { opacity: 0.15, y: 6, scale: 0.97 }
+                ? { opacity: 0.2 }
                 : phase === "chicoSpeaking" || phase === "chicoExiting"
-                  ? { opacity: 1, y: 0, scale: 1 }
-                  : { opacity: 0, y: 8, scale: 0.96 }
+                  ? { opacity: 1 }
+                  : { opacity: 0 }
             }
             transition={{ duration: phase === "chicoEntering" ? CHICO_ENTER_S * 0.55 : 0.35, ease: "easeOut" }}
           >
             <ChicoSecurityBubble
               tip={activeChicoTip}
-              onDismiss={handleDismiss}
               onDetailOpen={handleTipDetailOpen}
               onDetailClose={handleTipDetailClose}
             />
           </motion.div>
+          </div>
         </div>
       )}
       </div>
@@ -433,40 +416,27 @@ export default function DiagnosticPromoBanner({ onSlotRelease }: Props) {
 function DumboBannerInner({
   walkFrame,
   sitting,
-  onDismiss,
   onStartDiagnostic,
 }: {
   walkFrame: number;
   sitting: boolean;
-  onDismiss: () => void;
   onStartDiagnostic: () => void;
 }) {
   const ropeGradientId = useId().replace(/:/g, "");
   const sprite = sitting ? DUMBO_SIT_SPRITE : (WALK_FRAMES_DUMBO[walkFrame] ?? WALK_FRAMES_DUMBO[0]);
 
   return (
-    <div className="pointer-events-none flex items-end gap-1 md:gap-1.5">
-      <div className="relative w-full max-w-[min(82vw,540px)] shrink-0 lg:max-w-[min(700px,56vw)]">
+    <div className="pointer-events-none flex w-full min-w-0 max-w-full items-end gap-1 md:gap-1.5">
+      <div className="relative min-w-0 flex-1 max-w-[min(100%,520px)]">
         <div
           className="pointer-events-auto relative overflow-visible rounded-2xl border-[2.5px] border-[#39F4FF]/90 bg-gradient-to-br from-[#4c1d95] via-[#1e3a8a] to-[#0f766e] px-4 py-3 pb-3 shadow-[0_16px_40px_-10px_rgba(15,23,42,0.45),0_0_36px_-8px_rgba(34,211,238,0.35),inset_0_1px_0_0_rgba(255,255,255,0.22)] ring-2 ring-black/25 md:flex md:flex-row md:items-center md:gap-6 md:px-5 md:py-3.5 md:pb-3.5 lg:gap-8 lg:px-6 lg:py-4"
         >
           <div aria-hidden className="pointer-events-none absolute inset-[2px] rounded-[0.875rem] bg-gradient-to-b from-white/18 via-transparent to-black/22 md:rounded-[1.05rem]" />
-          <button
-            type="button"
-            onClick={onDismiss}
-            className="pointer-events-auto absolute right-3 top-3 z-[5] flex h-8 w-8 items-center justify-center rounded-full border border-white/30 bg-black/35 text-[#ECFEFF] shadow-lg backdrop-blur-sm hover:bg-black/55 md:right-4 md:top-4"
-            aria-label="Cerrar aviso del diagnóstico ARGOS"
-          >
-            <span aria-hidden className="text-lg font-light leading-none">
-              ×
-            </span>
-          </button>
-
-          <div className="relative z-[1] min-w-0 flex-1 pt-2.5 pr-9 md:min-w-[14rem] md:pt-0 md:pr-10 lg:pr-12">
-            <p className="text-base font-bold leading-tight tracking-tight text-white drop-shadow md:text-lg lg:text-xl">
+          <div className="relative z-[1] min-w-0 flex-1 md:min-w-[12rem]">
+            <p className="min-h-[2.5rem] text-base font-bold leading-tight tracking-tight text-white drop-shadow md:min-h-[2.75rem] md:text-lg lg:text-xl">
               {PROMO_TEXT_MAIN}
             </p>
-            <p className="mt-1.5 text-sm font-black leading-tight text-balance md:text-[0.9375rem] lg:text-base">
+            <p className="mt-1.5 min-h-[2.5rem] text-sm font-black leading-tight text-balance md:min-h-[2.25rem] md:text-[0.9375rem] lg:text-base">
               <span className="text-[#fca5a5]">{PROMO_HIGHLIGHT_PARTS[0]}</span>
               <span className="font-bold tracking-wide text-white/55">{" · "}</span>
               <span className="text-[#6ee7b7]">{PROMO_HIGHLIGHT_PARTS[1]}</span>
@@ -522,7 +492,7 @@ function DumboBannerInner({
       </svg>
 
       <div
-        className="relative shrink-0 -scale-x-100 brightness-[1.06] saturate-[1.15] contrast-[1.05] drop-shadow-[0_14px_32px_-6px_rgba(15,23,42,0.55)]"
+        className={`relative shrink-0 ${DUMBO_SPRITE_BOX} -scale-x-100 brightness-[1.06] saturate-[1.15] contrast-[1.05] drop-shadow-[0_14px_32px_-6px_rgba(15,23,42,0.55)]`}
         aria-hidden
       >
         <Image
@@ -530,8 +500,8 @@ function DumboBannerInner({
           alt=""
           width={128}
           height={128}
-          sizes="(max-width: 1024px) 92px, 112px"
-          className="h-[4.85rem] w-auto object-contain md:h-[5.5rem] lg:h-[6.125rem]"
+          sizes="(max-width: 1024px) 80px, 96px"
+          className="h-full w-full object-contain object-bottom"
           priority={false}
         />
       </div>
@@ -541,12 +511,10 @@ function DumboBannerInner({
 
 function ChicoSecurityBubble({
   tip,
-  onDismiss,
   onDetailOpen,
   onDetailClose
 }: {
   tip: ChicoTip | null;
-  onDismiss: () => void;
   onDetailOpen?: () => void;
   onDetailClose?: () => void;
 }) {
@@ -575,7 +543,7 @@ function ChicoSecurityBubble({
   return (
     <>
     <aside
-      className="pointer-events-none relative z-[6] max-w-[100%]"
+      className="pointer-events-none relative z-[6] w-full max-w-full overflow-visible pb-1"
       aria-label={`${CHICO_SECURITY_A11Y_ROLE}. ${advice}`}
     >
       <div
@@ -588,17 +556,20 @@ function ChicoSecurityBubble({
       />
       <div
         role="presentation"
-        className="pointer-events-auto relative overflow-hidden rounded-2xl border-[2px] border-[#2DD4BF]/95 bg-[#0f172a] p-4 pr-14 shadow-[0_14px_36px_-10px_rgba(8,51,68,0.55),inset_0_1px_0_0_rgba(148,239,238,0.12)] md:p-5 md:pr-16"
+        className="pointer-events-auto relative overflow-hidden rounded-2xl border-[2px] border-[#2DD4BF]/95 bg-[#0f172a] p-4 shadow-[0_14px_36px_-10px_rgba(8,51,68,0.55),inset_0_1px_0_0_rgba(148,239,238,0.12)] md:p-5"
       >
         <div aria-hidden className={`pointer-events-none absolute inset-0 rounded-[calc(1rem-1px)] opacity-95 bg-[linear-gradient(145deg,#0c1929_0%,#082f49_52%,#0e7490_120%)]`} />
         <div className={`absolute inset-[1px] rounded-[calc(1rem-2px)] bg-[linear-gradient(180deg,rgba(148,239,238,0.14)_0%,transparent_45%,rgba(15,118,110,0.08)_100%)]`} aria-hidden />
         <p className="relative z-[1] mb-1 text-xs font-black uppercase leading-tight tracking-[0.08em] text-[#67E8F9] md:text-sm">
           Consejo práctico
         </p>
-        <h3 className="relative z-[1] text-sm font-black leading-snug text-[#ECFEFF] md:text-base" id={titleId}>
+        <h3
+          className="relative z-[1] min-h-[2.5rem] text-sm font-black leading-snug text-[#ECFEFF] md:min-h-[2.75rem] md:text-base"
+          id={titleId}
+        >
           {tip.titulo}
         </h3>
-        <p className="relative z-[1] mt-2 text-sm font-medium leading-snug text-[#E0F2FE]/95 md:text-[0.9375rem]">
+        <p className="relative z-[1] mt-2 min-h-[3rem] text-sm font-medium leading-snug text-[#E0F2FE]/95 md:min-h-[3.25rem] md:text-[0.9375rem]">
           {tip.mensajeCorto}
         </p>
         <button
@@ -608,16 +579,6 @@ function ChicoSecurityBubble({
           className="relative z-[1] mt-3 inline-flex min-h-[40px] items-center rounded-lg border border-[#5EEAD4]/45 bg-[#082f49]/80 px-3 py-2 text-left text-xs font-black uppercase tracking-wide text-[#A5F3FC] shadow-sm ring-1 ring-[#2DD4BF]/30 transition hover:bg-[#0c4a6e]/90 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 md:text-[13px]"
         >
           Ver explicación y pasos
-        </button>
-        <button
-          type="button"
-          onClick={onDismiss}
-          className="pointer-events-auto absolute right-2.5 top-2.5 z-[5] flex h-8 w-8 items-center justify-center rounded-full border border-teal-200/35 bg-black/40 text-teal-50 shadow backdrop-blur-sm hover:bg-teal-950/60 md:right-3 md:top-3"
-          aria-label="Cerrar mensajes promocionales ARGOS del encabezado"
-        >
-          <span aria-hidden className="text-lg font-light leading-none">
-            ×
-          </span>
         </button>
       </div>
     </aside>
@@ -740,11 +701,11 @@ function ChicoTipDetailModal({
 /** Alterna Dumbo y Chico con transiciones suaves sin recorridos largos en el viewport. */
 function ReducedMotionAlternate({
   entranceDelayMs,
-  onDismiss,
+  embeddedInHeader = false,
   onStartDiagnostic,
 }: {
   entranceDelayMs: number;
-  onDismiss: () => void;
+  embeddedInHeader?: boolean;
   onStartDiagnostic: () => void;
 }) {
   type RM = "idle" | "visibleDumbo" | "gapA" | "visibleChico" | "gapB";
@@ -823,7 +784,9 @@ function ReducedMotionAlternate({
     >
       {/* Dumbo: misma tarjeta y botón */}
       <motion.div
-        className={`relative flex w-full max-w-[min(100%,52rem)] items-end gap-5 pr-12 md:pr-16 lg:pr-[4.75rem] ${showDumbo ? "pointer-events-auto" : "pointer-events-none"}`}
+        className={`relative flex w-full max-w-full items-end gap-3 ${
+          embeddedInHeader ? "pr-1 md:pr-2" : "max-w-[min(100%,52rem)] gap-5 pr-12 md:pr-16 lg:pr-[4.75rem]"
+        } ${showDumbo ? "pointer-events-auto" : "pointer-events-none"}`}
         initial={false}
         animate={{ opacity: showDumbo ? 1 : 0, y: showDumbo ? 0 : 14 }}
         transition={{ duration: 0.42, ease: "easeOut" }}
@@ -833,16 +796,16 @@ function ReducedMotionAlternate({
       >
         <div className="flex min-h-[5.5rem] flex-1 items-end justify-start">
           <div className="pointer-events-none w-full max-w-full space-y-0">
-            <DumboReducedCard onDismiss={onDismiss} onStartDiagnostic={onStartDiagnostic} />
+            <DumboReducedCard onStartDiagnostic={onStartDiagnostic} />
           </div>
         </div>
-        <div className="shrink-0" aria-hidden>
+        <div className={`shrink-0 ${DUMBO_SPRITE_BOX}`} aria-hidden>
           <Image
             src={DUMBO_SIT_SPRITE}
             alt=""
             width={104}
             height={104}
-            className="h-[4rem] w-auto -scale-x-100 object-contain drop-shadow-[0_12px_22px_-6px_rgba(15,23,42,0.5)] md:h-[4.5rem]"
+            className="h-full w-full -scale-x-100 object-contain object-bottom drop-shadow-[0_12px_22px_-6px_rgba(15,23,42,0.5)]"
           />
         </div>
       </motion.div>
@@ -863,18 +826,18 @@ function ReducedMotionAlternate({
         aria-label={`${CHICO_SECURITY_A11Y_ROLE}. ${activeChicoAdvice}`}
         aria-live={showChico ? "polite" : undefined}
       >
-        <Image
-          src={CHICO_ATTENTIVE}
-          alt=""
-          width={104}
-          height={104}
-          className="h-[4rem] shrink-0 object-contain drop-shadow-[0_12px_22px_-6px_rgba(15,23,42,0.5)] md:h-[4.5rem]"
-          aria-hidden
-        />
+        <div className={`shrink-0 ${CHICO_SPRITE_BOX}`} aria-hidden>
+          <Image
+            src={CHICO_ATTENTIVE}
+            alt=""
+            width={104}
+            height={104}
+            className="h-full w-full object-contain object-bottom drop-shadow-[0_12px_22px_-6px_rgba(15,23,42,0.5)]"
+          />
+        </div>
         <div className="max-w-[min(100%,30rem)] shrink">
           <ChicoSecurityBubble
             tip={chicoSlice}
-            onDismiss={onDismiss}
             onDetailOpen={handleTipDetailOpen}
             onDetailClose={handleTipDetailClose}
           />
@@ -884,27 +847,11 @@ function ReducedMotionAlternate({
   );
 }
 
-function DumboReducedCard({
-  onDismiss,
-  onStartDiagnostic,
-}: {
-  onDismiss: () => void;
-  onStartDiagnostic: () => void;
-}) {
+function DumboReducedCard({ onStartDiagnostic }: { onStartDiagnostic: () => void }) {
   return (
-    <div className="relative flex w-full max-w-[min(100%,700px)] flex-col gap-4 overflow-visible rounded-2xl border-[2.5px] border-[#39F4FF]/90 bg-gradient-to-br from-[#4c1d95] via-[#1e3a8a] to-[#0f766e] p-4 pr-[3rem] pb-5 pt-[2.75rem] shadow-[0_16px_40px_-10px_rgba(15,23,42,0.45),inset_0_1px_0_0_rgba(255,255,255,0.22)] ring-2 ring-black/25 md:flex-row md:items-center md:gap-6 md:p-5 md:pr-20 lg:gap-8 lg:p-6 lg:pr-20">
+    <div className="relative flex w-full max-w-[min(100%,700px)] flex-col gap-4 overflow-visible rounded-2xl border-[2.5px] border-[#39F4FF]/90 bg-gradient-to-br from-[#4c1d95] via-[#1e3a8a] to-[#0f766e] p-4 pb-5 shadow-[0_16px_40px_-10px_rgba(15,23,42,0.45),inset_0_1px_0_0_rgba(255,255,255,0.22)] ring-2 ring-black/25 md:flex-row md:items-center md:gap-6 md:p-5 lg:gap-8 lg:p-6">
       <div aria-hidden className="pointer-events-none absolute inset-[2px] rounded-[0.9rem] bg-gradient-to-b from-white/16 via-transparent to-black/23 md:rounded-[1.05rem]" />
-      <button
-        type="button"
-        onClick={onDismiss}
-        className="absolute right-3 top-3 z-[5] flex h-8 w-8 items-center justify-center rounded-full border border-white/30 bg-black/35 text-[#ECFEFF] shadow-lg backdrop-blur-sm hover:bg-black/55 md:right-4 md:top-4"
-        aria-label="Cerrar aviso del diagnóstico ARGOS"
-      >
-        <span aria-hidden className="text-lg font-light leading-none">
-          ×
-        </span>
-      </button>
-      <div className="relative z-[1] min-w-0 flex-1 pt-6 md:min-w-[14rem] md:pt-0 lg:pb-6">
+      <div className="relative z-[1] min-w-0 flex-1 md:min-w-[14rem] lg:pb-6">
         <p className="text-base font-bold leading-tight tracking-tight text-white drop-shadow-md md:text-lg lg:text-xl">
           {PROMO_TEXT_MAIN}
         </p>
