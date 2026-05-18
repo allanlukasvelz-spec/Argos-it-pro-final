@@ -93,8 +93,9 @@ export default function DiagnosticPromoBanner({ embeddedInHeader = false }: Prop
   const dumboSlotPadEnd = embeddedInHeader ? "pr-1 md:pr-2" : "pr-6 md:pr-10 lg:pr-12";
   const chicoSpriteBox = embeddedInHeader ? CHICO_SPRITE_BOX_HEADER : CHICO_SPRITE_BOX;
   const dumboSpriteBox = embeddedInHeader ? DUMBO_SPRITE_BOX_HEADER : DUMBO_SPRITE_BOX;
-  const chicoClusterMaxW = embeddedInHeader ? "max-w-[min(100%,28rem)]" : "max-w-[min(100%,44rem)]";
-  const chicoBubbleMaxW = embeddedInHeader ? "max-w-[min(100%,28rem)]" : "max-w-[min(100%,30rem)]";
+  /** Cluster Chico: en header el globo usa 31rem (como Dumbo); el cluster debe abarcar mascota + globo. */
+  const chicoClusterMaxW = embeddedInHeader ? "w-full max-w-full" : "max-w-[min(100%,44rem)]";
+  const chicoBubbleMaxW = embeddedInHeader ? "w-full max-w-[min(100%,31rem)]" : "max-w-[min(100%,30rem)]";
   const phaseRef = useRef<CyclePhase>("idle");
   const pendingNextRef = useRef<"dumbo" | "chico">("dumbo");
   const tipOrderRef = useRef(0);
@@ -611,7 +612,7 @@ function ChicoSecurityBubble({
         role="presentation"
         className={
           embeddedInHeader
-            ? "pointer-events-auto relative overflow-hidden rounded-2xl border-[2px] border-[#2DD4BF]/95 bg-[#0f172a] px-4 py-3 shadow-[0_14px_36px_-10px_rgba(8,51,68,0.55),inset_0_1px_0_0_rgba(148,239,238,0.12)] md:py-3.5"
+            ? "pointer-events-auto relative w-full overflow-hidden rounded-2xl border-[2px] border-[#2DD4BF]/95 bg-[#0f172a] px-4 py-3 shadow-[0_14px_36px_-10px_rgba(8,51,68,0.55),inset_0_1px_0_0_rgba(148,239,238,0.12)] md:py-3.5"
             : "pointer-events-auto relative overflow-hidden rounded-2xl border-[2px] border-[#2DD4BF]/95 bg-[#0f172a] p-4 shadow-[0_14px_36px_-10px_rgba(8,51,68,0.55),inset_0_1px_0_0_rgba(148,239,238,0.12)] md:p-5"
         }
       >
@@ -906,7 +907,7 @@ function ReducedMotionAlternate({
             className="h-full w-full object-contain object-bottom drop-shadow-[0_12px_22px_-6px_rgba(15,23,42,0.5)]"
           />
         </div>
-        <div className={`shrink ${embeddedInHeader ? "max-w-[min(100%,28rem)]" : "max-w-[min(100%,30rem)]"}`}>
+        <div className={`shrink ${embeddedInHeader ? "w-full max-w-[min(100%,31rem)]" : "max-w-[min(100%,30rem)]"}`}>
           <ChicoSecurityBubble
             tip={chicoSlice}
             embeddedInHeader={embeddedInHeader}
