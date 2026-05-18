@@ -29,7 +29,8 @@
     "method": "Method",
     "about": "About ARGOS-IT",
     "contact": "Contact",
-    "menu": "Menu"
+    "menu": "Menu",
+    "startDiagnostic": "Start ARGOS diagnostic"
   },
   "actions": {
     "requestConsultation": "Request consultation",

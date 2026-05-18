@@ -154,7 +154,7 @@ export default function ContactView() {
   return (
     <ArgosPageShell variant="contact">
       <header className="py-12">
-        <div className="mx-auto max-w-6xl px-6">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 md:px-8">
           <Link href="/" className="mb-6 inline-block text-[#39F4FF] hover:underline">
             ← {t("actions.backHome")}
           </Link>
@@ -163,12 +163,12 @@ export default function ContactView() {
         </div>
       </header>
 
-      <section className="px-6 py-14">
-        <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.95fr_1.05fr]">
+      <section className="px-4 py-14 sm:px-6 md:px-8">
+        <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-[0.95fr_1.05fr]">
           <motion.div {...fadeIn} className="mb-12">
             <p className="mb-8 text-lg leading-8 text-[#D7E8F6]">{t("contact.intro")}</p>
 
-            <div className="mb-12 grid gap-5 sm:grid-cols-3">
+            <div className="mb-12 grid grid-cols-1 gap-5 min-[480px]:grid-cols-3">
               <div className="argos-hologram-card p-5">
                 <h3 className="mb-2 text-lg font-bold text-white">{t("contact.cards.emailTitle")}</h3>
                 <a href="mailto:info@argos-it.com" className="text-[#39F4FF] hover:underline">

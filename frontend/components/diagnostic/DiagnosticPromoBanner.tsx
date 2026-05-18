@@ -82,12 +82,12 @@ const CHICO_SPRITE_BOX = "h-[3.85rem] w-[3.85rem] md:h-[4.35rem] md:w-[4.35rem] 
 const CHICO_SPRITE_BOX_HEADER =
   "h-[70px] w-[70px] shrink-0 lg:h-[78px] lg:w-[78px] xl:h-[84px] xl:w-[84px]";
 
-/** Globo Chico en header por breakpoint (ancho fijo, layout horizontal en md+). */
+/** Globo Chico en header por breakpoint (min-w-0 en tablet para caber en slot sin overflow). */
 const CHICO_BUBBLE_EMBEDDED =
-  "w-full shrink-0 md:w-[520px] md:max-w-[520px] md:min-w-[500px] lg:w-[660px] lg:max-w-[660px] lg:min-w-[620px] xl:w-[720px] xl:max-w-[720px] xl:min-w-[680px]";
+  "w-full max-w-full min-w-0 shrink-0 md:w-[min(100%,520px)] md:max-w-[min(100%,520px)] md:min-w-0 lg:w-[660px] lg:max-w-[660px] lg:min-w-[620px] xl:w-[720px] xl:max-w-[720px] xl:min-w-[680px]";
 /** Tarjeta Dumbo en header por breakpoint. */
 const DUMBO_CARD_EMBEDDED =
-  "w-full md:w-[540px] md:max-w-[540px] md:min-w-[510px] lg:w-[700px] lg:max-w-[700px] lg:min-w-[660px] xl:w-[740px] xl:max-w-[740px] xl:min-w-[700px]";
+  "w-full max-w-full min-w-0 md:w-[min(100%,540px)] md:max-w-[min(100%,540px)] md:min-w-0 lg:w-[700px] lg:max-w-[700px] lg:min-w-[660px] xl:w-[740px] xl:max-w-[740px] xl:min-w-[700px]";
 
 function formatChicoAdviceForA11y(tip: ChicoTip) {
   return `Consejo de Chico: ${tip.titulo}. ${tip.mensajeCorto}`;
@@ -475,7 +475,7 @@ function DumboBannerInner({
             <p
               className={
                 embeddedInHeader
-                  ? "line-clamp-1 text-base font-bold leading-tight tracking-tight text-white drop-shadow md:text-lg"
+                  ? "line-clamp-2 text-base font-bold leading-tight tracking-tight text-white drop-shadow md:text-lg"
                   : "min-h-[2.5rem] text-base font-bold leading-tight tracking-tight text-white drop-shadow md:min-h-[2.75rem] md:text-lg lg:text-xl"
               }
             >
@@ -993,7 +993,7 @@ function DumboReducedCard({
         <p
           className={
             embeddedInHeader
-              ? "line-clamp-1 text-base font-bold leading-tight tracking-tight text-white drop-shadow-md md:text-lg"
+              ? "line-clamp-2 text-base font-bold leading-tight tracking-tight text-white drop-shadow-md md:text-lg"
               : "text-base font-bold leading-tight tracking-tight text-white drop-shadow-md md:text-lg lg:text-xl"
           }
         >

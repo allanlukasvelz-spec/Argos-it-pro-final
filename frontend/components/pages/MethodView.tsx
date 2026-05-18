@@ -76,7 +76,7 @@ export default function MethodView() {
           No esperamos a que algo falle. Analizamos, reforzamos y acompañamos para prevenir problemas antes de que afecten a tu negocio.
         </p>
 
-        <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-5">
+        <div className="mt-10 grid grid-cols-2 gap-5 min-[480px]:grid-cols-3 md:grid-cols-3 xl:grid-cols-5">
           {methodDetails.map((step) => (
             <Link key={step.id} href={`#${step.id}`} className="argos-hologram-card p-6 transition hover:-translate-y-1 hover:border-[#18D4F7]/45">
               <p className="text-sm font-black text-[#39F4FF]">{step.letter}</p>
@@ -88,7 +88,7 @@ export default function MethodView() {
 
         <div className="mt-12 grid gap-6">
           {methodDetails.map((detail) => (
-            <section key={detail.id} id={detail.id} className="argos-hologram-card scroll-mt-28 p-6 md:p-8">
+            <section key={detail.id} id={detail.id} className="argos-hologram-card scroll-mt-[calc(var(--header-h)+1rem)] p-6 md:p-8">
               <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                 <div>
                   <p className="text-sm font-black uppercase text-[#18D4F7]">{detail.letter} · {detail.title}</p>

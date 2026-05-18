@@ -9,6 +9,41 @@
   --argos-cyan: #38bdf8;
   --argos-silver: #e5e7eb;
   --argos-graphite: #111827;
+  /* Aligned with SiteHeader heights for scroll-margin / layout */
+  --header-h: 88px;
+  --header-px: 16px;
+  --content-max: 80rem;
+}
+
+@media (min-width: 480px) {
+  :root {
+    --header-h: 96px;
+    --header-px: 20px;
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --header-h: 190px;
+    --header-px: 32px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --header-h: 200px;
+    --header-px: 40px;
+  }
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --header-px: 56px;
+  }
+}
+
+html {
+  scroll-padding-top: var(--header-h);
 }
 
 * {

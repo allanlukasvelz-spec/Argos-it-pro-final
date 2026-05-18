@@ -3,9 +3,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supportedLocales, type Locale } from "@/i18n/config";
 import DiagnosticPromoBanner from "@/components/diagnostic/DiagnosticPromoBanner";
+import { useDiagnosticSurveyLauncher } from "@/components/diagnostic/DiagnosticSurveyLauncher";
 import { useI18n } from "@/i18n/useI18n";
 
 type NavItem = {
@@ -24,6 +25,7 @@ const navItems: NavItem[] = [
 export default function SiteHeader() {
   const pathname = usePathname();
   const { locale, setLocale, t } = useI18n();
+  const { openDiagnostic } = useDiagnosticSurveyLauncher();
   const [open, setOpen] = useState(false);
   const menuId = "site-navigation-menu";
 
@@ -32,20 +34,34 @@ export default function SiteHeader() {
     return pathname.startsWith(href);
   };
 
+  useEffect(() => {
+    if (!open) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onEsc = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("keydown", onEsc);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      document.removeEventListener("keydown", onEsc);
+    };
+  }, [open]);
+
   return (
     <header className="sticky top-0 z-50 overflow-visible border-b border-[#E5E7EB] bg-white/95 backdrop-blur">
-      {/* Una sola barra: móvil 88–96px | tablet 190px | desktop 200px */}
+      {/* Una sola barra: móvil 88–96px | tablet 190px | desktop 200px; overflow-x-clip evita scroll horizontal en tablet estrecha */}
       <div
-        className={`mx-auto grid w-full max-w-[100rem] grid-cols-[1fr_auto] items-center overflow-visible
+        className={`mx-auto grid w-full max-w-[100rem] grid-cols-[1fr_auto] items-center overflow-x-clip overflow-y-visible md:overflow-x-clip
           h-[88px] min-h-[88px] max-h-[88px] px-4
           min-[480px]:h-[96px] min-[480px]:min-h-[96px] min-[480px]:max-h-[96px] min-[480px]:px-5
-          md:grid-cols-[210px_minmax(500px,1fr)_96px] md:h-[190px] md:min-h-[190px] md:max-h-[190px] md:px-8 md:items-center
-          lg:grid-cols-[240px_minmax(680px,1fr)_120px] lg:h-[200px] lg:min-h-[200px] lg:max-h-[200px] lg:px-10
-          xl:grid-cols-[260px_minmax(820px,1fr)_140px] xl:px-14`}
+          md:grid-cols-[minmax(0,min(210px,28vw))_minmax(0,1fr)_minmax(0,min(96px,14vw))] md:h-[190px] md:min-h-[190px] md:max-h-[190px] md:px-8 md:items-center
+          lg:grid-cols-[240px_minmax(0,1fr)_120px] lg:h-[200px] lg:min-h-[200px] lg:max-h-[200px] lg:px-10
+          xl:grid-cols-[260px_minmax(0,1fr)_140px] xl:px-[var(--header-px)]`}
       >
         <Link
           href="/"
-          className="relative z-[46] col-start-1 row-start-1 flex shrink-0 items-center justify-self-start overflow-visible"
+          className="relative z-[46] col-start-1 row-start-1 flex min-w-0 shrink-0 items-center justify-self-start overflow-visible"
           aria-label="ARGOS-IT home"
           onClick={() => setOpen(false)}
         >
@@ -62,7 +78,7 @@ export default function SiteHeader() {
         {/* Slot central: oculto en móvil; tablet+ con alturas fijas */}
         <div
           className={`relative col-start-1 row-start-1 hidden min-w-0 overflow-visible transition-opacity duration-300 ease-out
-            md:col-start-2 md:flex md:h-[154px] md:min-h-[154px] md:max-h-[154px] md:w-full md:max-w-[620px] md:justify-self-center
+            md:col-start-2 md:flex md:h-[154px] md:min-h-[154px] md:max-h-[154px] md:w-full md:max-w-[min(100%,620px)] md:justify-self-center
             lg:h-[164px] lg:min-h-[164px] lg:max-h-[164px] lg:max-w-[820px]
             xl:max-w-[920px]
             ${open ? "pointer-events-none invisible opacity-0" : "opacity-100"}`}
@@ -93,7 +109,13 @@ export default function SiteHeader() {
       </div>
 
       {open && (
-        <div id={menuId} className="relative z-[55] border-t border-[#E5E7EB] bg-white/95 px-5 py-5 shadow-lg">
+        <div
+          id={menuId}
+          role="dialog"
+          aria-modal="true"
+          aria-label={t("nav.menu")}
+          className="relative z-[55] border-t border-[#E5E7EB] bg-white/95 px-5 py-5 shadow-lg"
+        >
           <div className="mx-auto grid max-w-7xl gap-5 lg:grid-cols-[1fr_auto] lg:px-3">
             <nav className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5" aria-label={t("nav.menu")}>
               {navItems.map((item) => (
@@ -111,6 +133,17 @@ export default function SiteHeader() {
                 </Link>
               ))}
             </nav>
+
+            <button
+              type="button"
+              className="md:hidden rounded-md border border-[#22d3ee]/80 bg-[#ECFEFF] px-4 py-3 text-center text-sm font-black text-[#082f49] shadow-sm transition hover:bg-[#cffafe]"
+              onClick={() => {
+                setOpen(false);
+                openDiagnostic();
+              }}
+            >
+              {t("nav.startDiagnostic")}
+            </button>
 
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center lg:justify-end">
               <div className="flex items-center gap-2">

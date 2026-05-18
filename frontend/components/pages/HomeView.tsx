@@ -101,7 +101,7 @@ export default function HomeView() {
         <Link href="/contacto" className="argos-side-nav__item">{t("nav.contact")}</Link>
       </nav>
 
-      <section className="px-5 pb-16 pt-16 lg:px-8 lg:pb-24 lg:pt-24">
+      <section className="max-[860px]:pt-[calc(var(--header-h)+2.75rem)] px-5 pb-16 pt-16 lg:px-8 lg:pb-24 lg:pt-24">
         <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.08fr_.92fr]">
           <div className="max-w-4xl">
             <p className="argos-status-dot mb-5">{t("home.eyebrow")}</p>
@@ -177,7 +177,7 @@ export default function HomeView() {
               Ver método completo
             </Link>
           </div>
-          <div className="grid gap-3 sm:grid-cols-5">
+          <div className="grid grid-cols-2 gap-3 min-[480px]:grid-cols-3 md:grid-cols-3 xl:grid-cols-5">
             {argosMethodCards.map((step) => (
               <Link
                 key={step.id}

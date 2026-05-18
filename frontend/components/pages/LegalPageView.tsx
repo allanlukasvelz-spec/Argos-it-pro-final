@@ -26,7 +26,7 @@ export default function LegalPageView({ type }: Props) {
 
   return (
     <ArgosPageShell variant="legal">
-      <header className="px-6 py-12">
+      <header className="px-4 py-12 sm:px-6 md:px-8">
         <div className="mx-auto max-w-4xl">
           <Link href="/" className="mb-6 inline-block text-[#39F4FF] hover:underline">
             ← {t("actions.backHome")}
@@ -36,12 +36,12 @@ export default function LegalPageView({ type }: Props) {
         </div>
       </header>
 
-      <section className="px-6 py-12">
-        <div className="mx-auto max-w-4xl space-y-6 text-[#4B5563]">
+      <section className="px-4 py-12 sm:px-6 md:px-8">
+        <div className="mx-auto max-w-3xl space-y-6 text-[#4B5563]">
           {sections.map((section) => (
-            <article key={section.title} className="rounded-xl border border-[#E5E7EB] bg-white p-6 shadow-sm">
-              <h2 className="text-xl font-black text-[#111827]">{section.title}</h2>
-              <p className="mt-3 text-sm leading-7">{section.body}</p>
+            <article key={section.title} className="rounded-xl border border-[#E5E7EB] bg-white p-5 shadow-sm sm:p-6">
+              <h2 className="text-lg font-black text-[#111827] md:text-xl">{section.title}</h2>
+              <p className="mt-3 text-sm leading-7 md:text-base">{section.body}</p>
             </article>
           ))}
         </div>

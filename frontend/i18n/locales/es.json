@@ -31,7 +31,8 @@
     "method": "Método",
     "about": "Sobre ARGOS-IT",
     "contact": "Contacto",
-    "menu": "Menú"
+    "menu": "Menú",
+    "startDiagnostic": "Iniciar diagnóstico ARGOS"
   },
   "actions": {
     "requestConsultation": "Solicitar consulta",

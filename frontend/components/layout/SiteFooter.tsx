@@ -2,14 +2,16 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useDiagnosticSurveyLauncher } from "@/components/diagnostic/DiagnosticSurveyLauncher";
 import { useI18n } from "@/i18n/useI18n";
 
 export default function SiteFooter() {
   const { t } = useI18n();
+  const { openDiagnostic } = useDiagnosticSurveyLauncher();
 
   return (
     <footer className="border-t border-[#E5E7EB] bg-white">
-      <div className="mx-auto grid max-w-7xl gap-8 px-5 py-10 md:grid-cols-[2fr_1fr_1fr] lg:px-8">
+      <div className="mx-auto grid max-w-7xl gap-8 px-4 py-8 md:grid-cols-[2fr_1fr_1fr] md:px-5 md:py-10 lg:px-8">
         <div>
           <div className="flex items-center">
             <Image
@@ -32,6 +34,13 @@ export default function SiteFooter() {
             <Link href="/sobre-argos-it">{t("nav.about")}</Link>
             <Link href="/contacto">{t("nav.contact")}</Link>
           </div>
+          <button
+            type="button"
+            className="mt-4 md:hidden rounded-md border border-[#22d3ee]/80 bg-[#ECFEFF] px-4 py-3 text-center text-xs font-black text-[#082f49] shadow-sm transition hover:bg-[#cffafe]"
+            onClick={() => openDiagnostic()}
+          >
+            {t("nav.startDiagnostic")}
+          </button>
         </div>
 
         <div className="text-sm">
@@ -44,7 +53,7 @@ export default function SiteFooter() {
         </div>
       </div>
 
-      <div className="border-t border-[#E5E7EB] px-5 py-4 text-center text-xs text-[#6B7280]">
+      <div className="border-t border-[#E5E7EB] px-4 py-4 text-center text-xs text-[#6B7280] md:px-5 lg:px-8">
         {t("footer.rights")}
       </div>
     </footer>

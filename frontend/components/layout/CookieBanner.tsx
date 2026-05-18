@@ -24,7 +24,7 @@ export default function CookieBanner() {
 
   return (
     <aside
-      className="fixed bottom-4 left-4 right-4 z-50 rounded-xl border border-[#BFDBFE] bg-white p-4 shadow-xl shadow-[#0B1E33]/10 md:left-auto md:max-w-md"
+      className="fixed bottom-4 left-4 right-4 z-[60] rounded-xl border border-[#BFDBFE] bg-white p-4 shadow-xl shadow-[#0B1E33]/10 md:left-auto md:max-w-md"
       aria-live="polite"
     >
       <p className="text-sm leading-6 text-[#1F2937]">{t("cookiesBanner.message")}</p>

@@ -882,7 +882,7 @@
     position: sticky;
     left: 12px;
     right: 12px;
-    top: 10px;
+    top: calc(var(--header-h, 96px) + 8px);
     bottom: auto;
     margin: 0 12px;
     display: flex;

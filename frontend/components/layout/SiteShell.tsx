@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import ClientAssistants from "@/components/ClientAssistants";
 import CookieBanner from "@/components/layout/CookieBanner";
+import { DiagnosticSurveyLauncherProvider } from "@/components/diagnostic/DiagnosticSurveyLauncher";
 import SiteFooter from "@/components/layout/SiteFooter";
 import SiteHeader from "@/components/layout/SiteHeader";
 
@@ -42,9 +43,15 @@ export default function SiteShell({ children }: Props) {
 
   return (
     <>
-      {!hideChrome && <SiteHeader />}
-      {children}
-      {!hideChrome && <SiteFooter />}
+      {!hideChrome ? (
+        <DiagnosticSurveyLauncherProvider>
+          <SiteHeader />
+          {children}
+          <SiteFooter />
+        </DiagnosticSurveyLauncherProvider>
+      ) : (
+        children
+      )}
       {!shouldHideAssistants(pathname) && <ClientAssistants />}
       {!pathname.startsWith("/dashboard") && pathname !== "/explainer" && <CookieBanner />}
     </>
