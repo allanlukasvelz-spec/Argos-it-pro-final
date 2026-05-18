@@ -490,7 +490,7 @@ function DumboBannerInner({
 
   return (
     <motion.div
-      className={`pointer-events-none flex w-full min-w-0 max-w-full flex-row items-end ${
+      className={`pointer-events-none relative flex w-full min-w-0 max-w-full flex-row items-end ${
         embeddedInHeader
           ? "justify-end gap-4 lg:gap-[18px] xl:gap-5"
           : "justify-center gap-1 md:gap-1.5"
@@ -953,7 +953,7 @@ function ReducedMotionAlternate({
       <motion.div
         className={`relative flex w-full max-w-full flex-row items-end ${
           embeddedInHeader
-            ? "justify-end gap-4 pr-1 md:gap-[18px] md:pr-2 xl:gap-5"
+            ? "justify-end gap-4 lg:gap-[18px] xl:gap-5"
             : "max-w-[min(100%,52rem)] justify-center gap-5 pr-12 md:pr-16 lg:pr-[4.75rem]"
         } ${showDumbo ? "pointer-events-auto" : "pointer-events-none"}`}
         initial={false}
@@ -974,7 +974,7 @@ function ReducedMotionAlternate({
         </motion.div>
         <button
           type="button"
-          className={`order-2 shrink-0 self-end ${embeddedInHeader ? DUMBO_SPRITE_BOX_HEADER : DUMBO_SPRITE_BOX} -scale-x-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400`}
+          className={`order-2 relative shrink-0 self-end ${embeddedInHeader ? DUMBO_SPRITE_BOX_HEADER : DUMBO_SPRITE_BOX} -scale-x-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400`}
           onClick={() => revealMascotPauseControls(pauseControl, "dumbo")}
           onKeyDown={(event) => onMascotPauseRevealKey(event, pauseControl, "dumbo")}
           aria-label="Mostrar controles de Dumbo"
