@@ -21,11 +21,6 @@ const navItems: NavItem[] = [
   { href: "/contacto", key: "nav.contact" }
 ];
 
-/** Una sola barra superior: ~180px (md) / ~190px (lg); máx. visual ~200px. */
-const HEADER_BAR_MIN_H = "min-h-[5.5rem] md:min-h-[11.25rem] lg:min-h-[11.875rem]";
-/** Slot central Chico/Dumbo: ~152px (md) / ~164px (lg). */
-const PROMO_SLOT_MIN_H = "min-h-[4.75rem] md:min-h-[9.5rem] lg:min-h-[10.25rem]";
-
 export default function SiteHeader() {
   const pathname = usePathname();
   const { locale, setLocale, t } = useI18n();
@@ -39,10 +34,18 @@ export default function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 overflow-visible border-b border-[#E5E7EB] bg-white/95 backdrop-blur">
-      <div className={`mx-auto flex max-w-7xl items-stretch gap-2 px-5 py-2 md:gap-3 md:py-2.5 lg:px-8 ${HEADER_BAR_MIN_H}`}>
+      {/* Una sola barra: móvil 88–96px | tablet 190px | desktop 200px */}
+      <div
+        className={`mx-auto grid w-full max-w-[100rem] grid-cols-[1fr_auto] items-center overflow-visible
+          h-[88px] min-h-[88px] max-h-[88px] px-4
+          min-[480px]:h-[96px] min-[480px]:min-h-[96px] min-[480px]:max-h-[96px] min-[480px]:px-5
+          md:grid-cols-[210px_minmax(500px,1fr)_96px] md:h-[190px] md:min-h-[190px] md:max-h-[190px] md:px-8 md:items-center
+          lg:grid-cols-[240px_minmax(680px,1fr)_120px] lg:h-[200px] lg:min-h-[200px] lg:max-h-[200px] lg:px-10
+          xl:grid-cols-[260px_minmax(820px,1fr)_140px] xl:px-14`}
+      >
         <Link
           href="/"
-          className="relative z-[46] flex shrink-0 items-center self-center overflow-visible"
+          className="relative z-[46] col-start-1 row-start-1 flex shrink-0 items-center justify-self-start overflow-visible"
           aria-label="ARGOS-IT home"
           onClick={() => setOpen(false)}
         >
@@ -51,15 +54,18 @@ export default function SiteHeader() {
             alt="Logo ARGOS-IT"
             width={360}
             height={138}
-            className="h-16 w-auto max-h-none object-contain object-center sm:h-[4.5rem]"
+            className="h-auto w-auto max-h-14 max-w-[150px] object-contain object-left min-[480px]:max-h-[3.75rem] min-[480px]:max-w-[170px] md:max-h-[4.5rem] md:max-w-[190px] lg:max-h-[5.125rem] lg:max-w-[220px] xl:max-h-[5.375rem] xl:max-w-[230px]"
             priority
           />
         </Link>
 
+        {/* Slot central: oculto en móvil; tablet+ con alturas fijas */}
         <div
-          className={`relative hidden min-w-0 flex-1 overflow-visible pb-3 transition-opacity duration-300 ease-out md:block md:pb-3 ${PROMO_SLOT_MIN_H} ${
-            open ? "pointer-events-none invisible opacity-0" : "opacity-100"
-          }`}
+          className={`relative col-start-1 row-start-1 hidden min-w-0 overflow-visible transition-opacity duration-300 ease-out
+            md:col-start-2 md:flex md:h-[154px] md:min-h-[154px] md:max-h-[154px] md:w-full md:max-w-[620px] md:justify-self-center
+            lg:h-[164px] lg:min-h-[164px] lg:max-h-[164px] lg:max-w-[820px]
+            xl:max-w-[920px]
+            ${open ? "pointer-events-none invisible opacity-0" : "opacity-100"}`}
           aria-hidden={open}
         >
           <DiagnosticPromoBanner embeddedInHeader />
@@ -67,7 +73,7 @@ export default function SiteHeader() {
 
         <button
           type="button"
-          className="relative z-[46] inline-flex min-h-[3rem] min-w-[3rem] shrink-0 items-center justify-center self-center rounded-lg border border-[#D9E2EF] bg-white px-3 py-3 text-[#0B1E33] shadow-sm transition hover:border-[#2563EB] hover:text-[#2563EB]"
+          className="relative z-[46] col-start-2 row-start-1 inline-flex h-11 w-11 shrink-0 items-center justify-center justify-self-end rounded-lg border border-[#D9E2EF] bg-white text-[#0B1E33] shadow-sm transition hover:border-[#2563EB] hover:text-[#2563EB] min-[480px]:h-[46px] min-[480px]:w-[46px] md:col-start-3 md:h-[52px] md:w-[52px] lg:h-14 lg:w-14"
           onClick={() => setOpen((prev) => !prev)}
           aria-label={t("nav.menu")}
           aria-controls={menuId}
