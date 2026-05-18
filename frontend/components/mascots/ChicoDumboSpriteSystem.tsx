@@ -3,6 +3,7 @@
 import Image from "next/image";
 import type { CSSProperties } from "react";
 import { useMascotChat } from "@/components/mascots/MascotChatContext";
+import { useMascotPauseControl } from "@/components/mascots/MascotPauseControlContext";
 import { useMascotController } from "@/hooks/useMascotController";
 import { useI18n } from "@/i18n/useI18n";
 import { chicoSprites, dumboSprites } from "@/sprites/spriteManifest";
@@ -26,6 +27,7 @@ export default function ChicoDumboSpriteSystem() {
   } = useMascotController();
   const { t } = useI18n();
   const { openChat, panelId, isOpenFor } = useMascotChat();
+  const { visible: pauseVisible, selectedMascot, showPauseFor } = useMascotPauseControl();
   const chicoBubble = t(chicoMessageKey);
   const dumboBubble = t(dumboMessageKey);
 
@@ -45,21 +47,32 @@ export default function ChicoDumboSpriteSystem() {
       style={rootStyle}
       aria-label="Chico y Dumbo"
     >
-      <button
-        type="button"
-        className="mascot__pause"
-        onClick={() => togglePause()}
-        aria-pressed={paused}
-        aria-label={paused ? t("mascots.activateMascots") : t("mascots.pauseMascots")}
-      >
-        {paused ? t("mascots.activateMascots") : t("mascots.pauseMascots")}
-      </button>
+      {pauseVisible && (
+        <button
+          type="button"
+          className={`mascot__pause mascot__pause--compact ${
+            selectedMascot === "dumbo" ? "mascot__pause--near-dumbo" : "mascot__pause--near-chico"
+          }`}
+          onClick={() => togglePause()}
+          aria-pressed={paused}
+          aria-label={paused ? t("mascots.activateMascots") : t("mascots.pauseMascots")}
+        >
+          {paused ? t("mascots.activateMascots") : t("mascots.pauseMascots")}
+        </button>
+      )}
 
       <aside className="mascot mascot--chico">
         <button
           type="button"
           className="mascot__sprite-button"
-          onClick={() => openChat("chico")}
+          onClick={() => {
+            showPauseFor("chico");
+            openChat("chico");
+          }}
+          onKeyDown={(event) => {
+            if (event.key !== "Enter" && event.key !== " ") return;
+            showPauseFor("chico");
+          }}
           onMouseEnter={() => applyEvent("hover")}
           onMouseLeave={() => applyEvent("idle")}
           aria-label={t("mascots.chicoAria")}
@@ -68,7 +81,7 @@ export default function ChicoDumboSpriteSystem() {
         >
           <Image
             src={chicoSprites[chico]}
-            alt={t("mascots.chicoAria")}
+            alt=""
             className={`mascot__img mascot__img--chico mascot__state--${chico}`}
             width={232}
             height={232}
@@ -76,15 +89,26 @@ export default function ChicoDumboSpriteSystem() {
             priority
           />
         </button>
-        <div className="mascot__bubble mascot__bubble--left">{chicoBubble}</div>
+        <div className="mascot__bubble mascot__bubble--left" onClick={(e) => e.stopPropagation()}>
+          {chicoBubble}
+        </div>
       </aside>
 
       <aside className="mascot mascot--dumbo">
-        <div className="mascot__bubble mascot__bubble--right">{dumboBubble}</div>
+        <div className="mascot__bubble mascot__bubble--right" onClick={(e) => e.stopPropagation()} role="presentation">
+          {dumboBubble}
+        </div>
         <button
           type="button"
           className="mascot__sprite-button"
-          onClick={() => openChat("dumbo")}
+          onClick={() => {
+            showPauseFor("dumbo");
+            openChat("dumbo");
+          }}
+          onKeyDown={(event) => {
+            if (event.key !== "Enter" && event.key !== " ") return;
+            showPauseFor("dumbo");
+          }}
           onMouseEnter={() => applyEvent("hover")}
           onMouseLeave={() => applyEvent("idle")}
           aria-label={t("mascots.dumboAria")}
@@ -93,7 +117,7 @@ export default function ChicoDumboSpriteSystem() {
         >
           <Image
             src={dumboSprites[dumbo]}
-            alt={t("mascots.dumboAria")}
+            alt=""
             className={`mascot__img mascot__img--dumbo mascot__state--${dumbo}`}
             width={208}
             height={208}

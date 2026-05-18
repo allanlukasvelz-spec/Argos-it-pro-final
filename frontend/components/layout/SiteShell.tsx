@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import ClientAssistants from "@/components/ClientAssistants";
+import { MascotPauseControlProvider } from "@/components/mascots/MascotPauseControlContext";
 import CookieBanner from "@/components/layout/CookieBanner";
 import { DiagnosticSurveyLauncherProvider } from "@/components/diagnostic/DiagnosticSurveyLauncher";
 import SiteFooter from "@/components/layout/SiteFooter";
@@ -42,7 +43,7 @@ export default function SiteShell({ children }: Props) {
   const hideChrome = shouldHideChrome(pathname);
 
   return (
-    <>
+    <MascotPauseControlProvider>
       {!hideChrome ? (
         <DiagnosticSurveyLauncherProvider>
           <SiteHeader />
@@ -54,6 +55,6 @@ export default function SiteShell({ children }: Props) {
       )}
       {!shouldHideAssistants(pathname) && <ClientAssistants />}
       {!pathname.startsWith("/dashboard") && pathname !== "/explainer" && <CookieBanner />}
-    </>
+    </MascotPauseControlProvider>
   );
 }

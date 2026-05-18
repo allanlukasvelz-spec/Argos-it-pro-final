@@ -62,31 +62,60 @@
 
 .mascot__pause{
   position:fixed;
-  left:12px;
-  bottom:calc(var(--mascot-dock-bottom) + min(32vw, 104px));
-  transform:none;
   z-index:46;
   pointer-events:auto;
-  max-width:min(200px,calc(100vw - 24px));
-  white-space:normal;
-  line-height:1.2;
-  text-align:center;
-  hyphens:auto;
-  border:1px solid #d4dbe6;
+  border:1px solid rgba(212,219,230,.65);
   border-radius:999px;
-  padding:6px 10px;
-  font-size:11px;
   font-weight:700;
   color:#0f172a;
-  background:rgba(255,255,255,.92);
+  background:rgba(255,255,255,.82);
+  backdrop-filter:blur(8px);
   cursor:pointer;
-  box-shadow:0 8px 20px rgba(15,23,42,.12);
+  box-shadow:0 4px 14px rgba(15,23,42,.1);
+  transition:background-color .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+
+.mascot__pause--compact{
+  max-width:min(168px,calc(100vw - 24px));
+  height:28px;
+  padding:0 10px;
+  font-size:11px;
+  line-height:1;
+  white-space:nowrap;
+  text-align:center;
+}
+
+.mascot__pause--near-chico{
+  left:12px;
+  right:auto;
+  bottom:calc(var(--mascot-dock-bottom) + min(32vw, 104px));
+}
+
+.mascot__pause--near-dumbo{
+  left:auto;
+  right:12px;
+  bottom:calc(var(--mascot-dock-bottom) + min(32vw, 104px));
 }
 
 @media(min-width:861px){
-  .mascot__pause{
+  .mascot__pause--compact{
+    height:30px;
+    font-size:12px;
+    padding:0 10px;
+  }
+
+  .mascot__pause--near-chico{
     bottom:calc(var(--mascot-dock-bottom) + min(22vw, 132px));
   }
+
+  .mascot__pause--near-dumbo{
+    bottom:calc(var(--mascot-dock-bottom) + min(22vw, 132px));
+  }
+}
+
+.mascot__pause:hover{
+  background:rgba(255,255,255,.95);
+  border-color:rgba(148,163,184,.55);
 }
 
 .mascot__pause:focus-visible{
@@ -171,11 +200,20 @@
 .mascot__bubble--right{order:1}
 
 @media(max-width:860px){
-  .mascot__pause{
+  .mascot__pause--near-chico{
     bottom:calc(var(--mascot-dock-bottom) + min(40vw, 88px));
     left:4px;
-    font-size:10px;
-    padding:3px 8px;
+  }
+
+  .mascot__pause--near-dumbo{
+    bottom:calc(var(--mascot-dock-bottom) + min(40vw, 88px));
+    right:4px;
+  }
+
+  .mascot__pause--compact{
+    height:28px;
+    font-size:11px;
+    padding:0 8px;
   }
 
   .mascot--chico{
