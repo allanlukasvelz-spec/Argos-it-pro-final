@@ -2,18 +2,9 @@
 
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
-import {
-  useCallback,
-  useEffect,
-  useId,
-  useMemo,
-  useRef,
-  useState,
-  type KeyboardEvent as ReactKeyboardEvent
-} from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
-import { useMascotPauseControlOptional } from "@/components/mascots/MascotPauseControlContext";
 import { DiagnosticSurveyModal } from "./DiagnosticSurveyModal";
 import { chicoTips, type ChicoTip } from "./chicoTips";
 
@@ -102,25 +93,7 @@ function formatChicoAdviceForA11y(tip: ChicoTip) {
   return `Consejo de Chico: ${tip.titulo}. ${tip.mensajeCorto}`;
 }
 
-function revealMascotPauseControls(
-  pauseControl: ReturnType<typeof useMascotPauseControlOptional>,
-  mascot: "chico" | "dumbo"
-) {
-  pauseControl?.showPauseFor(mascot);
-}
-
-function onMascotPauseRevealKey(
-  event: ReactKeyboardEvent,
-  pauseControl: ReturnType<typeof useMascotPauseControlOptional>,
-  mascot: "chico" | "dumbo"
-) {
-  if (event.key !== "Enter" && event.key !== " ") return;
-  event.preventDefault();
-  revealMascotPauseControls(pauseControl, mascot);
-}
-
 export default function DiagnosticPromoBanner({ embeddedInHeader = false }: Props) {
-  const pauseControl = useMascotPauseControlOptional();
   const prefersReducedMotion = useReducedMotion() === true;
   const dumboGapLeftPx = embeddedInHeader ? SAFE_GAP_LEFT_HEADER_PX : SAFE_GAP_LEFT_PX;
   const dumboEnterFrom = embeddedInHeader ? "72%" : X_DUMBO_ENTER_FROM;
@@ -355,9 +328,7 @@ export default function DiagnosticPromoBanner({ embeddedInHeader = false }: Prop
       {showChrome && isDumboLive && (
         <motion.div
           key={`dumbo-slot-${motionKey}`}
-          className={`absolute inset-x-0 bottom-0 flex w-full max-w-full items-end gap-0 will-change-transform ${dumboSlotPadEnd} ${
-            embeddedInHeader ? "justify-end" : ""
-          }`}
+          className={`absolute inset-x-0 bottom-0 flex w-full max-w-full items-end gap-0 will-change-transform ${dumboSlotPadEnd}`}
           style={{ paddingLeft: dumboGapLeftPx }}
           initial={
             phase === "dumboEntering"
@@ -398,9 +369,9 @@ export default function DiagnosticPromoBanner({ embeddedInHeader = false }: Prop
           }`}
         >
           <div className={`flex w-full ${chicoClusterMaxW} items-end justify-center ${chicoClusterGap}`}>
-            <motion.div
+          <motion.div
             key={`chico-mascot-${motionKey}`}
-            className="pointer-events-auto flex shrink-0 items-end"
+            className="flex shrink-0 items-end"
             initial={
               phase === "chicoEntering"
                 ? { x: CHICO_CLUSTER_ENTER_X, opacity: 1 }
@@ -424,12 +395,8 @@ export default function DiagnosticPromoBanner({ embeddedInHeader = false }: Prop
             }
           >
             <div
-              role="button"
-              tabIndex={0}
-              aria-label="Mostrar controles de Chico"
-              className={`relative shrink-0 cursor-pointer ${chicoSpriteBox} brightness-[1.04] saturate-[1.08] contrast-[1.02] drop-shadow-[0_12px_28px_-6px_rgba(15,23,42,0.5)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400`}
-              onClick={() => revealMascotPauseControls(pauseControl, "chico")}
-              onKeyDown={(event) => onMascotPauseRevealKey(event, pauseControl, "chico")}
+              className={`relative shrink-0 ${chicoSpriteBox} brightness-[1.04] saturate-[1.08] contrast-[1.02] drop-shadow-[0_12px_28px_-6px_rgba(15,23,42,0.5)]`}
+              aria-hidden
             >
               <Image
                 src={chicoSprite}
@@ -437,7 +404,7 @@ export default function DiagnosticPromoBanner({ embeddedInHeader = false }: Prop
                 width={120}
                 height={120}
                 sizes="(max-width: 1024px) 72px, 88px"
-                className="pointer-events-none h-full w-full object-contain object-bottom"
+                className="h-full w-full object-contain object-bottom"
                 priority={false}
               />
             </div>
@@ -484,22 +451,17 @@ function DumboBannerInner({
   dumboSpriteBox: string;
   onStartDiagnostic: () => void;
 }) {
-  const pauseControl = useMascotPauseControlOptional();
   const ropeGradientId = useId().replace(/:/g, "");
   const sprite = sitting ? DUMBO_SIT_SPRITE : (WALK_FRAMES_DUMBO[walkFrame] ?? WALK_FRAMES_DUMBO[0]);
 
   return (
-    <motion.div
-      className={`pointer-events-none relative flex w-full min-w-0 max-w-full flex-row items-end ${
-        embeddedInHeader
-          ? "justify-end gap-4 lg:gap-[18px] xl:gap-5"
-          : "justify-center gap-1 md:gap-1.5"
+    <div
+      className={`pointer-events-none flex w-full min-w-0 max-w-full items-end ${
+        embeddedInHeader ? "gap-4 lg:gap-[18px] xl:gap-5" : "gap-1 md:gap-1.5"
       }`}
     >
       <div
-        className={`order-1 relative min-w-0 shrink-0 self-end ${
-          embeddedInHeader ? DUMBO_CARD_EMBEDDED : "max-w-[min(100%,520px)] flex-1"
-        }`}
+        className={`relative min-w-0 shrink-0 ${embeddedInHeader ? DUMBO_CARD_EMBEDDED : "max-w-[min(100%,520px)] flex-1"}`}
       >
         <motion.div
           className={
@@ -559,12 +521,11 @@ function DumboBannerInner({
         />
       </div>
 
-      {!embeddedInHeader && (
       <svg
         width={56}
         height={40}
         viewBox="0 0 56 40"
-        className="order-2 -mr-px mb-[0.82rem] shrink-0 self-end md:mb-[0.92rem]"
+        className="-mr-px mb-[0.82rem] shrink-0 md:mb-[0.92rem]"
         aria-hidden
       >
         <defs>
@@ -588,14 +549,10 @@ function DumboBannerInner({
           strokeLinecap="round"
         />
       </svg>
-      )}
 
-      <button
-        type="button"
-        className={`order-2 relative shrink-0 self-end ${dumboSpriteBox} pointer-events-auto -scale-x-100 brightness-[1.06] saturate-[1.15] contrast-[1.05] drop-shadow-[0_14px_32px_-6px_rgba(15,23,42,0.55)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400`}
-        onClick={() => revealMascotPauseControls(pauseControl, "dumbo")}
-        onKeyDown={(event) => onMascotPauseRevealKey(event, pauseControl, "dumbo")}
-        aria-label="Mostrar controles de Dumbo"
+      <div
+        className={`relative shrink-0 ${dumboSpriteBox} -scale-x-100 brightness-[1.06] saturate-[1.15] contrast-[1.05] drop-shadow-[0_14px_32px_-6px_rgba(15,23,42,0.55)]`}
+        aria-hidden
       >
         <Image
           src={sprite}
@@ -603,11 +560,11 @@ function DumboBannerInner({
           width={128}
           height={128}
           sizes="(max-width: 1024px) 80px, 96px"
-          className="pointer-events-none h-full w-full object-contain object-bottom"
+          className="h-full w-full object-contain object-bottom"
           priority={false}
         />
-      </button>
-    </motion.div>
+      </div>
+    </div>
   );
 }
 
@@ -890,7 +847,6 @@ function ReducedMotionAlternate({
     () => (chicoSlice ? formatChicoAdviceForA11y(chicoSlice) : ""),
     [chicoSlice]
   );
-  const pauseControl = useMascotPauseControlOptional();
 
   useEffect(() => {
     if (rmPhase !== "idle") return;
@@ -951,10 +907,8 @@ function ReducedMotionAlternate({
     >
       {/* Dumbo: misma tarjeta y botón */}
       <motion.div
-        className={`relative flex w-full max-w-full flex-row items-end ${
-          embeddedInHeader
-            ? "justify-end gap-4 lg:gap-[18px] xl:gap-5"
-            : "max-w-[min(100%,52rem)] justify-center gap-5 pr-12 md:pr-16 lg:pr-[4.75rem]"
+        className={`relative flex w-full max-w-full items-end gap-3 ${
+          embeddedInHeader ? "pr-1 md:pr-2" : "max-w-[min(100%,52rem)] gap-5 pr-12 md:pr-16 lg:pr-[4.75rem]"
         } ${showDumbo ? "pointer-events-auto" : "pointer-events-none"}`}
         initial={false}
         animate={{ opacity: showDumbo ? 1 : 0, y: showDumbo ? 0 : 14 }}
@@ -963,30 +917,20 @@ function ReducedMotionAlternate({
         role="region"
         aria-label={PROMO_A11Y_DESCRIPTION}
       >
-        <motion.div
-          className={`order-1 min-w-0 shrink-0 self-end ${
-            embeddedInHeader ? DUMBO_CARD_EMBEDDED : "flex flex-1 items-end justify-start min-h-[5.5rem]"
-          }`}
-        >
+        <div className={`flex flex-1 items-end justify-start ${embeddedInHeader ? "min-h-0" : "min-h-[5.5rem]"}`}>
           <div className="pointer-events-none w-full max-w-full space-y-0">
             <DumboReducedCard embeddedInHeader={embeddedInHeader} onStartDiagnostic={onStartDiagnostic} />
           </div>
-        </motion.div>
-        <button
-          type="button"
-          className={`order-2 relative shrink-0 self-end ${embeddedInHeader ? DUMBO_SPRITE_BOX_HEADER : DUMBO_SPRITE_BOX} -scale-x-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400`}
-          onClick={() => revealMascotPauseControls(pauseControl, "dumbo")}
-          onKeyDown={(event) => onMascotPauseRevealKey(event, pauseControl, "dumbo")}
-          aria-label="Mostrar controles de Dumbo"
-        >
+        </div>
+        <div className={`shrink-0 ${embeddedInHeader ? DUMBO_SPRITE_BOX_HEADER : DUMBO_SPRITE_BOX}`} aria-hidden>
           <Image
             src={DUMBO_SIT_SPRITE}
             alt=""
             width={104}
             height={104}
-            className="pointer-events-none h-full w-full object-contain object-bottom drop-shadow-[0_12px_22px_-6px_rgba(15,23,42,0.5)]"
+            className="h-full w-full -scale-x-100 object-contain object-bottom drop-shadow-[0_12px_22px_-6px_rgba(15,23,42,0.5)]"
           />
-        </button>
+        </div>
       </motion.div>
 
       {/* Chico: grupo centrado — mascota junto al globo */}
@@ -1007,20 +951,13 @@ function ReducedMotionAlternate({
         aria-label={`${CHICO_SECURITY_A11Y_ROLE}. ${activeChicoAdvice}`}
         aria-live={showChico ? "polite" : undefined}
       >
-        <div
-          role="button"
-          tabIndex={0}
-          aria-label="Mostrar controles de Chico"
-          className={`shrink-0 cursor-pointer ${embeddedInHeader ? CHICO_SPRITE_BOX_HEADER : CHICO_SPRITE_BOX} focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400`}
-          onClick={() => revealMascotPauseControls(pauseControl, "chico")}
-          onKeyDown={(event) => onMascotPauseRevealKey(event, pauseControl, "chico")}
-        >
+        <div className={`shrink-0 ${embeddedInHeader ? CHICO_SPRITE_BOX_HEADER : CHICO_SPRITE_BOX}`} aria-hidden>
           <Image
             src={CHICO_ATTENTIVE}
             alt=""
             width={104}
             height={104}
-            className="pointer-events-none h-full w-full object-contain object-bottom drop-shadow-[0_12px_22px_-6px_rgba(15,23,42,0.5)]"
+            className="h-full w-full object-contain object-bottom drop-shadow-[0_12px_22px_-6px_rgba(15,23,42,0.5)]"
           />
         </div>
         <div className={`shrink-0 ${embeddedInHeader ? CHICO_BUBBLE_EMBEDDED : "max-w-[min(100%,30rem)]"}`}>
