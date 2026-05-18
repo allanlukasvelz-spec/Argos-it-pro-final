@@ -39,8 +39,27 @@
 .mascot--dumbo{
   right:clamp(8px,2vw,12px);
   left:auto;
+  flex-direction:row;
+  align-items:flex-end;
+  justify-content:flex-end;
+  gap:16px;
   transform-origin:bottom right;
   transform:translate3d(var(--mascot-dumbo-tx, 0px), var(--mascot-dumbo-ty, 0px), 0) scale(var(--mascot-scale, 1));
+}
+
+/* Dumbo dock: [ globo izquierda ] [ mascota derecha ] en flujo normal */
+.mascot--dumbo .mascot__bubble--right{
+  order:1;
+  position:relative;
+  align-self:flex-end;
+  flex-shrink:0;
+}
+
+.mascot--dumbo .mascot__sprite-button{
+  order:2;
+  position:relative;
+  align-self:flex-end;
+  flex-shrink:0;
 }
 
 @media(min-width:861px){
@@ -51,6 +70,16 @@
       + env(safe-area-inset-bottom, 0px)
       + 52px
     );
+  }
+
+  .mascot--dumbo{
+    gap:18px;
+  }
+}
+
+@media(min-width:1280px){
+  .mascot--dumbo{
+    gap:20px;
   }
 }
 
@@ -196,8 +225,6 @@
 }
 
 .mascot__bubble--left{order:2}
-
-.mascot__bubble--right{order:1}
 
 @media(max-width:860px){
   .mascot__pause--near-chico{
