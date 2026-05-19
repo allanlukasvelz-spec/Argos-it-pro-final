@@ -57,7 +57,12 @@ export default function Register() {
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          <label htmlFor="register-name" className="sr-only">
+            Nombre
+          </label>
           <input
+            id="register-name"
+            name="name"
             type="text"
             placeholder="Nombre"
             value={name}
@@ -66,7 +71,12 @@ export default function Register() {
             className="w-full rounded border border-[#E5E7EB] bg-white p-3 text-[#07111F] outline-none focus:border-[#2563EB]"
           />
 
+          <label htmlFor="register-email" className="sr-only">
+            Email
+          </label>
           <input
+            id="register-email"
+            name="email"
             type="email"
             placeholder="Email"
             value={email}
@@ -75,7 +85,12 @@ export default function Register() {
             className="w-full rounded border border-[#E5E7EB] bg-white p-3 text-[#07111F] outline-none focus:border-[#2563EB]"
           />
 
+          <label htmlFor="register-company" className="sr-only">
+            Empresa
+          </label>
           <input
+            id="register-company"
+            name="company"
             type="text"
             placeholder="Empresa"
             value={company}
@@ -83,7 +98,12 @@ export default function Register() {
             className="w-full rounded border border-[#E5E7EB] bg-white p-3 text-[#07111F] outline-none focus:border-[#2563EB]"
           />
 
+          <label htmlFor="register-password" className="sr-only">
+            Contraseña (mín 10 caracteres)
+          </label>
           <input
+            id="register-password"
+            name="password"
             type="password"
             placeholder="Contraseña (mín 10 caracteres)"
             value={password}

@@ -202,8 +202,9 @@ export default function ContactView() {
 
             <div className="grid gap-6 md:grid-cols-2">
               <div>
-                <label className="mb-2 block text-sm font-semibold">{t("contact.form.name")} *</label>
+                <label htmlFor="contact-name" className="mb-2 block text-sm font-semibold">{t("contact.form.name")} *</label>
                 <input
+                  id="contact-name"
                   type="text"
                   name="name"
                   value={form.name}
@@ -217,8 +218,9 @@ export default function ContactView() {
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-semibold">{t("contact.form.email")} *</label>
+                <label htmlFor="contact-email" className="mb-2 block text-sm font-semibold">{t("contact.form.email")} *</label>
                 <input
+                  id="contact-email"
                   type="email"
                   name="email"
                   value={form.email}
@@ -234,8 +236,9 @@ export default function ContactView() {
 
             <div className="grid gap-6 md:grid-cols-2">
               <div>
-                <label className="mb-2 block text-sm font-semibold">{t("contact.form.phone")} *</label>
+                <label htmlFor="contact-phone" className="mb-2 block text-sm font-semibold">{t("contact.form.phone")} *</label>
                 <input
+                  id="contact-phone"
                   type="tel"
                   name="phone"
                   value={form.phone}
@@ -249,8 +252,9 @@ export default function ContactView() {
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-semibold">{t("contact.form.company")} *</label>
+                <label htmlFor="contact-company" className="mb-2 block text-sm font-semibold">{t("contact.form.company")} *</label>
                 <input
+                  id="contact-company"
                   type="text"
                   name="company"
                   value={form.company}
@@ -265,8 +269,9 @@ export default function ContactView() {
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-semibold">{t("contact.form.service")} *</label>
+              <label htmlFor="contact-service" className="mb-2 block text-sm font-semibold">{t("contact.form.service")} *</label>
               <select
+                id="contact-service"
                 name="service"
                 value={form.service}
                 onChange={(event) => updateField("service", event.target.value)}
@@ -284,8 +289,9 @@ export default function ContactView() {
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-semibold">{t("contact.form.message")} *</label>
+              <label htmlFor="contact-message" className="mb-2 block text-sm font-semibold">{t("contact.form.message")} *</label>
               <textarea
+                id="contact-message"
                 name="message"
                 value={form.message}
                 maxLength={CONTACT_FIELD_MAX_LEN}

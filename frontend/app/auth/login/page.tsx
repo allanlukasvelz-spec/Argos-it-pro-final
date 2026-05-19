@@ -48,7 +48,12 @@ export default function Login() {
         <p className="mb-6 text-center text-[#4B5563]">Accede al portal de cliente ARGOS-IT.</p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          <label htmlFor="login-email" className="sr-only">
+            Email profesional
+          </label>
           <input
+            id="login-email"
+            name="email"
             type="email"
             placeholder="Email profesional"
             value={email}
@@ -57,7 +62,12 @@ export default function Login() {
             className="w-full rounded border border-[#E5E7EB] bg-white p-3 text-[#07111F] outline-none focus:border-[#2563EB]"
           />
 
+          <label htmlFor="login-password" className="sr-only">
+            Contraseña
+          </label>
           <input
+            id="login-password"
+            name="password"
             type="password"
             placeholder="Contraseña"
             value={password}
