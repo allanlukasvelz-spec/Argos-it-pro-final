@@ -135,9 +135,11 @@ export default function MethodView() {
             ← {t("actions.backHome")}
           </Link>
           <div className="argos-method-hero-panel mt-6">
-            <h1 className="argos-method-hero-title argos-method-title-glow argos-method-title-glow--showcase text-4xl lg:text-5xl">
-              {t("method.title")}
-            </h1>
+            <div className="argos-method-title-wrap">
+              <h1 className="argos-method-hero-title argos-method-title-glow argos-method-title-glow--showcase">
+                {t("method.title")}
+              </h1>
+            </div>
             <p className="mt-4 max-w-3xl text-lg leading-8 text-[#D7E8F6]">{t("method.subtitle")}</p>
             <p className="argos-method-value-strip mt-4 max-w-3xl rounded-xl p-4 text-sm font-bold leading-7 text-[#EAF7FF]">
               La tecnología de tu empresa no debería fallar para que alguien la revise.

@@ -795,10 +795,10 @@
   transition: color 0.6s ease;
 }
 
-.argos-method-galaxy--animated.argos-bg-method-galaxy .argos-content-layer h1,
-.argos-method-galaxy--animated.argos-bg-method-galaxy .argos-content-layer h2,
-.argos-method-galaxy--animated.argos-bg-method-galaxy .argos-content-layer h3,
-.argos-method-galaxy--animated.argos-bg-method-galaxy .argos-method-hero-title,
+.argos-method-galaxy--animated.argos-bg-method-galaxy .argos-content-layer h1:not(.argos-method-title-glow),
+.argos-method-galaxy--animated.argos-bg-method-galaxy .argos-content-layer h2:not(.argos-method-title-glow),
+.argos-method-galaxy--animated.argos-bg-method-galaxy .argos-content-layer h3:not(.argos-method-title-glow),
+.argos-method-galaxy--animated.argos-bg-method-galaxy .argos-method-hero-title:not(.argos-method-title-glow),
 .argos-method-galaxy--animated.argos-bg-method-galaxy .argos-content-layer .text-white,
 .argos-method-galaxy--animated.argos-bg-method-galaxy .argos-content-layer [class*="text-white"] {
   color: var(--method-text-primary) !important;
@@ -1395,9 +1395,11 @@
     transform: none !important;
   }
 
-  .argos-method-title-glow {
+  .argos-method-title-glow,
+  .argos-method-title-glow--showcase {
     animation: none !important;
-    background-position: 30% center;
+    will-change: auto !important;
+    background-position: 50% 50% !important;
   }
 
   .argos-methodology-reveal__window::after {
@@ -1482,49 +1484,106 @@
   animation: none;
 }
 
-/* Título con brillo cyan — shimmer lento, sin parpadeo */
-.argos-method-title-glow {
+/* Título Método ARGOS — marca premium (degradado fijo, sin parpadeo) */
+.argos-method-title-wrap {
+  position: relative;
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+  padding: 0.35rem 0;
+  overflow: visible;
+}
+
+.argos-method-title-wrap::before {
+  content: "";
+  position: absolute;
+  inset: -2rem -4rem;
+  z-index: -1;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(34, 211, 238, .18), transparent 62%);
+  filter: blur(18px);
+  opacity: .9;
+  pointer-events: none;
+}
+
+.argos-method-title-glow,
+.argos-method-title-glow--showcase {
   font-weight: 900;
-  letter-spacing: -0.02em;
-  line-height: 1.05;
-  background: linear-gradient(
-    105deg,
-    #f8fcff 0%,
-    #e8f7ff 18%,
-    #7ee8ff 42%,
-    #38bdf8 58%,
-    #a5f3fc 78%,
-    #f0f9ff 100%
-  );
-  background-size: 220% 100%;
-  background-position: 0% center;
+  letter-spacing: -0.045em;
+  line-height: 0.92;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  background:
+    linear-gradient(
+      115deg,
+      #38bdf8 0%,
+      #22d3ee 28%,
+      #6366f1 58%,
+      #a855f7 100%
+    );
+  background-size: 160% 160%;
+  background-position: 0% 50%;
   -webkit-background-clip: text;
   background-clip: text;
-  color: transparent;
-  text-shadow: none;
-  filter: drop-shadow(0 0 22px rgba(56, 189, 248, .32));
+  color: transparent !important;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, .25),
+    0 18px 48px rgba(34, 211, 238, .18),
+    0 26px 78px rgba(99, 102, 241, .16);
+  transition: none !important;
+  filter: none !important;
+  animation: none;
+  will-change: auto;
+}
+
+/* El cielo galáctico no debe animar color/sombra del título */
+.argos-method-galaxy--animated.argos-bg-method-galaxy .argos-content-layer .argos-method-title-glow,
+.argos-method-showcase .argos-method-title-glow,
+.argos-method-hero-title.argos-method-title-glow {
+  color: transparent !important;
+  transition: none !important;
+}
+
+@keyframes argosTitlePremiumShimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
 }
 
 .argos-method-title-glow--showcase {
-  font-size: clamp(2.5rem, 5.5vw, 4.75rem);
+  font-size: clamp(2.3rem, 13vw, 3.6rem);
+}
+
+@media (min-width: 768px) {
+  .argos-method-title-glow--showcase {
+    font-size: clamp(2.8rem, 8vw, 5.5rem);
+  }
 }
 
 @media (min-width: 1024px) {
   .argos-method-title-glow--showcase {
-    font-size: clamp(3.25rem, 4.8vw, 5.25rem);
-    letter-spacing: -0.03em;
+    font-size: clamp(3.2rem, 7vw, 7.5rem);
   }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .argos-method-title-glow {
-    animation: methodTitleShimmer 18s linear infinite;
+  .argos-method-title-glow--showcase {
+    animation: argosTitlePremiumShimmer 22s linear infinite alternate;
+    will-change: background-position;
   }
 }
 
-@keyframes methodTitleShimmer {
-  0% { background-position: 0% center; }
-  100% { background-position: 220% center; }
+@media (prefers-reduced-motion: reduce) {
+  .argos-method-title-glow,
+  .argos-method-title-glow--showcase {
+    animation: none !important;
+    will-change: auto !important;
+    background-position: 50% 50% !important;
+  }
 }
 
 /* Revelado metodología (ventana izquierda → derecha) */
@@ -1533,29 +1592,7 @@
 }
 
 .argos-methodology-reveal__window::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, rgba(6, 26, 48, .85) 0%, transparent 28%);
-  pointer-events: none;
-  opacity: 0;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .argos-methodology-reveal__window::after {
-    animation: methodologyRevealVeil 0.9s ease-out 0.05s forwards;
-  }
-}
-
-@keyframes methodologyRevealVeil {
-  0% {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-  100% {
-    opacity: 0;
-    transform: translate3d(100%, 0, 0);
-  }
+  display: none;
 }
 
 .argos-method-brand-voice {

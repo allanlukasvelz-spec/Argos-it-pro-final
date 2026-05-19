@@ -66,23 +66,17 @@ function MethodologyReveal({ reduceMotion }: { reduceMotion: boolean | null }) {
 
   return (
     <div className="argos-methodology-reveal mx-auto max-w-2xl" aria-label={text}>
-      <motion.div
-        className="argos-methodology-reveal__window overflow-hidden rounded-lg border border-[#18D4F7]/20 bg-[#061a30]/40 px-4 py-2.5 backdrop-blur-sm"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true, margin: "-40px" }}
-        transition={{ duration: 0.35 }}
-      >
+      <div className="argos-methodology-reveal__window overflow-hidden rounded-lg border border-[#18D4F7]/20 bg-[#061a30]/40 px-4 py-2.5 backdrop-blur-sm">
         <motion.p
           className="argos-methodology-reveal__text text-sm font-bold leading-7 text-[#A5E8FC] sm:text-base"
-          initial={{ opacity: 0, x: -48 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={{ x: -56 }}
+          whileInView={{ x: 0 }}
           viewport={{ once: true, margin: "-40px" }}
-          transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
+          transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1], delay: 0.06 }}
         >
           {text}
         </motion.p>
-      </motion.div>
+      </div>
     </div>
   );
 }
@@ -162,12 +156,14 @@ export default function MethodArgosShowcase() {
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
         >
           <MethodologyReveal reduceMotion={reduceMotion} />
-          <h2
-            id="metodo-argos-title"
-            className="argos-method-title-glow argos-method-title-glow--showcase mt-6"
-          >
-            Método ARGOS
-          </h2>
+          <div className="argos-method-title-wrap mt-6">
+            <h2
+              id="metodo-argos-title"
+              className="argos-method-title-glow argos-method-title-glow--showcase"
+            >
+              Método ARGOS
+            </h2>
+          </div>
           <p className="mt-5 text-lg leading-8 text-[#D7E8F6]">
             Una forma clara, preventiva y continua de proteger, ordenar y mejorar la tecnología de tu empresa.
           </p>
