@@ -1,4 +1,8 @@
 {
+  "meta": {
+    "methodTitle": "ARGOS-Methode | Analysieren, Stärken, Lenken, Optimieren, Überwachen",
+    "methodDescription": "Fünf Phasen A-R-G-O-S: erst verstehen, dann stärken, den Alltag lenken, wirtschaftlich optimieren und danach überwachen."
+  },
   "language": {
     "label": "Sprache",
     "es": "ES",
@@ -140,24 +144,29 @@
     "subtitle": "Ein klarer Rahmen für nachhaltige technische Verbesserungen.",
     "steps": [
       {
-        "id": "01",
-        "title": "Analyse",
-        "description": "Erstprüfung von Systemen, Risiken und Prioritäten."
+        "id": "A",
+        "title": "Analysieren",
+        "description": "Systeme, digitale Präsenz, Risiken, Prozesse und echte Prioritäten."
       },
       {
-        "id": "02",
-        "title": "Verbesserungsplan",
-        "description": "Priorisierte und realistische Maßnahmen."
+        "id": "R",
+        "title": "Stärken",
+        "description": "Sicherheit, Stabilität, Zugänge, Backups und Betrieb."
       },
       {
-        "id": "03",
-        "title": "Umsetzung",
-        "description": "Strukturierte Ausführung mit Dokumentation."
+        "id": "G",
+        "title": "Lenken",
+        "description": "Support, Anfragen, Kommunikation und Prioritäten mit klaren Spuren."
       },
       {
-        "id": "04",
-        "title": "Nachverfolgung",
-        "description": "Ergebniskontrolle und kontinuierliche Prävention."
+        "id": "O",
+        "title": "Optimieren",
+        "description": "Performance, Akquisition, Automatisierung, UX und Effizienz."
+      },
+      {
+        "id": "S",
+        "title": "Überwachen",
+        "description": "Regelmäßige Reviews, Prävention und Weiterentwicklung nach Änderungen."
       }
     ]
   },

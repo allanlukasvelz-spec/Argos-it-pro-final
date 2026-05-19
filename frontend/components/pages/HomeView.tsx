@@ -20,9 +20,9 @@ const argosMethodCards = [
     description: "Fortalecemos seguridad, estabilidad, copias, accesos, rendimiento y protección de datos."
   },
   {
-    id: "gestionar",
+    id: "guiar",
     letter: "G",
-    title: "Gestionar",
+    title: "Guiar",
     description: "Ordenamos incidencias, solicitudes, usuarios, mantenimiento, prioridades y comunicación."
   },
   {
@@ -32,9 +32,9 @@ const argosMethodCards = [
     description: "Mejoramos velocidad, automatizaciones, experiencia web, SEO, conversión y eficiencia."
   },
   {
-    id: "sostener",
+    id: "supervisar",
     letter: "S",
-    title: "Sostener",
+    title: "Supervisar",
     description: "Acompañamos de forma continua para prevenir, actualizar y proponer mejoras a tiempo."
   }
 ];
@@ -110,7 +110,7 @@ export default function HomeView() {
             </h1>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-[#D7E8F6]">{t("home.subtitle")}</p>
             <p className="mt-4 max-w-3xl rounded-lg border border-[#18D4F7]/25 bg-white/[.06] p-4 text-sm font-bold leading-7 text-[#EAF7FF]">
-              En ARGOS-IT no solo resolvemos problemas: los prevenimos. No esperamos a que tu tecnología falle; la revisamos, reforzamos y sostenemos antes de que afecte a tu negocio.
+              En ARGOS-IT no solo resolvemos problemas: los prevenimos. No esperamos a que tu tecnología falle; la revisamos, reforzamos, guiamos y supervisamos antes de que afecte a tu negocio.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
@@ -169,7 +169,7 @@ export default function HomeView() {
         <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[.9fr_1.1fr]">
           <div>
             <p className="text-sm font-black uppercase text-[#18D4F7]">Método ARGOS</p>
-            <h2 className="mt-3 text-3xl font-black text-white">Analizar, reforzar, gestionar, optimizar y sostener.</h2>
+            <h2 className="mt-3 text-3xl font-black text-white">Analizar, reforzar, guiar, optimizar y supervisar.</h2>
             <p className="mt-4 text-sm leading-7 text-[#BFD7E8]">
               No esperamos a que algo falle. Analizamos, reforzamos y acompañamos para prevenir problemas antes de que afecten a tu negocio.
             </p>
@@ -181,7 +181,7 @@ export default function HomeView() {
             {argosMethodCards.map((step) => (
               <Link
                 key={step.id}
-                href={`/metodo#${step.id}`}
+                href={`/metodo/${step.id}`}
                 className="argos-hologram-card flex min-h-44 flex-col justify-between p-5 transition hover:-translate-y-1 hover:border-[#18D4F7]/45"
               >
                 <span className="text-4xl font-black text-[#39F4FF]">{step.letter}</span>

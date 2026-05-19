@@ -1,7 +1,9 @@
 {
   "meta": {
     "defaultTitle": "ARGOS-IT | Consultoria informàtica per a empreses",
-    "defaultDescription": "Consultoria informàtica, manteniment, suport tècnic, ciberseguretat, automatització i solucions digitals per a empreses."
+    "defaultDescription": "Consultoria informàtica, manteniment, suport tècnic, ciberseguretat, automatització i solucions digitals per a empreses.",
+    "methodTitle": "Mètode ARGOS | Analitzar, Reforçar, Guiar, Optimitzar i Supervisar",
+    "methodDescription": "Cinc fases A-R-G-O-S: entendre, reforçar, guiar l’operació, optimitzar resultats i supervisar després de millorar."
   },
   "language": {
     "label": "Idioma",
@@ -144,24 +146,29 @@
     "subtitle": "Un marc clar perquè cada millora tecnològica tingui impacte real.",
     "steps": [
       {
-        "id": "01",
-        "title": "Diagnosi",
-        "description": "Revisió inicial de sistemes, riscos i prioritats."
+        "id": "A",
+        "title": "Analitzar",
+        "description": "Sistemes, presència digital, riscos, processos i prioritats reals."
       },
       {
-        "id": "02",
-        "title": "Pla de millora",
-        "description": "Accions prioritzades, realistes i executables."
+        "id": "R",
+        "title": "Reforçar",
+        "description": "Seguretat, estabilitat, accessos, còpies i operació diària."
       },
       {
-        "id": "03",
-        "title": "Implementació",
-        "description": "Execució ordenada amb documentació."
+        "id": "G",
+        "title": "Guiar",
+        "description": "Suport, sol·licituds, comunicació i prioritats amb traçabilitat."
       },
       {
-        "id": "04",
-        "title": "Seguiment",
-        "description": "Control de resultats i prevenció contínua."
+        "id": "O",
+        "title": "Optimitzar",
+        "description": "Rendiment, captació, automatització, experiència i eficiència."
+      },
+      {
+        "id": "S",
+        "title": "Supervisar",
+        "description": "Revisions periòdiques, prevenció i evolució després de les millores."
       }
     ]
   },

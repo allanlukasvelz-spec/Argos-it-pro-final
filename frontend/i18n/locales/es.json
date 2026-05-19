@@ -8,8 +8,8 @@
     "homeDescription": "Socio tecnológico externo para empresas y profesionales: soporte IT, ciberseguridad, mantenimiento web, automatización con IA y mejora continua.",
     "servicesTitle": "Servicios premium | ARGOS-IT",
     "servicesDescription": "Consultoría IT premium, mantenimiento informático, seguridad, presencia web corporativa, automatización con IA y auditoría digital continua.",
-    "methodTitle": "Método ARGOS | Analizar, Reforzar, Gestionar, Optimizar y Sostener",
-    "methodDescription": "Método ARGOS para convertir problemas técnicos en diagnóstico, refuerzo, gestión, optimización y seguimiento sostenido.",
+    "methodTitle": "Método ARGOS | Analizar, Reforzar, Guiar, Optimizar y Supervisar",
+    "methodDescription": "Método ARGOS: analizar antes de decidir, reforzar lo vulnerable, guiar la complejidad hacia la claridad, optimizar con criterio de negocio y supervisar después de mejorar.",
     "aboutTitle": "Sobre ARGOS-IT | Consultoría tecnológica premium",
     "aboutDescription": "Equipo técnico orientado a continuidad operativa, seguridad y crecimiento digital empresarial.",
     "contactTitle": "Contacto ARGOS-IT | Solicitar consulta técnica",
@@ -163,8 +163,8 @@
       },
       {
         "id": "G",
-        "title": "Gestionar",
-        "description": "Ordenar soporte, solicitudes, mantenimiento, documentación y prioridades técnicas."
+        "title": "Guiar",
+        "description": "Ordenar soporte, solicitudes, comunicación y prioridades con trazabilidad clara."
       },
       {
         "id": "O",
@@ -173,8 +173,8 @@
       },
       {
         "id": "S",
-        "title": "Sostener",
-        "description": "Mantener seguimiento, auditoría continua y evolución digital sin improvisación."
+        "title": "Supervisar",
+        "description": "Mantener revisiones, prevención y evolución ordenada después de las mejoras."
       }
     ]
   },

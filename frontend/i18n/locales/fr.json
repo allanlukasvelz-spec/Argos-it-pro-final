@@ -1,4 +1,8 @@
 {
+  "meta": {
+    "methodTitle": "Méthode ARGOS | Analyser, Renforcer, Guider, Optimiser, Superviser",
+    "methodDescription": "Cinq phases A-R-G-O-S : comprendre avant d’investir, renforcer l’existant, guider le quotidien, optimiser l’impact, puis superviser."
+  },
   "language": {
     "label": "Langue",
     "es": "ES",
@@ -140,24 +144,29 @@
     "subtitle": "Un cadre clair pour des améliorations techniques durables.",
     "steps": [
       {
-        "id": "01",
-        "title": "Diagnostic",
-        "description": "Analyse initiale des systèmes, risques et priorités."
+        "id": "A",
+        "title": "Analyser",
+        "description": "Systèmes, présence numérique, risques, processus et priorités."
       },
       {
-        "id": "02",
-        "title": "Plan d'amélioration",
-        "description": "Actions priorisées et réalistes."
+        "id": "R",
+        "title": "Renforcer",
+        "description": "Sécurité, stabilité, accès, sauvegardes et exploitation."
       },
       {
-        "id": "03",
-        "title": "Mise en œuvre",
-        "description": "Exécution structurée avec documentation."
+        "id": "G",
+        "title": "Guider",
+        "description": "Support, demandes, communication et priorités traçables."
       },
       {
-        "id": "04",
-        "title": "Suivi",
-        "description": "Mesure des résultats et prévention continue."
+        "id": "O",
+        "title": "Optimiser",
+        "description": "Performance, acquisition, automatisation, UX et efficacité."
+      },
+      {
+        "id": "S",
+        "title": "Superviser",
+        "description": "Relectures régulières, prévention et évolution après changement."
       }
     ]
   },

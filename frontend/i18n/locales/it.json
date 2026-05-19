@@ -1,4 +1,8 @@
 {
+  "meta": {
+    "methodTitle": "Metodo ARGOS | Analizzare, Rafforzare, Guidare, Ottimizzare, Supervisionare",
+    "methodDescription": "Cinque fasi A-R-G-O-S: capire, rafforzare, guidare le attività, ottimizzare i risultati, supervisionare dopo i cambiamenti."
+  },
   "language": {
     "label": "Lingua",
     "es": "ES",
@@ -140,24 +144,29 @@
     "subtitle": "Un quadro chiaro per miglioramenti tecnici sostenibili.",
     "steps": [
       {
-        "id": "01",
-        "title": "Diagnosi",
-        "description": "Analisi iniziale di sistemi, rischi e priorità."
+        "id": "A",
+        "title": "Analizzare",
+        "description": "Sistemi, presenza digitale, rischi, processi e priorità reali."
       },
       {
-        "id": "02",
-        "title": "Piano di miglioramento",
-        "description": "Azioni prioritarie e realistiche."
+        "id": "R",
+        "title": "Rafforzare",
+        "description": "Sicurezza, stabilità, accessi, backup e operatività quotidiana."
       },
       {
-        "id": "03",
-        "title": "Implementazione",
-        "description": "Esecuzione ordinata con documentazione."
+        "id": "G",
+        "title": "Guidare",
+        "description": "Supporto, richieste, comunicazione e priorità tracciabili."
       },
       {
-        "id": "04",
-        "title": "Monitoraggio",
-        "description": "Controllo risultati e prevenzione continua."
+        "id": "O",
+        "title": "Ottimizzare",
+        "description": "Prestazioni, acquisizione, automazione, esperienza utente ed efficienza."
+      },
+      {
+        "id": "S",
+        "title": "Supervisionare",
+        "description": "Revisioni periodiche, prevenzione ed evoluzione dopo i miglioramenti."
       }
     ]
   },

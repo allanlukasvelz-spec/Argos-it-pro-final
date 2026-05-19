@@ -6,8 +6,8 @@
     "homeDescription": "Support, maintenance, security, automation and digital consulting for business teams.",
     "servicesTitle": "IT Services | ARGOS-IT",
     "servicesDescription": "Professional IT services for business continuity, security and growth.",
-    "methodTitle": "ARGOS-IT Method | Structured technical work",
-    "methodDescription": "Diagnosis, plan, implementation and follow-up for stable infrastructure.",
+    "methodTitle": "ARGOS method | Analyze, Reinforce, Guide, Optimize, Supervise",
+    "methodDescription": "Five phases A-R-G-O-S: understand before you invest, harden what is fragile, guide day-to-day complexity, improve what drives outcomes, then keep watch.",
     "aboutTitle": "About ARGOS-IT | Premium technology consulting",
     "aboutDescription": "Technical team focused on operational continuity and secure growth.",
     "contactTitle": "Contact ARGOS-IT | Request a technical consultation",
@@ -154,24 +154,29 @@
     "subtitle": "A clear framework so every technical improvement has real and sustainable impact.",
     "steps": [
       {
-        "id": "01",
-        "title": "Diagnosis",
-        "description": "Initial review of systems, risks, processes and business priorities."
+        "id": "A",
+        "title": "Analyze",
+        "description": "Systems, digital presence, risks, processes and real business needs."
       },
       {
-        "id": "02",
-        "title": "Improvement plan",
-        "description": "Prioritized proposal with realistic actions, timelines and ownership."
+        "id": "R",
+        "title": "Reinforce",
+        "description": "Close gaps in security, stability, access control, backups and operations."
       },
       {
-        "id": "03",
-        "title": "Implementation",
-        "description": "Structured execution, documentation and continuity-oriented delivery."
+        "id": "G",
+        "title": "Guide",
+        "description": "Requests, priorities, communication and traceability without noise."
       },
       {
-        "id": "04",
-        "title": "Follow-up",
-        "description": "Result tracking, adjustments and continuous prevention."
+        "id": "O",
+        "title": "Optimize",
+        "description": "Performance, acquisition, automation, user experience and internal efficiency."
+      },
+      {
+        "id": "S",
+        "title": "Supervise",
+        "description": "Ongoing reviews, prevention and steady evolution after changes ship."
       }
     ]
   },
