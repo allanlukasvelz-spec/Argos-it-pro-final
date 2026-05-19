@@ -1522,8 +1522,8 @@
       #6366f1 58%,
       #a855f7 100%
     );
-  background-size: 160% 160%;
-  background-position: 0% 50%;
+  background-size: 100% 100%;
+  background-position: 50% 50%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent !important;
@@ -1533,8 +1533,8 @@
     0 26px 78px rgba(99, 102, 241, .16);
   transition: none !important;
   filter: none !important;
-  animation: none;
-  will-change: auto;
+  animation: none !important;
+  will-change: auto !important;
 }
 
 /* El cielo galáctico no debe animar color/sombra del título */
@@ -1543,15 +1543,7 @@
 .argos-method-hero-title.argos-method-title-glow {
   color: transparent !important;
   transition: none !important;
-}
-
-@keyframes argosTitlePremiumShimmer {
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 100% 50%;
-  }
+  animation: none !important;
 }
 
 .argos-method-title-glow--showcase {
@@ -1567,22 +1559,6 @@
 @media (min-width: 1024px) {
   .argos-method-title-glow--showcase {
     font-size: clamp(3.2rem, 7vw, 7.5rem);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .argos-method-title-glow--showcase {
-    animation: argosTitlePremiumShimmer 22s linear infinite alternate;
-    will-change: background-position;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .argos-method-title-glow,
-  .argos-method-title-glow--showcase {
-    animation: none !important;
-    will-change: auto !important;
-    background-position: 50% 50% !important;
   }
 }
 
