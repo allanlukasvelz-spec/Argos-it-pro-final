@@ -2,42 +2,10 @@
 
 import Link from "next/link";
 import ArgosPageShell from "@/components/layout/ArgosPageShell";
+import MethodArgosShowcase from "@/components/method/MethodArgosShowcase";
 import { usePageMeta } from "@/components/seo/usePageMeta";
 import { useLocalizedServices } from "@/hooks/useLocalizedServices";
 import { useI18n } from "@/i18n/useI18n";
-
-const argosMethodCards = [
-  {
-    id: "analizar",
-    letter: "A",
-    title: "Analizar",
-    description: "Revisamos web, sistemas, seguridad, rendimiento, herramientas, procesos y riesgos reales."
-  },
-  {
-    id: "reforzar",
-    letter: "R",
-    title: "Reforzar",
-    description: "Fortalecemos seguridad, estabilidad, copias, accesos, rendimiento y protección de datos."
-  },
-  {
-    id: "guiar",
-    letter: "G",
-    title: "Guiar",
-    description: "Ordenamos incidencias, solicitudes, usuarios, mantenimiento, prioridades y comunicación."
-  },
-  {
-    id: "optimizar",
-    letter: "O",
-    title: "Optimizar",
-    description: "Mejoramos velocidad, automatizaciones, experiencia web, SEO, conversión y eficiencia."
-  },
-  {
-    id: "supervisar",
-    letter: "S",
-    title: "Supervisar",
-    description: "Acompañamos de forma continua para prevenir, actualizar y proponer mejoras a tiempo."
-  }
-];
 
 const techStackItems = [
   "Plataforma web y alojamiento profesional",
@@ -97,7 +65,7 @@ export default function HomeView() {
     <ArgosPageShell variant="home">
       <nav className="argos-side-nav" aria-label="Accesos rápidos">
         <Link href="/servicios" className="argos-side-nav__item">{t("nav.services")}</Link>
-        <Link href="/metodo" className="argos-side-nav__item">{t("nav.method")}</Link>
+        <Link href="#metodo-argos" className="argos-side-nav__item">{t("nav.method")}</Link>
         <Link href="/contacto" className="argos-side-nav__item">{t("nav.contact")}</Link>
       </nav>
 
@@ -141,6 +109,8 @@ export default function HomeView() {
         </div>
       </section>
 
+      <MethodArgosShowcase />
+
       <section className="px-5 py-16 lg:px-8" id="servicios">
         <div className="mx-auto max-w-7xl">
           <div className="mb-10">
@@ -160,36 +130,6 @@ export default function HomeView() {
                   {t("actions.viewDetail")} →
                 </Link>
               </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="px-5 py-16 lg:px-8">
-        <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[.9fr_1.1fr]">
-          <div>
-            <p className="text-sm font-black uppercase text-[#18D4F7]">Método ARGOS</p>
-            <h2 className="mt-3 text-3xl font-black text-white">Analizar, reforzar, guiar, optimizar y supervisar.</h2>
-            <p className="mt-4 text-sm leading-7 text-[#BFD7E8]">
-              No esperamos a que algo falle. Analizamos, reforzamos y acompañamos para prevenir problemas antes de que afecten a tu negocio.
-            </p>
-            <Link href="/metodo" className="mt-6 inline-flex rounded-md border border-[#18D4F7]/40 bg-white/[.06] px-5 py-3 text-sm font-black text-[#39F4FF] transition hover:bg-white/[.1]">
-              Ver método completo
-            </Link>
-          </div>
-          <div className="grid grid-cols-2 gap-3 min-[480px]:grid-cols-3 md:grid-cols-3 xl:grid-cols-5">
-            {argosMethodCards.map((step) => (
-              <Link
-                key={step.id}
-                href={`/metodo/${step.id}`}
-                className="argos-hologram-card flex min-h-44 flex-col justify-between p-5 transition hover:-translate-y-1 hover:border-[#18D4F7]/45"
-              >
-                <span className="text-4xl font-black text-[#39F4FF]">{step.letter}</span>
-                <span>
-                  <strong className="block text-sm font-black text-white">{step.title}</strong>
-                  <span className="mt-2 block text-xs leading-5 text-[#BFD7E8]">{step.description}</span>
-                </span>
-              </Link>
             ))}
           </div>
         </div>

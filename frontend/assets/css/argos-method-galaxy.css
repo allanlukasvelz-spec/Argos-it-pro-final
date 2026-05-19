@@ -1,0 +1,1763 @@
+/* Método ARGOS — galaxia viva: ciclo día/noche, sol arriba ↔ luna abajo (y viceversa) */
+
+@property --galaxy-phase {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+.argos-bg-method-galaxy {
+  --method-galaxy-void: #020810;
+  --method-galaxy-ink: #061220;
+  --galaxy-phase: 0;
+  --method-text-primary: #f4faff;
+  --method-text-muted: #c9ddec;
+  --method-text-accent: #67e8f9;
+  --method-text-shadow: 0 2px 24px rgba(0, 0, 0, .65), 0 0 36px rgba(2, 8, 18, .45);
+  --method-card-border: rgba(126, 232, 255, .28);
+  --method-card-bg: linear-gradient(145deg, rgba(255, 255, 255, .14) 0%, rgba(255, 255, 255, .05) 48%, rgba(24, 120, 200, .08) 100%);
+  --method-readability-top: rgba(2, 8, 18, .38);
+  --method-readability-mid: rgba(2, 8, 18, .28);
+  --method-readability-bottom: rgba(2, 8, 18, .42);
+  --method-galaxy-mesh: rgba(72, 190, 240, .22);
+  --method-galaxy-mesh-soft: rgba(100, 210, 255, .14);
+
+  background:
+    radial-gradient(ellipse 42% 38% at 70% 26%, rgba(180, 220, 255, .28) 0%, rgba(70, 140, 200, .1) 32%, transparent 58%),
+    radial-gradient(ellipse 95% 28% at 32% 62%, rgba(50, 100, 160, .1) 0%, transparent 52%),
+    radial-gradient(ellipse 38% 32% at 14% 38%, rgba(90, 70, 140, .14) 0%, transparent 54%),
+    radial-gradient(ellipse 110% 22% at 48% 52%, rgba(2, 6, 14, .65) 0%, transparent 68%),
+    radial-gradient(ellipse 80% 70% at 50% 50%, rgba(8, 28, 52, .4) 0%, transparent 72%),
+    linear-gradient(175deg, #0a2240 0%, #081c36 28%, #061528 58%, #040e1a 82%, var(--method-galaxy-void) 100%);
+  color: var(--method-text-primary);
+}
+
+/* Ciclo día ↔ noche (90s, suave) */
+.argos-method-galaxy--animated.argos-bg-method-galaxy {
+  animation: methodGalaxyDayNightSky 90s ease-in-out infinite alternate;
+}
+
+.argos-page-shell--method-galaxy .argos-page-bg {
+  animation: methodGalaxyParallax 100s ease-in-out infinite alternate;
+}
+
+/* Cielo diurno — degradado azul galáctico (sin velo gris) */
+.argos-method-galaxy-sky-tint {
+  opacity: 0;
+  background:
+    radial-gradient(ellipse 50% 42% at 78% 10%, rgba(255, 220, 140, .2) 0%, rgba(255, 200, 100, .06) 28%, transparent 52%),
+    radial-gradient(ellipse 90% 55% at 50% 0%, rgba(103, 232, 249, .28) 0%, rgba(56, 189, 248, .12) 40%, transparent 62%),
+    radial-gradient(ellipse 120% 80% at 50% 100%, rgba(14, 116, 178, .35) 0%, transparent 55%),
+    linear-gradient(
+      175deg,
+      #2b7cb8 0%,
+      #1e5f94 18%,
+      #164a78 38%,
+      #0f3560 58%,
+      #0a2848 78%,
+      #061a30 100%
+    );
+  animation: methodGalaxySkyTint 90s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+/* Brazo galáctico / polvo estelar */
+.argos-method-galaxy-base {
+  opacity: 1;
+  background:
+    radial-gradient(ellipse 130% 35% at 28% 58%, rgba(60, 120, 180, .12) 0%, transparent 58%),
+    radial-gradient(ellipse 70% 20% at 55% 48%, rgba(0, 0, 0, .45) 0%, transparent 72%),
+    radial-gradient(ellipse 50% 40% at 82% 68%, rgba(100, 60, 140, .08) 0%, transparent 55%),
+    radial-gradient(circle at 68% 22%, rgba(200, 230, 255, .12) 0%, transparent 28%);
+  animation:
+    methodGalaxyBaseDrift 52s ease-in-out infinite alternate,
+    methodGalaxyBaseDay 90s ease-in-out infinite alternate;
+}
+
+.argos-method-galaxy-nebula {
+  filter: blur(40px);
+  mix-blend-mode: screen;
+  opacity: .48;
+  border-radius: 50%;
+}
+
+.argos-method-galaxy-nebula--one {
+  inset: -14% auto auto -10%;
+  width: min(78vw, 780px);
+  height: min(56vw, 560px);
+  background: radial-gradient(
+    circle,
+    rgba(160, 210, 255, .32) 0%,
+    rgba(80, 130, 200, .12) 38%,
+    rgba(60, 50, 120, .06) 55%,
+    transparent 72%
+  );
+  animation: methodGalaxyNebulaPulse 24s ease-in-out infinite;
+}
+
+.argos-method-galaxy-nebula--two {
+  inset: auto -12% -20% auto;
+  width: min(72vw, 680px);
+  height: min(50vw, 500px);
+  background: radial-gradient(
+    circle,
+    rgba(120, 180, 240, .22) 0%,
+    rgba(70, 50, 110, .1) 42%,
+    transparent 74%
+  );
+  animation: methodGalaxyNebulaPulse 28s ease-in-out infinite reverse;
+  animation-delay: -9s;
+}
+
+/* Sol — disco, corona y manchas; arriba de día, abajo de noche */
+.argos-method-galaxy-sun {
+  inset: auto;
+  left: auto;
+  right: 8%;
+  width: min(52vw, 520px);
+  height: min(52vw, 520px);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 252, 235, .7) 0%,
+    rgba(255, 230, 160, .45) 8%,
+    rgba(255, 190, 90, .22) 18%,
+    rgba(255, 160, 60, .1) 32%,
+    rgba(120, 180, 255, .06) 48%,
+    transparent 68%
+  );
+  filter: blur(6px);
+  mix-blend-mode: screen;
+  opacity: .4;
+  top: auto;
+  bottom: 12%;
+  animation: methodGalaxySunOrbit 90s ease-in-out infinite alternate;
+}
+
+.argos-method-galaxy-sun::before {
+  content: "";
+  position: absolute;
+  inset: 22%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 38% 36%, #fffef8 0%, #ffe9a8 14%, #ffb84d 32%, #ff8c33 48%, rgba(255, 120, 40, .25) 68%, transparent 100%),
+    radial-gradient(circle at 62% 58%, rgba(180, 100, 40, .35) 0%, transparent 22%),
+    radial-gradient(circle at 48% 72%, rgba(160, 90, 35, .28) 0%, transparent 18%);
+  box-shadow:
+    0 0 48px rgba(255, 220, 140, .55),
+    0 0 96px rgba(255, 180, 80, .28);
+  filter: blur(1px);
+}
+
+.argos-method-galaxy-sun::after {
+  content: "";
+  position: absolute;
+  inset: -18%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 210, 120, .22) 0%, rgba(255, 160, 60, .08) 38%, transparent 62%);
+  animation: methodGalaxySunPulse 7s ease-in-out infinite;
+}
+
+/* Planetas lejanos — capa con profundidad */
+.argos-method-galaxy-planets-far,
+.argos-method-galaxy-planets-orbit {
+  inset: 0;
+  overflow: visible;
+  animation: methodGalaxyBodiesNight 90s ease-in-out infinite alternate;
+}
+
+.argos-method-galaxy-planet {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  transform-origin: center center;
+}
+
+/* Gigante gaseoso con anillo */
+.argos-method-galaxy-planet--gas {
+  top: 10%;
+  left: 3%;
+  width: clamp(72px, 11vw, 128px);
+  height: clamp(72px, 11vw, 128px);
+  background:
+    linear-gradient(168deg,
+      #c9a86a 0%, #8b5a2b 12%, #e8c878 22%, #5c3d1e 36%,
+      #d4a855 48%, #4a3018 58%, #e0b868 72%, #6b4423 86%, #a08050 100%);
+  box-shadow:
+    inset -12px -8px 28px rgba(0, 0, 0, .45),
+    inset 6px 6px 18px rgba(255, 230, 180, .12),
+    0 0 48px rgba(200, 160, 90, .22);
+  opacity: .78;
+  animation: methodGalaxyPlanetDrift1 95s ease-in-out infinite;
+}
+
+.argos-method-galaxy-planet--gas::after {
+  content: "";
+  position: absolute;
+  left: -32%;
+  right: -32%;
+  top: 44%;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(220, 200, 160, .4);
+  box-shadow:
+    0 0 14px rgba(220, 200, 160, .25),
+    inset 0 0 8px rgba(255, 240, 200, .15);
+  transform: rotate(-14deg);
+}
+
+/* Mundo helado */
+.argos-method-galaxy-planet--ice {
+  top: 62%;
+  right: 6%;
+  width: clamp(44px, 6.5vw, 72px);
+  height: clamp(44px, 6.5vw, 72px);
+  background: radial-gradient(circle at 35% 32%, #f0f9ff 0%, #bae6fd 28%, #7dd3fc 52%, #0ea5e9 78%, #0369a1 100%);
+  box-shadow:
+    inset -6px -6px 14px rgba(3, 105, 161, .35),
+    0 0 32px rgba(125, 211, 252, .28);
+  opacity: .72;
+  animation: methodGalaxyPlanetDrift2 78s ease-in-out infinite reverse;
+  animation-delay: -20s;
+}
+
+/* Planeta rocoso / rojizo */
+.argos-method-galaxy-planet--rust {
+  top: 34%;
+  right: 14%;
+  width: clamp(52px, 7.5vw, 84px);
+  height: clamp(52px, 7.5vw, 84px);
+  background:
+    radial-gradient(circle at 38% 34%, #fca5a5 0%, #dc2626 22%, #991b1b 55%, #450a0a 100%);
+  box-shadow:
+    inset -8px -6px 16px rgba(69, 10, 10, .5),
+    0 0 28px rgba(220, 80, 60, .2);
+  opacity: .7;
+  animation: methodGalaxyPlanetDrift3 68s ease-in-out infinite;
+  animation-delay: -14s;
+}
+
+/* Tierra azul-verde */
+.argos-method-galaxy-planet--earth {
+  bottom: 22%;
+  left: 6%;
+  width: clamp(56px, 8vw, 92px);
+  height: clamp(56px, 8vw, 92px);
+  background:
+    radial-gradient(circle at 40% 38%, #86efac 0%, transparent 28%),
+    radial-gradient(circle at 62% 55%, #38bdf8 0%, #0284c7 42%, #0c4a6e 100%);
+  box-shadow:
+    inset -8px -8px 18px rgba(12, 74, 110, .4),
+    0 0 36px rgba(56, 189, 248, .22);
+  opacity: .75;
+  animation: methodGalaxyPlanetDrift4 82s ease-in-out infinite;
+  animation-delay: -30s;
+}
+
+/* Enano rocoso */
+.argos-method-galaxy-planet--dwarf {
+  top: 48%;
+  left: 22%;
+  width: clamp(28px, 4vw, 44px);
+  height: clamp(28px, 4vw, 44px);
+  border-radius: 46% 54% 50% 50% / 52% 48% 52% 48%;
+  background: linear-gradient(145deg, #94a3b8 0%, #64748b 45%, #334155 100%);
+  box-shadow: inset -4px -4px 8px rgba(15, 23, 42, .4), 0 0 16px rgba(148, 163, 184, .2);
+  opacity: .65;
+  animation: methodGalaxyPlanetDrift5 54s ease-in-out infinite;
+}
+
+/* Planetas en órbita alrededor del sol (derecha-arriba) */
+.argos-method-galaxy-planets-orbit {
+  pointer-events: none;
+  transform-origin: 82% 28%;
+}
+
+.argos-method-galaxy-planet--ringed {
+  top: 22%;
+  left: 72%;
+  width: clamp(64px, 9vw, 104px);
+  height: clamp(64px, 9vw, 104px);
+  margin-left: min(10vw, 120px);
+  background: linear-gradient(165deg, #fde68a 0%, #d97706 28%, #b45309 55%, #78350f 100%);
+  box-shadow: inset -10px -8px 20px rgba(69, 26, 3, .4), 0 0 40px rgba(251, 191, 36, .18);
+  opacity: .8;
+  animation: methodGalaxyPlanetOrbit1 90s linear infinite;
+}
+
+.argos-method-galaxy-planet--ringed::before {
+  content: "";
+  position: absolute;
+  left: -42%;
+  right: -42%;
+  top: 46%;
+  height: 16px;
+  border-radius: 50%;
+  border: 3px solid rgba(253, 230, 138, .45);
+  box-shadow: 0 0 20px rgba(253, 230, 138, .2);
+  transform: rotate(-8deg);
+}
+
+.argos-method-galaxy-planet--ringed::after {
+  content: "";
+  position: absolute;
+  left: -28%;
+  right: -28%;
+  top: 48%;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, .2);
+  transform: rotate(-8deg);
+}
+
+/* Volcánico / roca caliente — órbita interior */
+.argos-method-galaxy-planet--volcanic {
+  top: 32%;
+  left: 76%;
+  width: clamp(40px, 5.5vw, 64px);
+  height: clamp(40px, 5.5vw, 64px);
+  margin-left: min(6vw, 72px);
+  background: radial-gradient(circle at 35% 32%, #fdba74 0%, #ea580c 35%, #7c2d12 75%, #431407 100%);
+  box-shadow:
+    inset -6px -6px 12px rgba(67, 20, 7, .45),
+    0 0 24px rgba(234, 88, 12, .35);
+  opacity: .75;
+  animation: methodGalaxyPlanetOrbit2 65s linear infinite reverse;
+}
+
+/* Luna — cráteres y halo; abajo de día, arriba de noche */
+.argos-method-galaxy-moon {
+  position: absolute;
+  left: 10%;
+  width: clamp(72px, 10vw, 104px);
+  height: clamp(72px, 10vw, 104px);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 72% 28%, rgba(15, 23, 42, .55) 0%, transparent 42%),
+    radial-gradient(circle at 32% 30%, #f8fafc 0%, #e2e8f0 28%, #94a3b8 58%, #475569 88%, #334155 100%);
+  box-shadow:
+    0 0 48px rgba(200, 220, 255, .45),
+    0 0 88px rgba(148, 180, 220, .22),
+    inset -10px -12px 20px rgba(15, 23, 42, .4),
+    inset 4px 4px 12px rgba(248, 250, 252, .15);
+  opacity: .58;
+  top: auto;
+  bottom: 10%;
+  animation: methodGalaxyMoonOrbit 90s ease-in-out infinite alternate;
+}
+
+.argos-method-galaxy-moon::before {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 32%;
+  left: 26%;
+  border-radius: 50%;
+  background: rgba(71, 85, 105, .4);
+  box-shadow:
+    22px 8px 0 4px rgba(71, 85, 105, .28),
+    10px 24px 0 3px rgba(71, 85, 105, .22),
+    34px 28px 0 2px rgba(71, 85, 105, .18),
+    -6px 18px 0 2px rgba(71, 85, 105, .2);
+}
+
+.argos-method-galaxy-moon::after {
+  content: "";
+  position: absolute;
+  inset: -28px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(200, 220, 255, .18) 0%, transparent 68%);
+}
+
+/* Órbitas planetarias */
+.argos-method-galaxy-orbit {
+  inset: auto;
+  border: 1px solid rgba(100, 200, 255, .16);
+  border-radius: 50%;
+  opacity: .4;
+  box-shadow: 0 0 20px rgba(60, 140, 200, .06);
+}
+
+.argos-method-galaxy-orbit--one {
+  top: 6%;
+  right: 2%;
+  width: min(52vw, 520px);
+  height: min(36vw, 360px);
+  transform: rotate(-18deg);
+  animation: methodGalaxyOrbitSpin 90s linear infinite;
+}
+
+.argos-method-galaxy-orbit--two {
+  top: 22%;
+  right: 12%;
+  width: min(38vw, 380px);
+  height: min(26vw, 260px);
+  border-color: rgba(200, 235, 255, .16);
+  transform: rotate(12deg);
+  animation: methodGalaxyOrbitSpin2 65s linear infinite reverse;
+}
+
+/* Campo estelar denso — más visible y en movimiento */
+.argos-method-galaxy-stars--small {
+  opacity: .95;
+  mix-blend-mode: screen;
+  background-repeat: repeat;
+  background-size: 180px 180px;
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 255, 1) 0, transparent 1.2px),
+    radial-gradient(circle, rgba(210, 238, 255, .85) 0, transparent 1px),
+    radial-gradient(circle, rgba(255, 255, 255, .9) 0, transparent 1.1px),
+    radial-gradient(circle, rgba(180, 228, 255, .7) 0, transparent 1.4px),
+    radial-gradient(circle, rgba(255, 255, 255, .65) 0, transparent 1px);
+  background-position: 0 0, 36px 18px, 72px 54px, 108px 32px, 144px 88px;
+}
+
+.argos-method-galaxy-stars--twinkle {
+  opacity: .55;
+  mix-blend-mode: screen;
+  background-repeat: repeat;
+  background-size: 140px 140px;
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 255, .9) 0, transparent 2px),
+    radial-gradient(circle, rgba(200, 235, 255, .5) 0, transparent 1.5px);
+  background-position: 20px 40px, 70px 10px;
+}
+
+.argos-method-galaxy-stars--large {
+  opacity: .72;
+  mix-blend-mode: screen;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-image:
+    radial-gradient(circle at 8% 20%, rgba(255, 255, 255, .7) 0, transparent 2.5px),
+    radial-gradient(circle at 22% 8%, rgba(200, 235, 255, .5) 0, transparent 3px),
+    radial-gradient(circle at 42% 32%, rgba(255, 255, 255, .55) 0, transparent 2px),
+    radial-gradient(circle at 62% 14%, rgba(180, 228, 255, .45) 0, transparent 2.5px),
+    radial-gradient(circle at 78% 42%, rgba(255, 255, 255, .5) 0, transparent 3px),
+    radial-gradient(circle at 88% 22%, rgba(200, 235, 255, .4) 0, transparent 2px),
+    radial-gradient(circle at 18% 72%, rgba(255, 255, 255, .48) 0, transparent 2.5px),
+    radial-gradient(circle at 52% 68%, rgba(255, 255, 255, .38) 0, transparent 3.5px),
+    radial-gradient(circle at 92% 78%, rgba(210, 238, 255, .42) 0, transparent 2px);
+  transform-origin: 48% 42%;
+}
+
+/* Constelaciones — varios grupos con líneas */
+.argos-method-galaxy-constellations {
+  opacity: .52;
+  mix-blend-mode: screen;
+}
+
+.argos-method-galaxy-constellations::before,
+.argos-method-galaxy-constellations::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+.argos-method-galaxy-constellations::before {
+  background-image:
+    radial-gradient(circle at 14% 26%, rgba(230, 248, 255, .95) 0, transparent 2px),
+    radial-gradient(circle at 20% 32%, rgba(255, 255, 255, .8) 0, transparent 1.5px),
+    radial-gradient(circle at 28% 20%, rgba(200, 235, 255, .75) 0, transparent 1.5px),
+    radial-gradient(circle at 34% 38%, rgba(255, 255, 255, .65) 0, transparent 1.5px),
+    linear-gradient(115deg, transparent 12.8%, rgba(160, 220, 255, .28) 13%, rgba(160, 220, 255, .28) 13.35%, transparent 13.7%),
+    linear-gradient(48deg, transparent 22%, rgba(150, 210, 255, .22) 22.3%, rgba(150, 210, 255, .22) 22.65%, transparent 23%),
+    linear-gradient(168deg, transparent 30%, rgba(140, 200, 255, .18) 30.2%, rgba(140, 200, 255, .18) 30.5%, transparent 30.8%);
+  animation: methodGalaxyConstellationGlow 16s ease-in-out infinite;
+}
+
+.argos-method-galaxy-constellations::after {
+  background-image:
+    radial-gradient(circle at 62% 58%, rgba(230, 248, 255, .9) 0, transparent 2px),
+    radial-gradient(circle at 70% 54%, rgba(255, 255, 255, .75) 0, transparent 1.5px),
+    radial-gradient(circle at 78% 64%, rgba(200, 235, 255, .7) 0, transparent 1.5px),
+    radial-gradient(circle at 84% 52%, rgba(255, 255, 255, .6) 0, transparent 1.5px),
+    linear-gradient(-42deg, transparent 54%, rgba(160, 220, 255, .26) 54.3%, rgba(160, 220, 255, .26) 54.65%, transparent 55%),
+    linear-gradient(128deg, transparent 60%, rgba(150, 210, 255, .2) 60.25%, rgba(150, 210, 255, .2) 60.55%, transparent 60.85%),
+    radial-gradient(circle at 48% 82%, rgba(200, 235, 255, .55) 0, transparent 1.5px),
+    linear-gradient(72deg, transparent 78%, rgba(140, 200, 255, .16) 78.2%, rgba(140, 200, 255, .16) 78.5%, transparent 78.8%);
+  animation: methodGalaxyConstellationGlow 20s ease-in-out infinite reverse;
+  animation-delay: -7s;
+}
+
+/* Cinturón de escombros — rocas a lo lejos */
+.argos-method-galaxy-rocky-belt {
+  opacity: .72;
+  mix-blend-mode: screen;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-image:
+    radial-gradient(ellipse 4px 3px at 8% 38%, rgba(180, 195, 215, .85) 0%, transparent 100%),
+    radial-gradient(ellipse 3px 2px at 14% 42%, rgba(150, 170, 195, .7) 0%, transparent 100%),
+    radial-gradient(ellipse 5px 3px at 18% 36%, rgba(200, 210, 230, .75) 0%, transparent 100%),
+    radial-gradient(ellipse 3px 2px at 24% 44%, rgba(140, 160, 185, .65) 0%, transparent 100%),
+    radial-gradient(ellipse 4px 3px at 32% 40%, rgba(170, 185, 205, .8) 0%, transparent 100%),
+    radial-gradient(ellipse 2px 2px at 38% 46%, rgba(190, 200, 220, .6) 0%, transparent 100%),
+    radial-gradient(ellipse 6px 4px at 72% 58%, rgba(175, 190, 210, .8) 0%, transparent 100%),
+    radial-gradient(ellipse 3px 2px at 78% 54%, rgba(155, 175, 200, .7) 0%, transparent 100%),
+    radial-gradient(ellipse 4px 3px at 84% 62%, rgba(185, 200, 220, .75) 0%, transparent 100%),
+    radial-gradient(ellipse 3px 2px at 88% 56%, rgba(145, 165, 190, .65) 0%, transparent 100%),
+    radial-gradient(ellipse 5px 3px at 52% 78%, rgba(165, 180, 200, .7) 0%, transparent 100%),
+    radial-gradient(ellipse 3px 2px at 58% 82%, rgba(190, 205, 225, .65) 0%, transparent 100%),
+    radial-gradient(ellipse 4px 3px at 44% 28%, rgba(160, 175, 195, .72) 0%, transparent 100%),
+    radial-gradient(ellipse 2px 2px at 48% 32%, rgba(200, 215, 235, .55) 0%, transparent 100%),
+    radial-gradient(ellipse 3px 2px at 92% 34%, rgba(170, 185, 205, .68) 0%, transparent 100%),
+    radial-gradient(ellipse 4px 3px at 6% 68%, rgba(155, 170, 190, .7) 0%, transparent 100%),
+    radial-gradient(ellipse 3px 2px at 12% 72%, rgba(185, 200, 220, .62) 0%, transparent 100%);
+  animation: methodGalaxyBeltDrift 110s linear infinite;
+}
+
+/* Asteroides / cuerpos rocosos cercanos */
+.argos-method-galaxy-asteroid,
+.argos-method-galaxy-rock {
+  position: absolute;
+  border-radius: 42% 58% 48% 52% / 52% 44% 56% 48%;
+  background: linear-gradient(
+    155deg,
+    rgba(175, 195, 220, .75) 0%,
+    rgba(95, 120, 150, .55) 38%,
+    rgba(45, 65, 90, .45) 100%
+  );
+  box-shadow:
+    inset -3px -4px 8px rgba(0, 0, 0, .35),
+    inset 2px 2px 6px rgba(220, 240, 255, .2),
+    0 0 22px rgba(100, 150, 200, .25),
+    0 0 40px rgba(60, 100, 140, .12);
+  opacity: .88;
+  pointer-events: none;
+}
+
+.argos-method-galaxy-asteroid--1 {
+  top: 28%;
+  left: 12%;
+  width: 48px;
+  height: 32px;
+  animation: methodGalaxyAsteroid1 38s ease-in-out infinite;
+}
+
+.argos-method-galaxy-asteroid--2 {
+  top: 52%;
+  left: 68%;
+  width: 36px;
+  height: 24px;
+  animation: methodGalaxyAsteroid2 44s ease-in-out infinite;
+  animation-delay: -12s;
+}
+
+.argos-method-galaxy-asteroid--3 {
+  top: 18%;
+  left: 48%;
+  width: 28px;
+  height: 20px;
+  opacity: .75;
+  animation: methodGalaxyAsteroid3 32s ease-in-out infinite;
+  animation-delay: -6s;
+}
+
+.argos-method-galaxy-asteroid--4 {
+  top: 72%;
+  left: 22%;
+  width: 40px;
+  height: 26px;
+  animation: methodGalaxyAsteroid4 50s ease-in-out infinite;
+  animation-delay: -20s;
+}
+
+.argos-method-galaxy-asteroid--5 {
+  top: 38%;
+  left: 78%;
+  width: 22px;
+  height: 16px;
+  opacity: .7;
+  animation: methodGalaxyAsteroid5 28s ease-in-out infinite;
+  animation-delay: -9s;
+}
+
+.argos-method-galaxy-asteroid--6 {
+  top: 8%;
+  left: 55%;
+  width: 34px;
+  height: 22px;
+  animation: methodGalaxyAsteroid6 36s ease-in-out infinite;
+  animation-delay: -15s;
+}
+
+.argos-method-galaxy-asteroid--7 {
+  top: 65%;
+  left: 42%;
+  width: 26px;
+  height: 18px;
+  opacity: .8;
+  animation: methodGalaxyAsteroid7 42s ease-in-out infinite;
+  animation-delay: -8s;
+}
+
+.argos-method-galaxy-asteroid--8 {
+  top: 44%;
+  left: 4%;
+  width: 30px;
+  height: 20px;
+  animation: methodGalaxyAsteroid8 48s ease-in-out infinite;
+  animation-delay: -22s;
+}
+
+/* Rocas irregulares flotantes */
+.argos-method-galaxy-rock {
+  border-radius: 38% 62% 52% 48% / 48% 42% 58% 52%;
+  background: linear-gradient(
+    140deg,
+    rgba(190, 205, 225, .8) 0%,
+    rgba(110, 130, 155, .6) 40%,
+    rgba(50, 70, 95, .5) 100%
+  );
+  box-shadow:
+    inset -4px -5px 10px rgba(0, 0, 0, .35),
+    0 0 18px rgba(100, 140, 180, .2);
+  opacity: .82;
+}
+
+.argos-method-galaxy-rock--1 {
+  top: 56%;
+  left: 32%;
+  width: 18px;
+  height: 12px;
+  animation: methodGalaxyRock1 34s ease-in-out infinite;
+}
+
+.argos-method-galaxy-rock--2 {
+  top: 24%;
+  left: 88%;
+  width: 14px;
+  height: 10px;
+  opacity: .7;
+  animation: methodGalaxyRock2 40s ease-in-out infinite;
+  animation-delay: -11s;
+}
+
+.argos-method-galaxy-rock--3 {
+  top: 78%;
+  left: 58%;
+  width: 22px;
+  height: 14px;
+  animation: methodGalaxyRock3 52s ease-in-out infinite;
+  animation-delay: -18s;
+}
+
+.argos-method-galaxy-rock--4 {
+  top: 16%;
+  left: 36%;
+  width: 12px;
+  height: 9px;
+  opacity: .75;
+  animation: methodGalaxyRock4 30s ease-in-out infinite;
+  animation-delay: -5s;
+}
+
+/* Cometas con núcleo y cola — más frecuentes */
+.argos-method-galaxy-comets {
+  overflow: hidden;
+  mix-blend-mode: screen;
+  opacity: .85;
+  pointer-events: none;
+}
+
+.argos-method-galaxy-comets::before,
+.argos-method-galaxy-comets::after {
+  content: "";
+  position: absolute;
+  opacity: 0;
+  transform-origin: left center;
+}
+
+.argos-method-galaxy-comets::before {
+  top: 12%;
+  left: -4%;
+  width: min(320px, 48vw);
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, .95) 6%,
+    rgba(200, 235, 255, .75) 22%,
+    rgba(126, 232, 255, .35) 55%,
+    transparent 100%
+  );
+  box-shadow:
+    0 0 16px rgba(200, 235, 255, .5),
+    8px 0 0 2px rgba(255, 255, 255, .9);
+  transform: rotate(-33deg);
+}
+
+.argos-method-galaxy-comets::after {
+  top: 42%;
+  left: 42%;
+  width: min(200px, 32vw);
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, .85) 8%,
+    rgba(180, 228, 255, .5) 35%,
+    transparent 100%
+  );
+  box-shadow: 6px 0 0 1.5px rgba(255, 255, 255, .75);
+  transform: rotate(-28deg);
+}
+
+.argos-method-galaxy-comets--secondary::before {
+  top: 68%;
+  left: 72%;
+  width: min(260px, 40vw);
+  height: 2.5px;
+  transform: rotate(-152deg);
+  animation: methodGalaxyCometC 18s cubic-bezier(.15, .8, .2, 1) infinite;
+  animation-delay: -11s;
+}
+
+.argos-method-galaxy-comets--secondary::after {
+  display: none;
+}
+
+.argos-method-galaxy-comets--tertiary::before {
+  top: 24%;
+  left: -2%;
+  width: min(240px, 36vw);
+  height: 2px;
+  transform: rotate(-24deg);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, .9) 10%,
+    rgba(180, 228, 255, .55) 40%,
+    transparent 100%
+  );
+  box-shadow: 5px 0 0 1.5px rgba(255, 255, 255, .8);
+}
+
+.argos-method-galaxy-comets--tertiary::after {
+  top: 78%;
+  left: 20%;
+  width: min(180px, 28vw);
+  height: 2px;
+  transform: rotate(-38deg);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, .8) 12%,
+    rgba(200, 235, 255, .45) 45%,
+    transparent 100%
+  );
+  box-shadow: 4px 0 0 1px rgba(255, 255, 255, .7);
+}
+
+/* Malla cuadrada — misma que home (gridDrift 64px) */
+.argos-method-galaxy-grid {
+  opacity: .58;
+  background-image:
+    linear-gradient(var(--method-galaxy-mesh) 1px, transparent 1px),
+    linear-gradient(90deg, var(--method-galaxy-mesh-soft) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, .92) 0%,
+    rgba(0, 0, 0, .72) 50%,
+    rgba(0, 0, 0, .48) 100%
+  );
+  animation: gridDrift 22s linear infinite;
+}
+
+/* Vacío profundo — se aligera de día para no apagar el azul */
+.argos-method-galaxy-void {
+  background:
+    radial-gradient(ellipse 130% 110% at 50% 42%, transparent 0%, rgba(2, 6, 14, .4) 52%, rgba(1, 4, 10, .82) 100%),
+    radial-gradient(ellipse 90% 65% at 0% 100%, rgba(1, 4, 10, .7) 0%, transparent 58%),
+    radial-gradient(ellipse 85% 55% at 100% 0%, rgba(1, 4, 10, .65) 0%, transparent 52%),
+    radial-gradient(ellipse 60% 45% at 8% 12%, rgba(1, 4, 10, .5) 0%, transparent 48%);
+  pointer-events: none;
+  animation: methodGalaxyVoidFade 90s ease-in-out infinite alternate;
+}
+
+.argos-method-galaxy-readability {
+  background:
+    linear-gradient(180deg, var(--method-readability-top) 0%, var(--method-readability-mid) 45%, var(--method-readability-bottom) 100%),
+    radial-gradient(ellipse 95% 80% at 50% 48%, transparent 22%, rgba(2, 8, 18, .22) 100%);
+  animation: methodGalaxyReadability 90s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+/* Contraste de contenido según fase */
+.argos-bg-method-galaxy .argos-content-layer {
+  color: var(--method-text-primary);
+  transition: color 0.6s ease;
+}
+
+.argos-method-galaxy--animated.argos-bg-method-galaxy .argos-content-layer h1,
+.argos-method-galaxy--animated.argos-bg-method-galaxy .argos-content-layer h2,
+.argos-method-galaxy--animated.argos-bg-method-galaxy .argos-content-layer h3,
+.argos-method-galaxy--animated.argos-bg-method-galaxy .argos-method-hero-title,
+.argos-method-galaxy--animated.argos-bg-method-galaxy .argos-content-layer .text-white,
+.argos-method-galaxy--animated.argos-bg-method-galaxy .argos-content-layer [class*="text-white"] {
+  color: var(--method-text-primary) !important;
+  text-shadow: var(--method-text-shadow);
+  transition: color 0.6s ease, text-shadow 0.6s ease;
+}
+
+.argos-method-galaxy--animated.argos-bg-method-galaxy .argos-content-layer p,
+.argos-method-galaxy--animated.argos-bg-method-galaxy .argos-content-layer li,
+.argos-method-galaxy--animated.argos-bg-method-galaxy .argos-content-layer .text-\[\#D7E8F6\],
+.argos-method-galaxy--animated.argos-bg-method-galaxy .argos-content-layer .text-\[\#C9DDEC\],
+.argos-method-galaxy--animated.argos-bg-method-galaxy .argos-content-layer .text-\[\#BFD7E8\] {
+  color: var(--method-text-muted) !important;
+}
+
+.argos-bg-method-galaxy .argos-content-layer .text-\[\#39F4FF\],
+.argos-bg-method-galaxy .argos-content-layer .text-\[\#18D4F7\],
+.argos-bg-method-galaxy .argos-content-layer .text-\[\#67E8F9\] {
+  color: var(--method-text-accent);
+}
+
+/* Tarjetas premium */
+.argos-bg-method-galaxy .argos-hologram-card,
+.argos-bg-method-galaxy .argos-tech-frame {
+  border: 1px solid var(--method-card-border);
+  background: var(--method-card-bg);
+  box-shadow:
+    0 28px 72px rgba(0, 0, 0, .38),
+    0 0 0 1px rgba(126, 232, 255, .1) inset,
+    0 0 48px rgba(43, 143, 212, .08);
+  backdrop-filter: blur(20px);
+  transition: background 0.6s ease, border-color 0.6s ease;
+}
+
+.argos-bg-method-galaxy .argos-hologram-card:hover {
+  border-color: rgba(126, 232, 255, .42);
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, .42),
+    0 0 0 1px rgba(126, 232, 255, .16) inset,
+    0 0 56px rgba(43, 143, 212, .14);
+}
+
+.argos-method-inner-card {
+  border: 1px solid var(--method-card-border);
+  background: var(--method-card-bg);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .22);
+  backdrop-filter: blur(12px);
+}
+
+.argos-bg-method-galaxy .argos-method-value-strip {
+  border: 1px solid rgba(126, 232, 255, .32);
+  background: linear-gradient(135deg, rgba(255, 255, 255, .12), rgba(24, 120, 200, .1));
+  box-shadow: 0 16px 40px rgba(0, 0, 0, .2);
+}
+
+.argos-bg-method-galaxy .argos-method-cta-primary {
+  box-shadow:
+    0 8px 28px rgba(24, 212, 247, .35),
+    0 0 0 1px rgba(255, 255, 255, .12) inset;
+}
+
+.argos-bg-method-galaxy .argos-method-cta-primary:hover {
+  box-shadow:
+    0 12px 36px rgba(57, 244, 255, .42),
+    0 0 0 1px rgba(255, 255, 255, .18) inset;
+}
+
+@keyframes methodGalaxyParallax {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(-1%, -0.6%, 0) scale(1.015); }
+}
+
+@keyframes methodGalaxyBaseDrift {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(1.5%, -1%, 0) scale(1.03); }
+}
+
+@keyframes methodGalaxyBaseDay {
+  0% { opacity: 1; }
+  100% { opacity: .42; }
+}
+
+@keyframes methodGalaxyNebulaPulse {
+  0%, 100% { opacity: .5; transform: scale(1); }
+  50% { opacity: .68; transform: scale(1.05); }
+}
+
+@keyframes methodGalaxyStarsDrift {
+  from { transform: rotate(0deg) scale(1.02); }
+  to { transform: rotate(360deg) scale(1.02); }
+}
+
+@keyframes methodGalaxyStarPan {
+  0% { background-position: 0 0, 36px 18px, 72px 54px, 108px 32px, 144px 88px; }
+  100% { background-position: 180px 0, 216px 18px, 252px 54px, 288px 32px, 324px 88px; }
+}
+
+@keyframes methodGalaxyStarTwinkle {
+  0%, 100% { opacity: .35; }
+  50% { opacity: .7; }
+}
+
+@keyframes methodGalaxyDayNightSky {
+  0% {
+    --galaxy-phase: 0;
+    --method-galaxy-mesh: rgba(72, 190, 240, .22);
+    --method-galaxy-mesh-soft: rgba(100, 210, 255, .14);
+  }
+  100% {
+    --galaxy-phase: 1;
+    --method-galaxy-mesh: rgba(103, 232, 249, .38);
+    --method-galaxy-mesh-soft: rgba(125, 211, 252, .26);
+  }
+}
+
+@keyframes methodGalaxySkyTint {
+  0% { opacity: 0; }
+  100% { opacity: .88; }
+}
+
+@keyframes methodGalaxyVoidFade {
+  0% { opacity: 1; }
+  100% { opacity: .28; }
+}
+
+@keyframes methodGalaxyReadability {
+  0% {
+    --method-readability-top: rgba(2, 8, 18, .42);
+    --method-readability-mid: rgba(2, 8, 18, .32);
+    --method-readability-bottom: rgba(2, 8, 18, .48);
+    --method-text-primary: #f4faff;
+    --method-text-shadow: 0 2px 28px rgba(0, 0, 0, .7), 0 0 40px rgba(2, 8, 18, .5);
+    --method-card-bg: linear-gradient(145deg, rgba(255, 255, 255, .12) 0%, rgba(255, 255, 255, .04) 48%, rgba(12, 50, 90, .12) 100%);
+    --method-card-border: rgba(100, 200, 255, .22);
+    --method-text-muted: #c9ddec;
+    --method-text-accent: #7ee8ff;
+  }
+  100% {
+    /* Día: refuerzo azul galáctico, sin velo gris/blanco */
+    --method-readability-top: rgba(14, 72, 128, .22);
+    --method-readability-mid: rgba(10, 58, 108, .14);
+    --method-readability-bottom: rgba(8, 42, 82, .26);
+    --method-text-primary: #f8fcff;
+    --method-text-muted: #e2f2fc;
+    --method-text-accent: #a5f3fc;
+    --method-text-shadow:
+      0 2px 20px rgba(2, 24, 56, .85),
+      0 0 36px rgba(8, 60, 120, .45),
+      0 1px 0 rgba(14, 116, 178, .35);
+    --method-card-bg: linear-gradient(145deg, rgba(255, 255, 255, .18) 0%, rgba(186, 230, 253, .12) 48%, rgba(56, 150, 220, .18) 100%);
+    --method-card-border: rgba(125, 211, 252, .42);
+  }
+}
+
+@keyframes methodGalaxySunPulse {
+  0%, 100% { opacity: .85; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.06); }
+}
+
+@keyframes methodGalaxyBodiesNight {
+  0% { opacity: 1; filter: brightness(1.05) saturate(1.08); }
+  100% { opacity: .92; filter: brightness(1.12) saturate(1.15); }
+}
+
+@keyframes methodGalaxyPlanetDrift1 {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(24px, 18px) rotate(4deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+@keyframes methodGalaxyPlanetDrift2 {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(-20px, -14px); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes methodGalaxyPlanetDrift3 {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(-16px, 22px) rotate(-6deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+@keyframes methodGalaxyPlanetDrift4 {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(18px, -12px); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes methodGalaxyPlanetDrift5 {
+  0% { transform: translate(0, 0) rotate(-8deg); }
+  50% { transform: translate(30px, -20px) rotate(12deg); }
+  100% { transform: translate(0, 0) rotate(-8deg); }
+}
+
+@keyframes methodGalaxyPlanetOrbit1 {
+  0% { transform: rotate(0deg) translateX(min(11vw, 130px)) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(min(11vw, 130px)) rotate(-360deg); }
+}
+
+@keyframes methodGalaxyPlanetOrbit2 {
+  0% { transform: rotate(0deg) translateX(min(7vw, 84px)) rotate(0deg); }
+  100% { transform: rotate(-360deg) translateX(min(7vw, 84px)) rotate(360deg); }
+}
+
+@keyframes methodGalaxyBeltDrift {
+  0% { transform: translate3d(0, 0, 0); opacity: .72; }
+  50% { transform: translate3d(-2%, 1%, 0); opacity: .85; }
+  100% { transform: translate3d(0, 0, 0); opacity: .72; }
+}
+
+@keyframes methodGalaxySunOrbit {
+  0% {
+    top: auto;
+    bottom: 10%;
+    opacity: .38;
+    transform: scale(0.9);
+    filter: blur(8px);
+  }
+  100% {
+    top: 4%;
+    bottom: auto;
+    opacity: .95;
+    transform: scale(1.06);
+    filter: blur(3px);
+  }
+}
+
+@keyframes methodGalaxyMoonOrbit {
+  0% {
+    top: 6%;
+    bottom: auto;
+    opacity: .88;
+    transform: scale(1.05);
+  }
+  100% {
+    top: auto;
+    bottom: 11%;
+    opacity: .42;
+    transform: scale(0.92);
+  }
+}
+
+@keyframes methodGalaxyStarsNightBoost {
+  0% { opacity: .95; }
+  100% { opacity: .5; }
+}
+
+@keyframes methodGalaxyOrbitSpin {
+  from { transform: rotate(-18deg); }
+  to { transform: rotate(342deg); }
+}
+
+@keyframes methodGalaxyOrbitSpin2 {
+  from { transform: rotate(12deg); }
+  to { transform: rotate(372deg); }
+}
+
+@keyframes methodGalaxyAsteroid1 {
+  0% { transform: translate(0, 0) rotate(-24deg); }
+  25% { transform: translate(140px, -50px) rotate(8deg); }
+  50% { transform: translate(280px, 30px) rotate(22deg); }
+  75% { transform: translate(90px, 70px) rotate(-5deg); }
+  100% { transform: translate(0, 0) rotate(-24deg); }
+}
+
+@keyframes methodGalaxyAsteroid2 {
+  0% { transform: translate(0, 0) rotate(30deg); }
+  33% { transform: translate(-120px, -40px) rotate(12deg); }
+  66% { transform: translate(-60px, 50px) rotate(38deg); }
+  100% { transform: translate(0, 0) rotate(30deg); }
+}
+
+@keyframes methodGalaxyAsteroid3 {
+  0% { transform: translate(0, 0) rotate(-12deg); }
+  50% { transform: translate(-180px, 80px) rotate(18deg); }
+  100% { transform: translate(0, 0) rotate(-12deg); }
+}
+
+@keyframes methodGalaxyAsteroid4 {
+  0% { transform: translate(0, 0) rotate(20deg); }
+  25% { transform: translate(100px, -30px) rotate(35deg); }
+  50% { transform: translate(200px, -60px) rotate(10deg); }
+  75% { transform: translate(50px, -20px) rotate(28deg); }
+  100% { transform: translate(0, 0) rotate(20deg); }
+}
+
+@keyframes methodGalaxyAsteroid5 {
+  0% { transform: translate(0, 0) rotate(-8deg); }
+  50% { transform: translate(-140px, -90px) rotate(15deg); }
+  100% { transform: translate(0, 0) rotate(-8deg); }
+}
+
+@keyframes methodGalaxyAsteroid6 {
+  0% { transform: translate(0, 0) rotate(14deg); }
+  50% { transform: translate(120px, 60px) rotate(-6deg); }
+  100% { transform: translate(0, 0) rotate(14deg); }
+}
+
+@keyframes methodGalaxyAsteroid7 {
+  0% { transform: translate(0, 0) rotate(-18deg); }
+  50% { transform: translate(-90px, -50px) rotate(8deg); }
+  100% { transform: translate(0, 0) rotate(-18deg); }
+}
+
+@keyframes methodGalaxyAsteroid8 {
+  0% { transform: translate(0, 0) rotate(22deg); }
+  50% { transform: translate(160px, -40px) rotate(-4deg); }
+  100% { transform: translate(0, 0) rotate(22deg); }
+}
+
+@keyframes methodGalaxyRock1 {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(50px, -30px) rotate(25deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+@keyframes methodGalaxyRock2 {
+  0% { transform: translate(0, 0) rotate(10deg); }
+  50% { transform: translate(-70px, 40px) rotate(-15deg); }
+  100% { transform: translate(0, 0) rotate(10deg); }
+}
+
+@keyframes methodGalaxyRock3 {
+  0% { transform: translate(0, 0) rotate(-12deg); }
+  50% { transform: translate(40px, 50px) rotate(18deg); }
+  100% { transform: translate(0, 0) rotate(-12deg); }
+}
+
+@keyframes methodGalaxyRock4 {
+  0% { transform: translate(0, 0) rotate(6deg); }
+  50% { transform: translate(-55px, -35px) rotate(-20deg); }
+  100% { transform: translate(0, 0) rotate(6deg); }
+}
+
+@keyframes methodGalaxyConstellationGlow {
+  0%, 100% { opacity: .3; }
+  50% { opacity: .48; }
+}
+
+@keyframes methodGalaxyCometA {
+  0% {
+    transform: rotate(-33deg) translate3d(-20px, 0, 0);
+    opacity: 0;
+  }
+  4% { opacity: 1; }
+  22% { opacity: .88; }
+  100% {
+    transform: rotate(-33deg) translate3d(125vw, 70vh, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes methodGalaxyCometB {
+  0% {
+    transform: rotate(-28deg) translate3d(24px, -8px, 0);
+    opacity: 0;
+  }
+  3% { opacity: .82; }
+  18% { opacity: .75; }
+  100% {
+    transform: rotate(-28deg) translate3d(-100vw, 55vh, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes methodGalaxyCometC {
+  0% {
+    transform: rotate(-152deg) translate3d(20px, 0, 0);
+    opacity: 0;
+  }
+  4% { opacity: .78; }
+  20% { opacity: .7; }
+  100% {
+    transform: rotate(-152deg) translate3d(-110vw, -40vh, 0);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .argos-method-galaxy--animated .argos-method-galaxy-stars--small {
+    animation:
+      methodGalaxyStarPan 70s linear infinite,
+      methodGalaxyStarsDrift 180s linear infinite,
+      methodGalaxyStarsNightBoost 90s ease-in-out infinite alternate;
+  }
+
+  .argos-method-galaxy--animated .argos-method-galaxy-stars--large {
+    animation:
+      methodGalaxyStarsDrift 120s linear infinite,
+      methodGalaxyStarsNightBoost 90s ease-in-out infinite alternate;
+  }
+
+  .argos-method-galaxy-stars--twinkle {
+    animation:
+      methodGalaxyStarTwinkle 4s ease-in-out infinite,
+      methodGalaxyStarPan 90s linear infinite reverse;
+  }
+
+  .argos-method-galaxy-comets::before {
+    animation: methodGalaxyCometA 8s cubic-bezier(.15, .8, .2, 1) infinite;
+  }
+
+  .argos-method-galaxy-comets::after {
+    animation: methodGalaxyCometB 10s cubic-bezier(.15, .8, .2, 1) infinite;
+    animation-delay: -4s;
+  }
+
+  .argos-method-galaxy-comets--secondary::before {
+    animation: methodGalaxyCometC 11s cubic-bezier(.15, .8, .2, 1) infinite;
+    animation-delay: -6s;
+  }
+
+  .argos-method-galaxy-comets--tertiary::before {
+    animation: methodGalaxyCometA 9s cubic-bezier(.15, .8, .2, 1) infinite;
+    animation-delay: -2s;
+  }
+
+  .argos-method-galaxy-comets--tertiary::after {
+    animation: methodGalaxyCometB 12s cubic-bezier(.15, .8, .2, 1) infinite;
+    animation-delay: -7s;
+  }
+}
+
+@media (max-width: 1024px) {
+  .argos-method-galaxy-nebula--one,
+  .argos-method-galaxy-nebula--two {
+    opacity: .45;
+    filter: blur(24px);
+  }
+
+  .argos-method-galaxy-constellations {
+    opacity: .28;
+  }
+
+  .argos-method-galaxy-asteroid,
+  .argos-method-galaxy-rock {
+    opacity: .72;
+  }
+
+  .argos-method-galaxy-planet--gas {
+    width: 88px;
+    height: 88px;
+  }
+
+  .argos-method-galaxy-planet--earth,
+  .argos-method-galaxy-planet--rust {
+    width: 56px;
+    height: 56px;
+  }
+
+  .argos-method-galaxy-comets {
+    opacity: .7;
+  }
+
+  .argos-method-galaxy-grid {
+    opacity: .58;
+  }
+}
+
+@media (max-width: 860px) {
+  .argos-bg-method-galaxy {
+    background:
+      radial-gradient(ellipse 50% 40% at 68% 22%, rgba(160, 210, 255, .2) 0%, transparent 55%),
+      radial-gradient(ellipse 95% 55% at 50% 0%, rgba(60, 140, 200, .15) 0%, transparent 52%),
+      linear-gradient(168deg, #0a2240 0%, #061528 50%, var(--method-galaxy-void) 100%);
+  }
+
+  .argos-method-galaxy-nebula--two {
+    display: none;
+  }
+
+  .argos-method-galaxy-stars--large {
+    opacity: .28;
+  }
+
+  .argos-method-galaxy-constellations::after {
+    display: none;
+  }
+
+  .argos-method-galaxy-orbit--two {
+    display: none;
+  }
+
+  .argos-method-galaxy-asteroid--4,
+  .argos-method-galaxy-asteroid--5,
+  .argos-method-galaxy-asteroid--6,
+  .argos-method-galaxy-asteroid--7,
+  .argos-method-galaxy-asteroid--8,
+  .argos-method-galaxy-rock--3,
+  .argos-method-galaxy-rock--4 {
+    display: none;
+  }
+
+  .argos-method-galaxy-planet--dwarf,
+  .argos-method-galaxy-planet--volcanic,
+  .argos-method-galaxy-planet--ice {
+    display: none;
+  }
+
+  .argos-method-galaxy-rocky-belt {
+    opacity: .5;
+  }
+
+  .argos-method-galaxy-sun {
+    width: min(56vw, 380px);
+    height: min(56vw, 380px);
+  }
+
+  .argos-method-galaxy-moon {
+    width: 64px;
+    height: 64px;
+  }
+
+  .argos-method-galaxy-comets--tertiary {
+    display: none;
+  }
+
+  .argos-method-galaxy-grid {
+    opacity: .44;
+    background-size: 56px 56px;
+  }
+
+  .argos-method-galaxy-void {
+    opacity: .95;
+  }
+
+  .argos-page-shell--method-galaxy .argos-page-bg {
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .argos-method-galaxy--animated.argos-bg-method-galaxy,
+  .argos-page-shell--method-galaxy .argos-page-bg,
+  .argos-method-galaxy-base,
+  .argos-method-galaxy-void,
+  .argos-method-galaxy-sky-tint,
+  .argos-method-galaxy-nebula,
+  .argos-method-galaxy-stars,
+  .argos-method-galaxy-constellations::before,
+  .argos-method-galaxy-constellations::after,
+  .argos-method-galaxy-grid,
+  .argos-method-galaxy-sun,
+  .argos-method-galaxy-sun::before,
+  .argos-method-galaxy-sun::after,
+  .argos-method-galaxy-moon,
+  .argos-method-galaxy-planets-far,
+  .argos-method-galaxy-planets-orbit,
+  .argos-method-galaxy-planet,
+  .argos-method-galaxy-rocky-belt,
+  .argos-method-galaxy-readability,
+  .argos-method-galaxy-orbit,
+  .argos-method-galaxy-asteroid,
+  .argos-method-galaxy-rock,
+  .argos-method-galaxy-comets::before,
+  .argos-method-galaxy-comets::after,
+  .argos-method-galaxy-comets--secondary::before,
+  .argos-method-galaxy-comets--tertiary::before,
+  .argos-method-galaxy-comets--tertiary::after {
+    animation: none !important;
+  }
+
+  .argos-method-galaxy-sun {
+    top: 5%;
+    bottom: auto;
+    opacity: .85;
+  }
+
+  .argos-method-galaxy-moon {
+    top: auto;
+    bottom: 11%;
+    opacity: .55;
+  }
+
+  .argos-method-galaxy-sky-tint {
+    opacity: .55;
+  }
+
+  .argos-method-galaxy-void {
+    opacity: .45;
+  }
+
+  .argos-method-galaxy-comets::before,
+  .argos-method-galaxy-comets::after,
+  .argos-method-galaxy-comets--secondary::before,
+  .argos-method-galaxy-comets--tertiary::before,
+  .argos-method-galaxy-comets--tertiary::after {
+    opacity: 0 !important;
+  }
+
+  .argos-method-showcase .argos-method-orbit__line,
+  .argos-method-step-card {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .argos-method-title-glow {
+    animation: none !important;
+  }
+}
+
+/* —— Capas en contenedor (Home showcase + page-bg) —— */
+.argos-page-bg .argos-method-galaxy-backdrop,
+.argos-method-showcase .argos-method-galaxy-backdrop {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.argos-method-galaxy-backdrop .argos-bg-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Malla algorítmica / velo de legibilidad sobre la galaxia */
+.argos-method-galaxy-algorithm-veil {
+  opacity: .42;
+  background-image:
+    linear-gradient(118deg, rgba(103, 232, 249, .06) 0%, transparent 42%),
+    linear-gradient(-62deg, rgba(56, 189, 248, .05) 0%, transparent 38%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 31px,
+      rgba(125, 211, 252, .04) 31px,
+      rgba(125, 211, 252, .04) 32px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 31px,
+      rgba(103, 232, 249, .035) 31px,
+      rgba(103, 232, 249, .035) 32px
+    );
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, .75) 0%, rgba(0, 0, 0, .45) 55%, rgba(0, 0, 0, .65) 100%);
+}
+
+/* —— Showcase Home (sección insignia) —— */
+.argos-method-showcase {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 0%, rgba(56, 189, 248, .22) 0%, transparent 55%),
+    linear-gradient(175deg, #0f3d6e 0%, #0c2f58 32%, #081f3d 68%, #051525 100%);
+}
+
+.argos-method-showcase__inner {
+  position: relative;
+  z-index: 2;
+}
+
+.argos-method-galaxy--section-lite .argos-method-galaxy-sky-tint {
+  opacity: .72;
+  animation: none;
+}
+
+.argos-method-galaxy-backdrop--section .argos-method-galaxy-sky-tint {
+  opacity: .65;
+}
+
+.argos-method-galaxy-backdrop--section .argos-method-galaxy-readability {
+  background:
+    linear-gradient(180deg, rgba(8, 42, 82, .35) 0%, rgba(6, 28, 52, .22) 48%, rgba(4, 18, 36, .4) 100%),
+    radial-gradient(ellipse 100% 80% at 50% 40%, transparent 15%, rgba(4, 14, 28, .35) 100%);
+  animation: none;
+}
+
+/* Título con brillo cyan */
+.argos-method-title-glow {
+  background: linear-gradient(105deg, #f8fcff 0%, #e0f7ff 28%, #67e8f9 52%, #38bdf8 78%, #a5f3fc 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(0 0 28px rgba(56, 189, 248, .35));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .argos-method-title-glow {
+    animation: methodTitleGlowShift 14s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes methodTitleGlowShift {
+  0% { background-position: 0% center; filter: drop-shadow(0 0 20px rgba(56, 189, 248, .28)); }
+  100% { background-position: 100% center; filter: drop-shadow(0 0 36px rgba(103, 232, 249, .42)); }
+}
+
+/* Órbita conectora A→S */
+.argos-method-orbit {
+  position: relative;
+}
+
+.argos-method-orbit__line {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  top: 50%;
+  height: 2px;
+  transform: translate3d(0, -50%, 0);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(103, 232, 249, .35) 12%,
+    rgba(56, 189, 248, .55) 50%,
+    rgba(103, 232, 249, .35) 88%,
+    transparent 100%
+  );
+  box-shadow: 0 0 24px rgba(56, 189, 248, .25);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.argos-method-orbit__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .argos-method-orbit__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .argos-method-orbit--showcase .argos-method-orbit__grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: .85rem;
+  }
+
+  .argos-method-orbit--showcase .argos-method-orbit__line {
+    top: 42%;
+  }
+}
+
+/* Tarjetas premium por letra */
+.argos-method-step-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 11.5rem;
+  padding: 1.15rem 1.1rem 1.25rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(126, 232, 255, .32);
+  background: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, .14) 0%,
+    rgba(255, 255, 255, .05) 42%,
+    rgba(24, 120, 200, .1) 100%
+  );
+  box-shadow:
+    0 20px 48px rgba(0, 0, 0, .32),
+    0 0 0 1px rgba(126, 232, 255, .08) inset,
+    0 0 40px rgba(43, 143, 212, .1);
+  backdrop-filter: blur(16px);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    transform .35s cubic-bezier(.22, 1, .36, 1),
+    border-color .35s ease,
+    box-shadow .35s ease,
+    opacity .35s ease;
+}
+
+.argos-method-step-card:hover {
+  transform: translate3d(0, -4px, 0);
+  border-color: rgba(125, 211, 252, .5);
+  box-shadow:
+    0 28px 56px rgba(0, 0, 0, .38),
+    0 0 0 1px rgba(126, 232, 255, .18) inset,
+    0 0 52px rgba(56, 189, 248, .18);
+}
+
+.argos-method-step-card:focus-visible {
+  outline: 2px solid #39f4ff;
+  outline-offset: 3px;
+}
+
+.argos-method-step-card__stage {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: .65rem;
+}
+
+.argos-method-step-card__step-num {
+  font-size: .65rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(186, 230, 253, .85);
+}
+
+.argos-method-step-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: .5rem;
+  border: 1px solid rgba(103, 232, 249, .25);
+  background: rgba(24, 212, 247, .08);
+}
+
+.argos-method-step-card__letter {
+  font-size: 2.25rem;
+  font-weight: 900;
+  line-height: 1;
+  color: #39f4ff;
+  text-shadow: 0 0 24px rgba(57, 244, 255, .35);
+}
+
+.argos-method-step-card__title {
+  margin-top: .35rem;
+  font-size: 1rem;
+  font-weight: 900;
+  color: #f8fcff;
+}
+
+.argos-method-step-card__tagline {
+  margin-top: .5rem;
+  flex: 1;
+  font-size: .8rem;
+  line-height: 1.55;
+  color: #c9ddec;
+}
+
+.argos-method-step-card__cta {
+  margin-top: .85rem;
+  font-size: .75rem;
+  font-weight: 800;
+  color: #67e8f9;
+}
+
+/* Recorrido ARGOS (hub + páginas fase) */
+.argos-method-journey {
+  border: 1px solid rgba(126, 232, 255, .22);
+  border-radius: 1rem;
+  background: linear-gradient(135deg, rgba(255, 255, 255, .1), rgba(12, 50, 90, .12));
+  padding: 1rem 1.1rem;
+  backdrop-filter: blur(14px);
+}
+
+.argos-method-journey__label {
+  margin: 0 0 .75rem;
+  font-size: .65rem;
+  font-weight: 800;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: #67e8f9;
+}
+
+.argos-method-journey__track {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .35rem .25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.argos-method-journey__item {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.argos-method-journey__step {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .4rem .65rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, .12);
+  background: rgba(255, 255, 255, .04);
+  font-size: .72rem;
+  font-weight: 800;
+  color: #bfd7e8;
+  text-decoration: none;
+  transition:
+    transform .25s ease,
+    border-color .25s ease,
+    background .25s ease,
+    color .25s ease;
+}
+
+.argos-method-journey__step:hover {
+  transform: translate3d(0, -1px, 0);
+  border-color: rgba(103, 232, 249, .4);
+  color: #f4faff;
+}
+
+.argos-method-journey__step--active {
+  border-color: rgba(24, 212, 247, .55);
+  background: rgba(24, 212, 247, .16);
+  color: #fff;
+}
+
+.argos-method-journey__step:focus-visible {
+  outline: 2px solid #39f4ff;
+  outline-offset: 2px;
+}
+
+.argos-method-journey__letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+  font-weight: 900;
+  color: #39f4ff;
+}
+
+.argos-method-journey__connector {
+  width: .65rem;
+  height: 1px;
+  margin: 0 .15rem;
+  background: linear-gradient(90deg, rgba(103, 232, 249, .15), rgba(103, 232, 249, .45), rgba(103, 232, 249, .15));
+}
+
+@media (max-width: 639px) {
+  .argos-method-journey__connector {
+    display: none;
+  }
+
+  .argos-method-orbit__line {
+    display: none;
+  }
+
+  .argos-method-showcase .argos-method-galaxy-comets--secondary {
+    opacity: .5;
+  }
+}
+
+/* Bloques premium en páginas de fase */
+.argos-method-premium-card {
+  border: 1px solid rgba(126, 232, 255, .26);
+  border-radius: 1rem;
+  background: linear-gradient(145deg, rgba(255, 255, 255, .11) 0%, rgba(255, 255, 255, .04) 50%, rgba(24, 120, 200, .08) 100%);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, .24);
+  backdrop-filter: blur(14px);
+}
+
+.argos-bg-method-galaxy .argos-method-premium-card {
+  border-color: var(--method-card-border);
+  background: var(--method-card-bg);
+}
+
+.argos-method-hero-panel {
+  border: 1px solid rgba(126, 232, 255, .28);
+  border-radius: 1.25rem;
+  background: linear-gradient(135deg, rgba(255, 255, 255, .12), rgba(8, 48, 88, .2));
+  padding: 1.5rem 1.75rem;
+  backdrop-filter: blur(18px);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, .28);
+}

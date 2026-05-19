@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo } from "react";
 import ArgosPageShell from "@/components/layout/ArgosPageShell";
+import MethodArgosJourneyNav from "@/components/method/MethodArgosJourneyNav";
 import { useDiagnosticSurveyLauncher } from "@/components/diagnostic/DiagnosticSurveyLauncher";
 import { useLocalizedServiceBySlug } from "@/hooks/useLocalizedServices";
 import { usePageMeta } from "@/components/seo/usePageMeta";
 import { type ServiceSlug } from "@/lib/services";
-import { getAllMethodArgosSteps, type MethodArgosStep, type MethodStepCta } from "@/lib/methodArgosSteps";
+import { type MethodArgosStep, type MethodStepCta } from "@/lib/methodArgosSteps";
 
 type Props = {
   step: MethodArgosStep;
@@ -19,7 +19,7 @@ function RelatedServiceCard({ slug }: { slug: ServiceSlug }) {
   return (
     <Link
       href={`/servicios/${slug}`}
-      className="argos-hologram-card flex flex-col justify-between p-5 transition hover:-translate-y-0.5 hover:border-[#18D4F7]/45"
+      className="argos-method-premium-card argos-hologram-card flex flex-col justify-between p-5 transition hover:-translate-y-0.5 hover:border-[#18D4F7]/45"
     >
       <div>
         <p className="text-xs font-black uppercase text-[#39F4FF]">Servicio relacionado</p>
@@ -41,7 +41,7 @@ function MethodCtaControl({
   const { openDiagnostic } = useDiagnosticSurveyLauncher();
 
   const primaryClass =
-    "inline-flex justify-center rounded-md bg-[#18D4F7] px-5 py-3 text-center text-sm font-black text-[#030812] transition hover:bg-[#39F4FF]";
+    "argos-method-cta-primary inline-flex justify-center rounded-md bg-[#18D4F7] px-5 py-3 text-center text-sm font-black text-[#030812] transition hover:bg-[#39F4FF]";
   const secondaryClass =
     "inline-flex justify-center rounded-md border border-white/20 bg-white/5 px-5 py-3 text-center text-sm font-bold text-white backdrop-blur transition hover:border-[#18D4F7] hover:bg-white/10";
 
@@ -74,12 +74,10 @@ function MethodCtaControl({
 }
 
 export default function MethodStepPageView({ step }: Props) {
-  const steps = useMemo(() => getAllMethodArgosSteps(), []);
-
   usePageMeta(step.seoTitle, step.description);
 
   return (
-    <ArgosPageShell variant="method">
+    <ArgosPageShell variant="method-galaxy">
       <section className="px-5 py-12 lg:px-8">
         <div className="mx-auto max-w-5xl">
           <div className="flex flex-wrap items-center gap-3">
@@ -94,13 +92,20 @@ export default function MethodStepPageView({ step }: Props) {
             </Link>
           </div>
 
-          <div className="mt-6 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+          <MethodArgosJourneyNav activeSlug={step.slug} className="mt-6" />
+
+          <div className="argos-method-hero-panel mt-8 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
             <div className="max-w-3xl">
               <p className="text-sm font-black uppercase text-[#18D4F7]">
                 {step.letter} · {step.name}
               </p>
-              <h1 className="mt-2 text-4xl font-black text-white lg:text-5xl">{step.h1}</h1>
+              <h1 className="argos-method-hero-title argos-method-title-glow mt-2 text-4xl font-black lg:text-5xl">
+                {step.h1}
+              </h1>
               <p className="mt-4 text-lg leading-8 text-[#D7E8F6]">{step.subtitle}</p>
+              <p className="argos-method-value-strip mt-5 rounded-xl p-4 text-sm font-bold leading-7 text-[#EAF7FF]">
+                {step.valuePhrase}
+              </p>
             </div>
             <div className="flex shrink-0 flex-col gap-3 sm:flex-row lg:flex-col">
               <MethodCtaControl cta={step.primaryCta} variant="primary" />
@@ -108,36 +113,13 @@ export default function MethodStepPageView({ step }: Props) {
             </div>
           </div>
 
-          <p className="mt-8 max-w-4xl rounded-lg border border-[#18D4F7]/25 bg-white/[.06] p-4 text-sm font-bold leading-7 text-[#EAF7FF]">
-            {step.valuePhrase}
-          </p>
-
-          <nav
-            className="mt-10 flex flex-wrap gap-2 border-b border-white/10 pb-6"
-            aria-label="Fases del método ARGOS"
-          >
-            {steps.map((s) => (
-              <Link
-                key={s.slug}
-                href={s.path}
-                className={`rounded-full border px-3 py-1.5 text-xs font-black transition ${
-                  s.slug === step.slug
-                    ? "border-[#18D4F7] bg-[#18D4F7]/15 text-white"
-                    : "border-white/15 bg-white/[.04] text-[#BFD7E8] hover:border-[#18D4F7]/40"
-                }`}
-              >
-                <span className="text-[#39F4FF]">{s.letter}</span> {s.name}
-              </Link>
-            ))}
-          </nav>
-
-          <article className="argos-hologram-card mt-8 scroll-mt-[calc(var(--header-h)+1rem)] p-6 md:p-8">
+          <article className="argos-method-premium-card argos-hologram-card mt-8 scroll-mt-[calc(var(--header-h)+1rem)] p-6 md:p-8">
             <h2 className="text-xl font-black text-white">Qué significa esta fase</h2>
             <p className="mt-4 text-sm leading-7 text-[#D7E8F6]">{step.meaning}</p>
           </article>
 
           <div className="mt-6 grid gap-6 md:grid-cols-2">
-            <article className="argos-hologram-card p-6">
+            <article className="argos-method-premium-card argos-hologram-card p-6">
               <h2 className="text-xl font-black text-white">Problemas que abordamos</h2>
               <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-7 text-[#C9DDEC]">
                 {step.problems.map((item) => (
@@ -145,7 +127,7 @@ export default function MethodStepPageView({ step }: Props) {
                 ))}
               </ul>
             </article>
-            <article className="argos-hologram-card p-6">
+            <article className="argos-method-premium-card argos-hologram-card p-6">
               <h2 className="text-xl font-black text-white">Señales de alerta</h2>
               <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-7 text-[#C9DDEC]">
                 {step.warningSigns.map((item) => (
@@ -156,7 +138,7 @@ export default function MethodStepPageView({ step }: Props) {
           </div>
 
           <div className="mt-6 grid gap-6 md:grid-cols-2">
-            <article className="argos-hologram-card p-6">
+            <article className="argos-method-premium-card argos-hologram-card p-6">
               <h2 className="text-xl font-black text-white">Qué hace ARGOS-IT</h2>
               <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-7 text-[#C9DDEC]">
                 {step.argosActions.map((item) => (
@@ -164,7 +146,7 @@ export default function MethodStepPageView({ step }: Props) {
                 ))}
               </ul>
             </article>
-            <article className="argos-hologram-card p-6">
+            <article className="argos-method-premium-card argos-hologram-card p-6">
               <h2 className="text-xl font-black text-white">Resultados esperados</h2>
               <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-7 text-[#C9DDEC]">
                 {step.results.map((item) => (
@@ -174,7 +156,7 @@ export default function MethodStepPageView({ step }: Props) {
             </article>
           </div>
 
-          <article className="argos-hologram-card mt-6 p-6">
+          <article className="argos-method-premium-card argos-hologram-card mt-6 p-6">
             <h2 className="text-xl font-black text-white">Relación con el diagnóstico ARGOS</h2>
             <p className="mt-4 text-sm leading-7 text-[#D7E8F6]">{step.diagnosticRelation}</p>
           </article>
@@ -185,12 +167,12 @@ export default function MethodStepPageView({ step }: Props) {
             ))}
           </div>
 
-          <article className="argos-hologram-card mt-6 p-6">
+          <article className="argos-method-premium-card argos-hologram-card mt-6 p-6">
             <h2 className="text-xl font-black text-white">{step.portalCopy.title}</h2>
             <p className="mt-4 text-sm leading-7 text-[#D7E8F6]">{step.portalCopy.body}</p>
           </article>
 
-          <article className="argos-hologram-card mt-6 p-6">
+          <article className="argos-method-premium-card argos-hologram-card mt-6 p-6">
             <h2 className="text-xl font-black text-white">Proceso típico en esta fase</h2>
             <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm leading-7 text-[#D7E8F6]">
               {step.processSteps.map((item) => (

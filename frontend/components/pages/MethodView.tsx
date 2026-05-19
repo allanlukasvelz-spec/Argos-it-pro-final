@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect } from "react";
 import ArgosPageShell from "@/components/layout/ArgosPageShell";
+import MethodArgosJourneyNav from "@/components/method/MethodArgosJourneyNav";
 import { useI18n } from "@/i18n/useI18n";
 import { usePageMeta } from "@/components/seo/usePageMeta";
 
@@ -127,24 +128,30 @@ export default function MethodView() {
   }, []);
 
   return (
-    <ArgosPageShell variant="method">
+    <ArgosPageShell variant="method-galaxy">
       <section className="px-5 py-12 lg:px-8">
         <div className="mx-auto max-w-6xl">
           <Link href="/" className="text-sm font-bold text-[#39F4FF]">
             ← {t("actions.backHome")}
           </Link>
-          <h1 className="mt-4 text-4xl font-black text-white">{t("method.title")}</h1>
-          <p className="mt-4 max-w-3xl text-[#BFD7E8]">{t("method.subtitle")}</p>
-          <p className="mt-4 max-w-3xl rounded-lg border border-[#18D4F7]/25 bg-white/[.06] p-4 text-sm font-bold leading-7 text-[#EAF7FF]">
-            No esperamos a que algo falle. Analizamos, reforzamos y acompañamos para prevenir problemas antes de que afecten a tu negocio.
-          </p>
+          <div className="argos-method-hero-panel mt-6">
+            <h1 className="argos-method-hero-title argos-method-title-glow text-4xl font-black lg:text-5xl">
+              {t("method.title")}
+            </h1>
+            <p className="mt-4 max-w-3xl text-lg leading-8 text-[#D7E8F6]">{t("method.subtitle")}</p>
+            <p className="argos-method-value-strip mt-4 max-w-3xl rounded-xl p-4 text-sm font-bold leading-7 text-[#EAF7FF]">
+              La tecnología de tu empresa no debería fallar para que alguien la revise.
+            </p>
+          </div>
+
+          <MethodArgosJourneyNav className="mt-8" />
 
           <div className="mt-10 grid grid-cols-2 gap-5 min-[480px]:grid-cols-3 md:grid-cols-3 xl:grid-cols-5">
             {methodDetails.map((step) => (
               <Link
                 key={step.id}
                 href={`/metodo/${step.id}`}
-                className="argos-hologram-card p-6 transition hover:-translate-y-1 hover:border-[#18D4F7]/45"
+                className="argos-method-step-card min-h-0 p-5"
               >
                 <p className="text-sm font-black text-[#39F4FF]">{step.letter}</p>
                 <h2 className="mt-2 text-xl font-black text-white">{step.title}</h2>
@@ -176,25 +183,25 @@ export default function MethodView() {
                   </div>
                   <Link
                     href="/contacto"
-                    className="shrink-0 rounded-md bg-[#18D4F7] px-5 py-3 text-center text-sm font-black text-[#030812] transition hover:bg-[#39F4FF]"
+                    className="argos-method-cta-primary shrink-0 rounded-md bg-[#18D4F7] px-5 py-3 text-center text-sm font-black text-[#030812] transition hover:bg-[#39F4FF]"
                   >
                     Solicitar diagnóstico ARGOS
                   </Link>
                 </div>
                 <div className="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                  <article className="rounded-lg border border-white/10 bg-white/[.07] p-5">
+                  <article className="argos-method-premium-card argos-method-inner-card rounded-xl p-5">
                     <h3 className="text-sm font-black text-white">Qué hacemos</h3>
                     <p className="mt-3 text-sm leading-6 text-[#C9DDEC]">{detail.work}</p>
                   </article>
-                  <article className="rounded-lg border border-white/10 bg-white/[.07] p-5">
+                  <article className="argos-method-premium-card argos-method-inner-card rounded-xl p-5">
                     <h3 className="text-sm font-black text-white">Qué obtiene el cliente</h3>
                     <p className="mt-3 text-sm leading-6 text-[#C9DDEC]">{detail.clientGets}</p>
                   </article>
-                  <article className="rounded-lg border border-white/10 bg-white/[.07] p-5">
+                  <article className="argos-method-premium-card argos-method-inner-card rounded-xl p-5">
                     <h3 className="text-sm font-black text-white">Qué problemas evitamos</h3>
                     <p className="mt-3 text-sm leading-6 text-[#C9DDEC]">{detail.avoids}</p>
                   </article>
-                  <article className="rounded-lg border border-white/10 bg-white/[.07] p-5">
+                  <article className="argos-method-premium-card argos-method-inner-card rounded-xl p-5">
                     <h3 className="text-sm font-black text-white">Enfoque</h3>
                     <div className="mt-3 flex flex-wrap gap-2">
                       {detail.tools.map((tool) => (

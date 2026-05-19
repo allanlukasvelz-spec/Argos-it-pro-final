@@ -1,9 +1,11 @@
 import type { ReactNode } from "react";
+import MethodGalaxyBackdrop from "@/components/method/MethodGalaxyBackdrop";
 
 type ArgosBackgroundVariant =
   | "home"
   | "services"
   | "method"
+  | "method-galaxy"
   | "about"
   | "contact"
   | "agenda"
@@ -16,23 +18,36 @@ type Props = {
   className?: string;
 };
 
-export default function ArgosPageShell({ variant, children, className = "" }: Props) {
+function DefaultBackground() {
   return (
-    <div className={`argos-page-shell argos-bg-${variant} ${className}`}>
+    <>
+      <span className="argos-bg-layer argos-bg-grid" />
+      <span className="argos-bg-layer argos-bg-circuit" />
+      <span className="argos-bg-layer argos-bg-diagonal argos-bg-diagonal--one" />
+      <span className="argos-bg-layer argos-bg-diagonal argos-bg-diagonal--two" />
+      <span className="argos-bg-layer argos-bg-glow argos-bg-glow--one" />
+      <span className="argos-bg-layer argos-bg-glow argos-bg-glow--two" />
+      <span className="argos-bg-layer argos-bg-orbit" />
+      <span className="argos-bg-layer argos-bg-noise" />
+      <span className="argos-bg-layer argos-bg-meteors" />
+      <span className="argos-bg-layer argos-bg-stars" />
+    </>
+  );
+}
+
+export default function ArgosPageShell({ variant, children, className = "" }: Props) {
+  const isMethodGalaxy = variant === "method-galaxy";
+
+  return (
+    <div
+      className={`argos-page-shell argos-bg-${variant} ${isMethodGalaxy ? "argos-page-shell--method-galaxy argos-method-galaxy--animated" : ""} ${className}`}
+    >
       <div className="argos-page-bg" aria-hidden="true">
-        <span className="argos-bg-layer argos-bg-grid" />
-        <span className="argos-bg-layer argos-bg-circuit" />
-        <span className="argos-bg-layer argos-bg-diagonal argos-bg-diagonal--one" />
-        <span className="argos-bg-layer argos-bg-diagonal argos-bg-diagonal--two" />
-        <span className="argos-bg-layer argos-bg-glow argos-bg-glow--one" />
-        <span className="argos-bg-layer argos-bg-glow argos-bg-glow--two" />
-        <span className="argos-bg-layer argos-bg-orbit" />
-        <span className="argos-bg-layer argos-bg-noise" />
-        <span className="argos-bg-layer argos-bg-meteors" />
-        <span className="argos-bg-layer argos-bg-stars" />
+        {isMethodGalaxy ? <MethodGalaxyBackdrop variant="full" /> : <DefaultBackground />}
       </div>
 
       <main className="argos-content-layer">{children}</main>
     </div>
   );
 }
+

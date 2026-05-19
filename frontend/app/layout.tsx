@@ -5,6 +5,7 @@ import SiteShell from "@/components/layout/SiteShell";
 import { LanguageProvider } from "@/i18n/provider";
 import "./globals.css";
 import "../assets/css/argos-backgrounds.css";
+import "../assets/css/argos-method-galaxy.css";
 import "../styles/mascot-sprites.css";
 
 export const metadata: Metadata = {
