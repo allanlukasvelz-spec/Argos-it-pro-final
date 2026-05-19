@@ -129,12 +129,12 @@ export default function MethodView() {
 
   return (
     <ArgosPageShell variant="method-galaxy">
-      <section className="px-5 py-12 lg:px-8">
+      <section className="scroll-mt-[calc(var(--header-h)+1rem)] px-5 pb-12 pt-[calc(var(--header-h)+1.5rem)] lg:px-8">
         <div className="mx-auto max-w-6xl">
           <Link href="/" className="text-sm font-bold text-[#39F4FF]">
             ← {t("actions.backHome")}
           </Link>
-          <div className="argos-method-hero-panel mt-6">
+          <div className="argos-method-hero-panel mt-6 scroll-mt-[calc(var(--header-h)+1rem)]">
             <div className="argos-method-title-wrap">
               <h1 className="argos-method-hero-title argos-method-title-glow argos-method-title-glow--showcase">
                 {t("method.title")}

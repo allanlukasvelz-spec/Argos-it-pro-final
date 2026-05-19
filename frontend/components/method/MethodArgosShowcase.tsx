@@ -142,7 +142,7 @@ export default function MethodArgosShowcase() {
   return (
     <section
       id="metodo-argos"
-      className="argos-method-showcase argos-method-galaxy argos-method-galaxy--section-lite argos-method-galaxy--animated"
+      className="argos-method-showcase argos-method-galaxy argos-method-galaxy--section-lite argos-method-galaxy--animated scroll-mt-[calc(var(--header-h)+3.5rem)] max-[1279px]:scroll-mt-[calc(var(--header-h)+6.25rem)]"
       aria-labelledby="metodo-argos-title"
     >
       <MethodGalaxyBackdrop variant="section" />

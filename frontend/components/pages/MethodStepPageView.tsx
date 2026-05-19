@@ -78,7 +78,7 @@ export default function MethodStepPageView({ step }: Props) {
 
   return (
     <ArgosPageShell variant="method-galaxy">
-      <section className="px-5 py-12 lg:px-8">
+      <section className="scroll-mt-[calc(var(--header-h)+1rem)] px-5 pb-12 pt-[calc(var(--header-h)+1.5rem)] lg:px-8">
         <div className="mx-auto max-w-5xl">
           <div className="flex flex-wrap items-center gap-3">
             <Link href="/metodo" className="text-sm font-bold text-[#39F4FF]">
@@ -94,12 +94,12 @@ export default function MethodStepPageView({ step }: Props) {
 
           <MethodArgosJourneyNav activeSlug={step.slug} className="mt-6" />
 
-          <div className="argos-method-hero-panel mt-8 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+          <div className="argos-method-hero-panel mt-8 flex scroll-mt-[calc(var(--header-h)+1rem)] flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
             <div className="max-w-3xl">
               <p className="text-sm font-black uppercase text-[#18D4F7]">
                 {step.letter} · {step.name}
               </p>
-              <h1 className="argos-method-hero-title argos-method-title-glow mt-2 text-4xl font-black lg:text-5xl">
+              <h1 className="argos-method-hero-title mt-2 text-4xl font-black text-white lg:text-5xl">
                 {step.h1}
               </h1>
               <p className="mt-4 text-lg leading-8 text-[#D7E8F6]">{step.subtitle}</p>

@@ -1463,9 +1463,27 @@
     linear-gradient(175deg, #0f3d6e 0%, #0c2f58 32%, #081f3d 68%, #051525 100%);
 }
 
+/* CRIT-01: ancla #metodo-argos no queda bajo header ni barra lateral sticky */
+#metodo-argos {
+  scroll-margin-top: calc(var(--header-h, 180px) + 3.5rem);
+}
+
+@media (max-width: 1279px) {
+  #metodo-argos {
+    scroll-margin-top: calc(var(--header-h, 180px) + 3.5rem + var(--argos-side-nav-band, 2.75rem));
+  }
+}
+
 .argos-method-showcase__inner {
   position: relative;
   z-index: 2;
+}
+
+/* CRIT-03: safe area para nav lateral fija (desktop ≥1280px) */
+@media (min-width: 1280px) {
+  .argos-method-showcase__inner {
+    padding-right: max(2rem, 7.5rem);
+  }
 }
 
 .argos-method-galaxy--section-lite .argos-method-galaxy-sky-tint {
@@ -1666,6 +1684,17 @@
   }
 }
 
+@media (min-width: 768px) and (max-width: 1023px) {
+  .argos-method-orbit--showcase .argos-method-orbit__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .argos-method-orbit--showcase .argos-method-orbit__line {
+    display: none;
+  }
+}
+
 @media (min-width: 1024px) {
   .argos-method-orbit--showcase .argos-method-orbit__grid {
     grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -1674,6 +1703,12 @@
 
   .argos-method-orbit--showcase .argos-method-orbit__line {
     top: 42%;
+  }
+}
+
+@media (max-width: 1023px) {
+  .argos-method-orbit--showcase .argos-method-orbit__line {
+    display: none;
   }
 }
 
