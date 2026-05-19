@@ -135,7 +135,7 @@ export default function MethodView() {
             ← {t("actions.backHome")}
           </Link>
           <div className="argos-method-hero-panel mt-6">
-            <h1 className="argos-method-hero-title argos-method-title-glow text-4xl font-black lg:text-5xl">
+            <h1 className="argos-method-hero-title argos-method-title-glow argos-method-title-glow--showcase text-4xl lg:text-5xl">
               {t("method.title")}
             </h1>
             <p className="mt-4 max-w-3xl text-lg leading-8 text-[#D7E8F6]">{t("method.subtitle")}</p>

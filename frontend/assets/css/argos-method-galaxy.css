@@ -1397,6 +1397,19 @@
 
   .argos-method-title-glow {
     animation: none !important;
+    background-position: 30% center;
+  }
+
+  .argos-methodology-reveal__window::after {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+
+  .argos-home-brand-slogan {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
   }
 }
 
@@ -1469,26 +1482,136 @@
   animation: none;
 }
 
-/* Título con brillo cyan */
+/* Título con brillo cyan — shimmer lento, sin parpadeo */
 .argos-method-title-glow {
-  background: linear-gradient(105deg, #f8fcff 0%, #e0f7ff 28%, #67e8f9 52%, #38bdf8 78%, #a5f3fc 100%);
-  background-size: 200% auto;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  background: linear-gradient(
+    105deg,
+    #f8fcff 0%,
+    #e8f7ff 18%,
+    #7ee8ff 42%,
+    #38bdf8 58%,
+    #a5f3fc 78%,
+    #f0f9ff 100%
+  );
+  background-size: 220% 100%;
+  background-position: 0% center;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   text-shadow: none;
-  filter: drop-shadow(0 0 28px rgba(56, 189, 248, .35));
+  filter: drop-shadow(0 0 22px rgba(56, 189, 248, .32));
+}
+
+.argos-method-title-glow--showcase {
+  font-size: clamp(2.5rem, 5.5vw, 4.75rem);
+}
+
+@media (min-width: 1024px) {
+  .argos-method-title-glow--showcase {
+    font-size: clamp(3.25rem, 4.8vw, 5.25rem);
+    letter-spacing: -0.03em;
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .argos-method-title-glow {
-    animation: methodTitleGlowShift 14s ease-in-out infinite alternate;
+    animation: methodTitleShimmer 18s linear infinite;
   }
 }
 
-@keyframes methodTitleGlowShift {
-  0% { background-position: 0% center; filter: drop-shadow(0 0 20px rgba(56, 189, 248, .28)); }
-  100% { background-position: 100% center; filter: drop-shadow(0 0 36px rgba(103, 232, 249, .42)); }
+@keyframes methodTitleShimmer {
+  0% { background-position: 0% center; }
+  100% { background-position: 220% center; }
+}
+
+/* Revelado metodología (ventana izquierda → derecha) */
+.argos-methodology-reveal__window {
+  position: relative;
+}
+
+.argos-methodology-reveal__window::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(6, 26, 48, .85) 0%, transparent 28%);
+  pointer-events: none;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .argos-methodology-reveal__window::after {
+    animation: methodologyRevealVeil 0.9s ease-out 0.05s forwards;
+  }
+}
+
+@keyframes methodologyRevealVeil {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(100%, 0, 0);
+  }
+}
+
+.argos-method-brand-voice {
+  text-shadow: 0 2px 20px rgba(2, 12, 28, .45);
+}
+
+/* Eslogan Home — entrada “boom” suave */
+.argos-home-brand-slogan {
+  position: relative;
+  text-shadow: 0 0 28px rgba(56, 189, 248, .18);
+}
+
+/* Bloque ¿Por qué elegir ARGOS-IT? */
+.argos-home-why {
+  position: relative;
+}
+
+.argos-home-why-card {
+  border: 1px solid rgba(126, 232, 255, .22);
+  border-radius: 1rem;
+  background: linear-gradient(145deg, rgba(255, 255, 255, .1) 0%, rgba(255, 255, 255, .04) 48%, rgba(24, 120, 200, .08) 100%);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, .22);
+  backdrop-filter: blur(12px);
+  transition:
+    transform .3s ease,
+    border-color .3s ease,
+    box-shadow .3s ease;
+}
+
+.argos-home-why-card:hover {
+  transform: translate3d(0, -2px, 0);
+  border-color: rgba(125, 211, 252, .38);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, .28);
+}
+
+.argos-home-why-card:focus-within {
+  outline: 2px solid #39f4ff;
+  outline-offset: 2px;
+}
+
+/* Automatización ARGOS */
+.argos-home-automation__panel {
+  border-color: rgba(126, 232, 255, .26);
+}
+
+.argos-home-automation__item {
+  transition:
+    transform .25s ease,
+    border-color .25s ease,
+    background .25s ease;
+}
+
+.argos-home-automation__item:hover {
+  transform: translate3d(0, -1px, 0);
+  border-color: rgba(103, 232, 249, .35);
+  background: rgba(255, 255, 255, .09);
 }
 
 /* Órbita conectora A→S */

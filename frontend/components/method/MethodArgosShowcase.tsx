@@ -53,6 +53,40 @@ const showcaseSteps = [
   }
 ] as const;
 
+function MethodologyReveal({ reduceMotion }: { reduceMotion: boolean | null }) {
+  const text = "Contamos con una metodología propia y totalmente garantizada.";
+
+  if (reduceMotion) {
+    return (
+      <p className="argos-methodology-reveal mx-auto max-w-2xl text-sm font-bold leading-7 text-[#A5E8FC] sm:text-base">
+        {text}
+      </p>
+    );
+  }
+
+  return (
+    <div className="argos-methodology-reveal mx-auto max-w-2xl" aria-label={text}>
+      <motion.div
+        className="argos-methodology-reveal__window overflow-hidden rounded-lg border border-[#18D4F7]/20 bg-[#061a30]/40 px-4 py-2.5 backdrop-blur-sm"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, margin: "-40px" }}
+        transition={{ duration: 0.35 }}
+      >
+        <motion.p
+          className="argos-methodology-reveal__text text-sm font-bold leading-7 text-[#A5E8FC] sm:text-base"
+          initial={{ opacity: 0, x: -48 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
+        >
+          {text}
+        </motion.p>
+      </motion.div>
+    </div>
+  );
+}
+
 function StepIcon({ type }: { type: (typeof showcaseSteps)[number]["icon"] }) {
   const common = "h-5 w-5 stroke-[#67E8F9]";
   switch (type) {
@@ -127,13 +161,24 @@ export default function MethodArgosShowcase() {
           viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
         >
-          <p className="text-sm font-black uppercase tracking-[0.2em] text-[#67E8F9]">Metodología propia</p>
-          <h2 id="metodo-argos-title" className="argos-method-title-glow mt-4 text-4xl font-black sm:text-5xl lg:text-6xl">
+          <MethodologyReveal reduceMotion={reduceMotion} />
+          <h2
+            id="metodo-argos-title"
+            className="argos-method-title-glow argos-method-title-glow--showcase mt-6"
+          >
             Método ARGOS
           </h2>
           <p className="mt-5 text-lg leading-8 text-[#D7E8F6]">
             Una forma clara, preventiva y continua de proteger, ordenar y mejorar la tecnología de tu empresa.
           </p>
+          <blockquote className="argos-method-brand-voice mx-auto mt-6 max-w-2xl border-l-2 border-[#18D4F7]/45 pl-4 text-left sm:pl-5">
+            <p className="text-base font-bold leading-8 text-[#EAF7FF] sm:text-lg">
+              La informática que funciona. Sin ruido. Sin preocupaciones.
+            </p>
+            <p className="mt-2 text-sm font-semibold leading-7 text-[#BFD7E8]">
+              No trabajamos para apagar incendios. Trabajamos para que no se produzcan.
+            </p>
+          </blockquote>
           <p className="argos-method-value-strip mx-auto mt-6 max-w-2xl rounded-xl px-5 py-4 text-sm font-bold leading-7 text-[#EAF7FF]">
             La tecnología de tu empresa no debería fallar para que alguien la revise.
           </p>

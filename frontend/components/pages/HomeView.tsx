@@ -2,6 +2,9 @@
 
 import Link from "next/link";
 import ArgosPageShell from "@/components/layout/ArgosPageShell";
+import HomeAutomationArgosSection from "@/components/home/HomeAutomationArgosSection";
+import HomeBrandSlogan from "@/components/home/HomeBrandSlogan";
+import HomeWhyArgosSection from "@/components/home/HomeWhyArgosSection";
 import MethodArgosShowcase from "@/components/method/MethodArgosShowcase";
 import { usePageMeta } from "@/components/seo/usePageMeta";
 import { useLocalizedServices } from "@/hooks/useLocalizedServices";
@@ -76,6 +79,7 @@ export default function HomeView() {
             <h1 className="text-4xl font-black leading-tight text-white sm:text-5xl lg:text-6xl">
               {t("home.title")}
             </h1>
+            <HomeBrandSlogan />
             <p className="mt-6 max-w-3xl text-lg leading-8 text-[#D7E8F6]">{t("home.subtitle")}</p>
             <p className="mt-4 max-w-3xl rounded-lg border border-[#18D4F7]/25 bg-white/[.06] p-4 text-sm font-bold leading-7 text-[#EAF7FF]">
               En ARGOS-IT no solo resolvemos problemas: los prevenimos. No esperamos a que tu tecnología falle; la revisamos, reforzamos, guiamos y supervisamos antes de que afecte a tu negocio.
@@ -111,6 +115,8 @@ export default function HomeView() {
 
       <MethodArgosShowcase />
 
+      <HomeWhyArgosSection />
+
       <section className="px-5 py-16 lg:px-8" id="servicios">
         <div className="mx-auto max-w-7xl">
           <div className="mb-10">
@@ -134,6 +140,8 @@ export default function HomeView() {
           </div>
         </div>
       </section>
+
+      <HomeAutomationArgosSection />
 
       <section className="tech-stack px-5 py-16 lg:px-8">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[.82fr_1.18fr]">
