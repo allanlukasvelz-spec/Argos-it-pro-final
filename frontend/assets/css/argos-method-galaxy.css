@@ -789,6 +789,83 @@
   pointer-events: none;
 }
 
+/* —— Método (/metodo*, ArgosPageShell): backdrop method-lite estable —— */
+.argos-page-shell--method-galaxy.argos-method-galaxy--lite .argos-page-bg {
+  animation: none !important;
+}
+
+.argos-method-galaxy--lite.argos-bg-method-galaxy {
+  animation: none;
+}
+
+.argos-method-galaxy-backdrop--method-lite {
+  contain: layout paint;
+}
+
+.argos-method-galaxy-backdrop--method-lite .argos-method-galaxy-base {
+  animation: none !important;
+}
+
+.argos-method-galaxy-backdrop--method-lite .argos-method-galaxy-sky-tint {
+  opacity: 0.55;
+  animation: none !important;
+}
+
+.argos-method-galaxy-backdrop--method-lite .argos-method-galaxy-nebula--one {
+  animation: none !important;
+  filter: blur(32px);
+  opacity: 0.44;
+}
+
+.argos-method-galaxy-backdrop--method-lite .argos-method-galaxy-stars--small,
+.argos-method-galaxy-backdrop--method-lite .argos-method-galaxy-stars--large {
+  animation: none !important;
+}
+
+.argos-method-galaxy-backdrop--method-lite .argos-method-galaxy-constellations::before,
+.argos-method-galaxy-backdrop--method-lite .argos-method-galaxy-constellations::after {
+  animation: none !important;
+}
+
+.argos-method-galaxy-backdrop--method-lite .argos-method-galaxy-grid {
+  animation: none !important;
+}
+
+.argos-method-galaxy-backdrop--method-lite .argos-method-galaxy-void {
+  animation: none !important;
+  opacity: 0.52;
+}
+
+.argos-method-galaxy-backdrop--method-lite .argos-method-galaxy-readability {
+  animation: none !important;
+}
+
+/* Contraste fijo equivalente al modo animated (sin transición sincronizada con fase) */
+.argos-method-galaxy--lite.argos-bg-method-galaxy .argos-content-layer h1:not(.argos-method-title-glow),
+.argos-method-galaxy--lite.argos-bg-method-galaxy .argos-content-layer h2:not(.argos-method-title-glow),
+.argos-method-galaxy--lite.argos-bg-method-galaxy .argos-content-layer h3:not(.argos-method-title-glow),
+.argos-method-galaxy--lite.argos-bg-method-galaxy .argos-method-hero-title:not(.argos-method-title-glow),
+.argos-method-galaxy--lite.argos-bg-method-galaxy .argos-content-layer .text-white,
+.argos-method-galaxy--lite.argos-bg-method-galaxy .argos-content-layer [class*="text-white"] {
+  color: var(--method-text-primary) !important;
+  text-shadow: var(--method-text-shadow);
+  transition: none;
+}
+
+.argos-method-galaxy--lite.argos-bg-method-galaxy .argos-content-layer p,
+.argos-method-galaxy--lite.argos-bg-method-galaxy .argos-content-layer li,
+.argos-method-galaxy--lite.argos-bg-method-galaxy .argos-content-layer .text-\[\#D7E8F6\],
+.argos-method-galaxy--lite.argos-bg-method-galaxy .argos-content-layer .text-\[\#C9DDEC\],
+.argos-method-galaxy--lite.argos-bg-method-galaxy .argos-content-layer .text-\[\#BFD7E8\] {
+  color: var(--method-text-muted) !important;
+}
+
+.argos-method-galaxy--lite.argos-bg-method-galaxy .argos-content-layer .argos-method-title-glow {
+  color: transparent !important;
+  transition: none !important;
+  animation: none !important;
+}
+
 /* Contraste de contenido según fase */
 .argos-bg-method-galaxy .argos-content-layer {
   color: var(--method-text-primary);
@@ -1332,6 +1409,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .argos-method-galaxy--animated.argos-bg-method-galaxy,
+  .argos-method-galaxy--lite.argos-bg-method-galaxy,
   .argos-page-shell--method-galaxy .argos-page-bg,
   .argos-method-galaxy-base,
   .argos-method-galaxy-void,
@@ -1500,6 +1578,35 @@
     linear-gradient(180deg, rgba(8, 42, 82, .35) 0%, rgba(6, 28, 52, .22) 48%, rgba(4, 18, 36, .4) 100%),
     radial-gradient(ellipse 100% 80% at 50% 40%, transparent 15%, rgba(4, 14, 28, .35) 100%);
   animation: none;
+}
+
+/* Home showcase: menos movimiento costoso en el mismo bloque galáctico */
+.argos-method-showcase.argos-method-galaxy--section-lite .argos-method-galaxy-grid {
+  animation: none !important;
+}
+
+.argos-method-showcase.argos-method-galaxy--section-lite .argos-method-galaxy-stars--twinkle {
+  animation: none !important;
+  opacity: 0.32;
+}
+
+.argos-method-showcase.argos-method-galaxy--section-lite .argos-method-galaxy-stars--small,
+.argos-method-showcase.argos-method-galaxy--section-lite .argos-method-galaxy-stars--large {
+  animation: none !important;
+}
+
+.argos-method-showcase.argos-method-galaxy--section-lite .argos-method-galaxy-constellations::before,
+.argos-method-showcase.argos-method-galaxy--section-lite .argos-method-galaxy-constellations::after {
+  animation: none !important;
+}
+
+.argos-method-showcase.argos-method-galaxy--section-lite .argos-method-galaxy-comets::before,
+.argos-method-showcase.argos-method-galaxy--section-lite .argos-method-galaxy-comets::after,
+.argos-method-showcase.argos-method-galaxy--section-lite .argos-method-galaxy-comets--secondary::before,
+.argos-method-showcase.argos-method-galaxy--section-lite .argos-method-galaxy-comets--tertiary::before,
+.argos-method-showcase.argos-method-galaxy--section-lite .argos-method-galaxy-comets--tertiary::after {
+  animation: none !important;
+  opacity: 0 !important;
 }
 
 /* Título Método ARGOS — marca premium (degradado fijo, sin parpadeo) */

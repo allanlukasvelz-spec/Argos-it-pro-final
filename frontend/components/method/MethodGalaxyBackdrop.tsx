@@ -1,19 +1,31 @@
 type Props = {
-  /** full: páginas /metodo; section: bloque Home (menos capas pesadas) */
-  variant?: "full" | "section";
+  /**
+   * full: legado (muy pesado; no usar en shell actual).
+   * section: bloque Home MethodArgosShowcase.
+   * method-lite: /metodo y /metodo/[slug] — misma estética galáctica, sin capas animadas costosas.
+   */
+  variant?: "full" | "section" | "method-lite";
 };
 
 export default function MethodGalaxyBackdrop({ variant = "full" }: Props) {
   const isSection = variant === "section";
+  const isMethodLite = variant === "method-lite";
+  /** Menos capas DOM (sin sol/luna/planetas/asteroides/cometas pesados) */
+  const isLight = isSection || isMethodLite;
+
+  const backdropClass = [
+    "argos-method-galaxy-backdrop",
+    isSection ? "argos-method-galaxy-backdrop--section" : "",
+    isMethodLite ? "argos-method-galaxy-backdrop--method-lite" : ""
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
-    <div
-      className={`argos-method-galaxy-backdrop ${isSection ? "argos-method-galaxy-backdrop--section" : ""}`}
-      aria-hidden
-    >
+    <div className={backdropClass} aria-hidden>
       <span className="argos-bg-layer argos-method-galaxy-base" />
       <span className="argos-bg-layer argos-method-galaxy-sky-tint" />
-      {!isSection && (
+      {!isLight && (
         <>
           <span className="argos-bg-layer argos-method-galaxy-sun" />
           <span className="argos-bg-layer argos-method-galaxy-planets-far">
@@ -33,15 +45,17 @@ export default function MethodGalaxyBackdrop({ variant = "full" }: Props) {
         </>
       )}
       <span className="argos-bg-layer argos-method-galaxy-nebula argos-method-galaxy-nebula--one" />
-      {!isSection && (
+      {!isLight && (
         <span className="argos-bg-layer argos-method-galaxy-nebula argos-method-galaxy-nebula--two" />
       )}
       <span className="argos-bg-layer argos-method-galaxy-stars argos-method-galaxy-stars--small" />
       <span className="argos-bg-layer argos-method-galaxy-stars argos-method-galaxy-stars--large" />
-      <span className="argos-bg-layer argos-method-galaxy-stars argos-method-galaxy-stars--twinkle" />
+      {!isMethodLite && (
+        <span className="argos-bg-layer argos-method-galaxy-stars argos-method-galaxy-stars--twinkle" />
+      )}
       <span className="argos-bg-layer argos-method-galaxy-constellations" />
-      {!isSection && <span className="argos-bg-layer argos-method-galaxy-rocky-belt" />}
-      {!isSection && (
+      {!isLight && <span className="argos-bg-layer argos-method-galaxy-rocky-belt" />}
+      {!isLight && (
         <>
           <span className="argos-bg-layer argos-method-galaxy-asteroid argos-method-galaxy-asteroid--1" />
           <span className="argos-bg-layer argos-method-galaxy-asteroid argos-method-galaxy-asteroid--2" />
@@ -57,10 +71,14 @@ export default function MethodGalaxyBackdrop({ variant = "full" }: Props) {
           <span className="argos-bg-layer argos-method-galaxy-rock argos-method-galaxy-rock--4" />
         </>
       )}
-      <span className="argos-bg-layer argos-method-galaxy-comets" />
-      <span className="argos-bg-layer argos-method-galaxy-comets argos-method-galaxy-comets--secondary" />
-      {!isSection && (
-        <span className="argos-bg-layer argos-method-galaxy-comets argos-method-galaxy-comets--tertiary" />
+      {!isMethodLite && (
+        <>
+          <span className="argos-bg-layer argos-method-galaxy-comets" />
+          <span className="argos-bg-layer argos-method-galaxy-comets argos-method-galaxy-comets--secondary" />
+          {!isSection && (
+            <span className="argos-bg-layer argos-method-galaxy-comets argos-method-galaxy-comets--tertiary" />
+          )}
+        </>
       )}
       <span className="argos-bg-layer argos-method-galaxy-grid" />
       <span className="argos-bg-layer argos-method-galaxy-algorithm-veil" />

@@ -40,10 +40,10 @@ export default function ArgosPageShell({ variant, children, className = "" }: Pr
 
   return (
     <div
-      className={`argos-page-shell argos-bg-${variant} ${isMethodGalaxy ? "argos-page-shell--method-galaxy argos-method-galaxy--animated" : ""} ${className}`}
+      className={`argos-page-shell argos-bg-${variant} ${isMethodGalaxy ? "argos-page-shell--method-galaxy argos-method-galaxy--lite" : ""} ${className}`}
     >
       <div className="argos-page-bg" aria-hidden="true">
-        {isMethodGalaxy ? <MethodGalaxyBackdrop variant="full" /> : <DefaultBackground />}
+        {isMethodGalaxy ? <MethodGalaxyBackdrop variant="method-lite" /> : <DefaultBackground />}
       </div>
 
       <main className="argos-content-layer">{children}</main>

@@ -7,7 +7,8 @@ const reasons = [
   "Porque revisamos seguridad, rendimiento y procesos.",
   "Porque cada cliente tiene seguimiento en su portal.",
   "Porque convertimos incidencias en planes de mejora.",
-  "Porque unimos soporte técnico, web, IA y mantenimiento."
+  "Porque unimos soporte técnico, web, IA y mantenimiento.",
+  "Porque no te damos solo herramientas, te acompañamos y vamos contigo de la mano."
 ] as const;
 
 function ReasonIcon() {
