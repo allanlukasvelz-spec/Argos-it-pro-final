@@ -1620,18 +1620,12 @@
   overflow: visible;
 }
 
+/* Sin halo detrás del título: solo el texto (gradiente clip) */
 .argos-method-title-wrap::before {
-  content: "";
-  position: absolute;
-  inset: -2rem -4rem;
-  z-index: -1;
-  border-radius: 999px;
-  background: radial-gradient(circle, rgba(34, 211, 238, .18), transparent 62%);
-  filter: blur(18px);
-  opacity: .9;
-  pointer-events: none;
+  display: none;
 }
 
+/* Cristal / metal 3D — solo degradados en el texto + sombras (sin imagen, sin animación) */
 .argos-method-title-glow,
 .argos-method-title-glow--showcase {
   font-weight: 900;
@@ -1641,21 +1635,40 @@
   overflow-wrap: anywhere;
   background:
     linear-gradient(
-      115deg,
-      #38bdf8 0%,
-      #22d3ee 28%,
-      #6366f1 58%,
-      #a855f7 100%
+      148deg,
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(255, 255, 255, 0.35) 12%,
+      transparent 38%
+    ),
+    linear-gradient(
+      218deg,
+      rgba(255, 255, 255, 0.65) 0%,
+      transparent 36%
+    ),
+    linear-gradient(
+      175deg,
+      #f0fbff 0%,
+      #cfefff 14%,
+      #9fd4ef 38%,
+      #5fa4d0 62%,
+      #3d78a8 86%,
+      #2c5f8c 100%
     );
   background-size: 100% 100%;
   background-position: 50% 50%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent !important;
+  -webkit-text-stroke: 0.55px rgba(186, 230, 253, 0.55);
+  paint-order: stroke fill;
   text-shadow:
-    0 1px 0 rgba(255, 255, 255, .25),
-    0 18px 48px rgba(34, 211, 238, .18),
-    0 26px 78px rgba(99, 102, 241, .16);
+    0 1px 0 rgba(255, 255, 255, 0.7),
+    0 2px 0 rgba(130, 200, 235, 0.45),
+    1px 3px 0 rgba(70, 150, 200, 0.5),
+    2px 5px 0 rgba(45, 115, 165, 0.48),
+    3px 7px 1px rgba(32, 88, 140, 0.42),
+    2px 10px 16px rgba(10, 45, 85, 0.5),
+    0 14px 28px rgba(4, 28, 58, 0.45);
   transition: none !important;
   filter: none !important;
   animation: none !important;

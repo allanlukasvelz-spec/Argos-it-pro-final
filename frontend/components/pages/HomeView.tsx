@@ -117,22 +117,22 @@ export default function HomeView() {
 
       <HomeWhyArgosSection />
 
-      <section className="px-5 py-16 lg:px-8" id="servicios">
+      <section className="px-5 py-16 text-left lg:px-8" id="servicios">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-10">
-            <p className="text-sm font-black uppercase text-[#18D4F7]">{t("home.servicesEyebrow")}</p>
+          <div className="mb-12 max-w-3xl">
+            <p className="text-sm font-black uppercase tracking-wide text-[#18D4F7]">{t("home.servicesEyebrow")}</p>
             <h2 className="mt-3 text-3xl font-black text-white sm:text-4xl">{t("home.servicesTitle")}</h2>
-            <p className="mt-4 max-w-3xl text-sm leading-7 text-[#BFD7E8]">{t("home.servicesSubtitle")}</p>
-            <p className="mt-3 max-w-3xl text-sm font-semibold leading-7 text-[#EAF7FF]">
+            <p className="mt-4 text-sm leading-7 text-[#BFD7E8]">{t("home.servicesSubtitle")}</p>
+            <p className="mt-4 text-sm font-semibold leading-7 text-[#EAF7FF]">
               La mejor incidencia es la que nunca llega a ocurrir: mantenimiento preventivo, seguridad y mejora continua para que tu entorno digital funcione de forma estable, segura y predecible.
             </p>
           </div>
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {services.map((service) => (
-              <article key={service.slug} className="argos-hologram-card p-6 transition hover:-translate-y-0.5">
-                <h3 className="text-xl font-black text-white">{service.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-[#C9DDEC]">{service.description}</p>
-                <Link href={`/servicios/${service.slug}`} className="mt-5 inline-flex text-sm font-bold text-[#39F4FF]">
+              <article key={service.slug} className="argos-hologram-card rounded-xl border border-white/[0.08] p-7 text-left transition hover:-translate-y-0.5 hover:border-[#67E8F9]/22">
+                <h3 className="text-xl font-black tracking-tight text-white">{service.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-[#D7E8F6]">{service.description}</p>
+                <Link href={`/servicios/${service.slug}`} className="mt-6 inline-flex text-sm font-bold text-[#39F4FF] hover:text-[#67E8F9]">
                   {t("actions.viewDetail")} →
                 </Link>
               </article>

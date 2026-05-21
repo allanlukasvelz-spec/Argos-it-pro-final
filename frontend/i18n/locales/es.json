@@ -8,8 +8,8 @@
     "homeDescription": "Socio tecnológico externo para empresas y profesionales: soporte IT, ciberseguridad, mantenimiento web, automatización con IA y mejora continua.",
     "servicesTitle": "Servicios premium | ARGOS-IT",
     "servicesDescription": "Consultoría IT premium, mantenimiento informático, seguridad, presencia web corporativa, automatización con IA y auditoría digital continua.",
-    "methodTitle": "Método ARGOS | Analizar, Reforzar, Guiar, Optimizar y Supervisar",
-    "methodDescription": "Método ARGOS: analizar antes de decidir, reforzar lo vulnerable, guiar la complejidad hacia la claridad, optimizar con criterio de negocio y supervisar después de mejorar.",
+    "methodTitle": "Método Argos | Analizar, Reforzar, Guiar, Optimizar y Supervisar",
+    "methodDescription": "Método Argos: analizar antes de decidir, reforzar lo vulnerable, guiar la complejidad hacia la claridad, optimizar con criterio de negocio y supervisar después de mejorar.",
     "aboutTitle": "Sobre ARGOS-IT | Consultoría tecnológica premium",
     "aboutDescription": "Equipo técnico orientado a continuidad operativa, seguridad y crecimiento digital empresarial.",
     "contactTitle": "Contacto ARGOS-IT | Solicitar consulta técnica",
@@ -148,7 +148,7 @@
     "ctaSubtitle": "Cuéntanos tu situación actual y te responderemos con un plan técnico realista, priorizado y accionable."
   },
   "method": {
-    "title": "Método ARGOS",
+    "title": "Método Argos",
     "subtitle": "Una metodología propia para pasar del problema técnico a la mejora sostenida.",
     "steps": [
       {
@@ -402,31 +402,34 @@
     },
     "mantenimiento-informatico": {
       "title": "Mantenimiento informático para empresas",
-      "description": "Soporte preventivo y correctivo para mantener equipos, usuarios, sistemas y documentación bajo control.",
-      "problem": "Reduce interrupciones, incidencias repetidas y dependencia de soluciones improvisadas.",
+      "description": "Soporte preventivo y correctivo para mantener equipos, usuarios, sistemas y documentación técnica bajo control, reduciendo incidencias y evitando interrupciones en la operativa diaria.",
+      "problem": "Muchas empresas dependen de soluciones improvisadas cuando aparece una incidencia técnica. Esto genera interrupciones, errores repetidos, pérdida de tiempo y falta de control sobre equipos, usuarios, accesos y documentación.\n\nARGOS-IT ayuda a prevenir estos problemas mediante un mantenimiento informático estructurado, documentado y orientado a la continuidad del negocio.\n\nLa informática de una empresa no debe depender de improvisaciones: debe estar controlada, documentada y preparada para evitar problemas antes de que afecten al negocio.",
       "includes": [
-        "Revisión preventiva de equipos y usuarios",
-        "Soporte remoto o presencial según necesidad",
-        "Actualizaciones, limpieza y documentación",
-        "Control de incidencias repetidas",
-        "Coordinación con terceros de conectividad, alojamiento web y software"
+        "Evitamos interrupciones que afectan al ritmo de trabajo.",
+        "Reducimos incidencias repetidas mediante seguimiento técnico.",
+        "Sustituimos soluciones improvisadas por procesos claros y documentados.",
+        "Mantenemos bajo control equipos, usuarios, sistemas y documentación técnica.",
+        "Canal ordenado para prevenir, atender y registrar incidencias.",
+        "Revisiones preventivas, actualizaciones y coordinación con proveedores cuando corresponde."
       ],
       "benefits": [
         "Menos paradas en la operativa diaria.",
-        "Canal claro para prevenir, atender y documentar incidencias técnicas.",
-        "Información técnica documentada."
+        "Mayor control técnico sobre la infraestructura de la empresa.",
+        "Documentación clara para actuar con rapidez y criterio.",
+        "Mejor seguimiento de incidencias y tareas recurrentes.",
+        "Soporte preventivo, no solo respuesta cuando algo falla."
       ],
       "process": [
-        "Analizar estado de equipos y soporte.",
-        "Reforzar puntos críticos.",
-        "Gestionar incidencias y prioridades.",
-        "Optimizar rendimiento.",
-        "Sostener revisiones periódicas."
+        "Analizar el estado de equipos, usuarios y soporte.",
+        "Reforzar puntos críticos y documentar decisiones relevantes.",
+        "Gestionar incidencias con prioridades claras.",
+        "Optimizar rendimiento y estabilidad.",
+        "Supervisar revisiones periódicas y mejoras continuas."
       ],
       "audience": [
-        "Empresas pequeñas y equipos profesionales.",
-        "Oficinas que necesitan soporte IT recurrente.",
-        "Negocios sin departamento técnico propio."
+        "Empresas pequeñas y equipos profesionales sin dirección IT interna.",
+        "Oficinas que necesitan soporte informático recurrente y ordenado.",
+        "Negocios que priorizan continuidad operativa sin improvisar."
       ]
     },
     "seguridad-informatica": {

@@ -161,7 +161,7 @@ export default function MethodArgosShowcase() {
               id="metodo-argos-title"
               className="argos-method-title-glow argos-method-title-glow--showcase"
             >
-              Método ARGOS
+              Método Argos
             </h2>
           </div>
           <p className="mt-5 text-lg leading-8 text-[#D7E8F6]">
@@ -224,7 +224,7 @@ export default function MethodArgosShowcase() {
             href="/metodo"
             className="argos-method-cta-primary inline-flex rounded-md bg-[#18D4F7] px-7 py-4 text-center text-sm font-black text-[#030812] transition hover:bg-[#39F4FF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#39F4FF]"
           >
-            Explorar Método ARGOS
+            Explorar Método Argos
           </Link>
           <button
             type="button"
