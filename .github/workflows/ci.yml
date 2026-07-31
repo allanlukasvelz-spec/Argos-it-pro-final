@@ -9,9 +9,13 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   verify:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     services:
       postgres:
@@ -30,6 +34,7 @@ jobs:
           --health-retries 5
 
     env:
+      # Credenciales solo de CI (no son secretos de staging/producción)
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/argos_it
       JWT_SECRET: test_secret_123456789012345678901234567890
       JWT_REFRESH_SECRET: refresh_secret_123456789012345678901234
@@ -37,6 +42,8 @@ jobs:
       NODE_ENV: test
       FRONTEND_URL: http://localhost:3000
       CORS_ORIGINS: http://localhost:3000
+      ENABLE_SOCKET_IO: "false"
+      CI: "1"
 
     steps:
       - uses: actions/checkout@v4
@@ -46,13 +53,20 @@ jobs:
           node-version: 22
           cache: npm
 
-      - run: npm install
-      - run: npm --prefix backend install
-      - run: npm --prefix frontend install
+      - name: Install root dependencies
+        run: npm ci
 
-      - run: npm run verify
+      - name: Install backend dependencies
+        run: npm ci --prefix backend
 
-      - run: npx playwright install --with-deps chromium
+      - name: Install frontend dependencies
+        run: npm ci --prefix frontend
 
-      - run: npm run test:e2e
+      - name: Verify (lint, build, node --check)
+        run: npm run verify
 
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: E2E smoke
+        run: CI=1 npm run test:e2e

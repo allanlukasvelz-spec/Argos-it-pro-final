@@ -1,3 +1,5 @@
+# Stack local / staging-like. Secretos reales van en docker/.env (ignorado por Git).
+# Override local (p. ej. Postgres en host :5433): docker/docker-compose.override.yml — no versionar.
 services:
   # PostgreSQL Database
   db:
@@ -6,14 +8,14 @@ services:
     environment:
       POSTGRES_DB: argos_it
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-CAMBIAR_PASSWORD_DB_LOCAL}
-    ports:
-      - "5432:5432"
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in docker/.env}
+    # Sin ports públicos en el compose base (red interna Docker).
+    # Local: docker/docker-compose.override.yml publica 5433:5432 (archivo ignorado por Git).
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ../database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d argos_it"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -29,19 +31,33 @@ services:
     environment:
       NODE_ENV: development
       PORT: 4000
-      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-CAMBIAR_PASSWORD_DB_LOCAL}@db:5432/argos_it
-      JWT_SECRET: ${JWT_SECRET:-cambiar_este_jwt_secret_minimo_32_chars}
-      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-cambiar_este_refresh_secret_minimo_32_chars}
-      ENABLE_SOCKET_IO: ${ENABLE_SOCKET_IO:-true}
+      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@db:5432/argos_it
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in docker/.env}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:?Set JWT_REFRESH_SECRET in docker/.env}
+      ENABLE_SOCKET_IO: ${ENABLE_SOCKET_IO:-false}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
-      FRONTEND_URL: http://localhost:3000
-      CORS_ORIGINS: http://localhost:3000
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
+      FRONTEND_URL: http://localhost:${FRONTEND_PORT:-3000}
+      CORS_ORIGINS: http://localhost:${FRONTEND_PORT:-3000}
       CONTACT_FORM_ENDPOINT: https://formspree.io/f/xpqooedl
+      LOG_LEVEL: ${LOG_LEVEL:-info}
     ports:
-      - "4000:4000"
+      - "${BACKEND_PORT:-4000}:4000"
     depends_on:
       db:
         condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:4000/api/health').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
     volumes:
       - ../backend:/app
       - /app/node_modules
@@ -52,16 +68,19 @@ services:
     build:
       context: ../frontend
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_BACKEND_URL: http://localhost:${BACKEND_PORT:-4000}
     container_name: argos-frontend
     environment:
-      # El navegador en el host sigue llamando al API publicado en localhost:4000
-      NEXT_PUBLIC_BACKEND_URL: http://localhost:4000
-      # Route handlers de Next (proxy chat mascotas) deben usar la red Docker
+      # El navegador en el host llama al API publicado en el host
+      NEXT_PUBLIC_BACKEND_URL: http://localhost:${BACKEND_PORT:-4000}
+      # Route handlers de Next (proxy chat mascotas) usan la red Docker
       BACKEND_URL: http://backend:4000
     ports:
-      - "3000:3000"
+      - "${FRONTEND_PORT:-3000}:3000"
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     volumes:
       - ../frontend:/app
       - /app/node_modules

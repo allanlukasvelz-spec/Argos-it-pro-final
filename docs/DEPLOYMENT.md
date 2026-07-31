@@ -1,12 +1,16 @@
 # 🌐 Deployment - Producción
 
+Staging primero: ver [STAGING.md](./STAGING.md) y evidencia en [STAGING_RESULTADOS.md](./STAGING_RESULTADOS.md).
+No desplegar producción desde esta guía sin checklist de staging verde.
+
 ## Antes de Deployar
 
-- [ ] .env configurado con valores REALES
-- [ ] JWT_SECRET fuerte (min 32 caracteres)
-- [ ] OPENAI_API_KEY válida
-- [ ] Base de datos respaldada
-- [ ] Tests pasando
+- [ ] Variables en el **proveedor** (nunca secretos en Git); plantillas en `.env.example` / `backend/.env.example`
+- [ ] `JWT_SECRET` y `JWT_REFRESH_SECRET` distintos (`openssl rand -hex 48` cada uno)
+- [ ] `OPENAI_API_KEY` válida si se activa IA; si no, documentar 503
+- [ ] Base de datos de staging/producción respaldada
+- [ ] `npm run verify` y `CI=1 npm run test:e2e` pasando
+- [ ] `ENABLE_SOCKET_IO=false` si no hay cliente WebSocket real
 
 ## 🐳 Opción 1: Docker (Recomendado)
 
