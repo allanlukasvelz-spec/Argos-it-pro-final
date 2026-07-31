@@ -1,43 +1,58 @@
 name: CI
 
 on:
-  push:
-    branches: [main]
   pull_request:
-    branches: [main]
+    branches:
+      - main
+
+  push:
+    branches:
+      - main
 
 jobs:
-  verify-and-test:
+  verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: argos_it
+        ports:
+          - 5432:5432
+
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/argos_it
+      JWT_SECRET: test_secret_123456789012345678901234567890
+      JWT_REFRESH_SECRET: refresh_secret_123456789012345678901234
+      PORT: 4000
+      NODE_ENV: test
+      FRONTEND_URL: http://localhost:3000
+      CORS_ORIGINS: http://localhost:3000
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: 22
           cache: npm
-          cache-dependency-path: |
-            package-lock.json
-            frontend/package-lock.json
-            backend/package-lock.json
 
-      - name: Install dependencies (root + apps)
-        run: |
-          npm ci
-          npm ci --prefix frontend
-          npm ci --prefix backend
+      - run: npm install
+      - run: npm --prefix backend install
+      - run: npm --prefix frontend install
 
-      - name: Verify (lint + frontend build + backend syntax)
-        run: npm run verify
+      - run: npm run verify
 
-      - name: Install Playwright Chromium
-        run: npx playwright install chromium --with-deps
+      - run: npx playwright install --with-deps chromium
 
-      - name: E2E tests
-        run: CI=1 npm run test:e2e
+      - run: npm run test:e2e
 
-      - name: Production build (explicit gate)
-        run: npm run build
