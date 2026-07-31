@@ -44,3 +44,4 @@ build/
 # Logs
 logs/
 *.log
+docker/docker-compose.override.yml
