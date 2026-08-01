@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chico, asistente de diagnóstico | ARGOS-IT</title>
+  <meta name="description" content="Chico es el asistente de diagnóstico de ARGOS-IT para orientar solicitudes de seguridad, mantenimiento, auditoría digital y prioridades técnicas.">
+  <meta name="robots" content="index,follow">
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./assets/css/argos-backgrounds.css">
+</head>
+<body class="service-page assistant-page">
+  <header class="topbar">
+    <div class="wrap nav">
+      <a class="brand" href="./index.html" aria-label="ARGOS-IT inicio"><img src="./logo-argos-it.png" alt="ARGOS-IT Consultoría y Servicios Informáticos" class="argos-logo"></a>
+      <nav class="links"><a href="./index.html#servicios">Servicios</a><a href="./index.html#asistentes">Asistentes</a><a href="./contacto.html">Contacto</a></nav>
+    </div>
+  </header>
+  <div class="argos-page-shell argos-bg-contact">
+  <div class="argos-page-bg" aria-hidden="true">
+    <span class="argos-bg-layer argos-bg-grid"></span>
+    <span class="argos-bg-layer argos-bg-circuit"></span>
+    <span class="argos-bg-layer argos-bg-diagonal argos-bg-diagonal--one"></span>
+    <span class="argos-bg-layer argos-bg-diagonal argos-bg-diagonal--two"></span>
+    <span class="argos-bg-layer argos-bg-glow argos-bg-glow--one"></span>
+    <span class="argos-bg-layer argos-bg-glow argos-bg-glow--two"></span>
+    <span class="argos-bg-layer argos-bg-orbit"></span>
+    <span class="argos-bg-layer argos-bg-noise"></span>
+  </div>
+
+  <main class="argos-content-layer">
+    <section class="hero service-detail-hero">
+      <div class="wrap service-hero">
+        <div class="breadcrumb"><a href="./index.html">Inicio</a><span>/</span><span>Chico</span></div>
+        <span class="eyebrow">Asistente ARGOS</span>
+        <h1>Chico, diagnóstico y protección.</h1>
+        <p class="lead">Chico orienta solicitudes relacionadas con diagnóstico inicial, seguridad informática, mantenimiento IT, auditoría digital y priorización de necesidades. Puede guiar y preparar una solicitud, pero no ejecuta acciones críticas sin confirmación expresa.</p>
+        <div class="service-hero-actions"><button type="button" class="btn primary" data-assistant-chat="chico">Abrir chat con Chico</button><a class="btn ghost" href="#formulario">Iniciar diagnóstico con Chico</a><a class="btn ghost" href="./servicios/seguridad-informatica.html" target="_blank" rel="noopener">Ver seguridad informática</a></div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="wrap service-detail-grid">
+        <article class="service-panel">
+          <h2>En qué puede ayudarte</h2>
+          <ul class="service-list">
+            <li>Detectar si necesitas consultoría, seguridad, mantenimiento o auditoría digital.</li>
+            <li>Priorizar problemas técnicos por impacto y urgencia.</li>
+            <li>Preparar una solicitud clara para que ARGOS-IT pueda responder con contexto.</li>
+            <li>Orientar hacia las páginas de servicio adecuadas sin recopilar datos sensibles innecesarios.</li>
+          </ul>
+        <a class="detail-link" href="#formulario">Ver detalle y formulario</a></article>
+        <aside class="service-panel service-summary">
+          <h2>Rutas recomendadas</h2>
+          <ul class="service-list">
+            <li><a href="./servicios/consultoria-it.html" target="_blank" rel="noopener">Consultoría IT premium</a></li>
+            <li><a href="./servicios/seguridad-informatica.html" target="_blank" rel="noopener">Seguridad informática</a></li>
+            <li><a href="./servicios/mantenimiento-informatico.html" target="_blank" rel="noopener">Mantenimiento informático</a></li>
+            <li><a href="./servicios/auditoria-digital.html" target="_blank" rel="noopener">Auditoría digital continua</a></li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+    <section class="section white">
+      <div class="wrap service-detail-grid">
+        <article class="service-panel">
+          <h2>Chat interactivo en la web</h2>
+          <p>Chico ya no funciona solo como animación. Al hacer clic en su avatar o en el botón de chat abre un panel flotante con historial, campo de texto, acciones rápidas y respuestas de orientación según la página actual.</p>
+          <ul class="service-list">
+            <li>Detecta la página, título, secciones, enlaces, botones y formularios visibles.</li>
+            <li>Puede guiarte visualmente hacia servicios, método ARGOS, contacto o formularios.</li>
+            <li>Usa memoria local básica en este navegador y permite borrarla desde el panel.</li>
+          </ul>
+        </article>
+        <aside class="service-panel service-summary">
+          <h2>Privacidad y memoria</h2>
+          <p>El asistente solo usa el contexto de esta web para orientarte. No accede a información privada de tu dispositivo.</p>
+          <p>La memoria avanzada real con cuenta de usuario queda para fase 2 y debe requerir login, consentimiento RGPD, usuario verificado, base de datos, historial asociado a cuenta y opción de borrar datos.</p>
+          <p>En esta fase, Chico responde con reglas locales, navegación contextual, guía visual y botones rápidos. Una futura integración con IA debe hacerse desde backend, con historial por usuario y sin exponer ninguna clave privada de OpenAI en el frontend.</p>
+        </aside>
+      </div>
+    </section>
+    <section class="section white">
+      <div class="wrap service-form-wrap">
+        <div>
+          <span class="kicker">Diagnóstico guiado</span>
+          <h2>Iniciar diagnóstico con Chico</h2>
+          <p class="muted">No incluyas contraseñas, claves, datos bancarios ni información sensible. Chico prepara la solicitud y ARGOS-IT la revisa.</p>
+        </div>
+        <form id="formulario" class="form service-form" action="https://formspree.io/f/xpqooedl" method="POST">
+          <input type="hidden" name="_subject" value="Solicitud desde asistente Chico">
+          <input type="hidden" name="origen" value="asistente-argos">
+          <input type="hidden" name="asistente" value="chico">
+          <div class="grid2">
+            <label>Nombre y apellidos<input required name="nombre" placeholder="Tu nombre"></label>
+            <label>Empresa o actividad profesional<input name="empresa" placeholder="Empresa o actividad"></label>
+            <label>Email<input required type="email" name="email" placeholder="tu@email.com"></label>
+            <label>Teléfono<input name="telefono" placeholder="+34"></label>
+            <label>Área que quieres revisar<select name="area_revision"><option>Diagnóstico inicial</option><option>Seguridad informática</option><option>Mantenimiento IT</option><option>Auditoría digital</option><option>Selección de servicios</option></select></label>
+            <label>Urgencia<select name="urgencia"><option>Normal</option><option>Alta</option><option>Crítica</option></select></label>
+            <label>Web o sistema relacionado<input name="web_o_sistema" placeholder="https:// o sistema afectado"></label>
+            <label>Servicio que crees que necesitas<select name="servicio_preferente"><option>No lo sé todavía</option><option>Consultoría IT premium</option><option>Seguridad informática y protección digital</option><option>Mantenimiento informático para empresas</option><option>Auditoría digital continua</option></select></label>
+          </div>
+          <label style="margin-top:16px">Describe el problema o necesidad<textarea required name="descripcion" rows="5" placeholder="Cuéntanos qué está pasando, desde cuándo y qué impacto tiene en tu negocio."></textarea></label>
+          <label class="consent" style="margin-top:16px"><input required type="checkbox" name="privacidad">Acepto la política de privacidad y autorizo a ARGOS-IT a contactar conmigo.</label>
+          <button class="btn primary" style="width:100%;margin-top:18px" type="submit">Enviar diagnóstico a ARGOS-IT</button>
+        </form>
+      </div>
+    </section>
+  </main>
+</div>
+  <footer class="footer"><div class="wrap footer-grid"><div><img src="./logo-argos-it.png" alt="ARGOS-IT Consultoría y Servicios Informáticos" class="argos-logo-footer"><p>Chico orienta, prioriza y prepara solicitudes. ARGOS-IT valida las acciones.</p></div><a href="./index.html">Inicio</a><a href="./contacto.html">Contacto</a><div><a href="./aviso-legal.html">Aviso legal</a><br><a href="./privacidad.html">Privacidad</a><br><a href="./cookies.html">Cookies</a></div></div></footer>
+  <script src="./script.js"></script>
+  <script src="./js/argos-assistants.js"></script>
+</body>
+</html>
