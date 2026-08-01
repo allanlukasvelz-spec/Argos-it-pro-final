@@ -60,7 +60,9 @@ const testimonials = [
 export default function HomeView() {
   const { t, get } = useI18n();
   const services = useLocalizedServices();
-  const trustItems = get<string[]>("home.trustItems", []);
+  const proofTags = get<string[]>("home.proofTags", []);
+  const commandMetrics = get<string[]>("home.commandCenterMetrics", []);
+  const commandStats = get<{ label: string; sub: string }[]>("home.commandCenterStats", []);
 
   usePageMeta(t("meta.homeTitle"), t("meta.homeDescription"));
 
@@ -72,7 +74,7 @@ export default function HomeView() {
         <Link href="/contacto" className="argos-side-nav__item">{t("nav.contact")}</Link>
       </nav>
 
-      <section className="max-[860px]:pt-[calc(var(--header-h)+2.75rem)] px-5 pb-16 pt-16 lg:px-8 lg:pb-24 lg:pt-24">
+      <section className="px-5 pb-16 pt-16 lg:px-8 lg:pb-24 lg:pt-24">
         <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.08fr_.92fr]">
           <div className="max-w-4xl">
             <p className="argos-status-dot mb-5">{t("home.eyebrow")}</p>
@@ -81,31 +83,45 @@ export default function HomeView() {
             </h1>
             <HomeBrandSlogan />
             <p className="mt-6 max-w-3xl text-lg leading-8 text-[#D7E8F6]">{t("home.subtitle")}</p>
-            <p className="mt-4 max-w-3xl rounded-lg border border-[#18D4F7]/25 bg-white/[.06] p-4 text-sm font-bold leading-7 text-[#EAF7FF]">
-              En ARGOS-IT no solo resolvemos problemas: los prevenimos. No esperamos a que tu tecnología falle; la revisamos, reforzamos, guiamos y supervisamos antes de que afecte a tu negocio.
-            </p>
+            <div className="argos-hero-proof" aria-label="Modalidades y enfoque">
+              {proofTags.map((tag) => (
+                <span key={tag}>{tag}</span>
+              ))}
+            </div>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/contacto"
                 className="rounded-md bg-[#18D4F7] px-6 py-4 text-center font-black text-[#030812] shadow-lg shadow-cyan-500/20 transition hover:bg-[#39F4FF]"
               >
-                Solicitar diagnóstico ARGOS
+                {t("home.ctaDiagnostic")}
               </Link>
               <Link
                 href="/metodo"
                 className="rounded-md border border-white/20 bg-white/5 px-6 py-4 text-center font-bold text-white backdrop-blur transition hover:border-[#18D4F7] hover:bg-white/10"
               >
-                Ver método completo
+                {t("home.ctaMethod")}
               </Link>
             </div>
           </div>
 
-          <div className="argos-hologram-card argos-tech-frame argos-scan-line p-6">
-            <h2 className="text-lg font-black text-white">{t("home.trustTitle")}</h2>
-            <div className="mt-4 grid gap-3">
-              {trustItems.map((item) => (
-                <div key={item} className="rounded-lg border border-white/10 bg-white/[.08] p-4 text-sm font-semibold text-[#EAF7FF]">
-                  {item}
+          <div className="argos-command-center" aria-label={t("home.commandCenterTitle")}>
+            <div className="argos-command-center__head">
+              <strong>{t("home.commandCenterTitle")}</strong>
+              <span className="argos-command-center__ok">{t("home.commandCenterStatus")}</span>
+            </div>
+            {commandMetrics.map((metric) => (
+              <div key={metric} className="argos-command-center__metric">
+                <span>{metric}</span>
+                <span className="argos-command-center__bar" aria-hidden="true">
+                  <span />
+                </span>
+              </div>
+            ))}
+            <div className="argos-command-center__stats">
+              {commandStats.map((stat) => (
+                <div key={stat.label} className="argos-command-center__stat">
+                  <strong>{stat.label}</strong>
+                  <small>{stat.sub}</small>
                 </div>
               ))}
             </div>
@@ -220,7 +236,7 @@ export default function HomeView() {
         </div>
       </section>
 
-      <section className="px-5 py-16 lg:px-8">
+      <section id="planes" className="scroll-mt-[calc(var(--header-h)+1rem)] px-5 py-16 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-5 md:grid-cols-3">
             {[

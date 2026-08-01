@@ -29,6 +29,9 @@
     "home": "Inicio",
     "services": "Servicios",
     "method": "Método",
+    "methodArgos": "Método ARGOS",
+    "plans": "Planes",
+    "portal": "Portal",
     "about": "Sobre ARGOS-IT",
     "contact": "Contacto",
     "menu": "Menú",
@@ -44,9 +47,27 @@
     "backServices": "Volver a servicios"
   },
   "home": {
-    "eyebrow": "Consultoría tecnológica premium",
+    "eyebrow": "Consultoría informática premium para empresas y profesionales",
     "title": "Tecnología que protege, acompaña y simplifica.",
     "subtitle": "Ayudamos a empresas, autónomos y profesionales a mantener su infraestructura digital segura, estable y preparada para crecer, combinando soporte IT, ciberseguridad, mantenimiento web, automatización con IA y mejora continua.",
+    "proofTags": [
+      "Telemático · telefónico · presencial",
+      "Soporte IT con criterio de negocio",
+      "Seguridad, web e IA bajo una misma hoja de ruta"
+    ],
+    "commandCenterTitle": "ARGOS Command Center",
+    "commandCenterStatus": "Socio externo",
+    "commandCenterMetrics": [
+      "Soporte IT y continuidad",
+      "Seguridad informática",
+      "WordPress y presencia digital",
+      "Automatización con IA"
+    ],
+    "commandCenterStats": [
+      { "label": "ARGOS", "sub": "Método" },
+      { "label": "WP", "sub": "Hostinger" },
+      { "label": "IA", "sub": "Controlada" }
+    ],
     "trustTitle": "Acompañamiento tecnológico",
     "trustItems": [
       "Diagnóstico y prioridades con criterio externo",
@@ -54,6 +75,8 @@
       "Presencia web, formularios y captación cuidados",
       "Automatización con IA de forma controlada"
     ],
+    "ctaDiagnostic": "Solicitar diagnóstico ARGOS",
+    "ctaMethod": "Ver método completo",
     "servicesEyebrow": "Servicios premium",
     "servicesTitle": "Seis áreas para proteger, gestionar y hacer evolucionar tu entorno digital.",
     "servicesSubtitle": "Diseñados para empresas, autónomos y profesionales de cualquier lugar que necesitan soporte IT, seguridad, presencia web corporativa, IA y mejora continua de forma telemática, telefónica o presencial.",
