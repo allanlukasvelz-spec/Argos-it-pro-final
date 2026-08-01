@@ -17,6 +17,11 @@ function requireJwtSecret(res) {
     return false;
   }
 
+  if (process.env.JWT_SECRET === process.env.JWT_REFRESH_SECRET) {
+    res.status(500).json({ error: "JWT_SECRET y JWT_REFRESH_SECRET deben ser distintos" });
+    return false;
+  }
+
   return true;
 }
 

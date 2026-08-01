@@ -640,45 +640,41 @@
 }
 
 .argos-side-nav {
+  /* Siempre vertical al borde derecho, justo encima de Dumbo */
   position: fixed;
-  right: 18px;
-  top: 42%;
-  z-index: 35;
+  right: clamp(8px, 2vw, 14px);
+  left: auto;
+  top: auto;
+  /* Altura aprox. sprite Dumbo + globo + margen */
+  bottom: calc(
+    var(--mascot-dock-bottom, 1rem) + min(42vw, 250px) + 20px
+  );
+  z-index: 40;
   display: grid;
   gap: 10px;
+  margin: 0;
+  justify-content: stretch;
+  pointer-events: none;
 }
 
-/* Tablet / desktop estrecho: barra horizontal sticky (no fixed lateral invasivo) */
-@media (max-width: 1279px) {
+@media (min-width: 861px) {
   .argos-side-nav {
-    position: sticky;
-    left: 12px;
-    right: 12px;
-    top: calc(var(--header-h, 96px) + 8px);
-    bottom: auto;
-    margin: 0 12px;
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    z-index: 30;
-  }
-
-  .argos-side-nav__item {
-    min-width: 0;
-    min-height: 38px;
-    padding: 0 12px;
-    font-size: 12px;
+    bottom: calc(
+      var(--mascot-dock-bottom, 1.35rem) + min(28vw, 260px) + 24px
+    );
   }
 }
 
-/* Desktop ancho: nav lateral fija sin tapar el showcase */
 @media (min-width: 1280px) {
   .argos-side-nav {
-    top: 38%;
+    bottom: calc(
+      var(--mascot-dock-bottom, 1.35rem) + min(22vw, 280px) + 28px
+    );
   }
 }
 
 .argos-side-nav__item {
+  pointer-events: auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;

@@ -9,29 +9,26 @@
   --argos-cyan: #38bdf8;
   --argos-silver: #e5e7eb;
   --argos-graphite: #111827;
-  /* Aligned with SiteHeader heights for scroll-margin / layout */
-  --header-h: 88px;
+  /* Aligned with SiteHeader: lang + barra del logo (sin franja extra) */
+  --header-h: calc(var(--argos-topbar-lang-h, 44px) + var(--argos-topbar-nav-h, 72px));
   --header-px: 16px;
   --content-max: 80rem;
 }
 
 @media (min-width: 480px) {
   :root {
-    --header-h: 96px;
     --header-px: 20px;
   }
 }
 
 @media (min-width: 768px) {
   :root {
-    --header-h: 190px;
     --header-px: 32px;
   }
 }
 
 @media (min-width: 1024px) {
   :root {
-    --header-h: 200px;
     --header-px: 40px;
   }
 }
@@ -42,10 +39,10 @@
   }
 }
 
-/* Altura aproximada de la barra lateral sticky (Home, ≤1279px) */
+/* Altura aproximada de la barra lateral sticky (Home, ≤1279px) — ya no aplica: side-nav es fixed vertical */
 @media (max-width: 1279px) {
   :root {
-    --argos-side-nav-band: 2.75rem;
+    --argos-side-nav-band: 0px;
   }
 }
 

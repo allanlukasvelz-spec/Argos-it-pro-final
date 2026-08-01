@@ -84,19 +84,19 @@ const SAFE_GAP_LEFT_PX = 72;
 const SAFE_GAP_LEFT_HEADER_PX = 4;
 /** Caja fija del sprite Dumbo (layout completo / legado). */
 const DUMBO_SPRITE_BOX = "h-[4.25rem] w-[4.25rem] md:h-[4.75rem] md:w-[4.75rem] lg:h-[5.25rem] lg:w-[5.25rem]";
-/** Mascotas en header: tablet 70–72px, desktop 78–80px, desktop grande 84–86px. */
+/** Mascotas en header: +2 puntos respecto al tamaño compacto anterior. */
 const DUMBO_SPRITE_BOX_HEADER =
-  "h-[72px] w-[72px] shrink-0 lg:h-20 lg:w-20 xl:h-[86px] xl:w-[86px]";
+  "h-[60px] w-[60px] shrink-0 lg:h-[66px] lg:w-[66px] xl:h-[70px] xl:w-[70px]";
 const CHICO_SPRITE_BOX = "h-[3.85rem] w-[3.85rem] md:h-[4.35rem] md:w-[4.35rem] lg:h-[4.75rem] lg:w-[4.75rem]";
 const CHICO_SPRITE_BOX_HEADER =
-  "h-[70px] w-[70px] shrink-0 lg:h-[78px] lg:w-[78px] xl:h-[84px] xl:w-[84px]";
+  "h-[58px] w-[58px] shrink-0 lg:h-[64px] lg:w-[64px] xl:h-[68px] xl:w-[68px]";
 
 /** Globo Chico en header por breakpoint (min-w-0 en tablet para caber en slot sin overflow). */
 const CHICO_BUBBLE_EMBEDDED =
-  "w-full max-w-full min-w-0 shrink-0 md:w-[min(100%,520px)] md:max-w-[min(100%,520px)] md:min-w-0 lg:w-[660px] lg:max-w-[660px] lg:min-w-[620px] xl:w-[720px] xl:max-w-[720px] xl:min-w-[680px]";
+  "w-full max-w-full min-w-0 shrink-0 md:w-[min(100%,460px)] md:max-w-[min(100%,460px)] md:min-w-0 lg:w-[min(100%,560px)] lg:max-w-[560px] xl:w-[min(100%,620px)] xl:max-w-[620px]";
 /** Tarjeta Dumbo en header por breakpoint. */
 const DUMBO_CARD_EMBEDDED =
-  "w-full max-w-full min-w-0 md:w-[min(100%,540px)] md:max-w-[min(100%,540px)] md:min-w-0 lg:w-[700px] lg:max-w-[700px] lg:min-w-[660px] xl:w-[740px] xl:max-w-[740px] xl:min-w-[700px]";
+  "w-full max-w-full min-w-0 md:w-[min(100%,480px)] md:max-w-[min(100%,480px)] md:min-w-0 lg:w-[min(100%,580px)] lg:max-w-[580px] xl:w-[min(100%,640px)] xl:max-w-[640px]";
 
 function formatChicoAdviceForA11y(tip: ChicoTip) {
   return `Consejo de Chico: ${tip.titulo}. ${tip.mensajeCorto}`;
@@ -346,7 +346,7 @@ export default function DiagnosticPromoBanner({ embeddedInHeader = false }: Prop
     <>
       <DiagnosticSurveyModal open={diagnosticOpen} onClose={() => setDiagnosticOpen(false)} />
       <div
-      className="pointer-events-none absolute inset-0 overflow-visible"
+      className={`pointer-events-none absolute inset-0 ${embeddedInHeader ? "overflow-hidden" : "overflow-visible"}`}
       role="region"
       aria-label={regionAria}
       aria-hidden={!showChrome}
@@ -355,8 +355,8 @@ export default function DiagnosticPromoBanner({ embeddedInHeader = false }: Prop
       {showChrome && isDumboLive && (
         <motion.div
           key={`dumbo-slot-${motionKey}`}
-          className={`absolute inset-x-0 bottom-0 flex w-full max-w-full items-end gap-0 will-change-transform ${dumboSlotPadEnd} ${
-            embeddedInHeader ? "justify-end" : ""
+          className={`absolute inset-x-0 bottom-0 flex w-full max-w-full items-center gap-0 will-change-transform ${dumboSlotPadEnd} ${
+            embeddedInHeader ? "top-0 justify-end" : "items-end"
           }`}
           style={{ paddingLeft: dumboGapLeftPx }}
           initial={
@@ -393,14 +393,18 @@ export default function DiagnosticPromoBanner({ embeddedInHeader = false }: Prop
 
       {showChrome && isChicoLive && (
         <div
-          className={`pointer-events-none absolute inset-x-0 bottom-0 z-[2] flex justify-center px-2 md:px-3 ${
-            embeddedInHeader ? "pb-0.5 md:pb-1" : "pb-[0.45rem] md:px-4 md:pb-2"
+          className={`pointer-events-none absolute inset-x-0 z-[2] flex justify-center px-2 md:px-3 ${
+            embeddedInHeader ? "inset-y-0 items-center py-0" : "bottom-0 pb-[0.45rem] md:px-4 md:pb-2"
           }`}
         >
-          <div className={`flex w-full ${chicoClusterMaxW} items-end justify-center ${chicoClusterGap}`}>
+          <div
+            className={`flex w-full ${chicoClusterMaxW} justify-center ${chicoClusterGap} ${
+              embeddedInHeader ? "h-full items-center" : "items-end"
+            }`}
+          >
             <motion.div
             key={`chico-mascot-${motionKey}`}
-            className="pointer-events-auto flex shrink-0 items-end"
+            className={`pointer-events-auto flex shrink-0 ${embeddedInHeader ? "items-center" : "items-end"}`}
             initial={
               phase === "chicoEntering"
                 ? { x: CHICO_CLUSTER_ENTER_X, opacity: 1 }
@@ -490,30 +494,31 @@ function DumboBannerInner({
 
   return (
     <motion.div
-      className={`pointer-events-none flex w-full min-w-0 max-w-full flex-row items-end ${
+      className={`pointer-events-none flex w-full min-w-0 max-w-full flex-row ${
         embeddedInHeader
-          ? "justify-end gap-4 lg:gap-[18px] xl:gap-5"
-          : "justify-center gap-1 md:gap-1.5"
+          ? "h-full items-center justify-end gap-2 lg:gap-3"
+          : "items-end justify-center gap-1 md:gap-1.5"
       }`}
     >
       <div
-        className={`order-1 relative min-w-0 shrink-0 self-end ${
-          embeddedInHeader ? DUMBO_CARD_EMBEDDED : "max-w-[min(100%,520px)] flex-1"
+        className={`order-1 relative min-w-0 shrink-0 ${
+          embeddedInHeader ? `${DUMBO_CARD_EMBEDDED} self-center` : "max-w-[min(100%,520px)] flex-1 self-end"
         }`}
       >
         <motion.div
+          data-argos-header-card={embeddedInHeader ? "true" : undefined}
           className={
             embeddedInHeader
-              ? "pointer-events-auto relative max-h-[130px] overflow-visible rounded-[20px] border-[2.5px] border-[#39F4FF]/90 bg-gradient-to-br from-[#4c1d95] via-[#1e3a8a] to-[#0f766e] py-[14px] pl-[22px] pr-[22px] shadow-[0_16px_40px_-10px_rgba(15,23,42,0.45),0_0_36px_-8px_rgba(34,211,238,0.35),inset_0_1px_0_0_rgba(255,255,255,0.22)] ring-2 ring-black/25 md:flex md:max-h-[130px] md:flex-row md:items-center md:gap-[18px] lg:max-h-[136px] lg:gap-[22px] lg:pl-6 lg:pr-6 xl:max-h-[136px] xl:gap-6 xl:pl-[26px] xl:pr-[26px]"
+              ? "pointer-events-auto relative max-h-[calc(var(--argos-topbar-nav-h)-12px)] overflow-hidden rounded-[14px] border-2 border-[#39F4FF]/90 bg-gradient-to-br from-[#4c1d95] via-[#1e3a8a] to-[#0f766e] py-1.5 pl-3 pr-3 shadow-[0_6px_16px_-6px_rgba(15,23,42,0.4)] ring-1 ring-black/20 md:flex md:flex-row md:items-center md:gap-3 lg:gap-3.5 lg:pl-3.5 lg:pr-3.5"
               : "pointer-events-auto relative overflow-visible rounded-2xl border-[2.5px] border-[#39F4FF]/90 bg-gradient-to-br from-[#4c1d95] via-[#1e3a8a] to-[#0f766e] px-4 py-3 pb-3 shadow-[0_16px_40px_-10px_rgba(15,23,42,0.45),0_0_36px_-8px_rgba(34,211,238,0.35),inset_0_1px_0_0_rgba(255,255,255,0.22)] ring-2 ring-black/25 md:flex md:flex-row md:items-center md:gap-6 md:px-5 md:py-3.5 md:pb-3.5 lg:gap-8 lg:px-6 lg:py-4"
           }
         >
-          <div aria-hidden className="pointer-events-none absolute inset-[2px] rounded-[18px] bg-gradient-to-b from-white/18 via-transparent to-black/22" />
+          <div aria-hidden className="pointer-events-none absolute inset-[2px] rounded-[10px] bg-gradient-to-b from-white/18 via-transparent to-black/22" />
           <div className={`relative z-[1] min-w-0 flex-1 ${embeddedInHeader ? "" : "md:min-w-[12rem]"}`}>
             <p
               className={
                 embeddedInHeader
-                  ? "line-clamp-2 text-base font-bold leading-tight tracking-tight text-white drop-shadow md:text-lg"
+                  ? "line-clamp-1 text-sm font-bold leading-tight tracking-tight text-white drop-shadow lg:text-[15px]"
                   : "min-h-[2.5rem] text-base font-bold leading-tight tracking-tight text-white drop-shadow md:min-h-[2.75rem] md:text-lg lg:text-xl"
               }
             >
@@ -522,7 +527,7 @@ function DumboBannerInner({
             <p
               className={
                 embeddedInHeader
-                  ? "mt-1 line-clamp-2 text-sm font-black leading-tight text-balance md:text-[0.9375rem]"
+                  ? "mt-0.5 line-clamp-1 text-xs font-black leading-tight text-balance lg:text-[13px]"
                   : "mt-1.5 min-h-[2.5rem] text-sm font-black leading-tight text-balance md:min-h-[2.25rem] md:text-[0.9375rem] lg:text-base"
               }
             >
@@ -534,13 +539,13 @@ function DumboBannerInner({
             </p>
           </div>
 
-          <div className={`relative z-[1] shrink-0 md:mt-0 md:flex md:flex-col md:justify-center ${embeddedInHeader ? "mt-2 md:mt-0" : "mt-3"}`}>
+          <div className={`relative z-[1] shrink-0 md:mt-0 md:flex md:flex-col md:justify-center ${embeddedInHeader ? "mt-0" : "mt-3"}`}>
             <button
               type="button"
               onClick={onStartDiagnostic}
               className={
                 embeddedInHeader
-                  ? "pointer-events-auto inline-flex h-[42px] w-full min-w-0 items-center justify-center whitespace-nowrap rounded-xl bg-[#22D3EE] px-4 py-2 text-center text-sm font-black leading-tight tracking-tight text-[#082f49] shadow-[0_8px_24px_-6px_rgba(6,182,212,0.85),inset_0_1px_0_0_rgba(255,255,255,0.45)] ring-2 ring-[#A5F3FC]/95 hover:bg-[#67E8F9] md:h-[42px] md:w-[210px] md:min-w-[210px] md:shrink-0 lg:w-[230px] lg:min-w-[230px] xl:w-[240px] xl:min-w-[240px]"
+                  ? "pointer-events-auto inline-flex h-9 w-full min-w-0 items-center justify-center whitespace-nowrap rounded-lg bg-[#22D3EE] px-3.5 text-center text-xs font-black leading-tight tracking-tight text-[#082f49] shadow-[0_4px_12px_-4px_rgba(6,182,212,0.85)] ring-1 ring-[#A5F3FC]/95 hover:bg-[#67E8F9] md:h-9 md:w-[164px] md:min-w-[164px] md:shrink-0 lg:w-[176px] lg:min-w-[176px] lg:text-[13px]"
                   : "pointer-events-auto inline-flex min-h-[44px] w-full items-center justify-center whitespace-nowrap rounded-xl bg-[#22D3EE] px-5 py-2.5 text-center text-sm font-black leading-tight tracking-tight text-[#082f49] shadow-[0_8px_24px_-6px_rgba(6,182,212,0.85),inset_0_1px_0_0_rgba(255,255,255,0.45)] ring-2 ring-[#A5F3FC]/95 ring-offset-2 ring-offset-[#0f172a]/0 hover:bg-[#67E8F9] md:min-h-[46px] md:min-w-[11.5rem] md:px-5 md:text-sm lg:min-w-[12.5rem] lg:px-6 lg:py-2.5 lg:text-base"
               }
             >
@@ -548,15 +553,13 @@ function DumboBannerInner({
             </button>
           </div>
         </motion.div>
+        {!embeddedInHeader && (
         <div
-          className={
-            embeddedInHeader
-              ? "pointer-events-none absolute bottom-[20%] -right-1 z-[2] h-6 w-6 rotate-45 border-b-[2.5px] border-r-[2.5px] border-[#39F4FF]/75 bg-[#134e4a] shadow-[3px_3px_14px_-2px_rgba(34,211,238,0.45)] md:bottom-[22%] lg:h-[26px] lg:w-[26px]"
-              : "pointer-events-none absolute bottom-[18%] -right-1 z-[2] h-7 w-7 rotate-45 border-b-[2.5px] border-r-[2.5px] border-[#39F4FF]/75 bg-[#134e4a] shadow-[3px_3px_14px_-2px_rgba(34,211,238,0.45)] md:-right-1 md:bottom-[22%]"
-          }
+          className="pointer-events-none absolute bottom-[18%] -right-1 z-[2] h-7 w-7 rotate-45 border-b-[2.5px] border-r-[2.5px] border-[#39F4FF]/75 bg-[#134e4a] shadow-[3px_3px_14px_-2px_rgba(34,211,238,0.45)] md:-right-1 md:bottom-[22%]"
           style={{ clipPath: "polygon(100% 0, 100% 100%, 0 100%)" }}
           aria-hidden
         />
+        )}
       </div>
 
       {!embeddedInHeader && (
@@ -592,7 +595,9 @@ function DumboBannerInner({
 
       <button
         type="button"
-        className={`order-2 relative shrink-0 self-end ${dumboSpriteBox} pointer-events-auto -scale-x-100 brightness-[1.06] saturate-[1.15] contrast-[1.05] drop-shadow-[0_14px_32px_-6px_rgba(15,23,42,0.55)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400`}
+        className={`order-2 relative shrink-0 pointer-events-auto -scale-x-100 brightness-[1.06] saturate-[1.15] contrast-[1.05] drop-shadow-[0_14px_32px_-6px_rgba(15,23,42,0.55)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400 ${dumboSpriteBox} ${
+          embeddedInHeader ? "self-center" : "self-end"
+        }`}
         onClick={() => revealMascotPauseControls(pauseControl, "dumbo")}
         onKeyDown={(event) => onMascotPauseRevealKey(event, pauseControl, "dumbo")}
         aria-label="Mostrar controles de Dumbo"
@@ -648,40 +653,29 @@ function ChicoSecurityBubble({
     return (
       <>
         <aside
-          className="pointer-events-none relative z-[6] w-full overflow-visible pb-3 md:pb-3.5"
+          className="pointer-events-none relative z-[6] flex h-full w-full items-center overflow-hidden"
           aria-label={`${CHICO_SECURITY_A11Y_ROLE}. ${advice}`}
         >
           <div
-            aria-hidden
-            className="pointer-events-none absolute -bottom-2.5 left-[18%] z-0 h-7 w-7 rotate-[-28deg] rounded-br-[14px] rounded-tl-sm border-[2px] border-[#5EEAD4]/90 bg-[#0f172a] md:h-7 md:w-7"
-            style={{
-              clipPath: "polygon(0 0, 100% 0, 55% 100%, 0 40%)",
-              boxShadow: "4px 4px 16px rgba(8,145,178,0.35)"
-            }}
-          />
-          <div
+            data-argos-header-card="true"
             role="presentation"
-            className="pointer-events-auto relative flex w-full max-h-[132px] flex-col overflow-visible rounded-[20px] border-[2px] border-[#2DD4BF]/95 bg-[#0f172a] py-[14px] pl-[22px] pr-[22px] shadow-[0_14px_36px_-10px_rgba(8,51,68,0.55),inset_0_1px_0_0_rgba(148,239,238,0.12)] md:max-h-[126px] md:flex-row md:items-center md:gap-[18px] lg:max-h-[132px] lg:gap-5 lg:pl-6 lg:pr-6 xl:max-h-[132px] xl:gap-[22px] xl:pl-[26px] xl:pr-[26px]"
+            className="pointer-events-auto relative flex w-full max-h-[calc(var(--argos-topbar-nav-h)-12px)] flex-col overflow-hidden rounded-[14px] border-2 border-[#2DD4BF]/95 bg-[#0f172a] py-1.5 pl-3 pr-3 shadow-[0_6px_16px_-6px_rgba(8,51,68,0.45)] md:flex-row md:items-center md:gap-3 lg:gap-3.5 lg:pl-3.5 lg:pr-3.5"
           >
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-0 rounded-[18px] opacity-95 bg-[linear-gradient(145deg,#0c1929_0%,#082f49_52%,#0e7490_120%)]"
-            />
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-[1px] rounded-[17px] bg-[linear-gradient(180deg,rgba(148,239,238,0.14)_0%,transparent_45%,rgba(15,118,110,0.08)_100%)]"
+              className="pointer-events-none absolute inset-0 rounded-[12px] opacity-95 bg-[linear-gradient(145deg,#0c1929_0%,#082f49_52%,#0e7490_120%)]"
             />
             <div className="relative z-[1] flex min-w-0 flex-1 flex-col justify-center">
-              <p className="mb-1 line-clamp-1 text-xs font-black uppercase leading-tight tracking-[0.08em] text-[#67E8F9]">
+              <p className="mb-0.5 line-clamp-1 text-[11px] font-black uppercase leading-none tracking-[0.08em] text-[#67E8F9]">
                 Consejo práctico
               </p>
               <h3
-                className="line-clamp-2 text-sm font-black leading-snug text-[#ECFEFF] md:text-[0.9375rem]"
+                className="line-clamp-1 text-sm font-black leading-tight text-[#ECFEFF] lg:text-[15px]"
                 id={titleId}
               >
                 {tip.titulo}
               </h3>
-              <p className="mt-1 line-clamp-2 text-[13px] font-medium leading-snug text-[#E0F2FE]/95 md:text-sm">
+              <p className="mt-0.5 line-clamp-1 text-xs font-medium leading-tight text-[#E0F2FE]/95 lg:text-[13px]">
                 {tip.mensajeCorto}
               </p>
             </div>
@@ -689,7 +683,7 @@ function ChicoSecurityBubble({
               type="button"
               onClick={openDetail}
               aria-haspopup="dialog"
-              className="relative z-[1] mt-2 inline-flex min-h-[36px] w-full shrink-0 items-center justify-center rounded-lg border border-[#5EEAD4]/45 bg-[#082f49]/80 px-3 py-1.5 text-center text-xs font-black uppercase tracking-wide text-[#A5F3FC] shadow-sm ring-1 ring-[#2DD4BF]/30 transition hover:bg-[#0c4a6e]/90 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 md:mt-0 md:h-[38px] md:w-[200px] md:min-w-[200px] md:whitespace-nowrap md:text-[13px] lg:w-[220px] lg:min-w-[220px] xl:w-[230px] xl:min-w-[230px]"
+              className="relative z-[1] inline-flex h-9 w-full shrink-0 items-center justify-center rounded-lg border border-[#5EEAD4]/45 bg-[#082f49]/80 px-3 text-center text-[11px] font-black uppercase tracking-wide text-[#A5F3FC] shadow-sm ring-1 ring-[#2DD4BF]/30 transition hover:bg-[#0c4a6e]/90 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 md:mt-0 md:w-[156px] md:min-w-[156px] md:whitespace-nowrap lg:w-[168px] lg:min-w-[168px] lg:text-xs"
             >
               Ver explicación y pasos
             </button>
