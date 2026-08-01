@@ -24,8 +24,11 @@ export default defineConfig({
   ],
 
   webServer: {
+    // preview = localhost only; start = 0.0.0.0 for Coolify/Docker (do not append hostname args)
     command:
-      `npm --prefix frontend run start -- --hostname 127.0.0.1 --port ${e2ePort}`,
+      e2ePort === "3000"
+        ? "npm --prefix frontend run preview"
+        : `npm --prefix frontend exec -- next start --hostname 127.0.0.1 --port ${e2ePort}`,
     url: e2eOrigin,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
