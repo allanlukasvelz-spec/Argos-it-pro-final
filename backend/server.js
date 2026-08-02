@@ -20,6 +20,8 @@ const { generalLimiter, detectBot, aiLimiter } = require("./middleware/security"
 const authMiddleware = require("./middleware/auth");
 
 const app = express();
+// Trust the single Traefik hop so rate limits use the real client IP.
+app.set("trust proxy", 1);
 const server = http.createServer(app);
 const allowedOrigins = (process.env.CORS_ORIGINS || process.env.FRONTEND_URL || "http://localhost:3000")
   .split(",")
