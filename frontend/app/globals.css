@@ -87,7 +87,26 @@ textarea {
 }
 
 ::selection {
-  background: #dbeafe;
+  background: #7dd3fc;
+  color: #07111f;
+  -webkit-text-fill-color: #07111f;
+}
+
+::-moz-selection {
+  background: #7dd3fc;
+  color: #07111f;
+}
+
+.argos-page-shell ::selection,
+.argos-content-layer ::selection {
+  background: #38bdf8;
+  color: #07111f;
+  -webkit-text-fill-color: #07111f;
+}
+
+.argos-page-shell ::-moz-selection,
+.argos-content-layer ::-moz-selection {
+  background: #38bdf8;
   color: #07111f;
 }
 

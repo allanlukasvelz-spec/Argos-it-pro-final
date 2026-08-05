@@ -1684,6 +1684,28 @@
   animation: none !important;
 }
 
+/* Selección visible al copiar (el gradiente clip deja el texto transparente) */
+.argos-method-title-glow::selection,
+.argos-method-title-glow--showcase::selection,
+.argos-method-hero-title.argos-method-title-glow::selection {
+  color: #07111f !important;
+  -webkit-text-fill-color: #07111f !important;
+  background: #7dd3fc !important;
+  background-color: #7dd3fc !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 transparent !important;
+}
+
+.argos-method-title-glow::-moz-selection,
+.argos-method-title-glow--showcase::-moz-selection,
+.argos-method-hero-title.argos-method-title-glow::-moz-selection {
+  color: #07111f !important;
+  background: #7dd3fc !important;
+  text-shadow: none !important;
+}
+
 .argos-method-title-glow--showcase {
   font-size: clamp(2.3rem, 13vw, 3.6rem);
 }
