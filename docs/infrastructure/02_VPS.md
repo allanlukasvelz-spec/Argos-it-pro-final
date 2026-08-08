@@ -6,9 +6,9 @@ VPS Hostinger KVM 2 Ubuntu 24.04.4 LTS, único host de Coolify, portal, staging 
 
 ## Estado
 
-Operativo · uptime >3 días en verificación · filesystem rw · Docker healthy.
+Operativo · uptime >4 días en verificación · filesystem rw · Docker healthy · swap activo.
 
-**Última verificación UTC:** 2026-08-05T10:00Z
+**Última verificación UTC:** 2026-08-06T16:08Z
 
 ## Inventario
 
@@ -22,8 +22,8 @@ Operativo · uptime >3 días en verificación · filesystem rw · Docker healthy
 | OS | Ubuntu 24.04.4 LTS (noble) |
 | CPU | 2 vCPU (`nproc=2`) |
 | RAM | 7.8 GiB total · ~6.3 GiB available |
-| Swap | **0B** (sin swap) |
-| Disco | `/dev/sda1` ext4 96G · ~7.1G used · ~89G avail (8%) |
+| Swap | **2.0 GiB** (`/swapfile`) · `vm.swappiness=10` · `vm.vfs_cache_pressure=50` |
+| Disco | `/dev/sda1` ext4 96G · ~9.1G used · ~87G avail (10%; +2G swapfile) |
 | Boot | `/boot` 881M · EFI 105M |
 
 ## Configuración — Paquetes relevantes
@@ -102,7 +102,7 @@ Hostinger hardware · red pública · DNS.
 
 ## Riesgos
 
-Sin swap · single node · root SSH aún permitido por clave (necesario Coolify).
+Swap 2G activo (FASE FINAL) · single node · root SSH aún permitido por clave (necesario Coolify). Rollback swap: `/root/argos-fase-final-cierre/SWAP_ROLLBACK.txt`.
 
 ## Rollback
 

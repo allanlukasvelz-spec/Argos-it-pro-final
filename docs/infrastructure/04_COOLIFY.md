@@ -6,17 +6,18 @@ Coolify orquesta proyectos staging/producción, proxy Traefik, backups y panel e
 
 ## Estado
 
-Panel HTTPS 200 · contenedor healthy · Laravel Framework 12.61.1 (artisan) · app efectiva aproximada **Coolify 4.2.0** (imagen `coollabsio/coolify:latest`; 9 migraciones batch 2 aplicadas). Downgrade a 4.1.2 **no autorizado**. Pin de digest **pendiente**.
+Panel HTTPS 200 · contenedor healthy · Laravel Framework 12.61.1 (artisan) · **Coolify 4.2.0 fijado** (`LATEST_IMAGE=4.2.0`; digest `b8aea35f…`; 346 migraciones / pending 0; batch 337+9). Downgrade a 4.1.2 **no autorizado**.
 
-**Última verificación UTC:** 2026-08-05T10:00Z
+**Última verificación UTC:** 2026-08-06T16:08Z
 
 ## Inventario
 
 | Recurso | Valor |
 |---|---|
-| Contenedor | `coolify` (`coollabsio/coolify:latest`) |
+| Contenedor | `coolify` (`coollabsio/coolify:4.2.0`) |
+| `LATEST_IMAGE` | `4.2.0` (persistido en `/data/coolify/source/.env`) |
 | Digest en ejecución | `sha256:b8aea35f4113e54c38be3e88f842e09856aebcf92bd3e264b06c567c99ed4921` |
-| App efectiva (aprox.) | **4.2.0** |
+| App efectiva | **4.2.0** (pin FASE 13.2B) |
 | DB interna | `coolify-db` PostgreSQL 15.18 |
 | Redis | `coolify-redis` Redis 7 |
 | Realtime | `coolify-realtime` 1.0.16 |

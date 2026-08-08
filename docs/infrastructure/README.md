@@ -1,6 +1,6 @@
 # ARGOS-IT — Infrastructure CMDB (FASE 11)
 
-Documentación maestra de infraestructura. Origen de datos 2026-08-05T10:00Z · revisión consistencia **FASE 11.1**.
+Documentación maestra de infraestructura. Origen de datos 2026-08-05T10:00Z · revisión **FASE 11.1** · cierre **FASE FINAL** 2026-08-06T16:08Z.
 
 | # | Documento |
 |---|---|
@@ -24,5 +24,6 @@ Documentación maestra de infraestructura. Origen de datos 2026-08-05T10:00Z · 
 | 18 | [Open Risks](./18_OPEN_RISKS.md) |
 | 19 | [Go-Live Checklist](./19_GO_LIVE_CHECKLIST.md) |
 | 20 | [Executive Summary](./20_EXECUTIVE_SUMMARY.md) |
+| 21 | [FASE FINAL — Cierre v1.0](./21_FASE_FINAL_CIERRE.md) |
 
 Relacionados: `docs/PRODUCTION_DR_RUNBOOK.md`, diseños Cloudflare (no implementados).
