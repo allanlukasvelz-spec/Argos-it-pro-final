@@ -4,7 +4,8 @@ const MAX_AGE_S = 60 * 60 * 24 * 7;
 
 export function setAuthSessionCookie(): void {
   if (typeof document === "undefined") return;
-  document.cookie = `${AUTH_SESSION_COOKIE}=1; path=/; max-age=${MAX_AGE_S}; samesite=lax`;
+  const secure = location.protocol === "https:" ? "; secure" : "";
+  document.cookie = `${AUTH_SESSION_COOKIE}=1; path=/; max-age=${MAX_AGE_S}; samesite=lax${secure}`;
 }
 
 export function clearAuthSessionCookie(): void {

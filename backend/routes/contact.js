@@ -1,5 +1,5 @@
 const express = require("express");
-const { contactLimiter } = require("../middleware/security");
+const { contactLimiter, validateEmailFormat } = require("../middleware/security");
 
 const router = express.Router();
 
@@ -22,8 +22,7 @@ router.post("/", contactLimiter, async (req, res) => {
       return res.status(400).json({ error: "Nombre, email y mensaje son obligatorios." });
     }
 
-    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email);
-    if (!emailOk) {
+    if (!validateEmailFormat(payload.email)) {
       return res.status(400).json({ error: "Email no valido." });
     }
 
