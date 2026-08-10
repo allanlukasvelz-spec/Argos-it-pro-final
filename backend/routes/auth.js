@@ -220,4 +220,33 @@ router.post("/refresh", authLimiter, async (req, res) => {
   }
 });
 
+// LOGOUT — revoke the refresh session so the token cannot be reused
+router.post("/logout", async (req, res) => {
+  try {
+    const { refreshToken: bodyRefresh } = req.body;
+
+    if (bodyRefresh && typeof bodyRefresh === "string") {
+      const secret = process.env.JWT_REFRESH_SECRET;
+      if (secret && secret.length >= 32) {
+        try {
+          const decoded = jwt.verify(bodyRefresh, secret);
+          if (decoded.jti) {
+            await pool.query(
+              "UPDATE refresh_sessions SET revoked_at = NOW() WHERE jti = $1 AND revoked_at IS NULL",
+              [decoded.jti]
+            );
+          }
+        } catch (_verifyErr) {
+          // Token invalid/expired — nothing to revoke, logout succeeds anyway
+        }
+      }
+    }
+
+    res.json({ message: "Sesion cerrada" });
+  } catch (error) {
+    console.error("[AUTH] Error en logout:", error.message);
+    res.json({ message: "Sesion cerrada" });
+  }
+});
+
 module.exports = router;
