@@ -7,6 +7,9 @@ import {
 
 const REFRESH_STORAGE_KEY = "refreshToken";
 
+const BACKEND_URL =
+  process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000";
+
 export type AuthUser = {
   email?: string;
   company?: string;
@@ -21,6 +24,12 @@ interface AuthState {
   /** Tras POST /api/auth/refresh: actualiza access (y refresh rotado si viene en la respuesta). */
   applyTokenRefresh: (accessToken: string, newRefreshToken?: string) => void;
   logout: () => void;
+}
+
+function clearLocal() {
+  localStorage.removeItem("token");
+  localStorage.removeItem(REFRESH_STORAGE_KEY);
+  clearAuthSessionCookie();
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -45,10 +54,25 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ token: accessToken });
   },
   logout: () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem(REFRESH_STORAGE_KEY);
-    clearAuthSessionCookie();
-    set({ token: null, user: null });
+    const rt = localStorage.getItem(REFRESH_STORAGE_KEY);
+
+    (async () => {
+      try {
+        if (rt) {
+          await fetch(`${BACKEND_URL}/api/auth/logout`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ refreshToken: rt }),
+            signal: AbortSignal.timeout(5000)
+          });
+        }
+      } catch {
+        // Server unavailable or network error — cleanup proceeds in finally
+      } finally {
+        clearLocal();
+        set({ token: null, user: null });
+      }
+    })();
   }
 }));
 
