@@ -198,6 +198,16 @@ router.post("/refresh", authLimiter, async (req, res) => {
         "INSERT INTO refresh_sessions(user_id, jti, expires_at) VALUES($1, $2, $3)",
         [row.id, newJti, expiresAt]
       );
+
+      // Opportunistic cleanup: remove expired and old revoked sessions for this user.
+      // Uses idx_refresh_sessions_user (user_id) + idx_refresh_sessions_expires (expires_at).
+      pool.query(
+        `DELETE FROM refresh_sessions
+         WHERE user_id = $1
+           AND (expires_at < NOW() OR (revoked_at IS NOT NULL AND revoked_at < NOW() - INTERVAL '1 day'))`,
+        [row.id]
+      ).catch((err) => console.error("[AUTH] refresh session cleanup error:", err.message));
+
       const refreshToken = jwt.sign({ id: row.id, jti: newJti }, process.env.JWT_REFRESH_SECRET, {
         expiresIn: "7d"
       });

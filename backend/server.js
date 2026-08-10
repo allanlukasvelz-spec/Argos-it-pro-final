@@ -145,7 +145,7 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 app.use(cors(corsOptions));
-app.use(express.json({ limit: "10mb" }));
+app.use(express.json({ limit: "512kb" }));
 app.use(morgan("combined"));
 app.use(detectBot);
 app.use(generalLimiter);
@@ -160,9 +160,14 @@ app.use("/api/ai", aiLimiter, authMiddleware, aiRoutes);
 app.use("/api/security", authMiddleware, securityRoutes);
 app.use("/api/client", authMiddleware, clientRoutes);
 
-// Health check
-app.get("/api/health", (req, res) => {
-  res.json({ status: "OK", timestamp: new Date() });
+// Health check — verifies database connectivity
+app.get("/api/health", async (req, res) => {
+  try {
+    await pool.query("SELECT 1");
+    res.json({ status: "OK", db: "connected", timestamp: new Date() });
+  } catch (_err) {
+    res.status(503).json({ status: "DEGRADED", db: "disconnected", timestamp: new Date() });
+  }
 });
 
 const PORT = process.env.PORT || 4000;
