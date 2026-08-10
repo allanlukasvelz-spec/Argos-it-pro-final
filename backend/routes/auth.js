@@ -228,16 +228,19 @@ router.post("/logout", async (req, res) => {
     if (bodyRefresh && typeof bodyRefresh === "string") {
       const secret = process.env.JWT_REFRESH_SECRET;
       if (secret && secret.length >= 32) {
+        let jti;
         try {
           const decoded = jwt.verify(bodyRefresh, secret);
-          if (decoded.jti) {
-            await pool.query(
-              "UPDATE refresh_sessions SET revoked_at = NOW() WHERE jti = $1 AND revoked_at IS NULL",
-              [decoded.jti]
-            );
-          }
+          jti = decoded.jti;
         } catch (_verifyErr) {
-          // Token invalid/expired — nothing to revoke, logout succeeds anyway
+          // Token invalid/expired — nothing to revoke, logout succeeds
+        }
+
+        if (jti) {
+          await pool.query(
+            "UPDATE refresh_sessions SET revoked_at = NOW() WHERE jti = $1 AND revoked_at IS NULL",
+            [jti]
+          );
         }
       }
     }
@@ -245,7 +248,7 @@ router.post("/logout", async (req, res) => {
     res.json({ message: "Sesion cerrada" });
   } catch (error) {
     console.error("[AUTH] Error en logout:", error.message);
-    res.json({ message: "Sesion cerrada" });
+    res.status(503).json({ message: "Sesion cerrada" });
   }
 });
 

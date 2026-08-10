@@ -55,16 +55,24 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
   logout: () => {
     const rt = localStorage.getItem(REFRESH_STORAGE_KEY);
-    clearLocal();
-    set({ token: null, user: null });
 
-    if (rt) {
-      fetch(`${BACKEND_URL}/api/auth/logout`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ refreshToken: rt })
-      }).catch(() => {});
-    }
+    (async () => {
+      try {
+        if (rt) {
+          await fetch(`${BACKEND_URL}/api/auth/logout`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ refreshToken: rt }),
+            signal: AbortSignal.timeout(5000)
+          });
+        }
+      } catch {
+        // Server unavailable or network error — cleanup proceeds in finally
+      } finally {
+        clearLocal();
+        set({ token: null, user: null });
+      }
+    })();
   }
 }));
 
