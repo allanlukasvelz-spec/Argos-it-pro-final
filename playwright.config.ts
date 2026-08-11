@@ -31,6 +31,11 @@ export default defineConfig({
       timeout: 30_000,
       stdout: "pipe",
       stderr: "pipe",
+      env: {
+        ...process.env,
+        // e2e auth-flow registers/logins several users; default AUTH_RATE_LIMIT_MAX=8 is too low
+        AUTH_RATE_LIMIT_MAX: process.env.AUTH_RATE_LIMIT_MAX || "40",
+      },
     },
     {
       command:

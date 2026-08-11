@@ -13,7 +13,7 @@ async function registerViaAPI(request: APIRequestContext, email: string): Promis
   const res = await request.post(`${BACKEND}/api/auth/register`, {
     data: { email, password: PASSWORD, name: "E2E User", company: "E2E Corp" },
   });
-  expect(res.status(), "register API should return 201").toBe(201);
+  expect(res.status(), `register API should return 201 (got ${res.status()})`).toBe(201);
 }
 
 async function loginViaUI(page: Page, email: string): Promise<void> {
@@ -135,5 +135,80 @@ test.describe("authenticated flow (HttpOnly cookies)", () => {
   test("dashboard redirects unauthenticated visitor to login", async ({ page }) => {
     await page.goto("/dashboard");
     await expect(page).toHaveURL(/\/auth\/login/, { timeout: 10_000 });
+  });
+
+  test("Bearer-only REST access is rejected with 401", async ({ page, request }) => {
+    const email = uniqueEmail();
+    await registerViaAPI(request, email);
+    await loginViaUI(page, email);
+
+    const cookies = await page.context().cookies();
+    const access = findCookie(cookies, "argos_access");
+    expect(access, "access cookie to reuse as Bearer").toBeDefined();
+
+    await page.context().clearCookies();
+
+    const bearerOnly = await request.get(`${BACKEND}/api/client/portal`, {
+      headers: { Authorization: `Bearer ${access!.value}` },
+    });
+    expect(bearerOnly.status(), "Bearer-only REST must be 401").toBe(401);
+
+    const noAuth = await request.get(`${BACKEND}/api/client/portal`);
+    expect(noAuth.status(), "unauthenticated REST must be 401").toBe(401);
+  });
+
+  test("cookie auth works and CSRF Origin blocks refresh without Origin", async ({
+    page,
+    request,
+  }) => {
+    const email = uniqueEmail();
+    await registerViaAPI(request, email);
+    await loginViaUI(page, email);
+
+    const cookies = await page.context().cookies();
+    const access = findCookie(cookies, "argos_access");
+    const refresh = findCookie(cookies, "argos_refresh");
+    expect(access).toBeDefined();
+    expect(refresh).toBeDefined();
+
+    const cookieHeader = `argos_access=${access!.value}; argos_refresh=${refresh!.value}`;
+
+    const withCookies = await request.get(`${BACKEND}/api/client/portal`, {
+      headers: { Cookie: `argos_access=${access!.value}` },
+    });
+    expect(withCookies.status(), "cookie access auth should be 200").toBe(200);
+
+    const refreshNoOrigin = await request.post(`${BACKEND}/api/auth/refresh`, {
+      headers: {
+        Cookie: cookieHeader,
+        "Content-Type": "application/json",
+      },
+      data: {},
+    });
+    expect(refreshNoOrigin.status(), "refresh without Origin must be 403").toBe(403);
+
+    const refreshOk = await request.post(`${BACKEND}/api/auth/refresh`, {
+      headers: {
+        Cookie: cookieHeader,
+        "Content-Type": "application/json",
+        Origin: "http://127.0.0.1:3000",
+      },
+      data: {},
+    });
+    // Origin must be in CORS_ORIGINS / FRONTEND_URL; local default is localhost:3000
+    const refreshLocalhost = refreshOk.status() === 200
+      ? refreshOk
+      : await request.post(`${BACKEND}/api/auth/refresh`, {
+          headers: {
+            Cookie: cookieHeader,
+            "Content-Type": "application/json",
+            Origin: "http://localhost:3000",
+          },
+          data: {},
+        });
+    expect(
+      refreshLocalhost.status(),
+      "refresh with allowed Origin must be 200"
+    ).toBe(200);
   });
 });

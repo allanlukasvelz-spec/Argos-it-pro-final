@@ -65,22 +65,25 @@ curl -sS -o /dev/null -w "%{http_code}\n" -X POST "$BASE/api/ai/public/mascot-ch
   -d '{"persona":"dumbo","message":""}'
 # Esperado: 400
 
-# Con JWT de usuario normal (definir TOKEN_CLIENT tras login; si no está definido, omitir esta línea):
-# export TOKEN_CLIENT='...'
-# curl -sS -o /dev/null -w "%{http_code}\n" -H "Authorization: Bearer $TOKEN_CLIENT" "$BASE/api/security/stats"
-# Esperado: 403
-
-# Con JWT de admin o super_admin:
-# export TOKEN_ADMIN='...'
-# curl -sS -o /dev/null -w "%{http_code}\n" -H "Authorization: Bearer $TOKEN_ADMIN" "$BASE/api/security/stats"
-# Esperado: 200
+# Auth REST = cookies HttpOnly (argos_access). Bearer-only → 401.
+# Login (guarda cookies en jar) y llamada autenticada:
+# curl -sS -c /tmp/argos.jar -b /tmp/argos.jar -X POST "$BASE/api/auth/login" \
+#   -H "Content-Type: application/json" -H "Origin: http://localhost:3000" \
+#   -d '{"email":"cliente@example.com","password":"..."}'
+# curl -sS -o /dev/null -w "%{http_code}\n" -b /tmp/argos.jar "$BASE/api/security/stats"
+# Cliente no admin → 403; admin/super_admin → 200
+# curl -sS -o /dev/null -w "%{http_code}\n" \
+#   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.fake.payload" "$BASE/api/client/portal"
+# Esperado: 401
 ```
 
-**Automático:** desde la raíz del repo (tras `chmod +x scripts/verify-api.sh` si hace falta). Sin `OPENAI_API_KEY` en el servidor, las pruebas con mensaje válido aceptan **503** `assistant_unavailable`; con clave, **200** y JSON con `reply`. Para forzar 200 en staging: `VERIFY_MASCOT_REQUIRES_200=1 ./scripts/verify-api.sh`.
+**Automático:** desde la raíz del repo (tras `chmod +x scripts/verify-api.sh` si hace falta). Sin `OPENAI_API_KEY` en el servidor, las pruebas con mensaje válido aceptan **503** `assistant_unavailable`; con clave, **200** y JSON con `reply`. Para forzar 200 en staging: `VERIFY_MASCOT_REQUIRES_200=1 ./scripts/verify-api.sh`. El script siempre comprueba rechazo Bearer (401). Con credenciales, valida cookies + CSRF Origin en refresh.
 
 ```bash
 ./scripts/verify-api.sh
-BASE_URL=http://localhost:4000 TOKEN_CLIENT=... TOKEN_ADMIN=... TOKEN_REFRESH=... ./scripts/verify-api.sh
+BASE_URL=http://localhost:4000 VERIFY_ORIGIN=http://localhost:3000 \
+  CLIENT_EMAIL=... CLIENT_PASSWORD=... ADMIN_EMAIL=... ADMIN_PASSWORD=... \
+  ./scripts/verify-api.sh
 ```
 
 **Portal (UI honesta):** con un usuario sin filas en `website_audits` ni `client_services`, el dashboard debe mostrar puntuación ausente (`—`), mensajes de auditoría/mejoras vacíos y el estado de verificación según `client_verified` en base de datos.
