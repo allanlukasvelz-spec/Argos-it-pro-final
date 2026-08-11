@@ -174,6 +174,27 @@ app.get("/api/health", async (req, res) => {
   }
 });
 
+// Global error handler — prevents stack traces and internal paths from reaching the client
+app.use((err, _req, res, _next) => {
+  if (res.headersSent) return;
+
+  if (String(err.message).includes("CORS")) {
+    return res.status(403).json({ error: "Origen no permitido" });
+  }
+
+  if (err instanceof SyntaxError && err.status === 400 && err.type === "entity.parse.failed") {
+    return res.status(400).json({ error: "JSON invalido" });
+  }
+
+  const clientStatus = err.status || err.statusCode;
+  if (typeof clientStatus === "number" && clientStatus >= 400 && clientStatus < 500) {
+    return res.status(clientStatus).json({ error: "Solicitud no valida" });
+  }
+
+  console.error("[SERVER] Unhandled error:", err.message);
+  res.status(500).json({ error: "Error interno del servidor" });
+});
+
 const PORT = process.env.PORT || 4000;
 
 server.on("error", (err) => {
