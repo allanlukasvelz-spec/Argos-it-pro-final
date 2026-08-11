@@ -19,6 +19,7 @@ const contactRoutes = require("./routes/contact");
 const clientRoutes = require("./routes/client");
 const { generalLimiter, detectBot, aiLimiter } = require("./middleware/security");
 const authMiddleware = require("./middleware/auth");
+const csrfOriginGuard = require("./middleware/csrfOrigin");
 
 const app = express();
 // Trust the single Traefik hop so rate limits use the real client IP.
@@ -151,6 +152,7 @@ app.use(express.json({ limit: "512kb" }));
 app.use(morgan("combined"));
 app.use(detectBot);
 app.use(generalLimiter);
+app.use(csrfOriginGuard(allowedOrigins));
 
 // Rutas públicas
 app.use("/api/auth", authRoutes);
