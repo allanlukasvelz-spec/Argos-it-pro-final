@@ -23,16 +23,25 @@ export default defineConfig({
     },
   ],
 
-  webServer: {
-    // preview = localhost only; start = 0.0.0.0 for Coolify/Docker (do not append hostname args)
-    command:
-      e2ePort === "3000"
-        ? "npm --prefix frontend run preview"
-        : `npm --prefix frontend exec -- next start --hostname 127.0.0.1 --port ${e2ePort}`,
-    url: e2eOrigin,
-    reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
-    stdout: "pipe",
-    stderr: "pipe",
-  },
+  webServer: [
+    {
+      command: "npm --prefix backend run start",
+      url: "http://127.0.0.1:4000/api/health",
+      reuseExistingServer: !process.env.CI,
+      timeout: 30_000,
+      stdout: "pipe",
+      stderr: "pipe",
+    },
+    {
+      command:
+        e2ePort === "3000"
+          ? "npm --prefix frontend run preview"
+          : `npm --prefix frontend exec -- next start --hostname 127.0.0.1 --port ${e2ePort}`,
+      url: e2eOrigin,
+      reuseExistingServer: !process.env.CI,
+      timeout: 120_000,
+      stdout: "pipe",
+      stderr: "pipe",
+    },
+  ],
 });

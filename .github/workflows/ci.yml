@@ -65,8 +65,11 @@ jobs:
       - name: Verify (lint, build, node --check)
         run: npm run verify
 
+      - name: Apply database schema
+        run: psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f database/schema.sql
+
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: E2E smoke
+      - name: E2E tests
         run: CI=1 npm run test:e2e
