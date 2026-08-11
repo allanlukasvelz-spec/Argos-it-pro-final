@@ -1,4 +1,4 @@
-import { test, expect, type Page } from "@playwright/test";
+import { test, expect, type Page, type APIRequestContext } from "@playwright/test";
 
 const BACKEND = "http://127.0.0.1:4000";
 const PASSWORD = "E2eSecure2026!x";
@@ -9,19 +9,17 @@ function uniqueEmail(): string {
   return `argos-e2e-${ts}-${rand}@example.test`;
 }
 
-async function getLocalStorage(page: Page, key: string): Promise<string | null> {
-  return page.evaluate((k) => localStorage.getItem(k), key);
+async function registerViaAPI(request: APIRequestContext, email: string): Promise<void> {
+  const res = await request.post(`${BACKEND}/api/auth/register`, {
+    data: { email, password: PASSWORD, name: "E2E User", company: "E2E Corp" },
+  });
+  expect(res.status(), "register API should return 201").toBe(201);
 }
 
-async function getCookie(page: Page, name: string): Promise<string | undefined> {
-  const cookies = await page.context().cookies();
-  return cookies.find((c) => c.name === name)?.value;
-}
-
-async function loginViaUI(page: Page, email: string, password: string): Promise<void> {
+async function loginViaUI(page: Page, email: string): Promise<void> {
   await page.goto("/auth/login");
   await page.locator("#login-email").fill(email);
-  await page.locator("#login-password").fill(password);
+  await page.locator("#login-password").fill(PASSWORD);
 
   const [response] = await Promise.all([
     page.waitForResponse(
@@ -35,11 +33,22 @@ async function loginViaUI(page: Page, email: string, password: string): Promise<
   await expect(page).toHaveURL(/\/dashboard/, { timeout: 10_000 });
 }
 
-test.describe.serial("authenticated flow: register → login → dashboard → logout", () => {
-  const email = uniqueEmail();
-  let capturedRefreshToken: string | null = null;
+async function getLocalStorage(page: Page, key: string): Promise<string | null> {
+  return page.evaluate((k) => localStorage.getItem(k), key);
+}
 
-  test("register a new user", async ({ page }) => {
+async function getCookie(page: Page, name: string): Promise<string | undefined> {
+  const cookies = await page.context().cookies();
+  return cookies.find((c) => c.name === name)?.value;
+}
+
+// Auth calls per test: register(1) = 1 auth req
+test.describe("authenticated flow", () => {
+
+  // Auth calls: 1 register (via UI)
+  test("register a new user via UI", async ({ page }) => {
+    const email = uniqueEmail();
+
     await page.goto("/auth/register");
     await expect(
       page.getByRole("heading", { name: /Crear cuenta ARGOS-IT/i })
@@ -65,8 +74,12 @@ test.describe.serial("authenticated flow: register → login → dashboard → l
     expect(token).toBeNull();
   });
 
-  test("login with the registered user and reach dashboard", async ({ page }) => {
-    await loginViaUI(page, email, PASSWORD);
+  // Auth calls: 1 register (API) + 1 login (UI) = 2 auth reqs
+  test("login reaches dashboard with tokens and cookie", async ({ page, request }) => {
+    const email = uniqueEmail();
+    await registerViaAPI(request, email);
+
+    await loginViaUI(page, email);
 
     await expect(
       page.getByRole("heading", { name: /Portal de cliente|Client portal/i })
@@ -82,11 +95,14 @@ test.describe.serial("authenticated flow: register → login → dashboard → l
     expect(sessionCookie).toBe("1");
   });
 
-  test("logout clears all tokens and session cookie", async ({ page }) => {
-    await loginViaUI(page, email, PASSWORD);
+  // Auth calls: 1 register (API) + 1 login (UI) + 1 refresh (API) = 3 auth reqs
+  test("logout clears state and revokes refresh token", async ({ page, request }) => {
+    const email = uniqueEmail();
+    await registerViaAPI(request, email);
+    await loginViaUI(page, email);
 
-    capturedRefreshToken = await getLocalStorage(page, "refreshToken");
-    expect(capturedRefreshToken).toBeTruthy();
+    const refreshToken = await getLocalStorage(page, "refreshToken");
+    expect(refreshToken).toBeTruthy();
 
     await page
       .getByRole("button", { name: /Cerrar sesión|Sign out/i })
@@ -94,31 +110,29 @@ test.describe.serial("authenticated flow: register → login → dashboard → l
 
     await expect(page).toHaveURL(/^\/$|\/auth\/login/, { timeout: 10_000 });
 
-    await page.waitForFunction(() => localStorage.getItem("token") === null, null, {
-      timeout: 6_000
+    await page.waitForFunction(
+      () => localStorage.getItem("token") === null,
+      null,
+      { timeout: 6_000 }
+    );
+
+    const tokenAfter = await getLocalStorage(page, "token");
+    expect(tokenAfter).toBeNull();
+
+    const rtAfter = await getLocalStorage(page, "refreshToken");
+    expect(rtAfter).toBeNull();
+
+    const cookie = await getCookie(page, "argos_session");
+    expect(cookie).toBeUndefined();
+
+    const refreshResponse = await request.post(`${BACKEND}/api/auth/refresh`, {
+      data: { refreshToken },
     });
-
-    const token = await getLocalStorage(page, "token");
-    expect(token).toBeNull();
-
-    const refreshToken = await getLocalStorage(page, "refreshToken");
-    expect(refreshToken).toBeNull();
-
-    const sessionCookie = await getCookie(page, "argos_session");
-    expect(sessionCookie).toBeUndefined();
+    expect(refreshResponse.status(), "revoked refresh should return 401").toBe(401);
   });
 
-  test("revoked refresh token returns 401", async ({ request }) => {
-    expect(capturedRefreshToken).toBeTruthy();
-
-    const response = await request.post(`${BACKEND}/api/auth/refresh`, {
-      data: { refreshToken: capturedRefreshToken },
-    });
-
-    expect(response.status()).toBe(401);
-  });
-
-  test("dashboard redirects to login after logout", async ({ page }) => {
+  // Auth calls: 0 (no auth needed — unauthenticated access)
+  test("dashboard redirects unauthenticated visitor to login", async ({ page }) => {
     await page.goto("/dashboard");
     await expect(page).toHaveURL(/\/auth\/login/, { timeout: 10_000 });
   });
