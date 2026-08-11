@@ -10,16 +10,12 @@ module.exports = (req, res, next) => {
     }
 
     const cookieToken = req.cookies && req.cookies[ACCESS_COOKIE];
-    const authHeader = req.headers.authorization;
 
-    const raw = cookieToken
-      || (authHeader && (authHeader.startsWith("Bearer ") ? authHeader.slice(7) : authHeader));
-
-    if (!raw) {
+    if (!cookieToken) {
       return res.status(401).json({ error: "Token requerido" });
     }
 
-    const decoded = jwt.verify(raw, process.env.JWT_SECRET);
+    const decoded = jwt.verify(cookieToken, process.env.JWT_SECRET);
 
     req.user = decoded;
     next();
