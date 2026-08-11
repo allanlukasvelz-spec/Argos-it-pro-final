@@ -65,22 +65,20 @@ curl -sS -o /dev/null -w "%{http_code}\n" -X POST "$BASE/api/ai/public/mascot-ch
   -d '{"persona":"dumbo","message":""}'
 # Esperado: 400
 
-# Con JWT de usuario normal (definir TOKEN_CLIENT tras login; si no está definido, omitir esta línea):
-# export TOKEN_CLIENT='...'
-# curl -sS -o /dev/null -w "%{http_code}\n" -H "Authorization: Bearer $TOKEN_CLIENT" "$BASE/api/security/stats"
-# Esperado: 403
-
-# Con JWT de admin o super_admin:
-# export TOKEN_ADMIN='...'
-# curl -sS -o /dev/null -w "%{http_code}\n" -H "Authorization: Bearer $TOKEN_ADMIN" "$BASE/api/security/stats"
+# Rutas protegidas usan cookies HttpOnly (no Bearer).
+# Para probar manualmente con curl, hacer login y usar cookie jar:
+# curl -sS -c /tmp/cookies.txt -X POST "$BASE/api/auth/login" \
+#   -H "Content-Type: application/json" -H "Origin: http://127.0.0.1:3000" \
+#   -d '{"email":"tu@email","password":"tupass"}'
+# curl -sS -b /tmp/cookies.txt -H "Origin: http://127.0.0.1:3000" "$BASE/api/client/portal"
 # Esperado: 200
 ```
 
-**Automático:** desde la raíz del repo (tras `chmod +x scripts/verify-api.sh` si hace falta). Sin `OPENAI_API_KEY` en el servidor, las pruebas con mensaje válido aceptan **503** `assistant_unavailable`; con clave, **200** y JSON con `reply`. Para forzar 200 en staging: `VERIFY_MASCOT_REQUIRES_200=1 ./scripts/verify-api.sh`.
+**Automático:** desde la raíz del repo (tras `chmod +x scripts/verify-api.sh` si hace falta). Sin `OPENAI_API_KEY` en el servidor, las pruebas con mensaje válido aceptan **503** `assistant_unavailable`; con clave, **200** y JSON con `reply`. Para forzar 200 en staging: `VERIFY_MASCOT_REQUIRES_200=1 ./scripts/verify-api.sh`. Para pruebas autenticadas: `VERIFY_AUTH=1 ./scripts/verify-api.sh`.
 
 ```bash
 ./scripts/verify-api.sh
-BASE_URL=http://localhost:4000 TOKEN_CLIENT=... TOKEN_ADMIN=... TOKEN_REFRESH=... ./scripts/verify-api.sh
+VERIFY_AUTH=1 ./scripts/verify-api.sh
 ```
 
 **Portal (UI honesta):** con un usuario sin filas en `website_audits` ni `client_services`, el dashboard debe mostrar puntuación ausente (`—`), mensajes de auditoría/mejoras vacíos y el estado de verificación según `client_verified` en base de datos.

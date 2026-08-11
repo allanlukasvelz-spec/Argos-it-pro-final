@@ -9,11 +9,7 @@ module.exports = (req, res, next) => {
       return res.status(500).json({ error: "Configuracion de autenticacion incompleta" });
     }
 
-    const cookieToken = req.cookies && req.cookies[ACCESS_COOKIE];
-    const authHeader = req.headers.authorization;
-
-    const raw = cookieToken
-      || (authHeader && (authHeader.startsWith("Bearer ") ? authHeader.slice(7) : authHeader));
+    const raw = req.cookies && req.cookies[ACCESS_COOKIE];
 
     if (!raw) {
       return res.status(401).json({ error: "Token requerido" });

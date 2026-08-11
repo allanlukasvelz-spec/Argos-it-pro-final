@@ -2,14 +2,19 @@
 # Smoke del API ARGOS-IT. Requiere backend en marcha.
 # Uso:
 #   ./scripts/verify-api.sh
-#   BASE_URL=http://localhost:4000 TOKEN_CLIENT=... TOKEN_ADMIN=... TOKEN_REFRESH=... ./scripts/verify-api.sh
+#   BASE_URL=http://localhost:4000 ./scripts/verify-api.sh
 #
 # Opcional: VERIFY_MASCOT_REQUIRES_200=1 — exige HTTP 200 en mascot-chat/dumbo-chat con mensaje válido
 # (staging con OPENAI_API_KEY en el servidor del API).
+#
+# Opcional: VERIFY_AUTH=1 — ejecuta pruebas autenticadas (registra un usuario de prueba, login con
+# cookie jar, portal, stats, refresh y logout). Requiere PostgreSQL con schema aplicado.
 set -euo pipefail
 
 BASE_URL="${BASE_URL:-http://localhost:4000}"
 BASE="${BASE_URL%/}"
+ORIGIN="${VERIFY_ORIGIN:-http://127.0.0.1:3000}"
+COOKIE_JAR="/tmp/argos-verify-cookies.txt"
 
 fail() {
   echo "FAIL: $*" >&2
@@ -24,6 +29,7 @@ grep -q "OK" /tmp/argos-health.json 2>/dev/null || fail "health: cuerpo sin stat
 echo "== POST /api/auth/register email inválido -> 400 =="
 code="$(curl -sS -o /dev/null -w "%{http_code}" -X POST "${BASE}/api/auth/register" \
   -H "Content-Type: application/json" \
+  -H "Origin: ${ORIGIN}" \
   -d '{"email":"no-es-un-email","password":"ValidPass123a"}')"
 [[ "${code}" == "400" ]] || fail "register: esperado HTTP 400, obtenido ${code}"
 
@@ -99,43 +105,63 @@ else
   fi
 fi
 
-if [[ -n "${TOKEN_CLIENT:-}" ]]; then
-  echo "== GET /api/security/stats JWT cliente -> 403 =="
-  code="$(curl -sS -o /dev/null -w "%{http_code}" \
-    -H "Authorization: Bearer ${TOKEN_CLIENT}" \
+# --- Authenticated tests (cookie-based) ---
+if [[ "${VERIFY_AUTH:-}" == "1" ]]; then
+  VERIFY_EMAIL="verify-$(date +%s)@argos-test.dev"
+  VERIFY_PASS="VerifySmoke2026!x"
+
+  echo "== AUTH: register test user =="
+  code="$(curl -sS -o /dev/null -w "%{http_code}" -X POST "${BASE}/api/auth/register" \
+    -H "Content-Type: application/json" \
+    -H "Origin: ${ORIGIN}" \
+    -d "{\"email\":\"${VERIFY_EMAIL}\",\"password\":\"${VERIFY_PASS}\",\"name\":\"Verify\"}")"
+  [[ "${code}" == "201" ]] || fail "auth register: esperado HTTP 201, obtenido ${code}"
+
+  echo "== AUTH: login -> cookies =="
+  code="$(curl -sS -c "${COOKIE_JAR}" -o /dev/null -w "%{http_code}" -X POST "${BASE}/api/auth/login" \
+    -H "Content-Type: application/json" \
+    -H "Origin: ${ORIGIN}" \
+    -d "{\"email\":\"${VERIFY_EMAIL}\",\"password\":\"${VERIFY_PASS}\"}")"
+  [[ "${code}" == "200" ]] || fail "auth login: esperado HTTP 200, obtenido ${code}"
+  grep -q "argos_access" "${COOKIE_JAR}" || fail "login: falta cookie argos_access"
+  grep -q "argos_refresh" "${COOKIE_JAR}" || fail "login: falta cookie argos_refresh"
+
+  echo "== AUTH: GET /api/client/portal -> 200 =="
+  code="$(curl -sS -b "${COOKIE_JAR}" -o /tmp/argos-portal.json -w "%{http_code}" \
+    -H "Origin: ${ORIGIN}" \
+    "${BASE}/api/client/portal")"
+  [[ "${code}" == "200" ]] || fail "portal: esperado HTTP 200, obtenido ${code}"
+  grep -q '"user"' /tmp/argos-portal.json 2>/dev/null || fail "portal: cuerpo sin objeto user"
+
+  echo "== AUTH: GET /api/security/stats cliente -> 403 =="
+  code="$(curl -sS -b "${COOKIE_JAR}" -o /dev/null -w "%{http_code}" \
+    -H "Origin: ${ORIGIN}" \
     "${BASE}/api/security/stats")"
   [[ "${code}" == "403" ]] || fail "stats cliente: esperado HTTP 403, obtenido ${code}"
 
-  echo "== GET /api/client/portal JWT cliente -> 200 =="
-  code="$(curl -sS -o /tmp/argos-portal.json -w "%{http_code}" \
-    -H "Authorization: Bearer ${TOKEN_CLIENT}" \
-    "${BASE}/api/client/portal")"
-  [[ "${code}" == "200" ]] || fail "portal cliente: esperado HTTP 200, obtenido ${code}"
-  grep -q '"user"' /tmp/argos-portal.json 2>/dev/null || fail "portal: cuerpo sin objeto user esperado"
-else
-  echo "SKIP: TOKEN_CLIENT no definido (JWT de usuario sin rol admin)"
-fi
-
-if [[ -n "${TOKEN_ADMIN:-}" ]]; then
-  echo "== GET /api/security/stats JWT admin -> 200 =="
-  code="$(curl -sS -o /dev/null -w "%{http_code}" \
-    -H "Authorization: Bearer ${TOKEN_ADMIN}" \
-    "${BASE}/api/security/stats")"
-  [[ "${code}" == "200" ]] || fail "stats admin: esperado HTTP 200, obtenido ${code}"
-else
-  echo "SKIP: TOKEN_ADMIN no definido (JWT de role admin o super_admin)"
-fi
-
-if [[ -n "${TOKEN_REFRESH:-}" ]]; then
-  echo "== POST /api/auth/refresh -> 200 y token =="
-  payload="$(printf '%s' "{\"refreshToken\":\"${TOKEN_REFRESH}\"}")"
-  code="$(curl -sS -o /tmp/argos-refresh.json -w "%{http_code}" -X POST "${BASE}/api/auth/refresh" \
+  echo "== AUTH: POST /api/auth/refresh -> 200 (cookie rotation) =="
+  code="$(curl -sS -c "${COOKIE_JAR}" -b "${COOKIE_JAR}" -o /tmp/argos-refresh.json -w "%{http_code}" \
+    -X POST "${BASE}/api/auth/refresh" \
     -H "Content-Type: application/json" \
-    -d "${payload}")"
+    -H "Origin: ${ORIGIN}")"
   [[ "${code}" == "200" ]] || fail "refresh: esperado HTTP 200, obtenido ${code}"
-  grep -q '"token"' /tmp/argos-refresh.json 2>/dev/null || fail "refresh: respuesta sin campo token"
+
+  echo "== AUTH: POST /api/auth/logout -> 200 =="
+  code="$(curl -sS -c "${COOKIE_JAR}" -b "${COOKIE_JAR}" -o /dev/null -w "%{http_code}" \
+    -X POST "${BASE}/api/auth/logout" \
+    -H "Content-Type: application/json" \
+    -H "Origin: ${ORIGIN}")"
+  [[ "${code}" == "200" ]] || fail "logout: esperado HTTP 200, obtenido ${code}"
+
+  echo "== AUTH: portal post-logout -> 401 =="
+  code="$(curl -sS -b "${COOKIE_JAR}" -o /dev/null -w "%{http_code}" \
+    -H "Origin: ${ORIGIN}" \
+    "${BASE}/api/client/portal")"
+  [[ "${code}" == "401" ]] || fail "portal post-logout: esperado HTTP 401, obtenido ${code}"
+
+  rm -f "${COOKIE_JAR}"
 else
-  echo "SKIP: TOKEN_REFRESH no definido (refresh JWT del login)"
+  echo "SKIP: VERIFY_AUTH no activado (set VERIFY_AUTH=1 para pruebas autenticadas con cookies)"
 fi
 
 echo "OK: verify-api terminado sin errores críticos."
