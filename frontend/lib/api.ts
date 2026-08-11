@@ -3,34 +3,26 @@ import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
 const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000";
 
 const API = axios.create({
-  baseURL
+  baseURL,
+  withCredentials: true,
 });
 
 type RetryableConfig = InternalAxiosRequestConfig & { _retry?: boolean };
 
-let refreshInFlight: Promise<string | null> | null = null;
+let refreshInFlight: Promise<boolean> | null = null;
 
-function refreshAccessToken(): Promise<string | null> {
+function refreshAccessToken(): Promise<boolean> {
   if (!refreshInFlight) {
     refreshInFlight = (async () => {
       try {
-        const rt = typeof window !== "undefined" ? localStorage.getItem("refreshToken") : null;
-        if (!rt) return null;
-        const res = await axios.post<{ token: string; refreshToken?: string }>(
+        await axios.post(
           `${baseURL}/api/auth/refresh`,
-          { refreshToken: rt },
-          { headers: { "Content-Type": "application/json" } }
+          {},
+          { withCredentials: true }
         );
-        const { token, refreshToken: newRt } = res.data;
-        localStorage.setItem("token", token);
-        if (newRt) {
-          localStorage.setItem("refreshToken", newRt);
-        }
-        const { useAuthStore } = await import("@/lib/auth");
-        useAuthStore.getState().applyTokenRefresh(token, newRt);
-        return token;
+        return true;
       } catch {
-        return null;
+        return false;
       } finally {
         refreshInFlight = null;
       }
@@ -38,16 +30,6 @@ function refreshAccessToken(): Promise<string | null> {
   }
   return refreshInFlight;
 }
-
-API.interceptors.request.use((config) => {
-  if (typeof window !== "undefined") {
-    const token = localStorage.getItem("token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-  }
-  return config;
-});
 
 API.interceptors.response.use(
   (res) => res,
@@ -66,13 +48,12 @@ API.interceptors.response.use(
 
     orig._retry = true;
     try {
-      const newToken = await refreshAccessToken();
-      if (!newToken) {
+      const refreshed = await refreshAccessToken();
+      if (!refreshed) {
         const { useAuthStore } = await import("@/lib/auth");
         useAuthStore.getState().logout();
         return Promise.reject(error);
       }
-      orig.headers.Authorization = `Bearer ${newToken}`;
       return API(orig);
     } catch {
       const { useAuthStore } = await import("@/lib/auth");

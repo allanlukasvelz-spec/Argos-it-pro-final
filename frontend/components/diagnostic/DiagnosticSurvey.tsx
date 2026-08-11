@@ -38,8 +38,7 @@ function emptyAnswers(): undefined[] {
 }
 
 export function DiagnosticSurvey({ ariaTitleId, onRequestClose }: Props) {
-  const token = useAuthStore((s) => s.token);
-  const isLoggedIn = Boolean(token);
+  const isLoggedIn = useAuthStore((s) => s.authenticated);
 
   const [phase, setPhase] = useState<"survey" | "results">("survey");
   const [step, setStep] = useState(0);

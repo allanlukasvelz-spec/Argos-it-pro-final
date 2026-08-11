@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
 
+const ACCESS_COOKIE = "argos_access";
+
 module.exports = (req, res, next) => {
   try {
     if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
@@ -7,17 +9,17 @@ module.exports = (req, res, next) => {
       return res.status(500).json({ error: "Configuracion de autenticacion incompleta" });
     }
 
+    const cookieToken = req.cookies && req.cookies[ACCESS_COOKIE];
     const authHeader = req.headers.authorization;
 
-    if (!authHeader) {
+    const raw = cookieToken
+      || (authHeader && (authHeader.startsWith("Bearer ") ? authHeader.slice(7) : authHeader));
+
+    if (!raw) {
       return res.status(401).json({ error: "Token requerido" });
     }
 
-    const token = authHeader.startsWith("Bearer ") 
-      ? authHeader.slice(7) 
-      : authHeader;
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(raw, process.env.JWT_SECRET);
 
     req.user = decoded;
     next();
