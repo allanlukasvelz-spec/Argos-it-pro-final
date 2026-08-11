@@ -3,6 +3,7 @@ const express = require("express");
 const http = require("http");
 const cors = require("cors");
 const helmet = require("helmet");
+const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const jwt = require("jsonwebtoken");
 const { Server } = require("socket.io");
@@ -145,6 +146,7 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 app.use(cors(corsOptions));
+app.use(cookieParser());
 app.use(express.json({ limit: "512kb" }));
 app.use(morgan("combined"));
 app.use(detectBot);

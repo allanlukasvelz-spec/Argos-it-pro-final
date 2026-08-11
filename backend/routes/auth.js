@@ -5,6 +5,7 @@ const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const pool = require("../db");
 const { authLimiter, validatePassword, validateEmailFormat } = require("../middleware/security");
+const { setTokenCookies, clearTokenCookies, REFRESH_COOKIE } = require("../lib/authCookies");
 
 function requireJwtSecret(res) {
   if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
@@ -127,10 +128,10 @@ router.post("/login", authLimiter, async (req, res) => {
       [user.id, "login_success"]
     );
 
+    setTokenCookies(res, token, refreshToken);
+
     res.json({
       message: "Login exitoso",
-      token,
-      refreshToken,
       user: {
         id: user.id,
         email: user.email,
@@ -151,13 +152,15 @@ router.post("/refresh", authLimiter, async (req, res) => {
   try {
     if (!requireJwtSecret(res)) return;
 
-    const { refreshToken: bodyRefresh } = req.body;
+    const rawRefresh =
+      (req.cookies && req.cookies[REFRESH_COOKIE]) ||
+      req.body?.refreshToken;
 
-    if (!bodyRefresh) {
+    if (!rawRefresh) {
       return res.status(400).json({ error: "Refresh token requerido" });
     }
 
-    const decoded = jwt.verify(bodyRefresh, process.env.JWT_REFRESH_SECRET);
+    const decoded = jwt.verify(rawRefresh, process.env.JWT_REFRESH_SECRET);
 
     if (decoded.jti) {
       const active = await pool.query(
@@ -166,6 +169,7 @@ router.post("/refresh", authLimiter, async (req, res) => {
         [decoded.id, decoded.jti]
       );
       if (active.rows.length === 0) {
+        clearTokenCookies(res);
         return res.status(401).json({ error: "Refresh token invalido" });
       }
       await pool.query("UPDATE refresh_sessions SET revoked_at = NOW() WHERE id = $1", [
@@ -179,13 +183,14 @@ router.post("/refresh", authLimiter, async (req, res) => {
     );
 
     if (userResult.rows.length === 0) {
+      clearTokenCookies(res);
       return res.status(401).json({ error: "Refresh token invalido" });
     }
 
     const row = userResult.rows[0];
     const role = row.role || "cliente";
 
-    const newToken = jwt.sign(
+    const newAccessToken = jwt.sign(
       { id: row.id, email: row.email, role },
       process.env.JWT_SECRET,
       { expiresIn: "24h" }
@@ -199,8 +204,6 @@ router.post("/refresh", authLimiter, async (req, res) => {
         [row.id, newJti, expiresAt]
       );
 
-      // Opportunistic cleanup: remove expired and old revoked sessions for this user.
-      // Uses idx_refresh_sessions_user (user_id) + idx_refresh_sessions_expires (expires_at).
       pool.query(
         `DELETE FROM refresh_sessions
          WHERE user_id = $1
@@ -208,14 +211,17 @@ router.post("/refresh", authLimiter, async (req, res) => {
         [row.id]
       ).catch((err) => console.error("[AUTH] refresh session cleanup error:", err.message));
 
-      const refreshToken = jwt.sign({ id: row.id, jti: newJti }, process.env.JWT_REFRESH_SECRET, {
+      const newRefreshToken = jwt.sign({ id: row.id, jti: newJti }, process.env.JWT_REFRESH_SECRET, {
         expiresIn: "7d"
       });
-      return res.json({ token: newToken, refreshToken });
+
+      setTokenCookies(res, newAccessToken, newRefreshToken);
+      return res.json({ message: "Token renovado" });
     }
 
-    res.json({ token: newToken });
+    res.json({ message: "Token renovado" });
   } catch (error) {
+    clearTokenCookies(res);
     res.status(401).json({ error: "Refresh token inválido" });
   }
 });
@@ -223,14 +229,16 @@ router.post("/refresh", authLimiter, async (req, res) => {
 // LOGOUT — revoke the refresh session so the token cannot be reused
 router.post("/logout", async (req, res) => {
   try {
-    const { refreshToken: bodyRefresh } = req.body;
+    const rawRefresh =
+      (req.cookies && req.cookies[REFRESH_COOKIE]) ||
+      req.body?.refreshToken;
 
-    if (bodyRefresh && typeof bodyRefresh === "string") {
+    if (rawRefresh && typeof rawRefresh === "string") {
       const secret = process.env.JWT_REFRESH_SECRET;
       if (secret && secret.length >= 32) {
         let jti;
         try {
-          const decoded = jwt.verify(bodyRefresh, secret);
+          const decoded = jwt.verify(rawRefresh, secret);
           jti = decoded.jti;
         } catch (_verifyErr) {
           // Token invalid/expired — nothing to revoke, logout succeeds
@@ -245,9 +253,11 @@ router.post("/logout", async (req, res) => {
       }
     }
 
+    clearTokenCookies(res);
     res.json({ message: "Sesion cerrada" });
   } catch (error) {
     console.error("[AUTH] Error en logout:", error.message);
+    clearTokenCookies(res);
     res.status(503).json({ message: "Sesion cerrada" });
   }
 });

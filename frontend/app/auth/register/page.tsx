@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 
 export default function Register() {
   const router = useRouter();
-  const token = useAuthStore((state) => state.token);
+  const authenticated = useAuthStore((state) => state.authenticated);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -19,10 +19,10 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (token) {
+    if (authenticated) {
       router.replace("/dashboard");
     }
-  }, [token, router]);
+  }, [authenticated, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

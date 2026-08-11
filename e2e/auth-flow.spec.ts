@@ -1,4 +1,4 @@
-import { test, expect, type Page, type APIRequestContext } from "@playwright/test";
+import { test, expect, type Page, type APIRequestContext, type Cookie } from "@playwright/test";
 
 const BACKEND = "http://127.0.0.1:4000";
 const PASSWORD = "E2eSecure2026!x";
@@ -37,15 +37,12 @@ async function getLocalStorage(page: Page, key: string): Promise<string | null> 
   return page.evaluate((k) => localStorage.getItem(k), key);
 }
 
-async function getCookie(page: Page, name: string): Promise<string | undefined> {
-  const cookies = await page.context().cookies();
-  return cookies.find((c) => c.name === name)?.value;
+function findCookie(cookies: Cookie[], name: string): Cookie | undefined {
+  return cookies.find((c) => c.name === name);
 }
 
-// Auth calls per test: register(1) = 1 auth req
-test.describe("authenticated flow", () => {
+test.describe("authenticated flow (HttpOnly cookies)", () => {
 
-  // Auth calls: 1 register (via UI)
   test("register a new user via UI", async ({ page }) => {
     const email = uniqueEmail();
 
@@ -69,40 +66,49 @@ test.describe("authenticated flow", () => {
     expect(response.status(), "register API should return 201").toBe(201);
 
     await expect(page).toHaveURL(/\/auth\/login/, { timeout: 10_000 });
-
-    const token = await getLocalStorage(page, "token");
-    expect(token).toBeNull();
   });
 
-  // Auth calls: 1 register (API) + 1 login (UI) = 2 auth reqs
-  test("login reaches dashboard with tokens and cookie", async ({ page, request }) => {
+  test("login sets HttpOnly cookies and reaches dashboard", async ({ page, request }) => {
     const email = uniqueEmail();
     await registerViaAPI(request, email);
-
     await loginViaUI(page, email);
 
     await expect(
       page.getByRole("heading", { name: /Portal de cliente|Client portal/i })
     ).toBeVisible();
 
-    const token = await getLocalStorage(page, "token");
-    expect(token).toBeTruthy();
+    const cookies = await page.context().cookies();
+    const access = findCookie(cookies, "argos_access");
+    const refresh = findCookie(cookies, "argos_refresh");
+    const session = findCookie(cookies, "argos_session");
 
-    const refreshToken = await getLocalStorage(page, "refreshToken");
-    expect(refreshToken).toBeTruthy();
+    expect(access, "argos_access cookie should exist").toBeDefined();
+    expect(access!.httpOnly, "argos_access should be HttpOnly").toBe(true);
+    expect(access!.sameSite, "argos_access SameSite").toBe("Lax");
 
-    const sessionCookie = await getCookie(page, "argos_session");
-    expect(sessionCookie).toBe("1");
+    expect(refresh, "argos_refresh cookie should exist").toBeDefined();
+    expect(refresh!.httpOnly, "argos_refresh should be HttpOnly").toBe(true);
+    expect(refresh!.path, "argos_refresh path").toBe("/api/auth");
+
+    expect(session, "argos_session cookie should exist").toBeDefined();
+    expect(session!.value).toBe("1");
+    expect(session!.httpOnly, "argos_session should NOT be HttpOnly").toBe(false);
+
+    const lsToken = await getLocalStorage(page, "token");
+    expect(lsToken, "no access token in localStorage").toBeNull();
+
+    const lsRefresh = await getLocalStorage(page, "refreshToken");
+    expect(lsRefresh, "no refresh token in localStorage").toBeNull();
   });
 
-  // Auth calls: 1 register (API) + 1 login (UI) + 1 refresh (API) = 3 auth reqs
-  test("logout clears state and revokes refresh token", async ({ page, request }) => {
+  test("logout clears cookies and revokes refresh", async ({ page, request }) => {
     const email = uniqueEmail();
     await registerViaAPI(request, email);
     await loginViaUI(page, email);
 
-    const refreshToken = await getLocalStorage(page, "refreshToken");
-    expect(refreshToken).toBeTruthy();
+    const preLogoutCookies = await page.context().cookies();
+    const refreshBefore = findCookie(preLogoutCookies, "argos_refresh");
+    expect(refreshBefore, "refresh cookie before logout").toBeDefined();
 
     await page
       .getByRole("button", { name: /Cerrar sesión|Sign out/i })
@@ -111,27 +117,21 @@ test.describe("authenticated flow", () => {
     await expect(page).toHaveURL(/^\/$|\/auth\/login/, { timeout: 10_000 });
 
     await page.waitForFunction(
-      () => localStorage.getItem("token") === null,
+      () => !document.cookie.includes("argos_session=1"),
       null,
       { timeout: 6_000 }
     );
 
-    const tokenAfter = await getLocalStorage(page, "token");
-    expect(tokenAfter).toBeNull();
-
-    const rtAfter = await getLocalStorage(page, "refreshToken");
-    expect(rtAfter).toBeNull();
-
-    const cookie = await getCookie(page, "argos_session");
-    expect(cookie).toBeUndefined();
+    const postCookies = await page.context().cookies();
+    expect(findCookie(postCookies, "argos_access"), "access cookie cleared").toBeUndefined();
+    expect(findCookie(postCookies, "argos_session"), "session cookie cleared").toBeUndefined();
 
     const refreshResponse = await request.post(`${BACKEND}/api/auth/refresh`, {
-      data: { refreshToken },
+      data: { refreshToken: refreshBefore!.value },
     });
     expect(refreshResponse.status(), "revoked refresh should return 401").toBe(401);
   });
 
-  // Auth calls: 0 (no auth needed — unauthenticated access)
   test("dashboard redirects unauthenticated visitor to login", async ({ page }) => {
     await page.goto("/dashboard");
     await expect(page).toHaveURL(/\/auth\/login/, { timeout: 10_000 });
