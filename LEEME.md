@@ -134,15 +134,17 @@ curl -X POST http://localhost:4000/api/ai/public/dumbo-chat \
 
 ### 3. Probar Chico (Seguridad)
 ```bash
-# Obtener token
-TOKEN=$(curl -s -X POST http://localhost:4000/api/auth/login \
+# Login y guardar cookies
+curl -sS -c /tmp/cookies.txt -X POST http://localhost:4000/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"test@argos.com","password":"Argos123!"}' | jq -r '.token')
+  -H "Origin: http://127.0.0.1:3000" \
+  -d '{"email":"test@argos.com","password":"Argos123!"}'
 
-# Probar Chico
+# Probar Chico con cookies
 curl -X POST http://localhost:4000/api/ai/chico \
-  -H "Authorization: Bearer $TOKEN" \
+  -b /tmp/cookies.txt \
   -H "Content-Type: application/json" \
+  -H "Origin: http://127.0.0.1:3000" \
   -d '{
     "action": "login_attempt",
     "details": {"ip": "192.168.1.1"}
@@ -155,8 +157,8 @@ curl -X POST http://localhost:4000/api/ai/chico \
 
 ## 🔐 Características de Seguridad
 
-✅ **Autenticación JWT** con tokens de 24h  
-✅ **Refresh Tokens** válidos por 7 días  
+✅ **Autenticación JWT** con cookies HttpOnly (24h access, 7d refresh)  
+✅ **Refresh Tokens** con rotación y revocación en BD  
 ✅ **Password Hashing** con bcrypt (salt 10)  
 ✅ **Validación fuerte** de contraseñas  
 ✅ **Rate Limiting** (100 req/15min, 5 login/15min)  
@@ -235,7 +237,7 @@ POST /api/auth/refresh         → Renovar token
 POST /api/ai/public/dumbo-chat → Hablar con Dumbo
 ```
 
-### IA (Protegido - requiere Bearer token)
+### IA (Protegido - requiere sesión autenticada)
 ```
 POST /api/ai/dumbo             → Dumbo con contexto usuario
 POST /api/ai/chico             → Análisis de seguridad

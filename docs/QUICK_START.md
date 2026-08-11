@@ -63,15 +63,17 @@ curl -X POST http://localhost:4000/api/ai/public/dumbo-chat \
 
 ### Probar Chico (Seguridad)
 ```bash
-# 1. Obtener token de login
-TOKEN=$(curl -s -X POST http://localhost:4000/api/auth/login \
+# 1. Login con cookie jar
+curl -sS -c /tmp/cookies.txt -X POST http://localhost:4000/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"test@argos.com","password":"Argos123!"}' | jq -r '.token')
+  -H "Origin: http://127.0.0.1:3000" \
+  -d '{"email":"test@argos.com","password":"Argos123!"}'
 
-# 2. Probar Chico
+# 2. Probar Chico con cookies
 curl -X POST http://localhost:4000/api/ai/chico \
-  -H "Authorization: Bearer $TOKEN" \
+  -b /tmp/cookies.txt \
   -H "Content-Type: application/json" \
+  -H "Origin: http://127.0.0.1:3000" \
   -d '{
     "action": "login_attempt",
     "details": {"ip": "192.168.1.1"}
@@ -136,7 +138,7 @@ Usuario en navegador (http://localhost:3000)
 - **Debug**: `docker-compose logs -f` para ver logs en tiempo real
 - **Reload Frontend**: Ctrl+Shift+R (hard refresh)
 - **Terminal Backend**: `npm run dev` auto-reloads con nodemon
-- **API Testing**: Usa Postman/Insomnia + Bearer token
+- **API Testing**: Usa curl con cookie jar o Postman (login → cookies automáticas)
 - **Database**: Conecta con PgAdmin en puerto 5050
 
 ---
