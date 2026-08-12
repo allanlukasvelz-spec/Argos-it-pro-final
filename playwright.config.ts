@@ -16,6 +16,13 @@ export default defineConfig({
     trace: "on-first-retry",
   },
 
+  expect: {
+    toHaveScreenshot: {
+      animations: "disabled",
+      maxDiffPixels: 0,
+    },
+  },
+
   projects: [
     {
       name: "chromium",
