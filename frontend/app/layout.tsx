@@ -3,10 +3,12 @@ import { Toaster } from "react-hot-toast";
 import ClientShell from "@/components/layout/ClientShell";
 import SiteShell from "@/components/layout/SiteShell";
 import { LanguageProvider } from "@/i18n/provider";
+import { corporateFontVariables } from "@/lib/fonts";
 import "./globals.css";
 import "../assets/css/argos-backgrounds.css";
 import "../assets/css/argos-marketing-chrome.css";
 import "../assets/css/argos-method-galaxy.css";
+import "../assets/css/argos-corporate.css";
 import "../styles/mascot-sprites.css";
 
 export const metadata: Metadata = {
@@ -82,18 +84,14 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="es">
+    <html lang="es" className={corporateFontVariables}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#07111F" />
         <link rel="icon" href="/favicon.svg" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
-        
-        {/* Preconnect para optimización */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        
+
         {/* Schema.org */}
         <script
           type="application/ld+json"
