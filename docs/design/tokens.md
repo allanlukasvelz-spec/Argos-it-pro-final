@@ -1,30 +1,43 @@
 # ARGOS-IT Design Tokens
 
-**Version:** 21.1  
-**CSS source of truth:** `frontend/app/globals.css` (`:root`)  
+**Version:** 21.3 — Canonical Token Freeze
+**CSS source of truth:** `frontend/app/globals.css` (`:root`)
 **Shell extensions:** `frontend/assets/css/argos-backgrounds.css`
+**CAB register:** [cab-decisions.md](./cab-decisions.md)
+
+**VISUAL_CHANGE = NO** — semantic tokens still resolve to legacy production values.
 
 ---
 
-## Architecture (three layers)
+## Architecture (three layers + typography roles)
 
-### A. Brand candidates (PROVISIONAL — not applied to UI)
+### A. Canonical brand tokens (CANONICAL — not applied to UI in 21.3)
 
 | Token | Value | Status |
 |-------|-------|--------|
-| `--argos-brand-primary-candidate` | `#1F3A5F` | PROVISIONAL / HIGH CONFIDENCE |
-| `--argos-brand-primary-alt-candidate` | `#072648` | PROVISIONAL (Brand Book XML — CAB-DS-01) |
-| `--argos-brand-secondary-candidate` | `#2F7D6D` | PROVISIONAL / HIGH CONFIDENCE |
-| `--argos-brand-surface-candidate` | `#F7F7F5` | PROVISIONAL / HIGH CONFIDENCE |
-| `--argos-brand-dark-candidate` | `#0B1320` | PROVISIONAL / HIGH CONFIDENCE |
+| `--argos-brand-primary` | `#1F3A5F` | **CANONICAL** (CAB-DS-01) |
+| `--argos-brand-secondary` | `#2F7D6D` | **CANONICAL** |
+| `--argos-brand-surface` | `#F7F7F5` | **CANONICAL** |
+| `--argos-brand-dark` | `#0B1320` | **CANONICAL** |
+| `--argos-brand-primary-rejected-072648` | `#072648` | **REJECTED** as primary (DOCX OOXML artifact) |
 
-These tokens exist for documentation and future migration. **No component uses them in 21.1.**
+Temporary aliases (prefer non-`-candidate` names):
+
+| Alias | Resolves to |
+|-------|-------------|
+| `--argos-brand-primary-candidate` | `var(--argos-brand-primary)` |
+| `--argos-brand-secondary-candidate` | `var(--argos-brand-secondary)` |
+| `--argos-brand-surface-candidate` | `var(--argos-brand-surface)` |
+| `--argos-brand-dark-candidate` | `var(--argos-brand-dark)` |
+| `--argos-brand-primary-alt-candidate` | `var(--argos-brand-primary-rejected-072648)` |
+
+**No component uses brand tokens for painted UI in 21.3.**
 
 ---
 
-### B. Semantic tokens (map to legacy in 21.1)
+### B. Semantic tokens (still → legacy appearance)
 
-| Token | 21.1 value / reference | Role |
+| Token | 21.3 value / reference | Role |
 |-------|------------------------|------|
 | `--surface-primary` | `#ffffff` | Marketing chrome, forms, cards |
 | `--surface-elevated` | `#ffffff` | Elevated cards |
@@ -39,103 +52,59 @@ These tokens exist for documentation and future migration. **No component uses t
 | `--action-secondary` | `var(--argos-legacy-blue)` | Outline / link actions |
 | `--action-accent` | `var(--argos-legacy-cyan)` | Shell CTAs, eyebrows |
 | `--status-success` | `#16a34a` | Success (reserved) |
-| `--status-warning` | `#d97706` | Warning (dashboard amber family) |
-| `--status-danger` | `#dc2626` | Danger (reserved) |
+| `--status-warning` | `#d97706` | Warning |
+| `--status-danger` | `#dc2626` | Danger |
 | `--status-info` | `var(--argos-legacy-blue)` | Info / links in chrome |
 
-**Note:** Components still use hardcoded hex in 21.1. Semantic tokens are defined but not adopted in TSX/CSS selectors yet.
+Retargeting semantic → brand requires a **separate authorized visual migration phase**.
 
 ---
 
 ### C. Legacy production tokens
 
-| Token | Value | Alias / notes |
-|-------|-------|---------------|
-| `--argos-legacy-cyan` | `#18D4F7` | Shell accent, CTAs on dark pages |
-| `--argos-legacy-blue` | `#2563EB` | Marketing chrome, auth, dashboard cards |
-| `--argos-legacy-light-blue` | `#38BDF8` | Favicon, selection on shell, Tailwind `argos.cyan` |
-| `--argos-legacy-navy` | `#07111F` | Body text, theme-color meta |
+| Token | Value | Notes |
+|-------|-------|-------|
+| `--argos-legacy-cyan` | `#18D4F7` | Shell accent — **not brand** |
+| `--argos-legacy-blue` | `#2563EB` | Chrome — **not brand** |
+| `--argos-legacy-light-blue` | `#38BDF8` | Favicon / selection |
+| `--argos-legacy-navy` | `#07111F` | Body text / theme-color |
 | `--argos-legacy-shell-navy` | `#071421` | Shell gradient base |
-| `--argos-legacy-deep-blue` | `#0D3B66` | Shell `--argos-blue` effective value |
+| `--argos-legacy-deep-blue` | `#0D3B66` | Shell `--argos-blue` |
+
+Authoritative shared aliases (unchanged visually):
+
+| Token | Value |
+|-------|-------|
+| `--argos-navy` | `#071421` |
+| `--argos-blue` | `#0D3B66` |
+| `--argos-cyan` | `#18D4F7` |
 
 ---
 
-## Authoritative `--argos-*` (collision resolution 21.1)
+### D. Typography role tokens (`FONT_LOADING = NO`)
 
-### Before 21.1
+| Token | Role (frozen) | 21.3 stack | Future load |
+|-------|---------------|------------|-------------|
+| `--font-display` | Corporate Display → Cormorant Garamond | system sans | Deferred |
+| `--font-body` | Corporate Body → Inter | system sans | Deferred |
+| `--font-ui` | Corporate UI → Inter | system sans | Deferred |
+| `--font-system-sans` | CURRENT_PRODUCTION | `-apple-system, …` | — |
 
-| Token | `globals.css` | `argos-backgrounds.css` | **Effective (cascade winner)** |
-|-------|---------------|-------------------------|--------------------------------|
-| `--argos-navy` | `#07111f` | `#071421` | `#071421` |
-| `--argos-blue` | `#2563eb` | `#0D3B66` | `#0D3B66` |
-| `--argos-cyan` | `#38bdf8` | `#18D4F7` | `#18D4F7` |
+**Manrope:** REJECTED — no token.
 
-### After 21.1
-
-Single definition in `globals.css`; duplicates removed from `argos-backgrounds.css`:
-
-| Token | Value | Unchanged visual |
-|-------|-------|------------------|
-| `--argos-navy` | `#071421` | YES |
-| `--argos-blue` | `#0D3B66` | YES |
-| `--argos-cyan` | `#18D4F7` | YES |
+`body { font-family: var(--font-body); }` resolves to the **same** system stack as pre-21.3.
 
 ---
 
-## Shell-only tokens (`argos-backgrounds.css`)
+## Raw color policy
 
-Remain in shell stylesheet: `--argos-ink`, `--argos-navy-2`, `--argos-cyan-2`, `--argos-aqua`, `--argos-white`, `--argos-muted`, glass/shadow/mascot safe-area tokens.
-
----
-
-## Raw color policy (21.1)
-
-### New code
-
-**Prohibited** without documented exception:
-
-- Literal `#xxxxxx` in new TSX/CSS
-- `rgb(...)`, `hsl(...)` for brand/surface/action colors
-- Tailwind arbitrary colors `bg-[#xxxxxx]`, `text-[#xxxxxx]`, etc.
-
-**Allowed:**
-
-- Semantic CSS variables from this token set
-- Tailwind `argos.*` keys where already mapped (legacy phase)
-- Standard Tailwind status neutrals (`amber-*`, `red-*`) with documentation
-
-### Existing code
-
-- **Do not** mass-migrate 50+ hardcoded hex values in 21.1.
-- Inventory and mapping: [legacy-map.md](./legacy-map.md).
-- Migration: future phases after CAB closes open decisions.
-
----
-
-## Typography (21.1 — document only)
-
-| Font | Status |
-|------|--------|
-| Cormorant Garamond | PROVISIONAL (display candidate) |
-| Inter | PROVISIONAL (body/UI candidate) |
-| Manrope | UNRESOLVED (Brand Guide only) |
-| System sans stack | CURRENT_PRODUCTION |
-
-**No `next/font`, no Google Fonts load, no `font-family` changes in 21.1.**
+Unchanged from 21.1: no new raw hex / arbitrary Tailwind brand colors without exception; existing hardcoded hex not mass-migrated in 21.3.
 
 ---
 
 ## Control Center
 
 `CONTROL_CENTER_DIRECTION = DEFERRED`
+`CONTROL_CENTER_FROZEN = NO`
 
-No Control Center–specific tokens beyond those required to preserve current `/dashboard` (client portal) appearance.
-
----
-
-## Logo / Dumbo
-
-- `LOGO = PROTECTED`
-- `DUMBO = PROTECTED`
-
-No regenerate, recolor, distort, replace, or AI redesign until master approved.
+No Control Center–specific tokens.

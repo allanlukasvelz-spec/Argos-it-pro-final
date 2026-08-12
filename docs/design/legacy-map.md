@@ -1,11 +1,12 @@
 # ARGOS-IT Legacy Color Map
 
-**Version:** 21.1  
-**Scope:** `frontend/` (css, tsx, ts, js)  
-**Total unique normalized hex values:** 137  
-**Total color–file pairs:** 300  
+**Version:** 21.3
+**Scope:** `frontend/` (css, tsx, ts, js)
+**Total unique normalized hex values:** 137 (inventory from 21.1; unchanged)
+**Total color–file pairs:** 300
 
-This document inventories production colors. **No TSX migration in 21.1.**
+This document inventories production colors. **No TSX migration in 21.3.**
+Semantic tokens remain mapped to this legacy palette so **VISIBLE_COLORS_CHANGED = NO**.
 
 ---
 
@@ -63,32 +64,38 @@ This document inventories production colors. **No TSX migration in 21.1.**
 
 ---
 
-## Brand candidates (zero production usage in 21.1)
+## Canonical brand (zero production usage in painted UI — 21.3)
 
-| RAW VALUE | STATUS | SEMANTIC TARGET (future) |
-|-----------|--------|--------------------------|
-| `#1F3A5F` | BRAND_CANDIDATE | `--argos-brand-primary-candidate` |
-| `#2F7D6D` | BRAND_CANDIDATE | `--argos-brand-secondary-candidate` |
-| `#F7F7F5` | BRAND_CANDIDATE | `--argos-brand-surface-candidate` |
-| `#0B1320` | BRAND_CANDIDATE | `--argos-brand-dark-candidate` |
-| `#072648` | BRAND_CANDIDATE | `--argos-brand-primary-alt-candidate` |
+| RAW VALUE | STATUS | TOKEN |
+|-----------|--------|-------|
+| `#1F3A5F` | **CANONICAL** brand primary | `--argos-brand-primary` |
+| `#2F7D6D` | **CANONICAL** brand secondary | `--argos-brand-secondary` |
+| `#F7F7F5` | **CANONICAL** brand surface | `--argos-brand-surface` |
+| `#0B1320` | **CANONICAL** brand dark | `--argos-brand-dark` |
+| `#072648` | **REJECTED** as primary | `--argos-brand-primary-rejected-072648` |
 
 ---
 
-## Hardcoded hex in TSX (21.1 policy)
+## Hardcoded hex in TSX (21.3 policy)
 
 - **~50+** arbitrary Tailwind hex classes remain unchanged.
-- Future phase: replace with semantic tokens one surface at a time.
-- Visual regression baseline (`e2e/visual-regression.spec.ts`) guards against accidental drift.
+- Future **visual migration** phase: replace with semantic/brand tokens surface-by-surface.
+- Visual regression baseline (`e2e/visual-regression.spec.ts`) guards against accidental drift (`maxDiffPixels = 0`).
 
 ---
 
 ## Mapping summary
 
 ```
-Production UI today  →  Legacy tokens  →  Brand candidates (future, CAB-approved)
-#2563EB chrome       →  legacy-blue    →  (not #1F3A5F until migration phase)
-#18D4F7 shell        →  legacy-cyan    →  (not brand secondary until migration)
+Production UI today  →  Legacy tokens (semantic map in 21.3)
+#2563EB chrome       →  legacy-blue / --action-primary
+#18D4F7 shell        →  legacy-cyan / --action-accent
+
+Canonical brand (docs + CSS vars; NOT painted yet)
+#1F3A5F              →  --argos-brand-primary
+#2F7D6D              →  --argos-brand-secondary
 ```
 
-**BRAND_PRIMARY_FROZEN = NO**
+**PRIMARY_CANONICAL = `#1F3A5F`**
+**PRIMARY_CANDIDATE_REMOVED = YES** (promoted; aliases kept temporarily)
+**VISIBLE_COLORS_CHANGED = NO**
