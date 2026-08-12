@@ -1,0 +1,27 @@
+# Linux visual baseline generation — mirrors CI (ubuntu + Playwright 1.59.1 + PostgreSQL 16).
+# Usage: docker compose -f docker-compose.visual-baseline.yml run --rm visual-baseline
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: argos_it
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  visual-baseline:
+    image: mcr.microsoft.com/playwright:v1.59.1-noble
+    working_dir: /work
+    volumes:
+      - .:/work
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/argos_it
+      CI: "1"
+    command: ["bash", "scripts/generate-visual-baselines-linux.sh"]
