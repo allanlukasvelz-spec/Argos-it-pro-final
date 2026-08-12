@@ -4,19 +4,35 @@
 
 :root {
   /*
-   * ARGOS Design Tokens v21.1
-   * Authoritative source for shared --argos-* tokens.
-   * Brand candidates are PROVISIONAL and not wired to UI in this phase.
+   * ARGOS Design Tokens v21.3 — Canonical Token Freeze (FASE 21.3)
+   * CAB decisions closed in FASE 21.2. Brand tokens are CANONICAL but NOT wired to UI.
+   * Semantic tokens still map to legacy production so VISUAL_CHANGE = NO.
+   * FONT_LOADING = NO — typography role tokens still resolve to the current system stack.
    */
 
-  /* A. Brand candidates (PROVISIONAL / HIGH CONFIDENCE — not applied to UI) */
-  --argos-brand-primary-candidate: #1f3a5f;
-  --argos-brand-primary-alt-candidate: #072648;
-  --argos-brand-secondary-candidate: #2f7d6d;
-  --argos-brand-surface-candidate: #f7f7f5;
-  --argos-brand-dark-candidate: #0b1320;
+  /* A. Canonical brand tokens (CAB-DS-01 / 21.2) — not applied to components in 21.3 */
+  --argos-brand-primary: #1f3a5f;
+  --argos-brand-secondary: #2f7d6d;
+  --argos-brand-surface: #f7f7f5;
+  --argos-brand-dark: #0b1320;
 
-  /* C. Legacy production palette (preserve current visuals) */
+  /*
+   * Rejected as brand-primary (CAB-DS-01): Brand Book DOCX OOXML artifact only.
+   * Kept as named constant for documentation / grep; do not use as primary.
+   */
+  --argos-brand-primary-rejected-072648: #072648;
+
+  /*
+   * Temporary aliases for any pre-21.3 references to *-candidate names.
+   * Prefer --argos-brand-* going forward. Remove aliases in a later cleanup phase.
+   */
+  --argos-brand-primary-candidate: var(--argos-brand-primary);
+  --argos-brand-secondary-candidate: var(--argos-brand-secondary);
+  --argos-brand-surface-candidate: var(--argos-brand-surface);
+  --argos-brand-dark-candidate: var(--argos-brand-dark);
+  --argos-brand-primary-alt-candidate: var(--argos-brand-primary-rejected-072648);
+
+  /* C. Legacy production palette (preserve current visuals — LEGACY_SHELL_PRESERVED) */
   --argos-legacy-cyan: #18d4f7;
   --argos-legacy-blue: #2563eb;
   --argos-legacy-light-blue: #38bdf8;
@@ -35,7 +51,10 @@
   --argos-silver: #e5e7eb;
   --argos-graphite: #111827;
 
-  /* B. Semantic tokens (21.1 maps to legacy production — not adopted in components yet) */
+  /*
+   * B. Semantic tokens — still map to LEGACY production appearance (21.3 freeze).
+   * Do not retarget to brand tokens until an authorized visual migration phase.
+   */
   --surface-primary: #ffffff;
   --surface-elevated: #ffffff;
   --surface-inverse: var(--argos-legacy-shell-navy);
@@ -52,6 +71,16 @@
   --status-warning: #d97706;
   --status-danger: #dc2626;
   --status-info: var(--argos-legacy-blue);
+
+  /*
+   * Typography role tokens (CAB-DS-02 / DS-03) — roles frozen; stacks still CURRENT_PRODUCTION.
+   * Inter / Cormorant are NOT loaded (FONT_LOADING = NO). Manrope = REJECTED (CAB-DS-04).
+   */
+  --font-system-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, sans-serif;
+  --font-display: var(--font-system-sans);
+  --font-body: var(--font-system-sans);
+  --font-ui: var(--font-system-sans);
 
   /* Layout tokens */
   --header-h: calc(var(--argos-topbar-lang-h, 44px) + var(--argos-topbar-nav-h, 72px));
@@ -107,8 +136,7 @@ html {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, sans-serif;
+  font-family: var(--font-body);
   background: #ffffff;
   color: #07111f;
 }
