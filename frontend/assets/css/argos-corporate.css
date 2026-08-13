@@ -1,0 +1,122 @@
+/**
+ * ARGOS Corporate foundation (FASE 21.4)
+ * Scoped to `.argos-corporate` so Portal / Auth / legacy shells stay unchanged.
+ * LIGHT_PREMIUM_INSTITUTIONAL — brand tokens only (no legacy cyan/blue).
+ */
+
+.argos-corporate {
+  /* Typography roles → next/font variables (set on <html>) */
+  --font-display: var(--font-cormorant), var(--font-system-sans);
+  --font-body: var(--font-inter), var(--font-system-sans);
+  --font-ui: var(--font-inter), var(--font-system-sans);
+
+  /* Semantic remapping for Corporate context only */
+  --surface-primary: var(--argos-brand-surface);
+  --surface-elevated: #ffffff;
+  --text-primary: var(--argos-brand-dark);
+  --text-secondary: #4b5563;
+  --text-muted: #64748b;
+  --border-default: #d9e0e6;
+  --action-primary: var(--argos-brand-primary);
+  --action-secondary: var(--argos-brand-secondary);
+  --action-accent: var(--argos-brand-secondary);
+  --status-info: var(--argos-brand-primary);
+
+  --corporate-action-hover: #18304f;
+  --corporate-focus: #93c5fd;
+
+  font-family: var(--font-body);
+  background: var(--surface-primary);
+  color: var(--text-primary);
+  min-height: 100%;
+}
+
+.argos-corporate .argos-font-display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.argos-corporate .argos-font-ui {
+  font-family: var(--font-ui);
+}
+
+.argos-corporate a:focus-visible,
+.argos-corporate button:focus-visible,
+.argos-corporate input:focus-visible,
+.argos-corporate select:focus-visible,
+.argos-corporate textarea:focus-visible {
+  outline: 3px solid var(--corporate-focus);
+  outline-offset: 2px;
+}
+
+.argos-corporate-shell {
+  position: relative;
+  min-height: calc(100vh - var(--header-h, 116px));
+  background: var(--argos-brand-surface);
+  color: var(--argos-brand-dark);
+}
+
+.argos-corporate-shell__main {
+  position: relative;
+  z-index: 1;
+}
+
+.argos-corporate-card {
+  border: 1px solid var(--border-default);
+  background: var(--surface-elevated);
+  border-radius: 0.5rem;
+  box-shadow: none;
+}
+
+.argos-corporate-link {
+  color: var(--action-secondary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.argos-corporate-link:hover {
+  color: var(--action-primary);
+}
+
+.argos-corporate-input {
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-default);
+  background: #ffffff;
+  padding: 0.75rem 1rem;
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.argos-corporate-input:focus {
+  border-color: var(--action-primary);
+}
+
+.argos-corporate-input[aria-invalid="true"] {
+  border-color: var(--status-danger);
+}
+
+.argos-corporate-btn-primary {
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+  background: var(--action-primary);
+  color: #ffffff;
+  padding: 1rem 2rem;
+  font-family: var(--font-ui);
+  font-size: 1.125rem;
+  font-weight: 700;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.argos-corporate-btn-primary:hover:not(:disabled) {
+  background: var(--corporate-action-hover);
+}
+
+.argos-corporate-btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

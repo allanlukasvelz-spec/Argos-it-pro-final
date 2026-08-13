@@ -10,6 +10,7 @@
 |------|---------|
 | [ARGOS_DESIGN_SYSTEM.md](./ARGOS_DESIGN_SYSTEM.md) | Master design system specification |
 | [cab-decisions.md](./cab-decisions.md) | Closed CAB Decision Register (21.2 → 21.3) |
+| [corporate-foundation-21-4.md](./corporate-foundation-21-4.md) | Corporate foundation + /contacto pilot (21.4) |
 | [tokens.md](./tokens.md) | Token architecture (brand, semantic, legacy, fonts) |
 | [legacy-map.md](./legacy-map.md) | Production hex inventory and migration mapping |
 | [source-hierarchy.md](./source-hierarchy.md) | Source-of-truth hierarchy |
