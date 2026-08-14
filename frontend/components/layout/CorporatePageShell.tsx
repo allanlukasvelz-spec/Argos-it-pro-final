@@ -6,8 +6,8 @@ type Props = {
 };
 
 /**
- * Light Corporate page foundation (FASE 21.4).
- * Does not use ArgosPageShell / nocturnal legacy backgrounds.
+ * Light Corporate page canvas (FASE 21.4 / 21.5).
+ * Chrome (header/footer) is composed by SiteShell via chromeOwnership — not here.
  */
 export default function CorporatePageShell({ children, className = "" }: Props) {
   return (

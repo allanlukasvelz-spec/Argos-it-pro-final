@@ -150,7 +150,7 @@ export default function ContactView() {
 
   return (
     <CorporatePageShell>
-      <header className="py-12">
+      <div className="py-12">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 md:px-8">
           <Link href="/" className="argos-corporate-link mb-6 inline-block text-sm font-semibold no-underline hover:underline">
             ← {t("actions.backHome")}
@@ -162,7 +162,7 @@ export default function ContactView() {
             {t("contact.subtitle")}
           </p>
         </div>
-      </header>
+      </div>
 
       <section className="px-4 pb-16 sm:px-6 md:px-8">
         <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-[0.95fr_1.05fr]">

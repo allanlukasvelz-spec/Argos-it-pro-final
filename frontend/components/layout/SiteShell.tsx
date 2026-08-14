@@ -3,21 +3,18 @@
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import ClientAssistants from "@/components/ClientAssistants";
+import CorporateFooter from "@/components/corporate/CorporateFooter";
+import CorporateHeader from "@/components/corporate/CorporateHeader";
 import { MascotPauseControlProvider } from "@/components/mascots/MascotPauseControlContext";
 import CookieBanner from "@/components/layout/CookieBanner";
 import { DiagnosticSurveyLauncherProvider } from "@/components/diagnostic/DiagnosticSurveyLauncher";
 import SiteFooter from "@/components/layout/SiteFooter";
 import SiteHeader from "@/components/layout/SiteHeader";
+import { getChromeOwner } from "@/lib/chromeOwnership";
 
 type Props = {
   children: ReactNode;
 };
-
-function shouldHideChrome(pathname: string) {
-  return (
-    pathname.startsWith("/auth") || pathname.startsWith("/dashboard") || pathname === "/explainer"
-  );
-}
 
 function shouldHideAssistants(pathname: string) {
   if (
@@ -40,18 +37,26 @@ function shouldHideAssistants(pathname: string) {
 
 export default function SiteShell({ children }: Props) {
   const pathname = usePathname();
-  const hideChrome = shouldHideChrome(pathname);
+  const chromeOwner = getChromeOwner(pathname);
 
   return (
     <MascotPauseControlProvider>
-      {!hideChrome ? (
+      {chromeOwner === "none" ? (
+        children
+      ) : chromeOwner === "corporate" ? (
+        <DiagnosticSurveyLauncherProvider>
+          <div className="argos-corporate">
+            <CorporateHeader />
+            {children}
+            <CorporateFooter />
+          </div>
+        </DiagnosticSurveyLauncherProvider>
+      ) : (
         <DiagnosticSurveyLauncherProvider>
           <SiteHeader />
           {children}
           <SiteFooter />
         </DiagnosticSurveyLauncherProvider>
-      ) : (
-        children
       )}
       {!shouldHideAssistants(pathname) && <ClientAssistants />}
       {!pathname.startsWith("/dashboard") && pathname !== "/explainer" && <CookieBanner />}
