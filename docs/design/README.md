@@ -12,6 +12,7 @@
 | [cab-decisions.md](./cab-decisions.md) | Closed CAB Decision Register (21.2 → 21.3) |
 | [corporate-foundation-21-4.md](./corporate-foundation-21-4.md) | Corporate foundation + /contacto pilot (21.4) |
 | [corporate-chrome-21-5.md](./corporate-chrome-21-5.md) | Corporate chrome ownership + /contacto header/footer (21.5) |
+| [ARGOS_DESIGN_DIRECTOR_BRIEF.md](./ARGOS_DESIGN_DIRECTOR_BRIEF.md) | Contract Brand/CAB → Relume → Framer → human → Cursor (21.6A.1) |
 | [tokens.md](./tokens.md) | Token architecture (brand, semantic, legacy, fonts) |
 | [legacy-map.md](./legacy-map.md) | Production hex inventory and migration mapping |
 | [source-hierarchy.md](./source-hierarchy.md) | Source-of-truth hierarchy |
