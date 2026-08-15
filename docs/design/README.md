@@ -1,8 +1,8 @@
 # ARGOS-IT Design System — Documentation Index
 
-**Phase:** 21.3 — Canonical Token Freeze
-**Status:** Level 1 ACTIVE (brand tokens frozen; UI still legacy)
-**Visual change in 21.3:** NO
+**Phase:** 21.5 — Corporate Chrome Foundation
+**Status:** Level 1 ACTIVE (brand tokens frozen; Corporate chrome on `/contacto` only)
+**Visual change in 21.5:** YES — `/contacto` header/footer only
 
 ## Documents
 
@@ -11,6 +11,7 @@
 | [ARGOS_DESIGN_SYSTEM.md](./ARGOS_DESIGN_SYSTEM.md) | Master design system specification |
 | [cab-decisions.md](./cab-decisions.md) | Closed CAB Decision Register (21.2 → 21.3) |
 | [corporate-foundation-21-4.md](./corporate-foundation-21-4.md) | Corporate foundation + /contacto pilot (21.4) |
+| [corporate-chrome-21-5.md](./corporate-chrome-21-5.md) | Corporate chrome ownership + /contacto header/footer (21.5) |
 | [tokens.md](./tokens.md) | Token architecture (brand, semantic, legacy, fonts) |
 | [legacy-map.md](./legacy-map.md) | Production hex inventory and migration mapping |
 | [source-hierarchy.md](./source-hierarchy.md) | Source-of-truth hierarchy |
