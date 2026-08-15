@@ -50,6 +50,18 @@
   outline-offset: 2px;
 }
 
+/* Cream surface makes the global cyan ::selection (#7dd3fc) nearly invisible. */
+.argos-corporate ::selection {
+  background: var(--action-primary);
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
+}
+
+.argos-corporate ::-moz-selection {
+  background: var(--action-primary);
+  color: #ffffff;
+}
+
 .argos-corporate-shell {
   position: relative;
   min-height: calc(100vh - var(--header-h, 116px));
