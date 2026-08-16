@@ -147,11 +147,13 @@ test.describe("public and auth shell", () => {
       window.localStorage.removeItem("argos_cookie_preferences_v1");
     });
     await page.goto("/");
+    const cookie = page.locator("aside[aria-live='polite']");
+    await expect(cookie).toBeVisible();
     const z = await page.evaluate(() => {
-      const cookie = document.querySelector("aside[aria-live='polite']");
+      const cookieEl = document.querySelector("aside[aria-live='polite']");
       const dock = document.querySelector(".mascot-root");
       return {
-        cookie: cookie ? getComputedStyle(cookie).zIndex : null,
+        cookie: cookieEl ? getComputedStyle(cookieEl).zIndex : null,
         dock: dock ? getComputedStyle(dock).zIndex : null
       };
     });

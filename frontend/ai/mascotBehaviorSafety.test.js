@@ -49,11 +49,11 @@ describe("21.6B.7A mascot behavior safety", () => {
     assert.match(block, /sit/);
   });
 
-  it("nextAmbientSprites must not schedule walking", () => {
-    const start = states.indexOf("export function nextAmbientSprites");
-    assert.ok(start >= 0);
-    const block = states.slice(start, start + 350);
-    assert.doesNotMatch(block, /walking/);
+  it("dead ambient/meet/play stubs removed after 7D", () => {
+    assert.doesNotMatch(states, /export function nextAmbientSprites/);
+    assert.doesNotMatch(states, /export function meetSprites/);
+    assert.doesNotMatch(states, /export function playSprites/);
+    assert.doesNotMatch(states, /chatOpenSprites/);
   });
 
   it("controller must not start walk/ambient/meet autonomy loops", () => {
@@ -164,5 +164,46 @@ describe("21.6B.7B one-active + V1 enforcement", () => {
 
   it("DiagnosticPromoBanner file untouched by 7B scope (path exists)", () => {
     assert.ok(existsSync(bannerPath));
+  });
+});
+
+describe("21.6B.7D legacy dead-code cleanup", () => {
+  const states = readFileSync(statesPath, "utf8");
+  const controller = readFileSync(controllerPath, "utf8");
+  const css = readFileSync(cssPath, "utf8");
+  const autonomyPath = path.join(__dirname, "mascotAutonomy.ts");
+  const animatorPath = path.join(ROOT, "animations/spriteAnimator.ts");
+  const autonomy = readFileSync(autonomyPath, "utf8");
+
+  it("spriteAnimator.ts is globally removed", () => {
+    assert.equal(existsSync(animatorPath), false);
+  });
+
+  it("mascotAutonomy keeps only USER_ACTIVITY_TIMEOUT_MS", () => {
+    assert.match(autonomy, /USER_ACTIVITY_TIMEOUT_MS/);
+    assert.doesNotMatch(autonomy, /AUTONOMY_MICRO|getDockMotionLimits|getMeetTargets|withChatBias|randBetween/);
+  });
+
+  it("dock CSS has no legacy motion keyframes", () => {
+    assert.doesNotMatch(css, /@keyframes mascot(Walk|Jump|Breath|Blink|Turn|Alert|Rest)/);
+    assert.doesNotMatch(css, /\.mascot__state--walk_01/);
+  });
+
+  it("controller still enforces one-active + V1 ready path", () => {
+    assert.match(controller, /activeMascot/);
+    assert.match(controller, /chatActiveSprites/);
+    assert.doesNotMatch(controller, /walkFrames|spriteAnimator/);
+  });
+
+  it("states retain V1 helpers used by dock", () => {
+    assert.match(states, /export function chatActiveSprites/);
+    assert.match(states, /export function formEventSprites/);
+    assert.match(states, /export function restingChicoSprite/);
+    assert.match(states, /CHICO_V1_STATES/);
+  });
+
+  it("DiagnosticPromoBanner still present and untouched by cleanup set", () => {
+    assert.ok(existsSync(bannerPath));
+    assert.match(readFileSync(bannerPath, "utf8"), /caminando/);
   });
 });

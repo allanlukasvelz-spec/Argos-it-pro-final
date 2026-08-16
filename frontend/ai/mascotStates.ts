@@ -35,7 +35,7 @@ export function restingChicoSprite(sessionSeed: number): ChicoSpriteState {
   return sessionSeed % 2 === 0 ? "lay" : "sleep";
 }
 
-/** V1-safe long-idle Dumbo (LAY / SLEEP / REST). No LOOK while inactive-alone. */
+/** V1-safe long-idle Dumbo (LAY / SLEEP / REST). */
 export function restingDumboSprite(sessionSeed: number): DumboSpriteState {
   const m = sessionSeed % 3;
   if (m === 0) return "sleep";
@@ -44,18 +44,8 @@ export function restingDumboSprite(sessionSeed: number): DumboSpriteState {
 }
 
 /**
- * FASE 21.6B.7A — ambient rotation DISABLED (unreachable from controller).
- */
-export function nextAmbientSprites(
-  _step: number
-): Pick<MascotBrainState, "chico" | "dumbo"> {
-  return { chico: "idle", dumbo: "idle" };
-}
-
-/**
  * FASE 21.6B.7B — ONE_ACTIVE chat-open visuals.
  * Chico → STAND; Dumbo → SIT; inactive → REST.
- * LOOK acknowledgement optional; ready states used directly for restraint.
  */
 export function chatActiveSprites(
   persona: "chico" | "dumbo"
@@ -66,12 +56,9 @@ export function chatActiveSprites(
   return { chico: "stand", dumbo: "idle" };
 }
 
-/** @deprecated alias — use chatActiveSprites */
-export const chatOpenSprites = chatActiveSprites;
-
 /**
  * Form events: neutral LOOK only; respect ONE_ACTIVE.
- * ROLE_SEMANTICS_FROZEN = NO — no diagnose/forms specialization.
+ * ROLE_SEMANTICS_FROZEN = NO.
  */
 export function formEventSprites(
   active: ActiveMascot
@@ -79,16 +66,6 @@ export function formEventSprites(
   if (active === "chico") return { chico: "looking", dumbo: "idle" };
   if (active === "dumbo") return { chico: "idle", dumbo: "looking" };
   return { chico: "looking", dumbo: "looking" };
-}
-
-/** Meet autonomy DISABLED — idle stub. */
-export function meetSprites(): Pick<MascotBrainState, "chico" | "dumbo"> {
-  return { chico: "idle", dumbo: "idle" };
-}
-
-/** Play autonomy DISABLED — idle stub. */
-export function playSprites(): Pick<MascotBrainState, "chico" | "dumbo"> {
-  return { chico: "idle", dumbo: "idle" };
 }
 
 /**

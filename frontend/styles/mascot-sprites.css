@@ -16,10 +16,6 @@
   pointer-events:none;
 }
 
-.mascot-root.is-webgl-ready .mascot{
-  will-change:transform;
-}
-
 .mascot{
   position:fixed;
   bottom:var(--mascot-dock-bottom);
@@ -212,40 +208,6 @@
 .mascot__img--chico{width:232px;height:232px}
 .mascot__img--dumbo{width:208px;height:208px}
 
-/*
-  FASE 21.6B.7A — state-class CSS performance DISABLED (walk/jump/alert/rest loops).
-  Legacy keyframes retained below for later cleanup; must not auto-run.
-*/
-.mascot__state--walk_01,
-.mascot__state--walk_02,
-.mascot__state--walk_03,
-.mascot__state--walking,
-.mascot__state--jump,
-.mascot__state--playing,
-.mascot__state--turn,
-.mascot__state--sniffing,
-.mascot__state--alert,
-.mascot__state--guide,
-.mascot__state--look,
-.mascot__state--guarding,
-.mascot__state--guiding,
-.mascot__state--looking,
-.mascot__state--waiting,
-.mascot__state--surprised,
-.mascot__state--sleep,
-.mascot__state--sleeping,
-.mascot__state--lay,
-.mascot__state--sit,
-.mascot__state--resting,
-.mascot__state--active,
-.mascot__state--meeting {
-  animation: none;
-}
-
-.mascot-root.is-session-resting .mascot__img:not(.mascot__state--sleep):not(.mascot__state--sleeping):not(.mascot__state--lay){
-  animation: none;
-}
-
 .mascot__bubble{
   max-width:220px;
   /* Decorative copy — must not steal clicks from CTA/form/cookie */
@@ -329,41 +291,6 @@
   .mascot__pause--near-dumbo{
     bottom:calc(var(--mascot-dock-bottom) + min(36vw, 72px));
   }
-}
-
-@keyframes mascotBreath{
-  0%,100%{transform:translateY(0) scale(1)}
-  50%{transform:translateY(-1.25px) scale(1.01)}
-}
-
-@keyframes mascotBlink{
-  0%,46%,48%,100%{filter:drop-shadow(0 8px 24px rgba(15,23,42,.18))}
-  47%{filter:brightness(.96) drop-shadow(0 8px 24px rgba(15,23,42,.18))}
-}
-
-@keyframes mascotWalk{
-  0%,100%{transform:translateX(0)}
-  50%{transform:translateX(2.5px)}
-}
-
-@keyframes mascotJump{
-  0%,100%{transform:translateY(0)}
-  45%{transform:translateY(-6px)}
-}
-
-@keyframes mascotTurn{
-  0%,100%{transform:rotateY(0)}
-  50%{transform:rotateY(180deg)}
-}
-
-@keyframes mascotAlert{
-  0%,100%{transform:translateY(-0.75px) rotate(.15deg)}
-  50%{transform:translateY(-2px) rotate(-.3deg)}
-}
-
-@keyframes mascotRest{
-  0%,100%{transform:translateY(.5px)}
-  50%{transform:translateY(1.5px)}
 }
 
 @media (prefers-reduced-motion: reduce){
