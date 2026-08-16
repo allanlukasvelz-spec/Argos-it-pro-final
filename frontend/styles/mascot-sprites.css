@@ -178,36 +178,45 @@
   object-position:center bottom;
   image-rendering:auto;
   filter:drop-shadow(0 8px 24px rgba(15,23,42,.18));
-  animation:mascotBreath 5.2s ease-in-out infinite,mascotBlink 8.5s linear infinite;
+  /* FASE 21.6B.7A: no autonomous CSS breath/bob on mount */
+  animation: none;
 }
 
 .mascot__img--chico{width:232px;height:232px}
 .mascot__img--dumbo{width:208px;height:208px}
 
-.mascot__state--walk_01,.mascot__state--walk_02,.mascot__state--walk_03,.mascot__state--walking{
-  animation:mascotWalk 1s ease-in-out infinite,mascotBlink 8.5s linear infinite;
-}
-
-.mascot__state--jump,.mascot__state--playing{animation:mascotJump .9s ease-in-out infinite,mascotBlink 8.5s linear infinite}
-.mascot__state--turn,.mascot__state--sniffing{animation:mascotTurn 1.1s ease-in-out,mascotBlink 8.5s linear infinite}
-.mascot__state--alert,.mascot__state--guide,.mascot__state--look,.mascot__state--guarding,.mascot__state--guiding,.mascot__state--looking,.mascot__state--waiting{
-  animation:mascotAlert 1.6s ease-in-out infinite,mascotBlink 8.5s linear infinite;
-}
-
-.mascot__state--surprised{animation:mascotJump .65s ease-in-out infinite,mascotBlink 8.5s linear infinite}
-
-.mascot__state--sleep,.mascot__state--sleeping,.mascot__state--lay,.mascot__state--sit,.mascot__state--resting{
-  animation:mascotRest 4.4s ease-in-out infinite,mascotBlink 8.5s linear infinite;
-}
-
-.mascot__state--active{animation:mascotBreath 4.8s ease-in-out infinite,mascotBlink 8.5s linear infinite}
-
-.mascot__state--meeting{
-  animation:mascotAlert 1.55s ease-in-out infinite,mascotBlink 8.5s linear infinite;
+/*
+  FASE 21.6B.7A — state-class CSS performance DISABLED (walk/jump/alert/rest loops).
+  Legacy keyframes retained below for later cleanup; must not auto-run.
+*/
+.mascot__state--walk_01,
+.mascot__state--walk_02,
+.mascot__state--walk_03,
+.mascot__state--walking,
+.mascot__state--jump,
+.mascot__state--playing,
+.mascot__state--turn,
+.mascot__state--sniffing,
+.mascot__state--alert,
+.mascot__state--guide,
+.mascot__state--look,
+.mascot__state--guarding,
+.mascot__state--guiding,
+.mascot__state--looking,
+.mascot__state--waiting,
+.mascot__state--surprised,
+.mascot__state--sleep,
+.mascot__state--sleeping,
+.mascot__state--lay,
+.mascot__state--sit,
+.mascot__state--resting,
+.mascot__state--active,
+.mascot__state--meeting {
+  animation: none;
 }
 
 .mascot-root.is-session-resting .mascot__img:not(.mascot__state--sleep):not(.mascot__state--sleeping):not(.mascot__state--lay){
-  animation:mascotRest 8s ease-in-out infinite,mascotBlink 10s linear infinite;
+  animation: none;
 }
 
 .mascot__bubble{

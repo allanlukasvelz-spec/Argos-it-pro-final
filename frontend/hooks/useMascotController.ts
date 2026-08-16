@@ -1,42 +1,23 @@
 "use client";
 
+/**
+ * FASE 21.6B.7A — behavior safety.
+ * Autonomous ambient / patrol / meet / walk loops DISABLED.
+ * Long-idle → LAY/SLEEP kept (quiet, V1-compatible).
+ */
+
 import { useReducedMotion } from "framer-motion";
-import { gsap } from "gsap";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import {
-  AUTONOMY_MAJOR_MS_MAX,
-  AUTONOMY_MAJOR_MS_MIN,
-  AUTONOMY_MEET_MS_MAX,
-  AUTONOMY_MEET_MS_MIN,
-  AUTONOMY_MICRO_MS_MAX,
-  AUTONOMY_MICRO_MS_MIN,
-  AUTONOMY_OVERRIDE_GUARD_MS,
-  getDockMotionLimits,
-  getMeetTargets,
-  randBetween,
-  USER_ACTIVITY_TIMEOUT_MS,
-  withChatBias
-} from "@/ai/mascotAutonomy";
+import { USER_ACTIVITY_TIMEOUT_MS } from "@/ai/mascotAutonomy";
 import {
   chatActiveSprites,
-  meetSprites,
-  nextAmbientSprites,
-  playSprites,
   resolveMascotState,
   restingChicoSprite,
   restingDumboSprite,
   type MascotBrainState,
   type MascotEvent
 } from "@/ai/mascotStates";
-import {
-  nextChicoWalkFrame,
-  nextDumboWalkFrame,
-  shouldLoopChicoWalk,
-  shouldLoopDumboWalk
-} from "@/animations/spriteAnimator";
 import { useMascotChat } from "@/components/mascots/MascotChatContext";
-
-type Motion = { chicoTx: number; dumboTx: number; chicoTy: number; dumboTy: number };
 
 export function useMascotController() {
   const [brain, setBrain] = useState<MascotBrainState>(() => resolveMascotState("idle"));
@@ -44,24 +25,13 @@ export function useMascotController() {
   const [paused, setPaused] = useState(false);
   const [webglReady, setWebglReady] = useState(false);
   const [sessionMode, setSessionMode] = useState<"active" | "resting">("active");
-  const [tabVisible, setTabVisible] = useState(true);
   const [chicoTx, setChicoTx] = useState(0);
   const [chicoTy, setChicoTy] = useState(0);
   const [dumboTx, setDumboTx] = useState(0);
   const [dumboTy, setDumboTy] = useState(0);
-  const [visibilityEpoch, setVisibilityEpoch] = useState(0);
 
   const lastActivityAtRef = useRef<number>(typeof performance !== "undefined" ? Date.now() : 0);
   const prevSessionModeRef = useRef<"active" | "resting">("active");
-  const overrideUntilRef = useRef(0);
-  const motionRef = useRef<Motion>({ chicoTx: 0, dumboTx: 0, chicoTy: 0, dumboTy: 0 });
-  const ambientIxRef = useRef(0);
-
-  const walkTimer = useRef<number | null>(null);
-  const microTimeoutRef = useRef<number | null>(null);
-  const majorTimeoutRef = useRef<number | null>(null);
-  const meetTimeoutRef = useRef<number | null>(null);
-  const ambientIntervalRef = useRef<number | null>(null);
 
   const prefersReducedMotion = useReducedMotion();
   const { open: chatOpen, persona: chatPersona } = useMascotChat();
@@ -70,43 +40,12 @@ export function useMascotController() {
     lastActivityAtRef.current = Date.now();
   }, []);
 
-  const flushMotion = useCallback(() => {
-    const m = motionRef.current;
-    setChicoTx(m.chicoTx);
-    setChicoTy(m.chicoTy);
-    setDumboTx(m.dumboTx);
-    setDumboTy(m.dumboTy);
+  const zeroDockMotion = useCallback(() => {
+    setChicoTx(0);
+    setChicoTy(0);
+    setDumboTx(0);
+    setDumboTy(0);
   }, []);
-
-  const killDockTweens = useCallback(() => {
-    gsap.killTweensOf(motionRef.current);
-  }, []);
-
-  const clearAllSchedulers = useCallback(() => {
-    if (microTimeoutRef.current !== null) {
-      window.clearTimeout(microTimeoutRef.current);
-      microTimeoutRef.current = null;
-    }
-    if (majorTimeoutRef.current !== null) {
-      window.clearTimeout(majorTimeoutRef.current);
-      majorTimeoutRef.current = null;
-    }
-    if (meetTimeoutRef.current !== null) {
-      window.clearTimeout(meetTimeoutRef.current);
-      meetTimeoutRef.current = null;
-    }
-    if (ambientIntervalRef.current !== null) {
-      window.clearInterval(ambientIntervalRef.current);
-      ambientIntervalRef.current = null;
-    }
-  }, []);
-
-  const motionAllowed =
-    !paused &&
-    prefersReducedMotion !== true &&
-    sessionMode === "active" &&
-    tabVisible &&
-    (typeof document === "undefined" || document.visibilityState === "visible");
 
   const togglePause = useCallback(() => {
     setPaused((p) => !p);
@@ -115,13 +54,12 @@ export function useMascotController() {
   const applyEvent = useCallback(
     (event: MascotEvent) => {
       bumpActivity();
-      overrideUntilRef.current = Date.now() + AUTONOMY_OVERRIDE_GUARD_MS;
       setBrain(resolveMascotState(event));
     },
     [bumpActivity]
   );
 
-  /** Sesión usuario: <30 s actividad → active */
+  /** KEPT: long-idle timer (30s) → session resting. Does not start walk/patrol. */
   useEffect(() => {
     lastActivityAtRef.current = Date.now();
     const id = window.setInterval(() => {
@@ -153,10 +91,9 @@ export function useMascotController() {
     }
   }, []);
 
-  /** Actividad del usuario → lastActivityAt */
+  /** Activity → lastActivityAt (scroll only resets idle clock; no scroll→state). */
   useEffect(() => {
     const onAct = () => bumpActivity();
-
     bumpActivity();
 
     window.addEventListener("scroll", onAct, { passive: true });
@@ -182,12 +119,6 @@ export function useMascotController() {
 
     document.addEventListener("mousemove", onMove, { passive: true });
 
-    const onVisibility = () => setTabVisible(document.visibilityState === "visible");
-    document.addEventListener("visibilitychange", onVisibility);
-
-    const onVisibilityEpoch = () => setVisibilityEpoch((n) => n + 1);
-    document.addEventListener("visibilitychange", onVisibilityEpoch);
-
     return () => {
       window.removeEventListener("scroll", onAct);
       window.removeEventListener("click", onAct, true);
@@ -195,8 +126,6 @@ export function useMascotController() {
       window.removeEventListener("touchstart", onAct, true);
       document.removeEventListener("mousemove", onMove);
       document.removeEventListener("focusin", onAct, true);
-      document.removeEventListener("visibilitychange", onVisibility);
-      document.removeEventListener("visibilitychange", onVisibilityEpoch);
     };
   }, [bumpActivity, applyEvent]);
 
@@ -214,80 +143,50 @@ export function useMascotController() {
     };
   }, [applyEvent]);
 
-  /** Ciclo de pasos al caminar cuando la sesión está activa */
+  /**
+   * ASSISTANT_OPEN = ALLOWED → LOOK/REST only.
+   * No guiding/guarding. No translate performance.
+   */
   useEffect(() => {
-    const shouldTickWalk =
-      !paused &&
-      sessionMode === "active" &&
-      prefersReducedMotion !== true &&
-      tabVisible;
-
-    if (walkTimer.current) window.clearInterval(walkTimer.current);
-    walkTimer.current = window.setInterval(() => {
-      if (!shouldTickWalk) return;
-      setBrain((prev) => ({
-        ...prev,
-        chico: shouldLoopChicoWalk(prev.chico) ? nextChicoWalkFrame(prev.chico) : prev.chico,
-        dumbo: shouldLoopDumboWalk(prev.dumbo) ? nextDumboWalkFrame(prev.dumbo) : prev.dumbo
-      }));
-    }, 380);
-
-    return () => {
-      if (walkTimer.current) window.clearInterval(walkTimer.current);
-    };
-  }, [paused, sessionMode, prefersReducedMotion, tabVisible]);
-
-  /** prefers-reduced-motion */
-  useEffect(() => {
-    if (prefersReducedMotion !== true || paused) return;
-    killDockTweens();
-    clearAllSchedulers();
-    gsap.to(motionRef.current, {
-      chicoTx: 0,
-      dumboTx: 0,
-      chicoTy: 0,
-      dumboTy: 0,
-      duration: 0.45,
-      ease: "sine.out",
-      onUpdate: flushMotion,
-      onComplete: flushMotion
-    });
+    if (!chatOpen || !chatPersona) return;
+    if (paused) return;
+    const sprites = chatActiveSprites(chatPersona);
     setBrain((prev) => ({
       ...prev,
-      chico: restingChicoSprite(Math.floor(Date.now() / 1000)),
+      chico: sprites.chico,
+      dumbo: sprites.dumbo
+    }));
+  }, [chatOpen, chatPersona, paused]);
+
+  /** prefers-reduced-motion: static dock, no translate performance. */
+  useEffect(() => {
+    if (prefersReducedMotion !== true) return;
+    zeroDockMotion();
+    setBrain((prev) => ({
+      ...prev,
+      chico: "idle",
       dumbo: "idle"
     }));
-  }, [paused, prefersReducedMotion, clearAllSchedulers, killDockTweens, flushMotion]);
+  }, [prefersReducedMotion, zeroDockMotion]);
 
   useEffect(() => {
     if (!paused) return;
-    killDockTweens();
-    clearAllSchedulers();
-  }, [paused, killDockTweens, clearAllSchedulers]);
+    zeroDockMotion();
+  }, [paused, zeroDockMotion]);
 
-  /** Transición active ⇄ resting (30 s sin actividad) */
+  /**
+   * KEPT: long idle → LAY/SLEEP (quiet V1).
+   * Return from idle → REST.
+   * No GSAP patrol/bob.
+   */
   useEffect(() => {
     const was = prevSessionModeRef.current;
     if (was === sessionMode) return;
     prevSessionModeRef.current = sessionMode;
 
     if (sessionMode === "resting") {
-      if (paused || prefersReducedMotion === true) return;
-
-      killDockTweens();
-      clearAllSchedulers();
-
-      gsap.to(motionRef.current, {
-        chicoTx: 0,
-        dumboTx: 0,
-        chicoTy: 0,
-        dumboTy: 0,
-        duration: 0.95,
-        ease: "sine.out",
-        onUpdate: flushMotion,
-        onComplete: flushMotion
-      });
-
+      zeroDockMotion();
+      if (paused) return;
       const seed = Math.floor(Date.now() / 813) % 1000;
       setBrain((p) => ({
         ...p,
@@ -297,210 +196,13 @@ export function useMascotController() {
       return;
     }
 
-    /** De resting → active */
-    if (was === "resting" && !paused && prefersReducedMotion !== true) {
-      if (!(Date.now() < overrideUntilRef.current)) {
-        setBrain((p) => {
-          const i = resolveMascotState("idle");
-          return { ...p, chico: i.chico, dumbo: i.dumbo };
-        });
-      }
-    }
-  }, [
-    sessionMode,
-    paused,
-    prefersReducedMotion,
-    killDockTweens,
-    clearAllSchedulers,
-    flushMotion
-  ]);
-
-  /** Autonomía: micro ~5–10 s, mayor ~15–25 s, encuentros ~25–45 s */
-  useEffect(() => {
-    if (!motionAllowed) {
-      killDockTweens();
-      clearAllSchedulers();
-      return () => {};
-    }
-
-    const motionAllowedRef = { current: true };
-    motionAllowedRef.current = true;
-
-    const applyAmbientSprites = () => {
-      setBrain((prev) => {
-        if (Date.now() < overrideUntilRef.current) return prev;
-        if (chatOpen) {
-          const p = chatActiveSprites(chatPersona);
-          return { ...prev, chico: p.chico, dumbo: p.dumbo };
-        }
-        const amb = nextAmbientSprites(ambientIxRef.current);
-        ambientIxRef.current += 1;
-        return { ...prev, chico: amb.chico, dumbo: amb.dumbo };
+    if (was === "resting" && !paused) {
+      setBrain((p) => {
+        const i = resolveMascotState("idle");
+        return { ...p, chico: i.chico, dumbo: i.dumbo };
       });
-    };
-
-    const scheduleMicro = () => {
-      if (microTimeoutRef.current !== null) window.clearTimeout(microTimeoutRef.current);
-      microTimeoutRef.current = window.setTimeout(() => {
-        microTimeoutRef.current = null;
-        if (!motionAllowedRef.current) return;
-
-        gsap.to(motionRef.current, {
-          chicoTy: randBetween(-1.75, 1.75),
-          dumboTy: randBetween(-1.75, 1.75),
-          duration: randBetween(1.8, 2.9),
-          ease: "sine.inOut",
-          yoyo: true,
-          repeat: 1,
-          onUpdate: flushMotion,
-          onComplete: () => {
-            gsap.to(motionRef.current, {
-              chicoTy: 0,
-              dumboTy: 0,
-              duration: 0.55,
-              ease: "sine.out",
-              onUpdate: flushMotion,
-              onComplete: flushMotion
-            });
-          }
-        });
-        scheduleMicro();
-      }, randBetween(AUTONOMY_MICRO_MS_MIN, AUTONOMY_MICRO_MS_MAX));
-    };
-
-    const runMajorPatrol = () => {
-      if (document.visibilityState !== "visible") return;
-      const L = getDockMotionLimits(window.innerWidth);
-      let chTx = randBetween(L.chico.min + 2, L.chico.max);
-      let dbTx = randBetween(L.dumbo.min, L.dumbo.max - 2);
-      ({ chicoTx: chTx, dumboTx: dbTx } = withChatBias(chatPersona, chatOpen, {
-        chicoTx: chTx,
-        dumboTx: dbTx
-      }, L));
-      gsap.to(motionRef.current, {
-        chicoTx: chTx,
-        dumboTx: dbTx,
-        duration: randBetween(5, 9),
-        ease: "sine.inOut",
-        onUpdate: flushMotion,
-        onComplete: flushMotion
-      });
-      if (!(Date.now() < overrideUntilRef.current) && !chatOpen) {
-        ambientIxRef.current += 1;
-        const amb = nextAmbientSprites(ambientIxRef.current);
-        setBrain((prev) => ({ ...prev, chico: amb.chico, dumbo: amb.dumbo }));
-      } else if (chatOpen) {
-        const cp = chatActiveSprites(chatPersona);
-        setBrain((prev) => ({ ...prev, chico: cp.chico, dumbo: cp.dumbo }));
-      }
-    };
-
-    const scheduleMajor = () => {
-      if (majorTimeoutRef.current !== null) window.clearTimeout(majorTimeoutRef.current);
-      majorTimeoutRef.current = window.setTimeout(() => {
-        majorTimeoutRef.current = null;
-        if (!motionAllowedRef.current || document.visibilityState !== "visible") {
-          scheduleMajor();
-          return;
-        }
-        if (Date.now() < overrideUntilRef.current) {
-          scheduleMajor();
-          return;
-        }
-        runMajorPatrol();
-        scheduleMajor();
-      }, randBetween(AUTONOMY_MAJOR_MS_MIN, AUTONOMY_MAJOR_MS_MAX));
-    };
-
-    const scheduleMeet = () => {
-      if (meetTimeoutRef.current !== null) window.clearTimeout(meetTimeoutRef.current);
-      meetTimeoutRef.current = window.setTimeout(() => {
-        meetTimeoutRef.current = null;
-        if (!motionAllowedRef.current || document.visibilityState !== "visible") {
-          scheduleMeet();
-          return;
-        }
-        if (Date.now() < overrideUntilRef.current) {
-          scheduleMeet();
-          return;
-        }
-
-        killDockTweens();
-        const L = getDockMotionLimits(window.innerWidth);
-        let { chicoTx: meetCx, dumboTx: meetDx } = getMeetTargets(L, 0.78);
-        const biased = withChatBias(chatPersona, chatOpen, { chicoTx: meetCx, dumboTx: meetDx }, L);
-        meetCx = biased.chicoTx;
-        meetDx = biased.dumboTx;
-
-        const tl = gsap.timeline({
-          onComplete: () => {
-            flushMotion();
-            scheduleMeet();
-          }
-        });
-        tl.to(motionRef.current, {
-          chicoTx: meetCx,
-          dumboTx: meetDx,
-          duration: 2,
-          ease: "power2.inOut",
-          onUpdate: flushMotion
-        });
-        tl.add(() => {
-          const m = meetSprites();
-          setBrain((prev) => ({ ...prev, chico: m.chico, dumbo: m.dumbo }));
-        });
-        tl.to({}, { duration: 1.1 });
-        tl.add(() => {
-          const p = playSprites();
-          setBrain((prev) => ({ ...prev, chico: p.chico, dumbo: p.dumbo }));
-        });
-        tl.to({}, { duration: 2 });
-        tl.add(() => {
-          setBrain((prev) => {
-            const idle = resolveMascotState("idle");
-            return {
-              ...idle,
-              chicoMessageKey: prev.chicoMessageKey,
-              dumboMessageKey: prev.dumboMessageKey
-            };
-          });
-        });
-        tl.to(motionRef.current, {
-          chicoTx: 0,
-          dumboTx: 0,
-          chicoTy: 0,
-          dumboTy: 0,
-          duration: 2,
-          ease: "sine.inOut",
-          onUpdate: flushMotion
-        });
-      }, randBetween(AUTONOMY_MEET_MS_MIN, AUTONOMY_MEET_MS_MAX));
-    };
-
-    ambientIntervalRef.current = window.setInterval(
-      applyAmbientSprites,
-      randBetween(7000, 10000)
-    );
-
-    runMajorPatrol();
-    scheduleMicro();
-    scheduleMajor();
-    scheduleMeet();
-
-    return () => {
-      motionAllowedRef.current = false;
-      clearAllSchedulers();
-      killDockTweens();
-    };
-  }, [
-    motionAllowed,
-    chatOpen,
-    chatPersona,
-    clearAllSchedulers,
-    killDockTweens,
-    flushMotion,
-    visibilityEpoch
-  ]);
+    }
+  }, [sessionMode, paused, zeroDockMotion]);
 
   return useMemo(
     () => ({
