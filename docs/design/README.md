@@ -1,7 +1,7 @@
 # ARGOS-IT Design System — Documentation Index
 
-**Phase:** 21.5 — Corporate Chrome Foundation
-**Status:** Level 1 ACTIVE (brand tokens frozen; Corporate chrome on `/contacto` only)
+**Phase:** 21.6B — Visual Freeze + Mascot Motion Lab Authorization
+**Status:** Level 1 ACTIVE — canonical brand tokens and Corporate foundation active; Quiet Authority desktop Home visual direction HUMAN-FROZEN for lab/spec purposes; mascot motion laboratory AUTHORIZED; production Home migration NOT AUTHORIZED; mascot production integration NOT AUTHORIZED.
 **Visual change in 21.5:** YES — `/contacto` header/footer only
 
 ## Documents
