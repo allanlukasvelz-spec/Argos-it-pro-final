@@ -51,6 +51,68 @@ test.describe("public and auth shell", () => {
     }
   });
 
+  test("one-active: Chico open uses STAND asset and deactivates Dumbo", async ({ page }) => {
+    await page.goto("/");
+    const root = page.locator(".mascot-root");
+    await expect(root).toHaveAttribute("data-active-mascot", "none");
+    await page
+      .getByRole("button", { name: /Interactuar con Chico|Interact with Chico/i })
+      .click({ force: true });
+    await expect(root).toHaveAttribute("data-active-mascot", "chico");
+    await expect(page.locator('.mascot--chico [data-mascot-active="true"]')).toBeVisible();
+    await expect(page.locator('.mascot--dumbo [data-mascot-active="false"]')).toBeVisible();
+    const chicoSrc =
+      (await page.locator(".mascot__img--chico").getAttribute("src")) || "";
+    expect(chicoSrc).toMatch(/chico_esperando\.png/);
+    expect(chicoSrc).not.toMatch(/caminando/i);
+    await page.keyboard.press("Escape");
+    await expect(root).toHaveAttribute("data-active-mascot", "none");
+  });
+
+  test("one-active: Dumbo open uses SIT; switch deactivates prior", async ({ page }) => {
+    await page.goto("/");
+    const root = page.locator(".mascot-root");
+    await page
+      .getByRole("button", { name: /Interactuar con Chico|Interact with Chico/i })
+      .click({ force: true });
+    await expect(root).toHaveAttribute("data-active-mascot", "chico");
+    await page
+      .getByRole("button", { name: /Interactuar con Dumbo|Interact with Dumbo/i })
+      .click({ force: true });
+    await expect(root).toHaveAttribute("data-active-mascot", "dumbo");
+    await expect(page.locator('.mascot--dumbo [data-mascot-active="true"]')).toBeVisible();
+    await expect(page.locator('.mascot--chico [data-mascot-active="false"]')).toBeVisible();
+    const dumboSrc =
+      (await page.locator(".mascot__img--dumbo").getAttribute("src")) || "";
+    expect(dumboSrc).toMatch(/dumbo_sentado_atento\.png/);
+    await page.keyboard.press("Escape");
+    await expect(root).toHaveAttribute("data-active-mascot", "none");
+  });
+
+  test("keyboard Enter opens Chico assistant", async ({ page }) => {
+    await page.goto("/");
+    const chico = page.getByRole("button", {
+      name: /Interactuar con Chico|Interact with Chico/i
+    });
+    await chico.focus();
+    await page.keyboard.press("Enter");
+    await expect(page.getByRole("dialog")).toBeVisible();
+    await expect(page.locator(".mascot-root")).toHaveAttribute("data-active-mascot", "chico");
+    await page.keyboard.press("Escape");
+  });
+
+  test("keyboard Space opens Dumbo assistant", async ({ page }) => {
+    await page.goto("/");
+    const dumbo = page.getByRole("button", {
+      name: /Interactuar con Dumbo|Interact with Dumbo/i
+    });
+    await dumbo.focus();
+    await page.keyboard.press("Space");
+    await expect(page.getByRole("dialog")).toBeVisible();
+    await expect(page.locator(".mascot-root")).toHaveAttribute("data-active-mascot", "dumbo");
+    await page.keyboard.press("Escape");
+  });
+
   test("explainer page section and CTA links", async ({ page }) => {
     await page.goto("/explainer");
     const section = page.locator("#dumbo-chico-explainer");

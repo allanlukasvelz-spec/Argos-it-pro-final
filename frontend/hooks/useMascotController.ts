@@ -1,9 +1,8 @@
 "use client";
 
 /**
- * FASE 21.6B.7A — behavior safety.
- * Autonomous ambient / patrol / meet / walk loops DISABLED.
- * Long-idle → LAY/SLEEP kept (quiet, V1-compatible).
+ * FASE 21.6B.7B — ONE_ACTIVE + V1 dock enforcement.
+ * Autonomous motion remains DISABLED (7A).
  */
 
 import { useReducedMotion } from "framer-motion";
@@ -11,9 +10,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { USER_ACTIVITY_TIMEOUT_MS } from "@/ai/mascotAutonomy";
 import {
   chatActiveSprites,
+  formEventSprites,
   resolveMascotState,
   restingChicoSprite,
   restingDumboSprite,
+  type ActiveMascot,
   type MascotBrainState,
   type MascotEvent
 } from "@/ai/mascotStates";
@@ -36,6 +37,9 @@ export function useMascotController() {
   const prefersReducedMotion = useReducedMotion();
   const { open: chatOpen, persona: chatPersona } = useMascotChat();
 
+  /** Single ownership: chat open → persona; else NONE. */
+  const activeMascot: ActiveMascot = chatOpen ? chatPersona : "none";
+
   const bumpActivity = useCallback(() => {
     lastActivityAtRef.current = Date.now();
   }, []);
@@ -54,12 +58,36 @@ export function useMascotController() {
   const applyEvent = useCallback(
     (event: MascotEvent) => {
       bumpActivity();
+      if (
+        event === "hover" ||
+        event === "cursorNearChico" ||
+        event === "cursorNearDumbo" ||
+        event === "idle"
+      ) {
+        // HOVER / near = NONE visual change (7A/7B)
+        if (event === "idle" && !chatOpen) {
+          setBrain(resolveMascotState("idle"));
+        }
+        return;
+      }
+
+      if (event === "formStart" || event === "formSuccess" || event === "formError") {
+        const msgs = resolveMascotState(event);
+        const sprites = formEventSprites(activeMascot);
+        setBrain({
+          ...msgs,
+          chico: sprites.chico,
+          dumbo: sprites.dumbo
+        });
+        return;
+      }
+
       setBrain(resolveMascotState(event));
     },
-    [bumpActivity]
+    [bumpActivity, activeMascot, chatOpen]
   );
 
-  /** KEPT: long-idle timer (30s) → session resting. Does not start walk/patrol. */
+  /** KEPT: long-idle timer (30s). */
   useEffect(() => {
     lastActivityAtRef.current = Date.now();
     const id = window.setInterval(() => {
@@ -91,7 +119,7 @@ export function useMascotController() {
     }
   }, []);
 
-  /** Activity → lastActivityAt (scroll only resets idle clock; no scroll→state). */
+  /** Activity only — no cursorNear visual (ONE_ACTIVE). */
   useEffect(() => {
     const onAct = () => bumpActivity();
     bumpActivity();
@@ -101,33 +129,17 @@ export function useMascotController() {
     window.addEventListener("keydown", onAct, true);
     window.addEventListener("touchstart", onAct, { passive: true, capture: true });
     document.addEventListener("focusin", onAct, true);
-
-    let lastNearTs = 0;
-    const onMove = (ev: MouseEvent) => {
-      onAct();
-      const now = Date.now();
-      const yBand = window.innerHeight - 260;
-      if (now - lastNearTs < 450) return;
-      if (ev.clientY > yBand && ev.clientX < window.innerWidth * 0.35) {
-        lastNearTs = now;
-        applyEvent("cursorNearChico");
-      } else if (ev.clientY > yBand && ev.clientX > window.innerWidth * 0.65) {
-        lastNearTs = now;
-        applyEvent("cursorNearDumbo");
-      }
-    };
-
-    document.addEventListener("mousemove", onMove, { passive: true });
+    document.addEventListener("mousemove", onAct, { passive: true });
 
     return () => {
       window.removeEventListener("scroll", onAct);
       window.removeEventListener("click", onAct, true);
       window.removeEventListener("keydown", onAct, true);
       window.removeEventListener("touchstart", onAct, true);
-      document.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mousemove", onAct);
       document.removeEventListener("focusin", onAct, true);
     };
-  }, [bumpActivity, applyEvent]);
+  }, [bumpActivity]);
 
   useEffect(() => {
     const onFormStart = () => applyEvent("formStart");
@@ -144,29 +156,33 @@ export function useMascotController() {
   }, [applyEvent]);
 
   /**
-   * ASSISTANT_OPEN = ALLOWED → LOOK/REST only.
-   * No guiding/guarding. No translate performance.
+   * Chat open/close owns ACTIVE_MASCOT visuals.
+   * Open → STAND (chico) / SIT (dumbo); inactive REST.
+   * Close → both REST.
    */
   useEffect(() => {
-    if (!chatOpen || !chatPersona) return;
     if (paused) return;
-    const sprites = chatActiveSprites(chatPersona);
-    setBrain((prev) => ({
-      ...prev,
-      chico: sprites.chico,
-      dumbo: sprites.dumbo
-    }));
-  }, [chatOpen, chatPersona, paused]);
-
-  /** prefers-reduced-motion: static dock, no translate performance. */
-  useEffect(() => {
-    if (prefersReducedMotion !== true) return;
     zeroDockMotion();
+    if (chatOpen && chatPersona) {
+      const sprites = chatActiveSprites(chatPersona);
+      setBrain((prev) => ({
+        ...prev,
+        chico: sprites.chico,
+        dumbo: sprites.dumbo
+      }));
+      return;
+    }
     setBrain((prev) => ({
       ...prev,
       chico: "idle",
       dumbo: "idle"
     }));
+  }, [chatOpen, chatPersona, paused, zeroDockMotion]);
+
+  /** prefers-reduced-motion: no translate; keep V1 still frames. */
+  useEffect(() => {
+    if (prefersReducedMotion !== true) return;
+    zeroDockMotion();
   }, [prefersReducedMotion, zeroDockMotion]);
 
   useEffect(() => {
@@ -175,9 +191,9 @@ export function useMascotController() {
   }, [paused, zeroDockMotion]);
 
   /**
-   * KEPT: long idle → LAY/SLEEP (quiet V1).
-   * Return from idle → REST.
-   * No GSAP patrol/bob.
+   * Long idle → LAY/SLEEP.
+   * If chat open: keep active STAND/SIT; only inactive rests.
+   * Chat closed: both quiet.
    */
   useEffect(() => {
     const was = prevSessionModeRef.current;
@@ -188,6 +204,17 @@ export function useMascotController() {
       zeroDockMotion();
       if (paused) return;
       const seed = Math.floor(Date.now() / 813) % 1000;
+      if (chatOpen && chatPersona) {
+        const ready = chatActiveSprites(chatPersona);
+        setBrain((p) => ({
+          ...p,
+          chico:
+            chatPersona === "chico" ? ready.chico : restingChicoSprite(seed),
+          dumbo:
+            chatPersona === "dumbo" ? ready.dumbo : restingDumboSprite(seed)
+        }));
+        return;
+      }
       setBrain((p) => ({
         ...p,
         chico: restingChicoSprite(seed),
@@ -197,17 +224,30 @@ export function useMascotController() {
     }
 
     if (was === "resting" && !paused) {
-      setBrain((p) => {
-        const i = resolveMascotState("idle");
-        return { ...p, chico: i.chico, dumbo: i.dumbo };
-      });
+      if (chatOpen && chatPersona) {
+        const sprites = chatActiveSprites(chatPersona);
+        setBrain((p) => ({ ...p, chico: sprites.chico, dumbo: sprites.dumbo }));
+      } else {
+        setBrain((p) => {
+          const i = resolveMascotState("idle");
+          return { ...p, chico: i.chico, dumbo: i.dumbo };
+        });
+      }
     }
-  }, [sessionMode, paused, zeroDockMotion]);
+  }, [sessionMode, paused, chatOpen, chatPersona, zeroDockMotion]);
+
+  /** Same-render as ACTIVE_MASCOT — avoid one-frame stale idle after switch. */
+  const ready = useMemo(() => {
+    if (chatOpen && (chatPersona === "chico" || chatPersona === "dumbo")) {
+      return chatActiveSprites(chatPersona);
+    }
+    return null;
+  }, [chatOpen, chatPersona]);
 
   return useMemo(
     () => ({
-      chico: brain.chico,
-      dumbo: brain.dumbo,
+      chico: ready ? ready.chico : brain.chico,
+      dumbo: ready ? ready.dumbo : brain.dumbo,
       chicoMessageKey: brain.chicoMessageKey,
       dumboMessageKey: brain.dumboMessageKey,
       scale,
@@ -219,10 +259,12 @@ export function useMascotController() {
       dumboTy,
       paused,
       togglePause,
-      sessionMode
+      sessionMode,
+      activeMascot
     }),
     [
       brain,
+      ready,
       scale,
       webglReady,
       applyEvent,
@@ -232,7 +274,8 @@ export function useMascotController() {
       dumboTy,
       paused,
       togglePause,
-      sessionMode
+      sessionMode,
+      activeMascot
     ]
   );
 }

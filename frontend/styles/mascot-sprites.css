@@ -11,7 +11,8 @@
   right:0;
   top:auto;
   bottom:var(--mascot-dock-bottom);
-  z-index:45;
+  /* Above chat backdrop (z-75), below chat panel (z-80) — enables one-active switch */
+  z-index:76;
   pointer-events:none;
 }
 
@@ -91,7 +92,7 @@
 
 .mascot__pause{
   position:fixed;
-  z-index:46;
+  z-index:77;
   pointer-events:auto;
   border:1px solid rgba(212,219,230,.65);
   border-radius:999px;
@@ -106,10 +107,13 @@
 
 .mascot__pause--compact{
   max-width:min(168px,calc(100vw - 24px));
-  height:28px;
-  padding:0 10px;
-  font-size:11px;
-  line-height:1;
+  /* FASE 21.6B.7B — MIN_INTERACTIVE_TARGET = 44px */
+  min-height:44px;
+  height:auto;
+  min-width:44px;
+  padding:0 12px;
+  font-size:12px;
+  line-height:1.2;
   white-space:nowrap;
   text-align:center;
 }
@@ -128,9 +132,9 @@
 
 @media(min-width:861px){
   .mascot__pause--compact{
-    height:30px;
+    min-height:44px;
     font-size:12px;
-    padding:0 10px;
+    padding:0 12px;
   }
 
   .mascot__pause--near-chico{
@@ -140,6 +144,19 @@
   .mascot__pause--near-dumbo{
     bottom:calc(var(--mascot-dock-bottom) + min(22vw, 132px));
   }
+}
+
+/* FASE 21.6B.7B — inactive dock partner de-emphasized (still rendered) */
+.mascot--inactive{
+  opacity:0.55;
+}
+
+.mascot--active{
+  opacity:1;
+}
+
+.mascot-root[data-active-mascot="none"] .mascot{
+  opacity:1;
 }
 
 .mascot__pause:hover{
@@ -314,6 +331,12 @@
 @media (prefers-reduced-motion: reduce){
   .mascot{
     transition:none!important;
+  }
+
+  /* FASE 21.6B.7B — no dock translate; proportional scale only */
+  .mascot--chico,
+  .mascot--dumbo{
+    transform:scale(var(--mascot-scale, 1))!important;
   }
 
   .mascot__img{
