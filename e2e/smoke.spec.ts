@@ -113,6 +113,51 @@ test.describe("public and auth shell", () => {
     await page.keyboard.press("Escape");
   });
 
+  test("390: keyboard opens Chico; pause target >= 44px", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.addInitScript(() => {
+      window.localStorage.setItem("argos_cookie_preferences_v1", "accepted");
+    });
+    await page.goto("/");
+    const chico = page.getByRole("button", {
+      name: /Interactuar con Chico|Interact with Chico/i
+    });
+    await chico.focus();
+    await page.keyboard.press("Enter");
+    await expect(page.locator(".mascot-root")).toHaveAttribute("data-active-mascot", "chico");
+    const pause = page.locator(".mascot__pause");
+    await expect(pause).toBeVisible();
+    const box = await pause.boundingBox();
+    expect(box).toBeTruthy();
+    expect(box!.height).toBeGreaterThanOrEqual(44);
+    expect(box!.width).toBeGreaterThanOrEqual(44);
+    await page.keyboard.press("Escape");
+    await expect(page.locator(".mascot-root")).toHaveAttribute("data-active-mascot", "none");
+  });
+
+  test("assistants hidden on auth and legal routes", async ({ page }) => {
+    for (const path of ["/auth/login", "/explainer", "/cookies", "/legal/privacidad"]) {
+      await page.goto(path);
+      await expect(page.locator(".mascot-root")).toHaveCount(0);
+    }
+  });
+
+  test("cookie banner stacks above dock when visible", async ({ page }) => {
+    await page.addInitScript(() => {
+      window.localStorage.removeItem("argos_cookie_preferences_v1");
+    });
+    await page.goto("/");
+    const z = await page.evaluate(() => {
+      const cookie = document.querySelector("aside[aria-live='polite']");
+      const dock = document.querySelector(".mascot-root");
+      return {
+        cookie: cookie ? getComputedStyle(cookie).zIndex : null,
+        dock: dock ? getComputedStyle(dock).zIndex : null
+      };
+    });
+    expect(Number(z.cookie)).toBeGreaterThan(Number(z.dock));
+  });
+
   test("explainer page section and CTA links", async ({ page }) => {
     await page.goto("/explainer");
     const section = page.locator("#dumbo-chico-explainer");

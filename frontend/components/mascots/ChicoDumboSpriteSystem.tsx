@@ -104,14 +104,15 @@ export default function ChicoDumboSpriteSystem() {
           <Image
             src={chicoSprites[chico]}
             alt=""
+            aria-hidden="true"
             className={`mascot__img mascot__img--chico mascot__state--${chico}`}
             width={232}
             height={232}
-            sizes="(max-width: 860px) 140px, 232px"
+            sizes="(max-width: 480px) 112px, (max-width: 860px) 140px, 232px"
             priority
           />
         </button>
-        <div className="mascot__bubble mascot__bubble--left" onClick={(e) => e.stopPropagation()}>
+        <div className="mascot__bubble mascot__bubble--left" aria-hidden="true">
           {chicoBubble}
         </div>
       </aside>
@@ -119,11 +120,7 @@ export default function ChicoDumboSpriteSystem() {
       <aside
         className={`mascot mascot--dumbo ${dumboActive ? "mascot--active" : "mascot--inactive"}`}
       >
-        <div
-          className="mascot__bubble mascot__bubble--right"
-          onClick={(e) => e.stopPropagation()}
-          role="presentation"
-        >
+        <div className="mascot__bubble mascot__bubble--right" aria-hidden="true">
           {dumboBubble}
         </div>
         <button
@@ -141,10 +138,11 @@ export default function ChicoDumboSpriteSystem() {
           <Image
             src={dumboSprites[dumbo]}
             alt=""
+            aria-hidden="true"
             className={`mascot__img mascot__img--dumbo mascot__state--${dumbo}`}
             width={208}
             height={208}
-            sizes="(max-width: 860px) 124px, 208px"
+            sizes="(max-width: 480px) 100px, (max-width: 860px) 124px, 208px"
             priority
           />
         </button>

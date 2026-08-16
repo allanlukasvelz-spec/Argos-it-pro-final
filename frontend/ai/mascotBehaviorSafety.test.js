@@ -131,6 +131,19 @@ describe("21.6B.7B one-active + V1 enforcement", () => {
     const compact = css.match(/\.mascot__pause--compact\{[\s\S]*?\n\}/);
     assert.ok(compact);
     assert.match(compact[0], /min-height:\s*44px/);
+    // mobile override must not regress below 44px
+    const mobile = css.match(/@media\(max-width:860px\)\{[\s\S]*?\.mascot__pause--compact\{[\s\S]*?\n\s*\}/);
+    assert.ok(mobile, "mobile pause compact block missing");
+    assert.match(mobile[0], /min-height:\s*44px/);
+    assert.doesNotMatch(mobile[0], /height:\s*28px/);
+  });
+
+  it("sprite launchers expose focus-visible outline", () => {
+    assert.match(css, /\.mascot__sprite-button:focus-visible/);
+  });
+
+  it("mascot bubbles do not capture pointer events", () => {
+    assert.match(css, /\.mascot__bubble\{[\s\S]*?pointer-events:\s*none/);
   });
 
   it("reduced-motion disables dock translate", () => {

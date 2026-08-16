@@ -146,9 +146,9 @@
   }
 }
 
-/* FASE 21.6B.7B — inactive dock partner de-emphasized (still rendered) */
+/* FASE 21.6B.7B/7C — inactive partner subordinate but still discoverable */
 .mascot--inactive{
-  opacity:0.55;
+  opacity:0.72;
 }
 
 .mascot--active{
@@ -176,6 +176,16 @@
   padding:0;
   pointer-events:auto;
   transition:transform .18s ease-out;
+  border-radius:12px;
+}
+
+.mascot__sprite-button:focus{
+  outline:none;
+}
+
+.mascot__sprite-button:focus-visible{
+  outline:2px solid #22d3ee;
+  outline-offset:3px;
 }
 
 @media (hover:hover){
@@ -238,7 +248,8 @@
 
 .mascot__bubble{
   max-width:220px;
-  pointer-events:auto;
+  /* Decorative copy — must not steal clicks from CTA/form/cookie */
+  pointer-events:none;
   border:1px solid #d4dbe6;
   border-radius:10px;
   background:rgba(255,255,255,.95);
@@ -264,9 +275,12 @@
   }
 
   .mascot__pause--compact{
-    height:28px;
+    /* Keep MIN_INTERACTIVE_TARGET = 44px on mobile (do not regress to 28px) */
+    min-height:44px;
+    height:auto;
+    min-width:44px;
     font-size:11px;
-    padding:0 8px;
+    padding:0 10px;
   }
 
   .mascot--chico{
@@ -288,8 +302,32 @@
 
   .mascot__bubble{
     font-size:11px;
-    max-width:170px;
+    max-width:140px;
     padding:7px 8px;
+  }
+}
+
+/* Hard gate 390: smaller presentation footprint; bubbles off to avoid CTA/cookie clutter */
+@media(max-width:480px){
+  .mascot__img{
+    width:104px;
+    height:104px;
+  }
+
+  .mascot__img--chico{width:112px;height:112px}
+
+  .mascot__img--dumbo{width:100px;height:100px}
+
+  .mascot__bubble{
+    display:none;
+  }
+
+  .mascot__pause--near-chico{
+    bottom:calc(var(--mascot-dock-bottom) + min(36vw, 72px));
+  }
+
+  .mascot__pause--near-dumbo{
+    bottom:calc(var(--mascot-dock-bottom) + min(36vw, 72px));
   }
 }
 
