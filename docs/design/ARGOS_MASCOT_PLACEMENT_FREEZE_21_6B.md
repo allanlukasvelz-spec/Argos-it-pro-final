@@ -185,20 +185,21 @@ Conditional dual presence allowed only for:
 
 ---
 
-## 8. Role semantics — not frozen
+## 8. Role semantics — frozen (R2 soft)
 
-Existing product/copy evidence associates:
+Public Chico/Dumbo role semantics are human-frozen as **R2 soft specialization**.
 
-- Chico → diagnose / protect assistant (proposed)  
-- Dumbo → requests / forms / follow-up assistant (proposed)  
+Authoritative freeze:
+
+- [ARGOS_MASCOT_ROLE_SEMANTICS_FREEZE_21_6B.md](./ARGOS_MASCOT_ROLE_SEMANTICS_FREEZE_21_6B.md)
 
 ```
-ROLE_SEMANTICS_FROZEN = NO
-ROLE_SEMANTICS_STATUS = PROPOSED_FROM_EXISTING_PRODUCT_EVIDENCE
+ROLE_SEMANTICS_FROZEN = YES
+FROZEN_ROLE_MODEL = R2_SOFT_SPECIALIZATION
+DIAGNOSTIC_MASCOT_OWNERSHIP = NOT_FROZEN
 ```
 
-Do not invent additional capabilities. Final product semantics require a **separate human decision**.
-
+Affinity ≠ exclusive capability. Role semantics do **not** control motion states or placement.
 ---
 
 ## 9. Accessibility freeze
