@@ -202,8 +202,16 @@ describe("21.6B.7D legacy dead-code cleanup", () => {
     assert.match(states, /CHICO_V1_STATES/);
   });
 
-  it("DiagnosticPromoBanner still present and untouched by cleanup set", () => {
+  it("DiagnosticPromoBanner is static — no walk assets or motion loops", () => {
     assert.ok(existsSync(bannerPath));
-    assert.match(readFileSync(bannerPath, "utf8"), /caminando/);
+    const banner = readFileSync(bannerPath, "utf8");
+    assert.doesNotMatch(banner, /caminando|corriendo/);
+    assert.doesNotMatch(banner, /setInterval/);
+    assert.doesNotMatch(banner, /framer-motion|from "framer-motion"/);
+    assert.doesNotMatch(banner, /WALK_FRAMES|dumboEntering|chicoEntering/);
+    assert.match(banner, /dumbo_sentado_atento\.png/);
+    assert.match(banner, /data-banner-static="true"/);
+    assert.match(banner, /min-h-\[44px\]/);
+    assert.doesNotMatch(banner, /useMascotPauseControl|showPauseFor/);
   });
 });
