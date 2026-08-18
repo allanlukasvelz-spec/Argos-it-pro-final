@@ -57,15 +57,17 @@ export function chatActiveSprites(
 }
 
 /**
- * Form events: neutral LOOK only; respect ONE_ACTIVE.
- * ROLE_SEMANTICS_FROZEN = NO.
+ * Form events: neutral LOOK only on the active assistant.
+ * ROLE_SEMANTICS_FROZEN = YES (R2 soft)
+ * Form visual behavior remains neutral; role affinity does not control motion.
+ * No active mascot → both REST (no dual LOOK, no persona auto-select).
  */
 export function formEventSprites(
   active: ActiveMascot
 ): Pick<MascotBrainState, "chico" | "dumbo"> {
   if (active === "chico") return { chico: "looking", dumbo: "idle" };
   if (active === "dumbo") return { chico: "idle", dumbo: "looking" };
-  return { chico: "looking", dumbo: "looking" };
+  return { chico: "idle", dumbo: "idle" };
 }
 
 /**

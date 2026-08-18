@@ -1,8 +1,10 @@
 # ARGOS-IT Design System — Documentation Index
 
-**Phase:** 21.6B — Visual Freeze + Mascot Motion Lab Authorization
+**Phase:** 21.6B — Visual Freeze + Mascot Motion Lab + assistant-only production dock
 
-**Status:** Level 1 ACTIVE — canonical brand tokens and Corporate foundation active; Quiet Authority desktop Home visual direction HUMAN-FROZEN for lab/spec purposes; mascot motion laboratory AUTHORIZED; production Home migration NOT AUTHORIZED; mascot production integration NOT AUTHORIZED.
+**Status:** Level 1 ACTIVE — canonical brand tokens and Corporate foundation active; Quiet Authority desktop Home visual direction HUMAN-FROZEN for lab/spec purposes; mascot motion laboratory AUTHORIZED; production Home migration NOT AUTHORIZED.
+
+**Mascot current status (after 21.6B.7A–8D):** ClientAssistants production dock migrated to frozen V1; placement remains ASSISTANT_ONLY; static legacy diagnostic banner migrated; R2 soft role semantics frozen. Home/Corporate mascot placement still prohibited. Control Center mascot placement unresolved. Diagnostic mascot ownership unresolved. WALK remains REJECTED.
 
 **Visual change in 21.5:** YES — `/contacto` header/footer only
 

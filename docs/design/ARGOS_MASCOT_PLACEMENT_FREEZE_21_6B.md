@@ -2,11 +2,31 @@
 
 **Status:** HUMAN-FROZEN PLACEMENT POLICY  
 **Phase:** 21.6B.5A  
-**Production implementation authorization:** NO  
+**Production implementation authorization (at time of this freeze):** NO
 
 This document records the human placement freeze after analysis **FASE 21.6B.5** (`PASS`).
 
-It does **not** authorize production implementation, assistant refactor, Home changes, asset edits, new animation, or WALK.
+At the moment of 21.6B.5A it did **not** authorize production implementation, assistant refactor, Home changes, asset edits, new animation, or WALK.
+
+### Current status / superseded by later phases
+
+Placement **direction** from this freeze remains authoritative. Implementation arrived later (7A–8D), without expanding placement beyond ASSISTANT_ONLY:
+
+```
+MASCOT_PRODUCTION_PLACEMENT = ASSISTANT_ONLY
+CLIENT_ASSISTANTS_V1_IMPLEMENTED = YES
+ONE_ACTIVE_POLICY_IMPLEMENTED = YES
+STATIC_LEGACY_BANNER_IMPLEMENTED = YES
+ROLE_MODEL = R2_SOFT_SPECIALIZATION
+ROLE_SEMANTICS_FROZEN = YES
+WALK = REJECTED
+HOME_HERO_MASCOT = NO
+CORPORATE_HEADER_MASCOT = NO
+CONTROL_CENTER_MASCOT = NOT_DECIDED
+DIAGNOSTIC_MASCOT_OWNERSHIP = NOT_FROZEN
+```
+
+Role contract (do not duplicate here): [ARGOS_MASCOT_ROLE_SEMANTICS_FREEZE_21_6B.md](./ARGOS_MASCOT_ROLE_SEMANTICS_FREEZE_21_6B.md)
 
 ---
 
@@ -42,7 +62,8 @@ The secondary context authorizes **approved static story/emblem** only.
 It does **not** authorize new **animated** mascot placement on Corporate pages.
 
 ```
-MASCOT_PRODUCTION_INTEGRATION = NOT_YET_AUTHORIZED
+MASCOT_PRODUCTION_INTEGRATION_AT_5A = NOT_YET_AUTHORIZED
+CLIENT_ASSISTANTS_V1_IMPLEMENTED = YES   # after 7A–8D; still ASSISTANT_ONLY
 ```
 
 ---
@@ -249,19 +270,29 @@ Existing frozen lab normalization remains **presentation-only** (CSS scale / tra
 
 ---
 
-## 12. Explicit non-authorization
+## 12. Explicit non-authorization (historical at 5A) vs later phases
 
-This freeze does **not** authorize:
+**At 21.6B.5A this freeze did not authorize:**
 
 - production assistant refactor  
 - Quiet Authority Home modification  
 - Corporate page animated mascot insertion  
 - WALK reintroduction  
 - Control Center mascot behavior  
-- freezing Chico/Dumbo role semantics  
-- push / PR / merge / deploy  
+- freezing Chico/Dumbo role semantics *(that freeze happened later, 8D)*
+- push / PR / merge / deploy
+
+**Later (authoritative, do not treat 5A as current global fact):**
+
+- 7A–7D implemented the ClientAssistants V1 dock under this placement direction
+- 8B implemented the static legacy diagnostic banner
+- 8D froze role semantics as **R2 soft** — see [ARGOS_MASCOT_ROLE_SEMANTICS_FREEZE_21_6B.md](./ARGOS_MASCOT_ROLE_SEMANTICS_FREEZE_21_6B.md)
 
 ```
+ROLE_SEMANTICS_FROZEN = YES
+ROLE_MODEL = R2_SOFT_SPECIALIZATION
 FINAL_GATE = MASCOT_PLACEMENT_FROZEN
-PRODUCTION_IMPLEMENTATION_AUTHORIZATION = NO
+HISTORICAL_PRODUCTION_IMPLEMENTATION_AUTHORIZATION_AT_5A = NO
 ```
+
+Still **not** authorized by this placement freeze: Home hero mascot, Corporate header mascot, Control Center mascot, WALK, diagnostic exclusive ownership.

@@ -35,9 +35,10 @@ describe("21.6B.7A mascot behavior safety", () => {
   it("formEventSprites only uses looking + idle (neutral V1)", () => {
     const start = states.indexOf("export function formEventSprites");
     assert.ok(start >= 0);
-    const block = states.slice(start, start + 500);
+    const block = states.slice(start, start + 700);
     assert.match(block, /looking/);
     assert.doesNotMatch(block, /walking|stand|"sit"|playing|guiding/);
+    assert.doesNotMatch(block, /chico: "looking", dumbo: "looking"/);
   });
 
   it("chatActiveSprites uses stand/sit ready states, not guiding/guarding/walk", () => {
@@ -213,5 +214,57 @@ describe("21.6B.7D legacy dead-code cleanup", () => {
     assert.match(banner, /data-banner-static="true"/);
     assert.match(banner, /min-h-\[44px\]/);
     assert.doesNotMatch(banner, /useMascotPauseControl|showPauseFor/);
+  });
+});
+
+describe("21.6B.9A form-event one-active (no dual LOOK)", () => {
+  const states = readFileSync(statesPath, "utf8");
+  const controller = readFileSync(controllerPath, "utf8");
+
+  function formEventSpritesBlock() {
+    const start = states.indexOf("export function formEventSprites");
+    assert.ok(start >= 0, "formEventSprites missing");
+    return states.slice(start, start + 900);
+  }
+
+  it("form event + no active mascot: both REST", () => {
+    const block = formEventSpritesBlock();
+    assert.match(block, /if \(active === "chico"\)/);
+    assert.match(block, /if \(active === "dumbo"\)/);
+    assert.match(block, /return \{ chico: "idle", dumbo: "idle" \}/);
+    assert.doesNotMatch(block, /chico: "looking", dumbo: "looking"/);
+  });
+
+  it("form event + Chico active: Chico LOOK / Dumbo REST", () => {
+    const block = formEventSpritesBlock();
+    assert.match(block, /active === "chico"\) return \{ chico: "looking", dumbo: "idle" \}/);
+  });
+
+  it("form event + Dumbo active: Chico REST / Dumbo LOOK", () => {
+    const block = formEventSpritesBlock();
+    assert.match(block, /active === "dumbo"\) return \{ chico: "idle", dumbo: "looking" \}/);
+  });
+
+  it("no automatic persona selection on form events", () => {
+    const block = formEventSpritesBlock();
+    assert.doesNotMatch(block, /openChat|setPersona|chatPersona\s*=/);
+    assert.match(controller, /formEventSprites\(activeMascot\)/);
+    assert.match(controller, /activeMascot: ActiveMascot = chatOpen \? chatPersona : "none"/);
+    assert.doesNotMatch(controller, /formStart[\s\S]{0,400}openChat/);
+  });
+
+  it("WALK remains unreachable on form + controller path", () => {
+    const block = formEventSpritesBlock();
+    assert.doesNotMatch(block, /walking|walk_0|"walk"/);
+    assert.doesNotMatch(controller, /"walking"|walk_0|"walk"/);
+  });
+
+  it("one-active remains enforced", () => {
+    assert.match(controller, /chatOpen \? chatPersona : "none"/);
+    assert.match(states, /ROLE_SEMANTICS_FROZEN = YES \(R2 soft\)/);
+    assert.doesNotMatch(states, /ROLE_SEMANTICS_FROZEN = NO/);
+    const block = formEventSpritesBlock();
+    assert.match(block, /return \{ chico: "idle", dumbo: "idle" \}/);
+    assert.doesNotMatch(block, /chico: "looking", dumbo: "looking"/);
   });
 });

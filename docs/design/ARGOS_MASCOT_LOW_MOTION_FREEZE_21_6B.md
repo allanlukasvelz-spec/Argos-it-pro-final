@@ -2,12 +2,35 @@
 
 **Status:** HUMAN-FROZEN LAB SPEC  
 **Phase:** 21.6B.4C  
-**Production authorization:** NO  
+**Production authorization (at time of this freeze):** NO
 **Raster generation authorization:** NO  
 
 This document freezes the approved **low-motion laboratory** for Chico and Dumbo after human visual gate **21.6B.4B** (`FINAL_GATE = GO_FREEZE_LOW_MOTION_LAB`).
 
-It does **not** authorize production integration, Corporate IA entry, navigation links, sitemap inclusion, or any change to live site mascot behavior.
+At the moment of 21.6B.4C it did **not** authorize production integration, Corporate IA entry, navigation links, sitemap inclusion, or any change to live site mascot behavior.
+
+### Current status / superseded by later phases
+
+This lab freeze is **not rewritten**. Later phases implemented production separately:
+
+| Item | Current (after 21.6B.7A–8D) |
+|------|------------------------------|
+| MASCOT_PRODUCTION_PLACEMENT | ASSISTANT_ONLY |
+| CLIENT_ASSISTANTS_V1_IMPLEMENTED | YES |
+| ONE_ACTIVE_POLICY_IMPLEMENTED | YES |
+| STATIC_LEGACY_BANNER_IMPLEMENTED | YES |
+| ROLE_MODEL | R2_SOFT_SPECIALIZATION |
+| ROLE_SEMANTICS_FROZEN | YES — see [ARGOS_MASCOT_ROLE_SEMANTICS_FREEZE_21_6B.md](./ARGOS_MASCOT_ROLE_SEMANTICS_FREEZE_21_6B.md) |
+| WALK | REJECTED |
+| HOME_HERO_MASCOT | NO |
+| CORPORATE_HEADER_MASCOT | NO |
+| CONTROL_CENTER_MASCOT | NOT_DECIDED |
+| DIAGNOSTIC_MASCOT_OWNERSHIP | NOT_FROZEN |
+
+```
+HISTORICAL_AUTHORIZATION_AT_4C = NO
+CURRENT_IMPLEMENTATION_STATUS_AFTER_7A_8D = ASSISTANT_ONLY_V1
+```
 
 ---
 
@@ -167,10 +190,12 @@ When `prefers-reduced-motion: reduce`:
 - Proxy (`frontend/proxy.ts`) mirrors the same gate and sets `X-Robots-Tag: noindex, nofollow`.
 - Page uses `dynamic = "force-dynamic"` so the env guard is not baked as a static 404 in all environments.
 
-### Production pages unchanged by this freeze
+### Production pages unchanged **by this freeze** (historical, 21.6B.4C)
 
-Home, `/contacto`, `/servicios`, `/metodo`, `/auth/*`, `/dashboard` — **no visual change** required or authorized by 21.6B.4C.  
-**Mascot production behavior:** unchanged.
+Home, `/contacto`, `/servicios`, `/metodo`, `/auth/*`, `/dashboard` — **no visual change** was required or authorized by 21.6B.4C itself.
+**Mascot production behavior at 4C:** unchanged.
+
+Later dock/banner work (7A–8B) is **not** authorized by this lab freeze; it is recorded in the placement freeze current-status note.
 
 ---
 
