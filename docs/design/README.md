@@ -1,8 +1,10 @@
 # ARGOS-IT Design System — Documentation Index
 
-**Phase:** 21.6B — Visual Freeze + Mascot Motion Lab Authorization
+**Phase:** 21.6B — Visual Freeze + Mascot Motion Lab + assistant-only production dock
 
-**Status:** Level 1 ACTIVE — canonical brand tokens and Corporate foundation active; Quiet Authority desktop Home visual direction HUMAN-FROZEN for lab/spec purposes; mascot motion laboratory AUTHORIZED; production Home migration NOT AUTHORIZED; mascot production integration NOT AUTHORIZED.
+**Status:** Level 1 ACTIVE — canonical brand tokens and Corporate foundation active; Quiet Authority desktop Home visual direction HUMAN-FROZEN for lab/spec purposes; mascot motion laboratory AUTHORIZED; production Home migration NOT AUTHORIZED.
+
+**Mascot current status (after 21.6B.7A–8D):** ClientAssistants production dock migrated to frozen V1; placement remains ASSISTANT_ONLY; static legacy diagnostic banner migrated; R2 soft role semantics frozen. Home/Corporate mascot placement still prohibited. Control Center mascot placement unresolved. Diagnostic mascot ownership unresolved. WALK remains REJECTED.
 
 **Visual change in 21.5:** YES — `/contacto` header/footer only
 
@@ -18,6 +20,8 @@
 | [ARGOS_VISUAL_FREEZE_21_6B.md](./ARGOS_VISUAL_FREEZE_21_6B.md) | Human visual freeze: Quiet Authority + desktop Home (21.6B) |
 | [ARGOS_MASCOT_MOTION_AUTHORIZATION.md](./ARGOS_MASCOT_MOTION_AUTHORIZATION.md) | Limited Chico/Dumbo motion lab authorization (no production) |
 | [ARGOS_MASCOT_LOW_MOTION_FREEZE_21_6B.md](./ARGOS_MASCOT_LOW_MOTION_FREEZE_21_6B.md) | Human-frozen Chico/Dumbo low-motion lab specification |
+| [ARGOS_MASCOT_PLACEMENT_FREEZE_21_6B.md](./ARGOS_MASCOT_PLACEMENT_FREEZE_21_6B.md) | Human-frozen mascot production placement policy (assistant-only) |
+| [ARGOS_MASCOT_ROLE_SEMANTICS_FREEZE_21_6B.md](./ARGOS_MASCOT_ROLE_SEMANTICS_FREEZE_21_6B.md) | Human-frozen soft role semantics (R2 affinities; no exclusive ownership) |
 | [tokens.md](./tokens.md) | Token architecture (brand, semantic, legacy, fonts) |
 | [legacy-map.md](./legacy-map.md) | Production hex inventory and migration mapping |
 | [source-hierarchy.md](./source-hierarchy.md) | Source-of-truth hierarchy |

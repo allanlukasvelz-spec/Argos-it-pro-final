@@ -1,19 +1,19 @@
 "use client";
 
+/**
+ * FASE 21.6B.8B — static legacy diagnostic banner (B1).
+ * No autonomous mascot motion / walk / rotation.
+ */
+
 import Image from "next/image";
-import { motion, useReducedMotion } from "framer-motion";
 import {
   useCallback,
   useEffect,
   useId,
-  useMemo,
-  useRef,
-  useState,
-  type KeyboardEvent as ReactKeyboardEvent
+  useState
 } from "react";
 import { createPortal } from "react-dom";
 
-import { useMascotPauseControlOptional } from "@/components/mascots/MascotPauseControlContext";
 import { DiagnosticSurveyModal } from "./DiagnosticSurveyModal";
 import { chicoTips, type ChicoTip } from "./chicoTips";
 
@@ -21,505 +21,107 @@ type Props = {
   /** Banner dentro de la fila única del header (entre logo y menú). */
   embeddedInHeader?: boolean;
 };
-/** Copias exactas del diseño de referencia (visible). */
+
 const PROMO_TEXT_MAIN = "Descubre en pocos minutos el estado real de tu web";
 const PROMO_TEXT_HIGHLIGHT = "Seguridad · Sistemas · Procesos";
 const PROMO_TEXT_CTA = "Iniciar diagnóstico ARGOS";
-
-/** Texto completo para nombre accesible de la región Dumbo. */
 const PROMO_A11Y_DESCRIPTION =
   "Descubre en pocos minutos el estado real de tu web, seguridad, sistemas y procesos digitales.";
-
-const CHICO_SECURITY_A11Y_ROLE = "Consejos prácticos ARGOS para mejorar tu presencia digital";
 const PROMO_HIGHLIGHT_PARTS = PROMO_TEXT_HIGHLIGHT.split(" · ");
 
-type CyclePhase =
-  | "idle"
-  | "dumboEntering"
-  | "dumboParked"
-  | "dumboExiting"
-  | "chicoEntering"
-  | "chicoSpeaking"
-  | "chicoExiting"
-  | "waitingRestart";
+/** Static V1-compatible sit asset — no walk. */
+const STATIC_BANNER_ASSET = "/mascots/dumbo/dumbo_sentado_atento.png";
 
-const WALK_FRAMES_DUMBO = [
-  "/mascots/dumbo/dumbo_caminando.png",
-  "/mascots/dumbo/dumbo_caminando_2.png",
-  "/mascots/dumbo/dumbo_caminando_3.png",
-] as const;
-
-const DUMBO_SIT_SPRITE = "/mascots/dumbo/dumbo_sentado_atento.png";
-
-/** Entrada desde la derecha (Dumbo). Parkado más centrado respecto al slot y menos pegado al menú. */
-const X_DUMBO_ENTER_FROM = "28vw";
-const X_DUMBO_PARKED = "0px";
-const X_DUMBO_EXIT = "-38vw";
-
-const DUMBO_ENTER_S = 3.5;
-const DUMBO_EXIT_S = 4.2;
-
-const CHICO_WALK_FRAMES = [
-  "/mascots/chico/chico_caminando.png",
-  "/mascots/chico/chico_corriendo.png",
-] as const;
-
-const CHICO_ATTENTIVE = "/mascots/chico/chico_mirandoatento.png";
-const CHICO_ALERT_WAIT = "/mascots/chico/chico_esperando2.png";
-
-/** Chico en bloque centrado: offsets locales (px) respecto al cluster globo+mascota. */
-const CHICO_CLUSTER_ENTER_X = -56;
-const CHICO_CLUSTER_PARKED_X = 0;
-const CHICO_CLUSTER_EXIT_X = -88;
-
-const CHICO_ENTER_S = 3;
-const CHICO_EXIT_S = 3.2;
-
-const RESTART_MS = 5000;
-/** Tras cerrar el modal de consejo: tiempo mínimo antes de que Chico salga del banner. */
-const CHICO_SPEAK_AFTER_DETAIL_MS = 14000;
-
-/** Margen izquierdo del slot Dumbo en layout de fila separada (legado). */
-const SAFE_GAP_LEFT_PX = 72;
-const SAFE_GAP_LEFT_HEADER_PX = 4;
-/** Caja fija del sprite Dumbo (layout completo / legado). */
-const DUMBO_SPRITE_BOX = "h-[4.25rem] w-[4.25rem] md:h-[4.75rem] md:w-[4.75rem] lg:h-[5.25rem] lg:w-[5.25rem]";
-/** Mascotas en header: +2 puntos respecto al tamaño compacto anterior. */
 const DUMBO_SPRITE_BOX_HEADER =
   "h-[60px] w-[60px] shrink-0 lg:h-[66px] lg:w-[66px] xl:h-[70px] xl:w-[70px]";
-const CHICO_SPRITE_BOX = "h-[3.85rem] w-[3.85rem] md:h-[4.35rem] md:w-[4.35rem] lg:h-[4.75rem] lg:w-[4.75rem]";
-const CHICO_SPRITE_BOX_HEADER =
-  "h-[58px] w-[58px] shrink-0 lg:h-[64px] lg:w-[64px] xl:h-[68px] xl:w-[68px]";
 
-/** Globo Chico en header por breakpoint (min-w-0 en tablet para caber en slot sin overflow). */
-const CHICO_BUBBLE_EMBEDDED =
-  "w-full max-w-full min-w-0 shrink-0 md:w-[min(100%,460px)] md:max-w-[min(100%,460px)] md:min-w-0 lg:w-[min(100%,560px)] lg:max-w-[560px] xl:w-[min(100%,620px)] xl:max-w-[620px]";
-/** Tarjeta Dumbo en header por breakpoint. */
 const DUMBO_CARD_EMBEDDED =
   "w-full max-w-full min-w-0 md:w-[min(100%,480px)] md:max-w-[min(100%,480px)] md:min-w-0 lg:w-[min(100%,580px)] lg:max-w-[580px] xl:w-[min(100%,640px)] xl:max-w-[640px]";
 
-function formatChicoAdviceForA11y(tip: ChicoTip) {
-  return `Consejo de Chico: ${tip.titulo}. ${tip.mensajeCorto}`;
-}
-
-function revealMascotPauseControls(
-  pauseControl: ReturnType<typeof useMascotPauseControlOptional>,
-  mascot: "chico" | "dumbo"
-) {
-  pauseControl?.showPauseFor(mascot);
-}
-
-function onMascotPauseRevealKey(
-  event: ReactKeyboardEvent,
-  pauseControl: ReturnType<typeof useMascotPauseControlOptional>,
-  mascot: "chico" | "dumbo"
-) {
-  if (event.key !== "Enter" && event.key !== " ") return;
-  event.preventDefault();
-  revealMascotPauseControls(pauseControl, mascot);
+function formatTipA11y(tip: ChicoTip) {
+  return `Consejo práctico: ${tip.titulo}. ${tip.mensajeCorto}`;
 }
 
 export default function DiagnosticPromoBanner({ embeddedInHeader = false }: Props) {
-  const pauseControl = useMascotPauseControlOptional();
-  const prefersReducedMotion = useReducedMotion() === true;
-  const dumboGapLeftPx = embeddedInHeader ? SAFE_GAP_LEFT_HEADER_PX : SAFE_GAP_LEFT_PX;
-  const dumboEnterFrom = embeddedInHeader ? "72%" : X_DUMBO_ENTER_FROM;
-  const dumboExitTo = embeddedInHeader ? "-72%" : X_DUMBO_EXIT;
-  const dumboSlotPadEnd = embeddedInHeader ? "pr-1 md:pr-2" : "pr-6 md:pr-10 lg:pr-12";
-  const chicoSpriteBox = embeddedInHeader ? CHICO_SPRITE_BOX_HEADER : CHICO_SPRITE_BOX;
-  const dumboSpriteBox = embeddedInHeader ? DUMBO_SPRITE_BOX_HEADER : DUMBO_SPRITE_BOX;
-  /** Cluster Chico: en header el globo usa 31rem (como Dumbo); el cluster debe abarcar mascota + globo. */
-  const chicoClusterMaxW = embeddedInHeader ? "w-full max-w-full" : "max-w-[min(100%,44rem)]";
-  const chicoClusterGap = embeddedInHeader ? "gap-4 lg:gap-[18px] xl:gap-5" : "gap-1.5 md:gap-2";
-  const chicoBubbleMaxW = embeddedInHeader ? CHICO_BUBBLE_EMBEDDED : "max-w-[min(100%,30rem)]";
-  const phaseRef = useRef<CyclePhase>("idle");
-  const pendingNextRef = useRef<"dumbo" | "chico">("dumbo");
-  const tipOrderRef = useRef(0);
-  /** Incrementa por cada llegada a dumboParked / chicoSpeaking para timeouts únicos con duración aleatoria. */
-  const dumboParkedEpochRef = useRef(0);
-  const chicoSpeakEpochRef = useRef(0);
-  const chicoSpeakDelayMsRef = useRef<number | null>(null);
-
-  const [hydrated, setHydrated] = useState(false);
   const [diagnosticOpen, setDiagnosticOpen] = useState(false);
-  const [phase, setPhase] = useState<CyclePhase>("idle");
-  const [motionKey, setMotionKey] = useState(0);
+  const [tipIndex, setTipIndex] = useState(0);
+  const tip = chicoTips[tipIndex % chicoTips.length] ?? chicoTips[0];
 
-  /** Texto consejo vigente cuando Chico está en pantalla / accesibilidad del globo. */
-  const [activeChicoTip, setActiveChicoTip] = useState<ChicoTip | null>(null);
-  const [walkFrameDumbo, setWalkFrameDumbo] = useState(0);
-  const [walkFrameChico, setWalkFrameChico] = useState(0);
-  const [tipDetailOpen, setTipDetailOpen] = useState(false);
-
-  const entranceDelayMs = useMemo(() => 1200 + Math.random() * 800, []);
-
-  const handleTipDetailOpen = useCallback(() => setTipDetailOpen(true), []);
-  const handleTipDetailClose = useCallback(() => {
-    chicoSpeakDelayMsRef.current = Math.round(CHICO_SPEAK_AFTER_DETAIL_MS + Math.random() * 4000);
-    setTipDetailOpen(false);
+  const nextTip = useCallback(() => {
+    setTipIndex((i) => (i + 1) % chicoTips.length);
   }, []);
-
-  const setPhaseTracked = useCallback((p: CyclePhase) => {
-    phaseRef.current = p;
-    setPhase(p);
-  }, []);
-
-  const bumpMotionKey = useCallback(() => {
-    setMotionKey((k) => k + 1);
-  }, []);
-
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
-
-  /** idle → siguiente mascota (según pendiente antes de espera). */
-  useEffect(() => {
-    if (!hydrated || prefersReducedMotion) return;
-    if (phase !== "idle") return;
-    const id = window.setTimeout(() => {
-      const next = pendingNextRef.current;
-      bumpMotionKey();
-      if (next === "dumbo") {
-        setPhaseTracked("dumboEntering");
-      } else {
-        const ord = tipOrderRef.current;
-        tipOrderRef.current += 1;
-        const tip = chicoTips[ord % chicoTips.length];
-        setActiveChicoTip(tip);
-        setPhaseTracked("chicoEntering");
-      }
-    }, entranceDelayMs);
-    return () => window.clearTimeout(id);
-  }, [bumpMotionKey, entranceDelayMs, hydrated, prefersReducedMotion, phase, setPhaseTracked]);
-
-  const dumboWalkActive =
-    !prefersReducedMotion && (phase === "dumboEntering" || phase === "dumboExiting");
-  useEffect(() => {
-    if (!dumboWalkActive) return;
-    const id = window.setInterval(() => setWalkFrameDumbo((f) => (f + 1) % WALK_FRAMES_DUMBO.length), 160);
-    return () => window.clearInterval(id);
-  }, [dumboWalkActive]);
-
-  const chicoWalkActive =
-    !prefersReducedMotion && phase === "chicoEntering";
-  useEffect(() => {
-    if (!chicoWalkActive) return;
-    const id = window.setInterval(() => setWalkFrameChico((f) => (f + 1) % CHICO_WALK_FRAMES.length), 180);
-    return () => window.clearInterval(id);
-  }, [chicoWalkActive]);
-
-  /** Dumbo entrada. */
-  useEffect(() => {
-    if (phase !== "dumboEntering") return;
-    const ms = Math.round(DUMBO_ENTER_S * 1000);
-    const id = window.setTimeout(() => {
-      if (phaseRef.current !== "dumboEntering") return;
-      setPhaseTracked("dumboParked");
-    }, ms);
-    return () => window.clearTimeout(id);
-  }, [motionKey, phase, setPhaseTracked]);
-
-  /** Dumbo detenido: 20–30 s. */
-  useEffect(() => {
-    if (phase !== "dumboParked") return;
-    dumboParkedEpochRef.current += 1;
-    const epoch = dumboParkedEpochRef.current;
-    const parkedMs = Math.round(20000 + Math.random() * 10000);
-    const id = window.setTimeout(() => {
-      if (phaseRef.current !== "dumboParked" || dumboParkedEpochRef.current !== epoch) return;
-      setPhaseTracked("dumboExiting");
-    }, parkedMs);
-    return () => window.clearTimeout(id);
-  }, [phase, setPhaseTracked]);
-
-  /** Dumbo salida. */
-  useEffect(() => {
-    if (phase !== "dumboExiting") return;
-    const ms = Math.round(DUMBO_EXIT_S * 1000);
-    const id = window.setTimeout(() => {
-      if (phaseRef.current !== "dumboExiting") return;
-      pendingNextRef.current = "chico";
-      setPhaseTracked("waitingRestart");
-    }, ms);
-    return () => window.clearTimeout(id);
-  }, [motionKey, phase, setPhaseTracked]);
-
-  /** Chico entrada → hablando. */
-  useEffect(() => {
-    if (phase !== "chicoEntering") return;
-    const ms = Math.round(CHICO_ENTER_S * 1000);
-    const id = window.setTimeout(() => {
-      if (phaseRef.current !== "chicoEntering") return;
-      setPhaseTracked("chicoSpeaking");
-    }, ms);
-    return () => window.clearTimeout(id);
-  }, [motionKey, phase, setPhaseTracked]);
-
-  /** Chico globo: 12–18 s (pausado mientras el modal de explicación está abierto). */
-  useEffect(() => {
-    if (phase !== "chicoSpeaking") {
-      chicoSpeakDelayMsRef.current = null;
-      return;
-    }
-    if (tipDetailOpen) return;
-    if (chicoSpeakDelayMsRef.current === null) {
-      chicoSpeakDelayMsRef.current = Math.round(12000 + Math.random() * 6000);
-    }
-    chicoSpeakEpochRef.current += 1;
-    const epoch = chicoSpeakEpochRef.current;
-    const speakMs = chicoSpeakDelayMsRef.current;
-    const id = window.setTimeout(() => {
-      if (phaseRef.current !== "chicoSpeaking" || chicoSpeakEpochRef.current !== epoch) return;
-      setPhaseTracked("chicoExiting");
-    }, speakMs);
-    return () => window.clearTimeout(id);
-  }, [phase, setPhaseTracked, tipDetailOpen]);
-
-  /** Chico salida. */
-  useEffect(() => {
-    if (phase !== "chicoExiting") return;
-    const ms = Math.round(CHICO_EXIT_S * 1000);
-    const id = window.setTimeout(() => {
-      if (phaseRef.current !== "chicoExiting") return;
-      pendingNextRef.current = "dumbo";
-      setPhaseTracked("waitingRestart");
-    }, ms);
-    return () => window.clearTimeout(id);
-  }, [motionKey, phase, setPhaseTracked]);
-
-  /** Pausa 5 s entre mascotas; el siguiente ciclo viene de pendingNextRef (ya establecido al terminar salida). */
-  useEffect(() => {
-    if (phase !== "waitingRestart") return;
-    const id = window.setTimeout(() => {
-      if (phaseRef.current !== "waitingRestart") return;
-      bumpMotionKey();
-      const next = pendingNextRef.current;
-      if (next === "dumbo") {
-        setPhaseTracked("dumboEntering");
-      } else {
-        const ord = tipOrderRef.current;
-        tipOrderRef.current += 1;
-        const tip = chicoTips[ord % chicoTips.length];
-        setActiveChicoTip(tip);
-        setPhaseTracked("chicoEntering");
-      }
-    }, RESTART_MS);
-    return () => window.clearTimeout(id);
-  }, [bumpMotionKey, phase, setPhaseTracked]);
-
-  if (!hydrated) return null;
-
-  if (prefersReducedMotion) {
-    return (
-      <>
-        <DiagnosticSurveyModal open={diagnosticOpen} onClose={() => setDiagnosticOpen(false)} />
-        <ReducedMotionAlternate
-          entranceDelayMs={entranceDelayMs}
-          embeddedInHeader={embeddedInHeader}
-          onStartDiagnostic={() => setDiagnosticOpen(true)}
-        />
-      </>
-    );
-  }
-
-  const showChrome = phase !== "idle" && phase !== "waitingRestart";
-  const isDumboLive =
-    phase === "dumboEntering" || phase === "dumboParked" || phase === "dumboExiting";
-  const isChicoLive =
-    phase === "chicoEntering" || phase === "chicoSpeaking" || phase === "chicoExiting";
-
-  const regionAria =
-    isChicoLive && activeChicoTip
-      ? `${CHICO_SECURITY_A11Y_ROLE}. ${formatChicoAdviceForA11y(activeChicoTip)}`
-      : PROMO_A11Y_DESCRIPTION;
-
-  const sittingDumbo = phase === "dumboParked";
-  const chicoAttentionSprite =
-    (tipOrderRef.current & 1) === 1 ? CHICO_ALERT_WAIT : CHICO_ATTENTIVE;
-
-  const chicoSprite =
-    phase === "chicoEntering"
-      ? (CHICO_WALK_FRAMES[walkFrameChico] ?? CHICO_WALK_FRAMES[0])
-      : chicoAttentionSprite;
 
   return (
     <>
       <DiagnosticSurveyModal open={diagnosticOpen} onClose={() => setDiagnosticOpen(false)} />
       <div
-      className={`pointer-events-none absolute inset-0 ${embeddedInHeader ? "overflow-hidden" : "overflow-visible"}`}
-      role="region"
-      aria-label={regionAria}
-      aria-hidden={!showChrome}
-      aria-live={isChicoLive && phase === "chicoSpeaking" ? ("polite" as const) : undefined}
-    >
-      {showChrome && isDumboLive && (
-        <motion.div
-          key={`dumbo-slot-${motionKey}`}
-          className={`absolute inset-x-0 bottom-0 flex w-full max-w-full items-center gap-0 will-change-transform ${dumboSlotPadEnd} ${
-            embeddedInHeader ? "top-0 justify-end" : "items-end"
-          }`}
-          style={{ paddingLeft: dumboGapLeftPx }}
-          initial={
-            phase === "dumboEntering"
-              ? { x: dumboEnterFrom, opacity: 1 }
-              : { x: X_DUMBO_PARKED, opacity: 1 }
-          }
-          animate={
-            phase === "dumboEntering"
-              ? { x: X_DUMBO_PARKED, opacity: 1 }
-              : phase === "dumboParked"
-                ? { x: X_DUMBO_PARKED, opacity: 1 }
-                : phase === "dumboExiting"
-                  ? { x: dumboExitTo, opacity: 0 }
-                  : { x: X_DUMBO_PARKED, opacity: 1 }
-          }
-          transition={
-            phase === "dumboEntering"
-              ? { duration: DUMBO_ENTER_S, ease: [0.25, 0.46, 0.45, 0.94] }
-              : phase === "dumboExiting"
-                ? { duration: DUMBO_EXIT_S, ease: "easeInOut" }
-                : { duration: 0 }
-          }
-        >
-          <DumboBannerInner
-            embeddedInHeader={embeddedInHeader}
-            walkFrame={walkFrameDumbo}
-            sitting={sittingDumbo}
-            dumboSpriteBox={dumboSpriteBox}
-            onStartDiagnostic={() => setDiagnosticOpen(true)}
-          />
-        </motion.div>
-      )}
-
-      {showChrome && isChicoLive && (
+        className={`pointer-events-none absolute inset-0 overflow-hidden ${
+          embeddedInHeader ? "" : "overflow-visible"
+        }`}
+        role="region"
+        aria-label={PROMO_A11Y_DESCRIPTION}
+        data-banner-static="true"
+        data-banner-mascot="dumbo"
+      >
         <div
-          className={`pointer-events-none absolute inset-x-0 z-[2] flex justify-center px-2 md:px-3 ${
-            embeddedInHeader ? "inset-y-0 items-center py-0" : "bottom-0 pb-[0.45rem] md:px-4 md:pb-2"
+          className={`pointer-events-none absolute inset-0 flex w-full max-w-full items-center ${
+            embeddedInHeader ? "justify-end pr-1 md:pr-2" : "justify-center px-2"
           }`}
         >
-          <div
-            className={`flex w-full ${chicoClusterMaxW} justify-center ${chicoClusterGap} ${
-              embeddedInHeader ? "h-full items-center" : "items-end"
-            }`}
-          >
-            <motion.div
-            key={`chico-mascot-${motionKey}`}
-            className={`pointer-events-auto flex shrink-0 ${embeddedInHeader ? "items-center" : "items-end"}`}
-            initial={
-              phase === "chicoEntering"
-                ? { x: CHICO_CLUSTER_ENTER_X, opacity: 1 }
-                : { x: CHICO_CLUSTER_PARKED_X, opacity: 1 }
-            }
-            animate={
-              phase === "chicoEntering"
-                ? { x: CHICO_CLUSTER_PARKED_X, opacity: 1 }
-                : phase === "chicoSpeaking"
-                  ? { x: CHICO_CLUSTER_PARKED_X, opacity: 1 }
-                  : phase === "chicoExiting"
-                    ? { x: CHICO_CLUSTER_EXIT_X, opacity: 0 }
-                    : { x: CHICO_CLUSTER_PARKED_X, opacity: 1 }
-            }
-            transition={
-              phase === "chicoEntering"
-                ? { duration: CHICO_ENTER_S, ease: [0.33, 0.72, 0.45, 0.94] }
-                : phase === "chicoExiting"
-                  ? { duration: CHICO_EXIT_S, ease: "easeInOut" }
-                  : { duration: 0 }
-            }
-          >
-            <div
-              role="button"
-              tabIndex={0}
-              aria-label="Mostrar controles de Chico"
-              className={`relative shrink-0 cursor-pointer ${chicoSpriteBox} brightness-[1.04] saturate-[1.08] contrast-[1.02] drop-shadow-[0_12px_28px_-6px_rgba(15,23,42,0.5)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400`}
-              onClick={() => revealMascotPauseControls(pauseControl, "chico")}
-              onKeyDown={(event) => onMascotPauseRevealKey(event, pauseControl, "chico")}
-            >
-              <Image
-                src={chicoSprite}
-                alt=""
-                width={120}
-                height={120}
-                sizes="(max-width: 1024px) 72px, 88px"
-                className="pointer-events-none h-full w-full object-contain object-bottom"
-                priority={false}
-              />
-            </div>
-          </motion.div>
-
-          <motion.div
-            key={`chico-bubble-${motionKey}-${activeChicoTip?.id ?? "none"}`}
-            className={`pointer-events-auto min-w-0 ${embeddedInHeader ? "shrink-0" : "flex-1"} ${chicoBubbleMaxW}`}
-            initial={{ opacity: 0 }}
-            animate={
-              phase === "chicoEntering"
-                ? { opacity: 0.2 }
-                : phase === "chicoSpeaking" || phase === "chicoExiting"
-                  ? { opacity: 1 }
-                  : { opacity: 0 }
-            }
-            transition={{ duration: phase === "chicoEntering" ? CHICO_ENTER_S * 0.55 : 0.35, ease: "easeOut" }}
-          >
-            <ChicoSecurityBubble
-              tip={activeChicoTip}
-              embeddedInHeader={embeddedInHeader}
-              onDetailOpen={handleTipDetailOpen}
-              onDetailClose={handleTipDetailClose}
-            />
-          </motion.div>
-          </div>
+          <StaticBannerInner
+            embeddedInHeader={embeddedInHeader}
+            tip={tip}
+            onStartDiagnostic={() => setDiagnosticOpen(true)}
+            onNextTip={nextTip}
+          />
         </div>
-      )}
       </div>
     </>
   );
 }
 
-function DumboBannerInner({
-  embeddedInHeader = false,
-  walkFrame,
-  sitting,
-  dumboSpriteBox,
+function StaticBannerInner({
+  embeddedInHeader,
+  tip,
   onStartDiagnostic,
+  onNextTip
 }: {
-  embeddedInHeader?: boolean;
-  walkFrame: number;
-  sitting: boolean;
-  dumboSpriteBox: string;
+  embeddedInHeader: boolean;
+  tip: ChicoTip;
   onStartDiagnostic: () => void;
+  onNextTip: () => void;
 }) {
-  const pauseControl = useMascotPauseControlOptional();
-  const ropeGradientId = useId().replace(/:/g, "");
-  const sprite = sitting ? DUMBO_SIT_SPRITE : (WALK_FRAMES_DUMBO[walkFrame] ?? WALK_FRAMES_DUMBO[0]);
-
   return (
-    <motion.div
+    <div
       className={`pointer-events-none flex w-full min-w-0 max-w-full flex-row ${
         embeddedInHeader
           ? "h-full items-center justify-end gap-2 lg:gap-3"
-          : "items-end justify-center gap-1 md:gap-1.5"
+          : "items-end justify-center gap-2"
       }`}
     >
       <div
         className={`order-1 relative min-w-0 shrink-0 ${
-          embeddedInHeader ? `${DUMBO_CARD_EMBEDDED} self-center` : "max-w-[min(100%,520px)] flex-1 self-end"
+          embeddedInHeader ? `${DUMBO_CARD_EMBEDDED} self-center` : "max-w-[min(100%,520px)] flex-1"
         }`}
       >
-        <motion.div
+        <div
           data-argos-header-card={embeddedInHeader ? "true" : undefined}
           className={
             embeddedInHeader
               ? "pointer-events-auto relative max-h-[calc(var(--argos-topbar-nav-h)-12px)] overflow-hidden rounded-[14px] border-2 border-[#39F4FF]/90 bg-gradient-to-br from-[#4c1d95] via-[#1e3a8a] to-[#0f766e] py-1.5 pl-3 pr-3 shadow-[0_6px_16px_-6px_rgba(15,23,42,0.4)] ring-1 ring-black/20 md:flex md:flex-row md:items-center md:gap-3 lg:gap-3.5 lg:pl-3.5 lg:pr-3.5"
-              : "pointer-events-auto relative overflow-visible rounded-2xl border-[2.5px] border-[#39F4FF]/90 bg-gradient-to-br from-[#4c1d95] via-[#1e3a8a] to-[#0f766e] px-4 py-3 pb-3 shadow-[0_16px_40px_-10px_rgba(15,23,42,0.45),0_0_36px_-8px_rgba(34,211,238,0.35),inset_0_1px_0_0_rgba(255,255,255,0.22)] ring-2 ring-black/25 md:flex md:flex-row md:items-center md:gap-6 md:px-5 md:py-3.5 md:pb-3.5 lg:gap-8 lg:px-6 lg:py-4"
+              : "pointer-events-auto relative overflow-visible rounded-2xl border-[2.5px] border-[#39F4FF]/90 bg-gradient-to-br from-[#4c1d95] via-[#1e3a8a] to-[#0f766e] px-4 py-3 shadow-[0_16px_40px_-10px_rgba(15,23,42,0.45)] ring-2 ring-black/25 md:flex md:flex-row md:items-center md:gap-6 md:px-5"
           }
         >
-          <div aria-hidden className="pointer-events-none absolute inset-[2px] rounded-[10px] bg-gradient-to-b from-white/18 via-transparent to-black/22" />
-          <div className={`relative z-[1] min-w-0 flex-1 ${embeddedInHeader ? "" : "md:min-w-[12rem]"}`}>
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-[2px] rounded-[10px] bg-gradient-to-b from-white/18 via-transparent to-black/22"
+          />
+          <div className="relative z-[1] min-w-0 flex-1">
             <p
               className={
                 embeddedInHeader
                   ? "line-clamp-1 text-sm font-bold leading-tight tracking-tight text-white drop-shadow lg:text-[15px]"
-                  : "min-h-[2.5rem] text-base font-bold leading-tight tracking-tight text-white drop-shadow md:min-h-[2.75rem] md:text-lg lg:text-xl"
+                  : "text-base font-bold leading-tight tracking-tight text-white drop-shadow md:text-lg"
               }
             >
               {PROMO_TEXT_MAIN}
@@ -528,7 +130,7 @@ function DumboBannerInner({
               className={
                 embeddedInHeader
                   ? "mt-0.5 line-clamp-1 text-xs font-black leading-tight text-balance lg:text-[13px]"
-                  : "mt-1.5 min-h-[2.5rem] text-sm font-black leading-tight text-balance md:min-h-[2.25rem] md:text-[0.9375rem] lg:text-base"
+                  : "mt-1.5 text-sm font-black leading-tight text-balance"
               }
             >
               <span className="text-[#fca5a5]">{PROMO_HIGHLIGHT_PARTS[0]}</span>
@@ -537,73 +139,36 @@ function DumboBannerInner({
               <span className="font-bold tracking-wide text-white/55">{" · "}</span>
               <span className="text-[#7dd3fc]">{PROMO_HIGHLIGHT_PARTS[2]}</span>
             </p>
+            <StaticTipStrip tip={tip} embeddedInHeader={embeddedInHeader} onNextTip={onNextTip} />
           </div>
 
-          <div className={`relative z-[1] shrink-0 md:mt-0 md:flex md:flex-col md:justify-center ${embeddedInHeader ? "mt-0" : "mt-3"}`}>
+          <div
+            className={`relative z-[1] shrink-0 ${embeddedInHeader ? "mt-0" : "mt-3"} md:mt-0 md:flex md:flex-col md:justify-center`}
+          >
             <button
               type="button"
               onClick={onStartDiagnostic}
               className={
                 embeddedInHeader
-                  ? "pointer-events-auto inline-flex h-9 w-full min-w-0 items-center justify-center whitespace-nowrap rounded-lg bg-[#22D3EE] px-3.5 text-center text-xs font-black leading-tight tracking-tight text-[#082f49] shadow-[0_4px_12px_-4px_rgba(6,182,212,0.85)] ring-1 ring-[#A5F3FC]/95 hover:bg-[#67E8F9] md:h-9 md:w-[164px] md:min-w-[164px] md:shrink-0 lg:w-[176px] lg:min-w-[176px] lg:text-[13px]"
-                  : "pointer-events-auto inline-flex min-h-[44px] w-full items-center justify-center whitespace-nowrap rounded-xl bg-[#22D3EE] px-5 py-2.5 text-center text-sm font-black leading-tight tracking-tight text-[#082f49] shadow-[0_8px_24px_-6px_rgba(6,182,212,0.85),inset_0_1px_0_0_rgba(255,255,255,0.45)] ring-2 ring-[#A5F3FC]/95 ring-offset-2 ring-offset-[#0f172a]/0 hover:bg-[#67E8F9] md:min-h-[46px] md:min-w-[11.5rem] md:px-5 md:text-sm lg:min-w-[12.5rem] lg:px-6 lg:py-2.5 lg:text-base"
+                  ? "pointer-events-auto inline-flex min-h-[44px] h-11 w-full min-w-0 items-center justify-center whitespace-nowrap rounded-lg bg-[#22D3EE] px-3.5 text-center text-xs font-black leading-tight tracking-tight text-[#082f49] shadow-[0_4px_12px_-4px_rgba(6,182,212,0.85)] ring-1 ring-[#A5F3FC]/95 hover:bg-[#67E8F9] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 md:w-[176px] md:min-w-[176px] md:shrink-0 lg:w-[188px] lg:min-w-[188px] lg:text-[13px]"
+                  : "pointer-events-auto inline-flex min-h-[44px] w-full items-center justify-center whitespace-nowrap rounded-xl bg-[#22D3EE] px-5 py-2.5 text-center text-sm font-black leading-tight tracking-tight text-[#082f49] shadow-[0_8px_24px_-6px_rgba(6,182,212,0.85)] ring-2 ring-[#A5F3FC]/95 hover:bg-[#67E8F9] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300"
               }
             >
               {PROMO_TEXT_CTA}
             </button>
           </div>
-        </motion.div>
-        {!embeddedInHeader && (
-        <div
-          className="pointer-events-none absolute bottom-[18%] -right-1 z-[2] h-7 w-7 rotate-45 border-b-[2.5px] border-r-[2.5px] border-[#39F4FF]/75 bg-[#134e4a] shadow-[3px_3px_14px_-2px_rgba(34,211,238,0.45)] md:-right-1 md:bottom-[22%]"
-          style={{ clipPath: "polygon(100% 0, 100% 100%, 0 100%)" }}
-          aria-hidden
-        />
-        )}
+        </div>
       </div>
 
-      {!embeddedInHeader && (
-      <svg
-        width={56}
-        height={40}
-        viewBox="0 0 56 40"
-        className="order-2 -mr-px mb-[0.82rem] shrink-0 self-end md:mb-[0.92rem]"
-        aria-hidden
-      >
-        <defs>
-          <linearGradient id={ropeGradientId} x1="0%" y1="50%" x2="100%" y2="40%">
-            <stop offset="0%" stopColor="#67E8F9" stopOpacity={0.85} />
-            <stop offset="100%" stopColor="#22d3ee" stopOpacity={0.95} />
-          </linearGradient>
-        </defs>
-        <path
-          d="M0 21 C 16 26, 32 17, 56 13"
-          fill="none"
-          stroke={`url(#${ropeGradientId})`}
-          strokeWidth={3.25}
-          strokeLinecap="round"
-        />
-        <path
-          d="M0 21 C 12 23, 24 17, 48 13"
-          fill="none"
-          stroke="rgba(255,255,255,0.18)"
-          strokeWidth={1.15}
-          strokeLinecap="round"
-        />
-      </svg>
-      )}
-
-      <button
-        type="button"
-        className={`order-2 relative shrink-0 pointer-events-auto -scale-x-100 brightness-[1.06] saturate-[1.15] contrast-[1.05] drop-shadow-[0_14px_32px_-6px_rgba(15,23,42,0.55)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400 ${dumboSpriteBox} ${
+      {/* Decorative static mascot — not interactive */}
+      <div
+        className={`order-2 relative shrink-0 -scale-x-100 drop-shadow-[0_14px_32px_-6px_rgba(15,23,42,0.55)] ${DUMBO_SPRITE_BOX_HEADER} ${
           embeddedInHeader ? "self-center" : "self-end"
         }`}
-        onClick={() => revealMascotPauseControls(pauseControl, "dumbo")}
-        onKeyDown={(event) => onMascotPauseRevealKey(event, pauseControl, "dumbo")}
-        aria-label="Mostrar controles de Dumbo"
+        aria-hidden="true"
       >
         <Image
-          src={sprite}
+          src={STATIC_BANNER_ASSET}
           alt=""
           width={128}
           height={128}
@@ -611,143 +176,70 @@ function DumboBannerInner({
           className="pointer-events-none h-full w-full object-contain object-bottom"
           priority={false}
         />
-      </button>
-    </motion.div>
+      </div>
+    </div>
   );
 }
 
-function ChicoSecurityBubble({
+function StaticTipStrip({
   tip,
-  embeddedInHeader = false,
-  onDetailOpen,
-  onDetailClose
+  embeddedInHeader,
+  onNextTip
 }: {
-  tip: ChicoTip | null;
-  embeddedInHeader?: boolean;
-  onDetailOpen?: () => void;
-  onDetailClose?: () => void;
+  tip: ChicoTip;
+  embeddedInHeader: boolean;
+  onNextTip: () => void;
 }) {
-  const gradId = useId().replace(/:/g, "");
-  const [detailModalOpen, setDetailModalOpen] = useState(false);
-
-  useEffect(() => {
-    setDetailModalOpen(false);
-  }, [tip?.id]);
-
-  const openDetail = () => {
-    setDetailModalOpen(true);
-    onDetailOpen?.();
-  };
-
-  const closeDetail = () => {
-    setDetailModalOpen(false);
-    onDetailClose?.();
-  };
-
-  if (!tip) return null;
-
-  const advice = formatChicoAdviceForA11y(tip);
-  const titleId = `chico-tip-title-${gradId.slice(0, 8)}`;
-
-  if (embeddedInHeader) {
-    return (
-      <>
-        <aside
-          className="pointer-events-none relative z-[6] flex h-full w-full items-center overflow-hidden"
-          aria-label={`${CHICO_SECURITY_A11Y_ROLE}. ${advice}`}
-        >
-          <div
-            data-argos-header-card="true"
-            role="presentation"
-            className="pointer-events-auto relative flex w-full max-h-[calc(var(--argos-topbar-nav-h)-12px)] flex-col overflow-hidden rounded-[14px] border-2 border-[#2DD4BF]/95 bg-[#0f172a] py-1.5 pl-3 pr-3 shadow-[0_6px_16px_-6px_rgba(8,51,68,0.45)] md:flex-row md:items-center md:gap-3 lg:gap-3.5 lg:pl-3.5 lg:pr-3.5"
-          >
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0 rounded-[12px] opacity-95 bg-[linear-gradient(145deg,#0c1929_0%,#082f49_52%,#0e7490_120%)]"
-            />
-            <div className="relative z-[1] flex min-w-0 flex-1 flex-col justify-center">
-              <p className="mb-0.5 line-clamp-1 text-[11px] font-black uppercase leading-none tracking-[0.08em] text-[#67E8F9]">
-                Consejo práctico
-              </p>
-              <h3
-                className="line-clamp-1 text-sm font-black leading-tight text-[#ECFEFF] lg:text-[15px]"
-                id={titleId}
-              >
-                {tip.titulo}
-              </h3>
-              <p className="mt-0.5 line-clamp-1 text-xs font-medium leading-tight text-[#E0F2FE]/95 lg:text-[13px]">
-                {tip.mensajeCorto}
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={openDetail}
-              aria-haspopup="dialog"
-              className="relative z-[1] inline-flex h-9 w-full shrink-0 items-center justify-center rounded-lg border border-[#5EEAD4]/45 bg-[#082f49]/80 px-3 text-center text-[11px] font-black uppercase tracking-wide text-[#A5F3FC] shadow-sm ring-1 ring-[#2DD4BF]/30 transition hover:bg-[#0c4a6e]/90 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 md:mt-0 md:w-[156px] md:min-w-[156px] md:whitespace-nowrap lg:w-[168px] lg:min-w-[168px] lg:text-xs"
-            >
-              Ver explicación y pasos
-            </button>
-          </div>
-        </aside>
-        <ChicoTipDetailModal open={detailModalOpen} tip={tip} titleId={titleId} onClose={closeDetail} />
-      </>
-    );
-  }
+  const [detailOpen, setDetailOpen] = useState(false);
+  const titleId = useId();
 
   return (
     <>
-      <aside
-        className="pointer-events-none relative z-[6] w-full max-w-full overflow-visible pb-1"
-        aria-label={`${CHICO_SECURITY_A11Y_ROLE}. ${advice}`}
+      <div
+        className={
+          embeddedInHeader
+            ? "mt-1 flex min-w-0 flex-wrap items-center gap-1.5"
+            : "mt-2 flex min-w-0 flex-wrap items-center gap-2"
+        }
+        aria-label={formatTipA11y(tip)}
       >
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -bottom-4 left-[15%] h-11 w-11 rotate-[-28deg] rounded-br-2xl rounded-tl-md border-[2px] border-[#5EEAD4]/90 bg-[#0f172a] md:left-[13%]"
-          style={{
-            clipPath: "polygon(0 0, 100% 0, 55% 100%, 0 40%)",
-            boxShadow: "4px 4px 16px rgba(8,145,178,0.35)"
-          }}
-        />
-        <div
-          role="presentation"
-          className="pointer-events-auto relative overflow-hidden rounded-2xl border-[2px] border-[#2DD4BF]/95 bg-[#0f172a] p-4 shadow-[0_14px_36px_-10px_rgba(8,51,68,0.55),inset_0_1px_0_0_rgba(148,239,238,0.12)] md:p-5"
+        <p
+          className={
+            embeddedInHeader
+              ? "min-w-0 flex-1 basis-[8rem] line-clamp-1 text-[11px] font-semibold leading-tight text-[#E0F2FE]/95 lg:text-xs"
+              : "min-w-0 flex-1 text-sm font-semibold leading-snug text-[#E0F2FE]/95"
+          }
         >
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 rounded-[calc(1rem-1px)] opacity-95 bg-[linear-gradient(145deg,#0c1929_0%,#082f49_52%,#0e7490_120%)]"
-          />
-          <div
-            aria-hidden
-            className="absolute inset-[1px] rounded-[calc(1rem-2px)] bg-[linear-gradient(180deg,rgba(148,239,238,0.14)_0%,transparent_45%,rgba(15,118,110,0.08)_100%)]"
-          />
-          <p className="relative z-[1] mb-1 text-xs font-black uppercase leading-tight tracking-[0.08em] text-[#67E8F9]">
-            Consejo práctico
-          </p>
-          <h3
-            className="relative z-[1] min-h-[2.5rem] text-sm font-black leading-snug text-[#ECFEFF] md:min-h-[2.75rem] md:text-base"
-            id={titleId}
-          >
-            {tip.titulo}
-          </h3>
-          <p className="relative z-[1] mt-2 min-h-[3rem] text-sm font-medium leading-snug text-[#E0F2FE]/95 md:min-h-[3.25rem] md:text-[0.9375rem]">
-            {tip.mensajeCorto}
-          </p>
-          <button
-            type="button"
-            onClick={openDetail}
-            aria-haspopup="dialog"
-            className="relative z-[1] mt-3 inline-flex min-h-[40px] items-center rounded-lg border border-[#5EEAD4]/45 bg-[#082f49]/80 px-3 py-2 text-left text-xs font-black uppercase tracking-wide text-[#A5F3FC] shadow-sm ring-1 ring-[#2DD4BF]/30 transition hover:bg-[#0c4a6e]/90 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 md:text-[13px]"
-          >
-            Ver explicación y pasos
-          </button>
-        </div>
-      </aside>
-      <ChicoTipDetailModal open={detailModalOpen} tip={tip} titleId={titleId} onClose={closeDetail} />
+          <span className="font-black text-[#67E8F9]">Consejo · </span>
+          {tip.titulo}
+        </p>
+        <button
+          type="button"
+          onClick={() => setDetailOpen(true)}
+          aria-haspopup="dialog"
+          className="inline-flex min-h-[44px] items-center rounded-md border border-[#5EEAD4]/45 bg-[#082f49]/80 px-2.5 text-[10px] font-black uppercase tracking-wide text-[#A5F3FC] transition hover:bg-[#0c4a6e]/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 lg:text-[11px]"
+        >
+          Ver explicación
+        </button>
+        <button
+          type="button"
+          onClick={onNextTip}
+          className="inline-flex min-h-[44px] items-center rounded-md border border-white/20 bg-black/25 px-2.5 text-[10px] font-black uppercase tracking-wide text-white/90 transition hover:bg-black/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 lg:text-[11px]"
+        >
+          Otro consejo
+        </button>
+      </div>
+      <TipDetailModal
+        open={detailOpen}
+        tip={tip}
+        titleId={titleId}
+        onClose={() => setDetailOpen(false)}
+      />
     </>
   );
 }
 
-function ChicoTipDetailModal({
+function TipDetailModal({
   open,
   tip,
   titleId,
@@ -777,12 +269,9 @@ function ChicoTipDetailModal({
   if (!open || typeof document === "undefined") return null;
 
   return createPortal(
-    <motion.div
+    <div
       className="fixed inset-0 z-[220] flex items-end justify-center p-3 sm:items-center sm:p-6"
       role="presentation"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.2 }}
     >
       <button
         type="button"
@@ -790,14 +279,11 @@ function ChicoTipDetailModal({
         aria-label="Cerrar explicación del consejo"
         onClick={onClose}
       />
-      <motion.div
+      <div
         role="dialog"
         aria-modal="true"
         aria-labelledby={dialogTitleId}
-        className="relative z-[1] flex max-h-[min(92vh,720px)] w-full max-w-lg flex-col overflow-hidden rounded-2xl border-2 border-[#2DD4BF]/80 bg-[#0f172a] shadow-[0_24px_64px_-12px_rgba(2,6,23,0.85),0_0_0_1px_rgba(45,212,191,0.15)] sm:max-w-xl md:max-w-2xl"
-        initial={{ opacity: 0, y: 24, scale: 0.97 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.28, ease: [0.22, 0.72, 0.36, 1] }}
+        className="relative z-[1] flex max-h-[min(92vh,720px)] w-full max-w-lg flex-col overflow-hidden rounded-2xl border-2 border-[#2DD4BF]/80 bg-[#0f172a] shadow-[0_24px_64px_-12px_rgba(2,6,23,0.85)] sm:max-w-xl md:max-w-2xl"
         onClick={(event) => event.stopPropagation()}
       >
         <div
@@ -807,7 +293,7 @@ function ChicoTipDetailModal({
         <div className="relative z-[1] flex shrink-0 items-start justify-between gap-3 border-b border-[#2DD4BF]/35 px-5 py-4 md:px-6 md:py-5">
           <div className="min-w-0">
             <p className="text-[11px] font-black uppercase tracking-[0.1em] text-[#67E8F9] md:text-xs">
-              Consejo práctico · Chico
+              Consejo práctico
             </p>
             <h2 id={dialogTitleId} className="mt-1 text-lg font-black leading-snug text-[#ECFEFF] md:text-xl">
               {tip.titulo}
@@ -816,7 +302,7 @@ function ChicoTipDetailModal({
           <button
             type="button"
             onClick={onClose}
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-teal-200/35 bg-black/45 text-teal-50 shadow backdrop-blur-sm transition hover:bg-teal-950/70"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-teal-200/35 bg-black/45 text-teal-50 shadow backdrop-blur-sm transition hover:bg-teal-950/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300"
             aria-label="Cerrar explicación"
           >
             <span aria-hidden className="text-xl font-light leading-none">
@@ -852,235 +338,8 @@ function ChicoTipDetailModal({
             Volver al consejo
           </button>
         </div>
-      </motion.div>
-    </motion.div>,
-    document.body
-  );
-}
-
-/** Alterna Dumbo y Chico con transiciones suaves sin recorridos largos en el viewport. */
-function ReducedMotionAlternate({
-  entranceDelayMs,
-  embeddedInHeader = false,
-  onStartDiagnostic,
-}: {
-  entranceDelayMs: number;
-  embeddedInHeader?: boolean;
-  onStartDiagnostic: () => void;
-}) {
-  type RM = "idle" | "visibleDumbo" | "gapA" | "visibleChico" | "gapB";
-  const [rmPhase, setRmPhase] = useState<RM>("idle");
-  const tipIxRef = useRef(0);
-  const [, tipBump] = useState(0);
-  const [chicoSlice, setChicoSlice] = useState<ChicoTip | null>(null);
-  const [tipDetailOpen, setTipDetailOpen] = useState(false);
-  const rmChicoVisibleMsRef = useRef<number | null>(null);
-  const handleTipDetailOpen = useCallback(() => setTipDetailOpen(true), []);
-  const handleTipDetailClose = useCallback(() => {
-    rmChicoVisibleMsRef.current = Math.round(CHICO_SPEAK_AFTER_DETAIL_MS + Math.random() * 4000);
-    setTipDetailOpen(false);
-  }, []);
-  const activeChicoAdvice = useMemo(
-    () => (chicoSlice ? formatChicoAdviceForA11y(chicoSlice) : ""),
-    [chicoSlice]
-  );
-  const pauseControl = useMascotPauseControlOptional();
-
-  useEffect(() => {
-    if (rmPhase !== "idle") return;
-    const id = window.setTimeout(() => setRmPhase("visibleDumbo"), entranceDelayMs);
-    return () => window.clearTimeout(id);
-  }, [entranceDelayMs, rmPhase]);
-
-  useEffect(() => {
-    if (rmPhase !== "visibleDumbo") return;
-    const ms = Math.round(14000 + Math.random() * 8000);
-    const id = window.setTimeout(() => setRmPhase("gapA"), ms);
-    return () => window.clearTimeout(id);
-  }, [rmPhase]);
-
-  useEffect(() => {
-    if (rmPhase !== "gapA") return;
-    const id = window.setTimeout(() => {
-      const n = tipIxRef.current;
-      tipIxRef.current += 1;
-      const tip = chicoTips[n % chicoTips.length];
-      setChicoSlice(tip);
-      tipBump((v) => v + 1);
-      setRmPhase("visibleChico");
-    }, RESTART_MS);
-    return () => window.clearTimeout(id);
-  }, [rmPhase]);
-
-  useEffect(() => {
-    if (rmPhase !== "visibleChico") {
-      rmChicoVisibleMsRef.current = null;
-      return;
-    }
-    if (tipDetailOpen) return;
-    if (rmChicoVisibleMsRef.current === null) {
-      rmChicoVisibleMsRef.current = Math.round(13000 + Math.random() * 5000);
-    }
-    const ms = rmChicoVisibleMsRef.current;
-    const id = window.setTimeout(() => setRmPhase("gapB"), ms);
-    return () => window.clearTimeout(id);
-  }, [rmPhase, tipDetailOpen]);
-
-  useEffect(() => {
-    if (rmPhase !== "gapB") return;
-    const id = window.setTimeout(() => setRmPhase("visibleDumbo"), RESTART_MS);
-    return () => window.clearTimeout(id);
-  }, [rmPhase]);
-
-  const showDumbo = rmPhase === "visibleDumbo";
-  const showChico = rmPhase === "visibleChico";
-  const showAny = showDumbo || showChico;
-
-  const regionAria = showChico ? `${CHICO_SECURITY_A11Y_ROLE}. ${activeChicoAdvice}` : PROMO_A11Y_DESCRIPTION;
-
-  return (
-    <div
-      className="pointer-events-none absolute inset-0 flex flex-col items-center justify-end overflow-visible px-2 pb-0"
-      aria-hidden={!showAny}
-    >
-      {/* Dumbo: misma tarjeta y botón */}
-      <motion.div
-        className={`relative flex w-full max-w-full flex-row items-end ${
-          embeddedInHeader
-            ? "justify-end gap-4 pr-1 md:gap-[18px] md:pr-2 xl:gap-5"
-            : "max-w-[min(100%,52rem)] justify-center gap-5 pr-12 md:pr-16 lg:pr-[4.75rem]"
-        } ${showDumbo ? "pointer-events-auto" : "pointer-events-none"}`}
-        initial={false}
-        animate={{ opacity: showDumbo ? 1 : 0, y: showDumbo ? 0 : 14 }}
-        transition={{ duration: 0.42, ease: "easeOut" }}
-        aria-hidden={!showDumbo}
-        role="region"
-        aria-label={PROMO_A11Y_DESCRIPTION}
-      >
-        <motion.div
-          className={`order-1 min-w-0 shrink-0 self-end ${
-            embeddedInHeader ? DUMBO_CARD_EMBEDDED : "flex flex-1 items-end justify-start min-h-[5.5rem]"
-          }`}
-        >
-          <div className="pointer-events-none w-full max-w-full space-y-0">
-            <DumboReducedCard embeddedInHeader={embeddedInHeader} onStartDiagnostic={onStartDiagnostic} />
-          </div>
-        </motion.div>
-        <button
-          type="button"
-          className={`order-2 shrink-0 self-end ${embeddedInHeader ? DUMBO_SPRITE_BOX_HEADER : DUMBO_SPRITE_BOX} -scale-x-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400`}
-          onClick={() => revealMascotPauseControls(pauseControl, "dumbo")}
-          onKeyDown={(event) => onMascotPauseRevealKey(event, pauseControl, "dumbo")}
-          aria-label="Mostrar controles de Dumbo"
-        >
-          <Image
-            src={DUMBO_SIT_SPRITE}
-            alt=""
-            width={104}
-            height={104}
-            className="pointer-events-none h-full w-full object-contain object-bottom drop-shadow-[0_12px_22px_-6px_rgba(15,23,42,0.5)]"
-          />
-        </button>
-      </motion.div>
-
-      {/* Chico: grupo centrado — mascota junto al globo */}
-      <motion.div
-        className={`relative mt-0 flex w-full items-end justify-center py-2 md:py-2.5 ${
-          embeddedInHeader ? "gap-4 lg:gap-[18px] xl:gap-5" : "gap-1.5 md:gap-2"
-        } ${showChico ? "pointer-events-auto" : "pointer-events-none"}`}
-        initial={false}
-        animate={{
-          opacity: showChico ? 1 : 0,
-          y: showChico ? -6 : 10,
-          height: showChico ? "auto" : "0rem",
-          marginTop: showChico ? 0 : "-0.5rem"
-        }}
-        transition={{ duration: 0.45, ease: "easeOut" }}
-        aria-hidden={!showChico}
-        role="region"
-        aria-label={`${CHICO_SECURITY_A11Y_ROLE}. ${activeChicoAdvice}`}
-        aria-live={showChico ? "polite" : undefined}
-      >
-        <div
-          role="button"
-          tabIndex={0}
-          aria-label="Mostrar controles de Chico"
-          className={`shrink-0 cursor-pointer ${embeddedInHeader ? CHICO_SPRITE_BOX_HEADER : CHICO_SPRITE_BOX} focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400`}
-          onClick={() => revealMascotPauseControls(pauseControl, "chico")}
-          onKeyDown={(event) => onMascotPauseRevealKey(event, pauseControl, "chico")}
-        >
-          <Image
-            src={CHICO_ATTENTIVE}
-            alt=""
-            width={104}
-            height={104}
-            className="pointer-events-none h-full w-full object-contain object-bottom drop-shadow-[0_12px_22px_-6px_rgba(15,23,42,0.5)]"
-          />
-        </div>
-        <div className={`shrink-0 ${embeddedInHeader ? CHICO_BUBBLE_EMBEDDED : "max-w-[min(100%,30rem)]"}`}>
-          <ChicoSecurityBubble
-            tip={chicoSlice}
-            embeddedInHeader={embeddedInHeader}
-            onDetailOpen={handleTipDetailOpen}
-            onDetailClose={handleTipDetailClose}
-          />
-        </div>
-      </motion.div>
-    </div>
-  );
-}
-
-function DumboReducedCard({
-  embeddedInHeader = false,
-  onStartDiagnostic,
-}: {
-  embeddedInHeader?: boolean;
-  onStartDiagnostic: () => void;
-}) {
-  return (
-    <div
-      className={
-        embeddedInHeader
-          ? `relative flex w-full shrink-0 flex-col overflow-visible rounded-[20px] border-[2.5px] border-[#39F4FF]/90 bg-gradient-to-br from-[#4c1d95] via-[#1e3a8a] to-[#0f766e] py-[14px] pl-[22px] pr-[22px] shadow-[0_16px_40px_-10px_rgba(15,23,42,0.45),inset_0_1px_0_0_rgba(255,255,255,0.22)] ring-2 ring-black/25 md:max-h-[130px] md:flex-row md:items-center md:gap-[18px] lg:max-h-[136px] lg:gap-[22px] lg:pl-6 lg:pr-6 xl:gap-6 xl:pl-[26px] xl:pr-[26px] ${DUMBO_CARD_EMBEDDED}`
-          : "relative flex w-full max-w-[min(100%,700px)] flex-col gap-4 overflow-visible rounded-2xl border-[2.5px] border-[#39F4FF]/90 bg-gradient-to-br from-[#4c1d95] via-[#1e3a8a] to-[#0f766e] p-4 pb-5 shadow-[0_16px_40px_-10px_rgba(15,23,42,0.45),inset_0_1px_0_0_rgba(255,255,255,0.22)] ring-2 ring-black/25 md:flex-row md:items-center md:gap-6 md:p-5 lg:gap-8 lg:p-6"
-      }
-    >
-      <div aria-hidden className="pointer-events-none absolute inset-[2px] rounded-[18px] bg-gradient-to-b from-white/16 via-transparent to-black/23" />
-      <div className={`relative z-[1] min-w-0 flex-1 ${embeddedInHeader ? "" : "md:min-w-[14rem] lg:pb-6"}`}>
-        <p
-          className={
-            embeddedInHeader
-              ? "line-clamp-2 text-base font-bold leading-tight tracking-tight text-white drop-shadow-md md:text-lg"
-              : "text-base font-bold leading-tight tracking-tight text-white drop-shadow-md md:text-lg lg:text-xl"
-          }
-        >
-          {PROMO_TEXT_MAIN}
-        </p>
-        <p
-          className={
-            embeddedInHeader
-              ? "mt-1 line-clamp-2 text-sm font-black leading-tight text-balance md:text-[0.9375rem]"
-              : "mt-1.5 text-sm font-black leading-tight text-balance md:text-[0.9375rem] lg:text-base"
-          }
-        >
-          <span className="text-[#fca5a5]">{PROMO_HIGHLIGHT_PARTS[0]}</span>
-          <span className="font-bold text-white/55">{" · "}</span>
-          <span className="text-[#6ee7b7]">{PROMO_HIGHLIGHT_PARTS[1]}</span>
-          <span className="font-bold text-white/55">{" · "}</span>
-          <span className="text-[#7dd3fc]">{PROMO_HIGHLIGHT_PARTS[2]}</span>
-        </p>
       </div>
-      <button
-        type="button"
-        onClick={onStartDiagnostic}
-        className={
-          embeddedInHeader
-            ? "relative z-[1] inline-flex h-[42px] w-full shrink-0 items-center justify-center whitespace-nowrap rounded-xl bg-[#22D3EE] px-4 py-2 text-center text-sm font-black leading-tight tracking-tight text-[#082f49] shadow-[0_8px_24px_-6px_rgba(6,182,212,0.85)] ring-2 ring-[#A5F3FC]/90 hover:bg-[#67E8F9] md:w-[210px] md:min-w-[210px] lg:w-[230px] lg:min-w-[230px] xl:w-[240px] xl:min-w-[240px]"
-            : "relative z-[1] mb-24 inline-flex min-h-[44px] w-full shrink-0 items-center justify-center rounded-xl bg-[#22D3EE] px-6 py-2.5 text-center text-sm font-black leading-tight tracking-tight text-[#082f49] shadow-[0_8px_24px_-6px_rgba(6,182,212,0.85)] ring-2 ring-[#A5F3FC]/90 hover:bg-[#67E8F9] md:mb-[5.5rem] md:mr-4 md:inline-flex md:min-h-[46px] md:w-auto md:min-w-[11.5rem] md:self-center md:text-sm lg:min-w-[12.5rem] lg:text-base"
-        }
-      >
-        {PROMO_TEXT_CTA}
-      </button>
-    </div>
+    </div>,
+    document.body
   );
 }

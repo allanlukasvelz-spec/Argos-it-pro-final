@@ -1,12 +1,22 @@
 "use client";
 
 import Image from "next/image";
-import type { CSSProperties } from "react";
+import type { CSSProperties, KeyboardEvent } from "react";
 import { useMascotChat } from "@/components/mascots/MascotChatContext";
 import { useMascotPauseControl } from "@/components/mascots/MascotPauseControlContext";
 import { useMascotController } from "@/hooks/useMascotController";
 import { useI18n } from "@/i18n/useI18n";
 import { chicoSprites, dumboSprites } from "@/sprites/spriteManifest";
+
+/**
+ * Explicit keyboard activation (Enter/Space) = same as pointer open.
+ * preventDefault avoids native button synthesizing a second click (toggle-close).
+ */
+function activateLauncherKey(event: KeyboardEvent, action: () => void) {
+  if (event.key !== "Enter" && event.key !== " ") return;
+  event.preventDefault();
+  action();
+}
 
 export default function ChicoDumboSpriteSystem() {
   const {
@@ -23,13 +33,24 @@ export default function ChicoDumboSpriteSystem() {
     dumboTy,
     paused,
     togglePause,
-    sessionMode
+    sessionMode,
+    activeMascot
   } = useMascotController();
   const { t } = useI18n();
   const { openChat, panelId, isOpenFor } = useMascotChat();
   const { visible: pauseVisible, selectedMascot, showPauseFor } = useMascotPauseControl();
   const chicoBubble = t(chicoMessageKey);
   const dumboBubble = t(dumboMessageKey);
+
+  const openChico = () => {
+    showPauseFor("chico");
+    openChat("chico");
+  };
+
+  const openDumbo = () => {
+    showPauseFor("dumbo");
+    openChat("dumbo");
+  };
 
   const rootStyle: CSSProperties = {
     ["--mascot-scale" as string]: scale,
@@ -39,6 +60,9 @@ export default function ChicoDumboSpriteSystem() {
     ["--mascot-dumbo-ty" as string]: `${dumboTy}px`
   };
 
+  const chicoActive = activeMascot === "chico";
+  const dumboActive = activeMascot === "dumbo";
+
   return (
     <section
       className={`mascot-root ${webglReady ? "is-webgl-ready" : ""} ${
@@ -46,6 +70,7 @@ export default function ChicoDumboSpriteSystem() {
       }`}
       style={rootStyle}
       aria-label="Chico y Dumbo"
+      data-active-mascot={activeMascot}
     >
       {pauseVisible && (
         <button
@@ -61,67 +86,63 @@ export default function ChicoDumboSpriteSystem() {
         </button>
       )}
 
-      <aside className="mascot mascot--chico">
+      <aside
+        className={`mascot mascot--chico ${chicoActive ? "mascot--active" : "mascot--inactive"}`}
+      >
         <button
           type="button"
           className="mascot__sprite-button"
-          onClick={() => {
-            showPauseFor("chico");
-            openChat("chico");
-          }}
-          onKeyDown={(event) => {
-            if (event.key !== "Enter" && event.key !== " ") return;
-            showPauseFor("chico");
-          }}
+          onClick={openChico}
+          onKeyDown={(event) => activateLauncherKey(event, openChico)}
           onMouseEnter={() => applyEvent("hover")}
           onMouseLeave={() => applyEvent("idle")}
           aria-label={t("mascots.chicoAria")}
           aria-expanded={isOpenFor("chico")}
           aria-controls={panelId}
+          data-mascot-active={chicoActive ? "true" : "false"}
         >
           <Image
             src={chicoSprites[chico]}
             alt=""
+            aria-hidden="true"
             className={`mascot__img mascot__img--chico mascot__state--${chico}`}
             width={232}
             height={232}
-            sizes="(max-width: 860px) 140px, 232px"
+            sizes="(max-width: 480px) 112px, (max-width: 860px) 140px, 232px"
             priority
           />
         </button>
-        <div className="mascot__bubble mascot__bubble--left" onClick={(e) => e.stopPropagation()}>
+        <div className="mascot__bubble mascot__bubble--left" aria-hidden="true">
           {chicoBubble}
         </div>
       </aside>
 
-      <aside className="mascot mascot--dumbo">
-        <div className="mascot__bubble mascot__bubble--right" onClick={(e) => e.stopPropagation()} role="presentation">
+      <aside
+        className={`mascot mascot--dumbo ${dumboActive ? "mascot--active" : "mascot--inactive"}`}
+      >
+        <div className="mascot__bubble mascot__bubble--right" aria-hidden="true">
           {dumboBubble}
         </div>
         <button
           type="button"
           className="mascot__sprite-button"
-          onClick={() => {
-            showPauseFor("dumbo");
-            openChat("dumbo");
-          }}
-          onKeyDown={(event) => {
-            if (event.key !== "Enter" && event.key !== " ") return;
-            showPauseFor("dumbo");
-          }}
+          onClick={openDumbo}
+          onKeyDown={(event) => activateLauncherKey(event, openDumbo)}
           onMouseEnter={() => applyEvent("hover")}
           onMouseLeave={() => applyEvent("idle")}
           aria-label={t("mascots.dumboAria")}
           aria-expanded={isOpenFor("dumbo")}
           aria-controls={panelId}
+          data-mascot-active={dumboActive ? "true" : "false"}
         >
           <Image
             src={dumboSprites[dumbo]}
             alt=""
+            aria-hidden="true"
             className={`mascot__img mascot__img--dumbo mascot__state--${dumbo}`}
             width={208}
             height={208}
-            sizes="(max-width: 860px) 124px, 208px"
+            sizes="(max-width: 480px) 100px, (max-width: 860px) 124px, 208px"
             priority
           />
         </button>

@@ -2,6 +2,7 @@
 
 export type ChicoSpriteState =
   | "idle"
+  | "stand"
   | "walk_01"
   | "walk_02"
   | "jump"
@@ -47,6 +48,8 @@ export type DumboSpriteState =
 
 export const chicoSprites: Record<ChicoSpriteState, string> = {
   idle: "/mascots/chico/chico_esperando2.png",
+  /** FASE 21.6B.7B — V1 STAND (existing PNG; not a new raster). */
+  stand: "/mascots/chico/chico_esperando.png",
   walk_01: "/mascots/chico/chico_caminando.png",
   walk_02: "/mascots/chico/chico_corriendo.png",
   jump: "/mascots/chico/chico_corriendofeliz.png",
