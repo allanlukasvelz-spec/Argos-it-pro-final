@@ -1,0 +1,339 @@
+/* FASE 21.6B.4A — LAB ONLY. Canonical source pixels. No dog warp/recolor/filter. */
+
+.mml-lab {
+  /* Outside .argos-corporate, globals map --font-ui → system. Remap to Inter for LAB UI. */
+  --font-ui: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --mml-surface: #f7f7f5;
+  --mml-dark: #0b1320;
+  --mml-navy: #1f3a5f;
+  --mml-teal: #2f7d6d;
+  --mml-ink: #0b1320;
+  --mml-muted: #4b5563;
+  --mml-panel: rgba(255, 255, 255, 0.92);
+  --mml-panel-border: rgba(31, 58, 95, 0.14);
+  --mml-duration: 220ms;
+  --mml-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Equal fit for all states on narrow viewports (avoids stand clipping without relative zoom) */
+  --mml-fit: 1;
+  min-height: 100vh;
+  font-family: var(--font-ui);
+  color: var(--mml-ink);
+  background: var(--mml-surface);
+  overflow-x: hidden;
+}
+
+.mml-lab[data-backdrop="dark"] {
+  color: #f7f7f5;
+  background: var(--mml-dark);
+  --mml-panel: rgba(11, 19, 32, 0.88);
+  --mml-panel-border: rgba(247, 247, 245, 0.12);
+  --mml-muted: #c4c9d1;
+}
+
+.mml-banner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--mml-panel-border);
+  background: var(--mml-panel);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.mml-banner strong {
+  color: var(--mml-navy);
+  font-weight: 700;
+}
+
+.mml-lab[data-backdrop="dark"] .mml-banner strong {
+  color: #9fd5c8;
+}
+
+.mml-layout {
+  display: grid;
+  grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
+  gap: 1rem;
+  padding: 1rem;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+@media (max-width: 860px) {
+  .mml-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mml-panel {
+  border: 1px solid var(--mml-panel-border);
+  background: var(--mml-panel);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.mml-panel h2 {
+  margin: 0 0 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--mml-muted);
+}
+
+.mml-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.mml-group:last-child {
+  margin-bottom: 0;
+}
+
+.mml-label {
+  width: 100%;
+  margin: 0 0 0.35rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--mml-muted);
+}
+
+.mml-btn {
+  appearance: none;
+  border: 1px solid var(--mml-panel-border);
+  background: transparent;
+  color: inherit;
+  border-radius: 999px;
+  padding: 0.45rem 0.85rem;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--mml-duration) var(--mml-ease),
+    border-color var(--mml-duration) var(--mml-ease);
+}
+
+.mml-btn:hover {
+  border-color: var(--mml-teal);
+}
+
+.mml-btn:focus-visible {
+  outline: 2px solid var(--mml-teal);
+  outline-offset: 2px;
+}
+
+.mml-btn[aria-pressed="true"] {
+  background: var(--mml-navy);
+  border-color: var(--mml-navy);
+  color: #f7f7f5;
+}
+
+.mml-lab[data-backdrop="dark"] .mml-btn[aria-pressed="true"] {
+  background: var(--mml-teal);
+  border-color: var(--mml-teal);
+  color: #0b1320;
+}
+
+.mml-note {
+  margin: 0.75rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--mml-muted);
+}
+
+.mml-stage-wrap {
+  position: relative;
+  min-height: min(70vh, 720px);
+  border: 1px solid var(--mml-panel-border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: inherit;
+}
+
+.mml-perimeter {
+  position: absolute;
+  inset: 8%;
+  pointer-events: none;
+  border: 1px solid color-mix(in srgb, var(--mml-teal) 35%, transparent);
+  border-radius: 18px;
+  opacity: 0.55;
+}
+
+.mml-perimeter::before,
+.mml-perimeter::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border: 1.5px solid var(--mml-navy);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--mml-teal) 40%, transparent);
+}
+
+.mml-lab[data-backdrop="dark"] .mml-perimeter::before,
+.mml-lab[data-backdrop="dark"] .mml-perimeter::after {
+  border-color: #9fd5c8;
+}
+
+.mml-perimeter::before {
+  top: -5px;
+  left: 18%;
+}
+
+.mml-perimeter::after {
+  right: -5px;
+  bottom: 22%;
+}
+
+.mml-signal {
+  position: absolute;
+  width: 120px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--mml-teal) 80%, transparent),
+    transparent
+  );
+  top: 18%;
+  left: 8%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.mml-lab[data-mode="notice"] .mml-signal {
+  animation: mml-signal-travel 1.4s var(--mml-ease) 1;
+}
+
+.mml-lab[data-mode="rest"] .mml-perimeter {
+  animation: mml-perimeter-breathe 8s ease-in-out infinite;
+}
+
+@keyframes mml-signal-travel {
+  0% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(min(42vw, 420px));
+  }
+}
+
+@keyframes mml-perimeter-breathe {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.mml-mascot-slot {
+  /* Fixed 360×420 aspect — presentation scale map is calibrated for this contain box */
+  position: absolute;
+  left: 50%;
+  bottom: 8%;
+  width: min(360px, 85vw);
+  height: calc(min(360px, 85vw) * 420 / 360);
+  overflow: visible;
+  transform: translate3d(-50%, 0, 0);
+}
+
+.mml-frame {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--mml-duration) var(--mml-ease);
+}
+
+.mml-frame.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mml-frame img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  object-position: bottom center;
+  /* Identity lock: uniform scale + Y only — no filter, warp, recolor, stretch */
+  filter: none;
+  transform-origin: bottom center;
+  transform: translateY(var(--mml-y, 0px))
+    scale(calc(var(--mml-scale, 1) * var(--mml-fit, 1)));
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.mml-status {
+  position: absolute;
+  top: 0.85rem;
+  left: 0.85rem;
+  right: 0.85rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.75rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--mml-muted);
+  pointer-events: none;
+}
+
+.mml-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--mml-panel-border);
+  background: var(--mml-panel);
+}
+
+@media (max-width: 480px) {
+  .mml-lab {
+    /* Stand landscape canvases + presentation scale exceed slot; shrink all states equally */
+    --mml-fit: 0.74;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mml-lab {
+    --mml-duration: 1ms;
+  }
+
+  .mml-frame,
+  .mml-btn {
+    transition: none !important;
+  }
+
+  .mml-lab[data-mode="rest"] .mml-perimeter,
+  .mml-lab[data-mode="notice"] .mml-signal {
+    animation: none !important;
+  }
+
+  .mml-signal {
+    opacity: 0 !important;
+  }
+}

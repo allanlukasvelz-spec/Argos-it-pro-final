@@ -10,7 +10,9 @@ export function getChromeOwner(pathname: string): ChromeOwner {
   if (
     pathname.startsWith("/auth") ||
     pathname.startsWith("/dashboard") ||
-    pathname === "/explainer"
+    pathname === "/explainer" ||
+    pathname === "/mascot-motion-lab" ||
+    pathname.startsWith("/mascot-motion-lab/")
   ) {
     return "none";
   }

@@ -16,12 +16,16 @@ type Props = {
   children: ReactNode;
 };
 
+function isLabOrRecordingPath(pathname: string) {
+  return (
+    pathname === "/explainer" ||
+    pathname === "/mascot-motion-lab" ||
+    pathname.startsWith("/mascot-motion-lab/")
+  );
+}
+
 function shouldHideAssistants(pathname: string) {
-  if (
-    pathname.startsWith("/auth") ||
-    pathname.startsWith("/dashboard") ||
-    pathname === "/explainer"
-  ) {
+  if (pathname.startsWith("/auth") || pathname.startsWith("/dashboard") || isLabOrRecordingPath(pathname)) {
     return true;
   }
   if (
@@ -33,6 +37,10 @@ function shouldHideAssistants(pathname: string) {
     return true;
   }
   return false;
+}
+
+function shouldHideCookieBanner(pathname: string) {
+  return pathname.startsWith("/dashboard") || isLabOrRecordingPath(pathname);
 }
 
 export default function SiteShell({ children }: Props) {
@@ -59,7 +67,7 @@ export default function SiteShell({ children }: Props) {
         </DiagnosticSurveyLauncherProvider>
       )}
       {!shouldHideAssistants(pathname) && <ClientAssistants />}
-      {!pathname.startsWith("/dashboard") && pathname !== "/explainer" && <CookieBanner />}
+      {!shouldHideCookieBanner(pathname) && <CookieBanner />}
     </MascotPauseControlProvider>
   );
 }

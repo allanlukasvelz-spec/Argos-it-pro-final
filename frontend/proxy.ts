@@ -22,9 +22,28 @@ export function proxy(request: NextRequest) {
     return res;
   }
 
+  if (pathname === "/mascot-motion-lab" || pathname.startsWith("/mascot-motion-lab/")) {
+    const labEnabled =
+      process.env.NODE_ENV === "development" ||
+      process.env.ALLOW_MASCOT_MOTION_LAB === "1";
+    if (!labEnabled) {
+      return new NextResponse(null, { status: 404 });
+    }
+    const res = NextResponse.next();
+    res.headers.set("X-Robots-Tag", "noindex, nofollow");
+    return res;
+  }
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/dashboard", "/dashboard/:path*", "/auth/login", "/auth/register"]
+  matcher: [
+    "/dashboard",
+    "/dashboard/:path*",
+    "/auth/login",
+    "/auth/register",
+    "/mascot-motion-lab",
+    "/mascot-motion-lab/:path*"
+  ]
 };
