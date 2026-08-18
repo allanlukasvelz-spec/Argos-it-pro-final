@@ -70,6 +70,45 @@ describe("21.6B.7A mascot behavior safety", () => {
   });
 });
 
+describe("21.7A.1 event-driven idle timeout", () => {
+  const controller = readFileSync(controllerPath, "utf8");
+  const idleTimerPath = path.join(__dirname, "mascotIdleTimer.ts");
+  const idleTimer = readFileSync(idleTimerPath, "utf8");
+
+  it("dock idle path has no setInterval / 240ms poll", () => {
+    assert.doesNotMatch(controller, /setInterval/);
+    assert.doesNotMatch(controller, /,\s*240\)/);
+    assert.doesNotMatch(idleTimer, /setInterval/);
+    assert.doesNotMatch(idleTimer, /,\s*240\s*\)/);
+  });
+
+  it("idle timeout is a single one-shot owner", () => {
+    assert.match(controller, /createMascotIdleTimer/);
+    assert.match(controller, /timer\.bumpActivity\(\)/);
+    assert.match(controller, /timer\.dispose\(\)/);
+    assert.match(idleTimer, /clearTimeout/);
+    assert.match(idleTimer, /setTimeout/);
+    assert.match(idleTimer, /MAX_PENDING_IDLE_TIMEOUTS = 1/);
+  });
+
+  it("activity listener set is unchanged", () => {
+    assert.match(controller, /addEventListener\("scroll"/);
+    assert.match(controller, /addEventListener\("click"/);
+    assert.match(controller, /addEventListener\("keydown"/);
+    assert.match(controller, /addEventListener\("touchstart"/);
+    assert.match(controller, /addEventListener\("focusin"/);
+    assert.match(controller, /addEventListener\("mousemove"/);
+    assert.doesNotMatch(controller, /pointermove|pointerdown|visibilitychange/);
+  });
+
+  it("resting sprite selection and V1 contracts stay in controller", () => {
+    assert.match(controller, /restingChicoSprite/);
+    assert.match(controller, /restingDumboSprite/);
+    assert.match(controller, /chatOpen \? chatPersona : "none"/);
+    assert.doesNotMatch(controller, /"walking"|walk_0|"walk"/);
+  });
+});
+
 describe("21.6B.7B one-active + V1 enforcement", () => {
   const states = readFileSync(statesPath, "utf8");
   const controller = readFileSync(controllerPath, "utf8");

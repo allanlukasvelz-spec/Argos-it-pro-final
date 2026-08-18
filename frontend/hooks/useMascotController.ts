@@ -3,11 +3,13 @@
 /**
  * FASE 21.6B.7B — ONE_ACTIVE + V1 dock enforcement.
  * Autonomous motion remains DISABLED (7A).
+ * FASE 21.7A.1 — idle detection is a one-shot activity timeout (no 240ms poll).
  */
 
 import { useReducedMotion } from "framer-motion";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { USER_ACTIVITY_TIMEOUT_MS } from "@/ai/mascotAutonomy";
+import { createMascotIdleTimer } from "@/ai/mascotIdleTimer";
 import {
   chatActiveSprites,
   formEventSprites,
@@ -31,7 +33,7 @@ export function useMascotController() {
   const [dumboTx, setDumboTx] = useState(0);
   const [dumboTy, setDumboTy] = useState(0);
 
-  const lastActivityAtRef = useRef<number>(typeof performance !== "undefined" ? Date.now() : 0);
+  const idleTimerRef = useRef<ReturnType<typeof createMascotIdleTimer> | null>(null);
   const prevSessionModeRef = useRef<"active" | "resting">("active");
 
   const prefersReducedMotion = useReducedMotion();
@@ -41,7 +43,7 @@ export function useMascotController() {
   const activeMascot: ActiveMascot = chatOpen ? chatPersona : "none";
 
   const bumpActivity = useCallback(() => {
-    lastActivityAtRef.current = Date.now();
+    idleTimerRef.current?.bumpActivity();
   }, []);
 
   const zeroDockMotion = useCallback(() => {
@@ -87,14 +89,34 @@ export function useMascotController() {
     [bumpActivity, activeMascot, chatOpen]
   );
 
-  /** KEPT: long-idle timer (30s). */
+  /** One-shot idle timeout. Activity listeners unchanged. */
   useEffect(() => {
-    lastActivityAtRef.current = Date.now();
-    const id = window.setInterval(() => {
-      const fresh = Date.now() - lastActivityAtRef.current < USER_ACTIVITY_TIMEOUT_MS;
-      setSessionMode(fresh ? "active" : "resting");
-    }, 240);
-    return () => window.clearInterval(id);
+    const timer = createMascotIdleTimer({
+      timeoutMs: USER_ACTIVITY_TIMEOUT_MS,
+      onActive: () => setSessionMode("active"),
+      onResting: () => setSessionMode("resting")
+    });
+    idleTimerRef.current = timer;
+    timer.bumpActivity();
+
+    const onAct = () => timer.bumpActivity();
+    window.addEventListener("scroll", onAct, { passive: true });
+    window.addEventListener("click", onAct, true);
+    window.addEventListener("keydown", onAct, true);
+    window.addEventListener("touchstart", onAct, { passive: true, capture: true });
+    document.addEventListener("focusin", onAct, true);
+    document.addEventListener("mousemove", onAct, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", onAct);
+      window.removeEventListener("click", onAct, true);
+      window.removeEventListener("keydown", onAct, true);
+      window.removeEventListener("touchstart", onAct, true);
+      document.removeEventListener("mousemove", onAct);
+      document.removeEventListener("focusin", onAct, true);
+      timer.dispose();
+      if (idleTimerRef.current === timer) idleTimerRef.current = null;
+    };
   }, []);
 
   useEffect(() => {
@@ -118,28 +140,6 @@ export function useMascotController() {
       setWebglReady(true);
     }
   }, []);
-
-  /** Activity only — no cursorNear visual (ONE_ACTIVE). */
-  useEffect(() => {
-    const onAct = () => bumpActivity();
-    bumpActivity();
-
-    window.addEventListener("scroll", onAct, { passive: true });
-    window.addEventListener("click", onAct, true);
-    window.addEventListener("keydown", onAct, true);
-    window.addEventListener("touchstart", onAct, { passive: true, capture: true });
-    document.addEventListener("focusin", onAct, true);
-    document.addEventListener("mousemove", onAct, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", onAct);
-      window.removeEventListener("click", onAct, true);
-      window.removeEventListener("keydown", onAct, true);
-      window.removeEventListener("touchstart", onAct, true);
-      document.removeEventListener("mousemove", onAct);
-      document.removeEventListener("focusin", onAct, true);
-    };
-  }, [bumpActivity]);
 
   useEffect(() => {
     const onFormStart = () => applyEvent("formStart");
