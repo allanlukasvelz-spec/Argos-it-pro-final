@@ -10,7 +10,11 @@ import CookieBanner from "@/components/layout/CookieBanner";
 import { DiagnosticSurveyLauncherProvider } from "@/components/diagnostic/DiagnosticSurveyLauncher";
 import SiteFooter from "@/components/layout/SiteFooter";
 import SiteHeader from "@/components/layout/SiteHeader";
-import { getChromeOwner } from "@/lib/chromeOwnership";
+import {
+  getChromeOwner,
+  isLegalPublicRoute,
+  shouldShowDiagnosticPromo
+} from "@/lib/chromeOwnership";
 
 type Props = {
   children: ReactNode;
@@ -25,18 +29,12 @@ function isLabOrRecordingPath(pathname: string) {
 }
 
 function shouldHideAssistants(pathname: string) {
-  if (pathname.startsWith("/auth") || pathname.startsWith("/dashboard") || isLabOrRecordingPath(pathname)) {
-    return true;
-  }
-  if (
-    pathname === "/privacidad" ||
-    pathname === "/cookies" ||
-    pathname === "/aviso-legal" ||
-    pathname.startsWith("/legal/")
-  ) {
-    return true;
-  }
-  return false;
+  return (
+    pathname.startsWith("/auth") ||
+    pathname.startsWith("/dashboard") ||
+    isLabOrRecordingPath(pathname) ||
+    isLegalPublicRoute(pathname)
+  );
 }
 
 function shouldHideCookieBanner(pathname: string) {
@@ -61,7 +59,7 @@ export default function SiteShell({ children }: Props) {
         </DiagnosticSurveyLauncherProvider>
       ) : (
         <DiagnosticSurveyLauncherProvider>
-          <SiteHeader />
+          <SiteHeader showDiagnosticPromo={shouldShowDiagnosticPromo(pathname)} />
           {children}
           <SiteFooter />
         </DiagnosticSurveyLauncherProvider>

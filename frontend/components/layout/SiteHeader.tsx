@@ -32,7 +32,11 @@ const pillItems: NavItem[] = [
 
 const quickLocales: Locale[] = ["es", "en", "ca"];
 
-export default function SiteHeader() {
+type Props = {
+  showDiagnosticPromo?: boolean;
+};
+
+export default function SiteHeader({ showDiagnosticPromo = true }: Props) {
   const pathname = usePathname();
   const { locale, setLocale, t } = useI18n();
   const { openDiagnostic } = useDiagnosticSurveyLauncher();
@@ -125,15 +129,16 @@ export default function SiteHeader() {
             ))}
           </nav>
 
-          {/* Slot Chico/Dumbo: recortado a la altura exacta de la barra del logo */}
-          <div
-            className={`argos-topbar-mascot-slot relative z-[40] hidden min-h-0 min-w-0 flex-1 self-stretch md:block ${
-              open ? "pointer-events-none invisible opacity-0" : "opacity-100"
-            }`}
-            aria-hidden={open}
-          >
-            <DiagnosticPromoBanner embeddedInHeader />
-          </div>
+          {showDiagnosticPromo && (
+            <div
+              className={`argos-topbar-mascot-slot relative z-[40] hidden min-h-0 min-w-0 flex-1 self-stretch md:block ${
+                open ? "pointer-events-none invisible opacity-0" : "opacity-100"
+              }`}
+              aria-hidden={open}
+            >
+              <DiagnosticPromoBanner embeddedInHeader />
+            </div>
+          )}
 
           <button
             type="button"
