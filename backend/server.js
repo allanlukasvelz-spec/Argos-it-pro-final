@@ -11,6 +11,7 @@ const pool = require("./db");
 const { isAllowedWsActionType, sanitizeWsDetails } = require("./lib/wsActions");
 const { ensureRefreshSessionsTable } = require("./lib/ensureRefreshSessions");
 const { ensureClientDiagnosticsTable } = require("./lib/ensureClientDiagnosticsTable");
+const { ensureOrganizationsFoundation } = require("./lib/ensureOrganizations");
 
 const authRoutes = require("./routes/auth");
 const aiRoutes = require("./routes/ai");
@@ -209,8 +210,9 @@ async function start() {
   try {
     await ensureRefreshSessionsTable(pool);
     await ensureClientDiagnosticsTable(pool);
+    await ensureOrganizationsFoundation(pool);
   } catch (err) {
-    console.error("❌ No se pudo asegurar la tabla refresh_sessions:", err.message);
+    console.error("❌ No se pudo asegurar tablas de arranque (sessions/diagnostics/orgs):", err.message);
     process.exit(1);
   }
 
