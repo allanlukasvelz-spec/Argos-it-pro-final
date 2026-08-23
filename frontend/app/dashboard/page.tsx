@@ -74,6 +74,27 @@ type ClientPortalPayload = {
   argosDiagnostics?: ArgosDiagnosticListItem[];
 };
 
+type ClientAsset = {
+  id: number;
+  type: string;
+  name: string;
+  hostname: string | null;
+  status: string;
+  lastObservedAt: string | null;
+};
+
+type ClientTlsCertificate = {
+  id: number;
+  provider: string | null;
+  notAfter: string | null;
+  sans: string[];
+  isWildcard: boolean;
+  autoRenew: boolean | null;
+  observationStatus: string;
+  assetHostname: string | null;
+  assetName: string | null;
+};
+
 const copy = {
   es: {
     portal: "Portal de cliente",
@@ -116,7 +137,33 @@ const copy = {
     diagAnswers: "Respuestas enviadas",
     diagPriorities: "Prioridades",
     diagRisksTitle: "Riesgos detectados",
-    diagStrengthsTitle: "Puntos fuertes"
+    diagStrengthsTitle: "Puntos fuertes",
+    assetsTitle: "Mis activos",
+    assetsEmpty: "Aún no hay activos registrados.",
+    assetsType: "Tipo",
+    assetsName: "Nombre",
+    assetsHostname: "Hostname",
+    assetsStatus: "Estado",
+    assetsObserved: "Última observación",
+    assetsUnknown: "UNKNOWN",
+    assetsNotConfigured: "NOT CONFIGURED",
+    tlsTitle: "Certificados TLS",
+    tlsEmpty: "Aún no hay certificados observados.",
+    tlsDomain: "Dominio",
+    tlsProvider: "Proveedor",
+    tlsValidUntil: "Válido hasta",
+    tlsSan: "SAN",
+    tlsWildcard: "Wildcard",
+    tlsAutoRenew: "Renovación automática",
+    tlsStatus: "Estado",
+    tlsYes: "Sí",
+    tlsNo: "No",
+    tlsUnknown: "UNKNOWN",
+    discoverTitle: "Descubrir dominio (solo lectura)",
+    discoverHint: "Consulta DNS/TLS pública. No modifica infraestructura.",
+    discoverPlaceholder: "ej. floresgali.com",
+    discoverSubmit: "Descubrir",
+    discoverOk: "Dominio observado y registrado"
   },
   en: {
     portal: "Client portal",
@@ -159,7 +206,33 @@ const copy = {
     diagAnswers: "Answers submitted",
     diagPriorities: "Priorities",
     diagRisksTitle: "Detected risks",
-    diagStrengthsTitle: "Strengths"
+    diagStrengthsTitle: "Strengths",
+    assetsTitle: "My assets",
+    assetsEmpty: "No assets registered yet.",
+    assetsType: "Type",
+    assetsName: "Name",
+    assetsHostname: "Hostname",
+    assetsStatus: "Status",
+    assetsObserved: "Last observed",
+    assetsUnknown: "UNKNOWN",
+    assetsNotConfigured: "NOT CONFIGURED",
+    tlsTitle: "TLS certificates",
+    tlsEmpty: "No observed certificates yet.",
+    tlsDomain: "Domain",
+    tlsProvider: "Provider",
+    tlsValidUntil: "Valid until",
+    tlsSan: "SAN",
+    tlsWildcard: "Wildcard",
+    tlsAutoRenew: "Auto-renewal",
+    tlsStatus: "Status",
+    tlsYes: "Yes",
+    tlsNo: "No",
+    tlsUnknown: "UNKNOWN",
+    discoverTitle: "Discover domain (read-only)",
+    discoverHint: "Public DNS/TLS lookup. Does not change infrastructure.",
+    discoverPlaceholder: "e.g. example.com",
+    discoverSubmit: "Discover",
+    discoverOk: "Domain observed and registered"
   },
   ca: {
     portal: "Portal de client",
@@ -202,7 +275,33 @@ const copy = {
     diagAnswers: "Respostes enviades",
     diagPriorities: "Prioritats",
     diagRisksTitle: "Riscos detectats",
-    diagStrengthsTitle: "Punts forts"
+    diagStrengthsTitle: "Punts forts",
+    assetsTitle: "Els meus actius",
+    assetsEmpty: "Encara no hi ha actius registrats.",
+    assetsType: "Tipus",
+    assetsName: "Nom",
+    assetsHostname: "Hostname",
+    assetsStatus: "Estat",
+    assetsObserved: "Ultima observacio",
+    assetsUnknown: "UNKNOWN",
+    assetsNotConfigured: "NOT CONFIGURED",
+    tlsTitle: "Certificats TLS",
+    tlsEmpty: "Encara no hi ha certificats observats.",
+    tlsDomain: "Domini",
+    tlsProvider: "Proveidor",
+    tlsValidUntil: "Valid fins",
+    tlsSan: "SAN",
+    tlsWildcard: "Wildcard",
+    tlsAutoRenew: "Renovacio automatica",
+    tlsStatus: "Estat",
+    tlsYes: "Si",
+    tlsNo: "No",
+    tlsUnknown: "UNKNOWN",
+    discoverTitle: "Descobrir domini (nomes lectura)",
+    discoverHint: "Consulta DNS/TLS publica. No modifica infraestructura.",
+    discoverPlaceholder: "ex. example.com",
+    discoverSubmit: "Descobrir",
+    discoverOk: "Domini observat i registrat"
   }
 };
 
@@ -252,6 +351,11 @@ export default function Dashboard() {
   const [diagExpandedId, setDiagExpandedId] = useState<number | null>(null);
   const [diagDetailData, setDiagDetailData] = useState<DiagnosticDetailResponse | null>(null);
   const [diagLoadingId, setDiagLoadingId] = useState<number | null>(null);
+  const [assets, setAssets] = useState<ClientAsset[]>([]);
+  const [tlsCerts, setTlsCerts] = useState<ClientTlsCertificate[]>([]);
+  const [assetsLoading, setAssetsLoading] = useState(true);
+  const [discoverHost, setDiscoverHost] = useState("");
+  const [discoverBusy, setDiscoverBusy] = useState(false);
 
   const t = copy[locale];
 
@@ -291,6 +395,7 @@ export default function Dashboard() {
     }
 
     fetchPortal();
+    fetchAssetsAndTls();
   }, [authenticated]);
 
   const fetchPortal = async () => {
@@ -301,6 +406,23 @@ export default function Dashboard() {
       toast.error("No se pudo cargar el portal");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchAssetsAndTls = async () => {
+    setAssetsLoading(true);
+    try {
+      const [assetsRes, tlsRes] = await Promise.all([
+        API.get<{ assets: ClientAsset[] }>("/api/client/assets"),
+        API.get<{ certificates: ClientTlsCertificate[] }>("/api/client/tls")
+      ]);
+      setAssets(assetsRes.data.assets || []);
+      setTlsCerts(tlsRes.data.certificates || []);
+    } catch {
+      setAssets([]);
+      setTlsCerts([]);
+    } finally {
+      setAssetsLoading(false);
     }
   };
 
@@ -365,6 +487,35 @@ export default function Dashboard() {
     } finally {
       setDiagLoadingId(null);
     }
+  };
+
+  const submitDiscover = async (event: FormEvent) => {
+    event.preventDefault();
+    const hostname = discoverHost.trim();
+    if (!hostname) return;
+    setDiscoverBusy(true);
+    try {
+      await API.post("/api/client/domains/discover", { hostname });
+      toast.success(t.discoverOk);
+      setDiscoverHost("");
+      await fetchAssetsAndTls();
+    } catch (error: any) {
+      toast.error(error.response?.data?.error || "Discovery no disponible");
+    } finally {
+      setDiscoverBusy(false);
+    }
+  };
+
+  const formatObserved = (value: string | null | undefined) => {
+    if (!value) return t.assetsNotConfigured;
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return t.assetsUnknown;
+    return d.toLocaleString();
+  };
+
+  const formatTlsStatus = (value: string | null | undefined) => {
+    if (!value) return t.tlsUnknown;
+    return value;
   };
 
   if (loading) {
@@ -563,6 +714,107 @@ export default function Dashboard() {
               {t.send}
             </button>
           </form>
+        </section>
+
+        <section className="lg:col-span-2 rounded-lg border border-[#E5E7EB] bg-white p-6 shadow-sm">
+          <h2 className="text-2xl font-black">{t.assetsTitle}</h2>
+          <form onSubmit={submitDiscover} className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end">
+            <label className="block flex-1 text-sm font-bold">
+              {t.discoverTitle}
+              <input
+                value={discoverHost}
+                onChange={(event) => setDiscoverHost(event.target.value)}
+                className="mt-2 w-full rounded-md border border-[#E5E7EB] bg-white px-4 py-3"
+                placeholder={t.discoverPlaceholder}
+                disabled={discoverBusy}
+              />
+              <span className="mt-1 block text-xs font-semibold text-[#6B7280]">{t.discoverHint}</span>
+            </label>
+            <button
+              type="submit"
+              disabled={discoverBusy || !discoverHost.trim()}
+              className="rounded-md border border-[#2563EB] bg-[#2563EB] px-5 py-3 text-sm font-black text-white transition hover:bg-[#1D4ED8] disabled:opacity-50"
+            >
+              {t.discoverSubmit}
+            </button>
+          </form>
+
+          <div className="mt-6 overflow-x-auto">
+            {assetsLoading ? (
+              <p className="text-sm text-[#4B5563]">…</p>
+            ) : assets.length === 0 ? (
+              <p className="text-sm text-[#4B5563]">{t.assetsEmpty}</p>
+            ) : (
+              <table className="min-w-full text-left text-sm">
+                <thead>
+                  <tr className="border-b border-[#E5E7EB] text-xs font-black uppercase tracking-wide text-[#6B7280]">
+                    <th className="py-2 pr-4">{t.assetsType}</th>
+                    <th className="py-2 pr-4">{t.assetsName}</th>
+                    <th className="py-2 pr-4">{t.assetsHostname}</th>
+                    <th className="py-2 pr-4">{t.assetsStatus}</th>
+                    <th className="py-2">{t.assetsObserved}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {assets.map((asset) => (
+                    <tr key={asset.id} className="border-b border-[#F3F4F6]">
+                      <td className="py-3 pr-4 font-semibold">{asset.type}</td>
+                      <td className="py-3 pr-4 font-bold text-[#111827]">{asset.name}</td>
+                      <td className="py-3 pr-4 text-[#4B5563]">{asset.hostname || t.assetsNotConfigured}</td>
+                      <td className="py-3 pr-4 font-semibold">{asset.status || t.assetsUnknown}</td>
+                      <td className="py-3 text-[#4B5563]">{formatObserved(asset.lastObservedAt)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+        </section>
+
+        <section className="lg:col-span-2 rounded-lg border border-[#E5E7EB] bg-white p-6 shadow-sm">
+          <h2 className="text-2xl font-black">{t.tlsTitle}</h2>
+          <div className="mt-5 overflow-x-auto">
+            {assetsLoading ? (
+              <p className="text-sm text-[#4B5563]">…</p>
+            ) : tlsCerts.length === 0 ? (
+              <p className="text-sm text-[#4B5563]">{t.tlsEmpty}</p>
+            ) : (
+              <table className="min-w-full text-left text-sm">
+                <thead>
+                  <tr className="border-b border-[#E5E7EB] text-xs font-black uppercase tracking-wide text-[#6B7280]">
+                    <th className="py-2 pr-4">{t.tlsDomain}</th>
+                    <th className="py-2 pr-4">{t.tlsProvider}</th>
+                    <th className="py-2 pr-4">{t.tlsValidUntil}</th>
+                    <th className="py-2 pr-4">{t.tlsSan}</th>
+                    <th className="py-2 pr-4">{t.tlsWildcard}</th>
+                    <th className="py-2 pr-4">{t.tlsAutoRenew}</th>
+                    <th className="py-2">{t.tlsStatus}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tlsCerts.map((cert) => (
+                    <tr key={cert.id} className="border-b border-[#F3F4F6]">
+                      <td className="py-3 pr-4 font-bold text-[#111827]">
+                        {cert.assetHostname || cert.assetName || t.assetsNotConfigured}
+                      </td>
+                      <td className="py-3 pr-4">{cert.provider || t.tlsUnknown}</td>
+                      <td className="py-3 pr-4 text-[#4B5563]">
+                        {cert.notAfter ? formatObserved(cert.notAfter) : t.tlsUnknown}
+                      </td>
+                      <td className="py-3 pr-4 text-[#4B5563]">
+                        {(cert.sans || []).length ? cert.sans.join(", ") : t.tlsUnknown}
+                      </td>
+                      <td className="py-3 pr-4">{cert.isWildcard ? t.tlsYes : t.tlsNo}</td>
+                      <td className="py-3 pr-4">
+                        {cert.autoRenew == null ? t.tlsUnknown : cert.autoRenew ? t.tlsYes : t.tlsNo}
+                      </td>
+                      <td className="py-3 font-semibold">{formatTlsStatus(cert.observationStatus)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
         </section>
 
         <section className="lg:col-span-2 rounded-lg border border-[#E5E7EB] bg-white p-6 shadow-sm">

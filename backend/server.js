@@ -12,6 +12,7 @@ const { isAllowedWsActionType, sanitizeWsDetails } = require("./lib/wsActions");
 const { ensureRefreshSessionsTable } = require("./lib/ensureRefreshSessions");
 const { ensureClientDiagnosticsTable } = require("./lib/ensureClientDiagnosticsTable");
 const { ensureOrganizationsFoundation } = require("./lib/ensureOrganizations");
+const { ensureAssetsTables } = require("./lib/ensureAssets");
 
 const authRoutes = require("./routes/auth");
 const aiRoutes = require("./routes/ai");
@@ -218,8 +219,9 @@ async function start() {
     await ensureRefreshSessionsTable(pool);
     await ensureClientDiagnosticsTable(pool);
     await ensureOrganizationsFoundation(pool);
+    await ensureAssetsTables(pool);
   } catch (err) {
-    console.error("❌ No se pudo asegurar tablas de arranque (sessions/diagnostics/orgs):", err.message);
+    console.error("❌ No se pudo asegurar tablas de arranque (sessions/diagnostics/orgs/assets):", err.message);
     process.exit(1);
   }
 
