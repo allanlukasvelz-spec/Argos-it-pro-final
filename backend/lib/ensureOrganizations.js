@@ -75,6 +75,13 @@ async function ensureOrganizationsFoundation(pool) {
 
   await backfillOrganizationsForUsers(pool);
   await backfillOrganizationIdsOnRows(pool);
+
+  const unmapped = await countUnmappedLegacyRows(pool);
+  if (unmapped.total > 0) {
+    console.warn(
+      `[ORGS] UNMAPPED_LEGACY_ROWS=${unmapped.total} detail=${JSON.stringify(unmapped.detail)}`
+    );
+  }
 }
 
 async function backfillOrganizationsForUsers(pool) {
@@ -88,37 +95,53 @@ async function backfillOrganizationsForUsers(pool) {
   );
 
   for (const user of users.rows) {
-    const base = slugifyBase(user.company || user.name || user.email || `user-${user.id}`);
-    let slug = `${base}-${user.id}`;
-    let attempt = 0;
-    // Unique slug retry
-    while (attempt < 5) {
-      const existing = await pool.query(`SELECT id FROM organizations WHERE slug = $1`, [slug]);
-      if (existing.rowCount === 0) break;
-      attempt += 1;
-      slug = `${base}-${user.id}-${attempt}`;
-    }
-
-    const name =
-      (user.company && String(user.company).trim()) ||
-      (user.name && String(user.name).trim()) ||
-      `Organización ${user.id}`;
-
-    const org = await pool.query(
-      `INSERT INTO organizations(slug, name, status)
-       VALUES ($1, $2, 'active')
-       RETURNING id`,
-      [slug, name]
-    );
-    const organizationId = org.rows[0].id;
-
-    await pool.query(
-      `INSERT INTO organization_members(organization_id, user_id, org_role)
-       VALUES ($1, $2, 'org_owner')
-       ON CONFLICT (organization_id, user_id) DO NOTHING`,
-      [organizationId, user.id]
-    );
+    await ensurePrimaryOrganizationForUser(pool, user);
   }
+}
+
+/**
+ * Create a primary org + org_owner membership for a single user (idempotent).
+ */
+async function ensurePrimaryOrganizationForUser(pool, user) {
+  const existing = await pool.query(
+    `SELECT organization_id FROM organization_members WHERE user_id = $1 LIMIT 1`,
+    [user.id]
+  );
+  if (existing.rowCount > 0) {
+    return existing.rows[0].organization_id;
+  }
+
+  const base = slugifyBase(user.company || user.name || user.email || `user-${user.id}`);
+  let slug = `${base}-${user.id}`;
+  let attempt = 0;
+  while (attempt < 5) {
+    const clash = await pool.query(`SELECT id FROM organizations WHERE slug = $1`, [slug]);
+    if (clash.rowCount === 0) break;
+    attempt += 1;
+    slug = `${base}-${user.id}-${attempt}`;
+  }
+
+  const name =
+    (user.company && String(user.company).trim()) ||
+    (user.name && String(user.name).trim()) ||
+    `Organización ${user.id}`;
+
+  const org = await pool.query(
+    `INSERT INTO organizations(slug, name, status)
+     VALUES ($1, $2, 'active')
+     RETURNING id`,
+    [slug, name]
+  );
+  const organizationId = org.rows[0].id;
+
+  await pool.query(
+    `INSERT INTO organization_members(organization_id, user_id, org_role)
+     VALUES ($1, $2, 'org_owner')
+     ON CONFLICT (organization_id, user_id) DO NOTHING`,
+    [organizationId, user.id]
+  );
+
+  return organizationId;
 }
 
 async function backfillOrganizationIdsOnRows(pool) {
@@ -185,19 +208,25 @@ function isGlobalArgosAdmin(role) {
   return GLOBAL_ADMIN_ROLES.includes(role);
 }
 
+function isActiveMembership(m) {
+  return m && String(m.status || "").toLowerCase() === "active";
+}
+
 /**
  * Resolve active organization for a user.
  * Prefer explicit membership match; ignore untrusted client org ids unless member.
+ * Inactive / suspended / archived orgs are never selected (fail closed).
  */
 function resolveActiveOrganization(memberships, requestedOrgId) {
-  if (!memberships || memberships.length === 0) {
+  const active = (memberships || []).filter(isActiveMembership);
+  if (active.length === 0) {
     return null;
   }
 
   if (requestedOrgId != null) {
     const id = Number(requestedOrgId);
     if (Number.isInteger(id) && id > 0) {
-      const match = memberships.find((m) => Number(m.organization_id) === id);
+      const match = active.find((m) => Number(m.organization_id) === id);
       if (match) {
         return {
           id: Number(match.organization_id),
@@ -210,7 +239,7 @@ function resolveActiveOrganization(memberships, requestedOrgId) {
     }
   }
 
-  const primary = memberships[0];
+  const primary = active[0];
   return {
     id: Number(primary.organization_id),
     slug: primary.slug,
@@ -233,14 +262,89 @@ function assertResourceInTenant(resourceOrgId, tenantId) {
   return { ok: true };
 }
 
+const TENANT_SCOPED_TABLES = [
+  "client_services",
+  "website_audits",
+  "client_improvements",
+  "client_messages",
+  "form_submissions",
+  "activity_logs",
+  "security_logs",
+  "client_diagnostics"
+];
+
+/** Tables read/written by /api/client portal routes (Phase 1 gate). */
+const PORTAL_SCOPED_TABLES = [
+  "client_services",
+  "website_audits",
+  "client_improvements",
+  "client_messages",
+  "form_submissions",
+  "activity_logs",
+  "client_diagnostics"
+];
+
+/**
+ * Count rows that still lack organization_id after backfill.
+ * Does not invent org assignment.
+ * @param {import("pg").Pool} pool
+ * @param {string[]} [tables]
+ */
+async function countUnmappedLegacyRows(pool, tables = TENANT_SCOPED_TABLES) {
+  const detail = {};
+  let total = 0;
+
+  for (const table of tables) {
+    const exists = await pool.query(
+      `SELECT 1 FROM information_schema.tables
+       WHERE table_schema = 'public' AND table_name = $1`,
+      [table]
+    );
+    if (exists.rowCount === 0) {
+      detail[table] = 0;
+      continue;
+    }
+    const hasCol = await pool.query(
+      `SELECT 1 FROM information_schema.columns
+       WHERE table_schema = 'public' AND table_name = $1 AND column_name = 'organization_id'`,
+      [table]
+    );
+    if (hasCol.rowCount === 0) {
+      detail[table] = 0;
+      continue;
+    }
+    const r = await pool.query(
+      `SELECT COUNT(*)::int AS c
+       FROM ${table}
+       WHERE organization_id IS NULL
+         AND user_id IS NOT NULL`
+    );
+    const c = r.rows[0]?.c || 0;
+    detail[table] = c;
+    total += c;
+  }
+
+  return { total, detail };
+}
+
+async function countUnmappedPortalLegacyRows(pool) {
+  return countUnmappedLegacyRows(pool, PORTAL_SCOPED_TABLES);
+}
+
 module.exports = {
   ORG_ROLES,
   GLOBAL_ADMIN_ROLES,
+  TENANT_SCOPED_TABLES,
+  PORTAL_SCOPED_TABLES,
   ensureOrganizationsFoundation,
   backfillOrganizationsForUsers,
+  ensurePrimaryOrganizationForUser,
   listMembershipsForUser,
   resolveActiveOrganization,
+  isActiveMembership,
   isGlobalArgosAdmin,
   assertResourceInTenant,
+  countUnmappedLegacyRows,
+  countUnmappedPortalLegacyRows,
   slugifyBase
 };

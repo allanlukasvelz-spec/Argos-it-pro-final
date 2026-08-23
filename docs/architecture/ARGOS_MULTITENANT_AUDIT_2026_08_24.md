@@ -382,8 +382,26 @@ Implemented on `feature/argos-multitenant-platform`:
 
 **Not yet (Phase 1):** wiring `resolveTenantContext` into `/api/client/*` (portal still user_id-scoped to avoid breaking existing sessions before backfill is verified in each env).
 
+## Phase 1 execution log (2026-08-24)
+
 ```
-PHASE_0_STATUS = FOUNDATION_LANDED
-PHASE_1_STATUS = PENDING
+PHASE_1_STATUS = COMPLETE
+CLIENT_ROUTES_TENANT_SCOPED = PASS
+resolveTenantContext = sync factory (bugfix: was returning Promise)
+UNMAPPED_PORTAL_LEGACY_ROWS = 0 after boot backfill (rows with user_id)
+Register creates primary organization + org_owner membership
 ```
+
+Routes audited/changed under `/api/client/*`:
+
+| Route | Type | Scope |
+|-------|------|-------|
+| GET /portal | READ | org-scoped lists; user profile by actor user_id |
+| POST /improvements | CREATE | organization_id forced from session |
+| POST /messages | CREATE | organization_id forced from session |
+| GET /diagnostics | READ | organization_id |
+| GET /diagnostics/:id | READ | id + organization_id → 404 cross-tenant |
+| POST /diagnostics | CREATE | organization_id forced from session |
+
+No UPDATE/DELETE endpoints under `/api/client` in this codebase.
 

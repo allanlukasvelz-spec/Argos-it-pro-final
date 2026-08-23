@@ -16,7 +16,7 @@ const {
  *
  * Optional header X-Argos-Organization-Id is honored ONLY if user is a member.
  */
-async function resolveTenantContext(pool) {
+function resolveTenantContext(pool) {
   return async function tenantContext(req, res, next) {
     try {
       const userId = req.user?.id;
@@ -41,9 +41,15 @@ async function resolveTenantContext(pool) {
       req.tenant = tenant;
 
       if (!tenant && !req.isGlobalArgosAdmin) {
+        const hasInactiveOnly =
+          Array.isArray(memberships) &&
+          memberships.length > 0 &&
+          memberships.every((m) => String(m.status || "").toLowerCase() !== "active");
         return res.status(403).json({
-          error: "Usuario sin organización asignada",
-          code: "NO_ORGANIZATION_MEMBERSHIP"
+          error: hasInactiveOnly
+            ? "Organización inactiva o suspendida"
+            : "Usuario sin organización asignada",
+          code: hasInactiveOnly ? "INACTIVE_ORGANIZATION" : "NO_ORGANIZATION_MEMBERSHIP"
         });
       }
 

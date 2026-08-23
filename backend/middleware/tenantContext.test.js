@@ -120,6 +120,31 @@ describe("resolveTenantContext", () => {
     assert.equal(req.isGlobalArgosAdmin, true);
     assert.equal(req.tenant, null);
   });
+
+  it("inactive-only membership fails closed for clients", async () => {
+    const mw = await resolveTenantContext(
+      mockPool({
+        4: [
+          {
+            organization_id: 40,
+            org_role: "org_owner",
+            slug: "x",
+            name: "X",
+            status: "archived"
+          }
+        ]
+      })
+    );
+    const req = { user: { id: 4, role: "cliente" }, headers: {}, query: {} };
+    const res = mockRes();
+    let next = false;
+    await mw(req, res, () => {
+      next = true;
+    });
+    assert.equal(next, false);
+    assert.equal(res.statusCode, 403);
+    assert.equal(res.body.code, "INACTIVE_ORGANIZATION");
+  });
 });
 
 describe("requireTenant", () => {

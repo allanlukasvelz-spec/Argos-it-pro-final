@@ -17,10 +17,11 @@ const authRoutes = require("./routes/auth");
 const aiRoutes = require("./routes/ai");
 const securityRoutes = require("./routes/security");
 const contactRoutes = require("./routes/contact");
-const clientRoutes = require("./routes/client");
+const createClientRouter = require("./routes/client");
 const { generalLimiter, detectBot, aiLimiter } = require("./middleware/security");
 const authMiddleware = require("./middleware/auth");
 const csrfOriginGuard = require("./middleware/csrfOrigin");
+const { resolveTenantContext, requireTenant } = require("./middleware/tenantContext");
 
 const app = express();
 // Trust the single Traefik hop so rate limits use the real client IP.
@@ -163,7 +164,13 @@ app.use("/api/contact", contactRoutes);
 // Rutas protegidas
 app.use("/api/ai", aiLimiter, authMiddleware, aiRoutes);
 app.use("/api/security", authMiddleware, securityRoutes);
-app.use("/api/client", authMiddleware, clientRoutes);
+app.use(
+  "/api/client",
+  authMiddleware,
+  resolveTenantContext(pool),
+  requireTenant(),
+  createClientRouter(pool)
+);
 
 // Health check — verifies database connectivity
 app.get("/api/health", async (req, res) => {

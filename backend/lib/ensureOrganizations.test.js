@@ -49,6 +49,28 @@ describe("resolveActiveOrganization — never trust foreign org ids", () => {
     assert.equal(resolveActiveOrganization([], 10), null);
     assert.equal(resolveActiveOrganization(null, 10), null);
   });
+
+  it("ignores inactive / suspended memberships", () => {
+    const mixed = [
+      {
+        organization_id: 10,
+        org_role: "org_owner",
+        slug: "dead",
+        name: "Dead",
+        status: "suspended"
+      },
+      {
+        organization_id: 20,
+        org_role: "org_member",
+        slug: "live",
+        name: "Live",
+        status: "active"
+      }
+    ];
+    const t = resolveActiveOrganization(mixed, 10);
+    assert.equal(t.id, 20, "requested inactive id must not win");
+    assert.equal(resolveActiveOrganization([mixed[0]], null), null);
+  });
 });
 
 describe("assertResourceInTenant — IDOR protection", () => {
