@@ -32,11 +32,21 @@ if [[ -f "${REFRESH_FILE}" ]]; then
 fi
 
 if [[ -d "${MIGRATIONS_DIR}" ]]; then
-  echo "Aplicando migrations numeradas en ${MIGRATIONS_DIR}..."
+  # Forward only: numbered *.sql, never *_down.sql (rollback is manual).
+  echo "Aplicando migrations forward numeradas en ${MIGRATIONS_DIR}..."
   while IFS= read -r migration; do
+    base="$(basename "${migration}")"
+    if [[ "${base}" == *_down.sql ]]; then
+      continue
+    fi
+    if [[ ! "${base}" =~ ^[0-9]+_.*\.sql$ ]]; then
+      echo "  (omitido no numerado: ${base})"
+      continue
+    fi
     echo "  -> ${migration}"
     psql "${DB_URL}" -v ON_ERROR_STOP=1 -f "${migration}"
   done < <(find "${MIGRATIONS_DIR}" -maxdepth 1 -type f -name '*.sql' | sort)
 fi
 
-echo "Base de datos configurada (schema + refresh_sessions + migrations)."
+echo "Base de datos configurada (schema + refresh_sessions + migrations forward)."
+echo "Rollback: aplicar manualmente database/migrations/*_down.sql si procede."

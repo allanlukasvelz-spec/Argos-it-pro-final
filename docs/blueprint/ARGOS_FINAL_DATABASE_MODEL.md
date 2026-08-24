@@ -1,9 +1,9 @@
 # ARGOS — Database model
 
 ```
-NO DDL IN THIS PHASE
-HEAD SCHEMA = database/schema.sql @ ec27eb9
-MARKERS = EXISTS | EXISTS_VIA_ENSURE | PHASE_3 | PHASE_4 | PHASE_6 | PHASE_7 | PHASE_8 | FUTURE
+PHASE_3 DDL = EXISTS (003_monitoring_alerts_incidents + schema.sql + ensureMonitors.js)
+HEAD SCHEMA = database/schema.sql (Phase 3 aligned)
+MARKERS = EXISTS | EXISTS_VIA_ENSURE | PHASE_3_DONE | PHASE_4 | PHASE_6 | PHASE_7 | PHASE_8 | FUTURE
 ```
 
 ---
@@ -14,12 +14,13 @@ MARKERS = EXISTS | EXISTS_VIA_ENSURE | PHASE_3 | PHASE_4 | PHASE_6 | PHASE_7 | P
 users 1──* organization_members *──1 organizations
 organizations 1──* assets
 assets 1──* tls_certificates          (EXISTS; cert also org-scoped)
-assets 1──* monitors                  PHASE_3
-monitors 1──* observations            PHASE_3
-observations }── health derivation    PHASE_3 (table or computed)
-alerts *──1 organization              PHASE_3
-alerts *──0..1 incidents              PHASE_3
-incidents 1──* incident_events        PHASE_3
+assets 1──* monitors                  EXISTS (Phase 3)
+monitors 1──* monitor_checks          EXISTS (Phase 3)
+monitors 1──* observations            EXISTS (Phase 3)
+observations }── health derivation    COMPUTED (no health_snapshots table)
+alerts *──1 organization              EXISTS (Phase 3)
+alerts *──0..1 incidents              EXISTS (Phase 3; via events)
+incidents 1──* incident_events        EXISTS (Phase 3)
 incidents 1──* remediation_actions    PHASE_6
 runbooks 1──* remediation_actions     PHASE_6
 preventive_actions → assets           PHASE_6
@@ -38,32 +39,32 @@ Aislamiento: **toda** tabla de recurso cliente lleva `organization_id NOT NULL` 
 ## 2. EXISTS (schema.sql)
 
 ### users
-`id, email UNIQUE, password, name, company, role DEFAULT 'cliente', client_verified, company_profile JSONB, avatar_url, is_active, timestamps`  
+`id, email UNIQUE, password, name, company, role DEFAULT 'cliente', client_verified, company_profile JSONB, avatar_url, is_active, timestamps`
 Roles comentario: visitante | cliente | cliente_verificado | admin | super_admin.
 
 ### organizations
 `id, slug UNIQUE, name, status IN (active,suspended,archived), timestamps`
 
 ### organization_members
-`id, organization_id FK CASCADE, user_id FK CASCADE, org_role IN (org_owner, org_admin, org_member, org_viewer), created_at`  
+`id, organization_id FK CASCADE, user_id FK CASCADE, org_role IN (org_owner, org_admin, org_member, org_viewer), created_at`
 UNIQUE (organization_id, user_id)
 
 ### assets
-`id, organization_id FK CASCADE, parent_asset_id self FK SET NULL`  
-`type IN (DOMAIN, HOSTNAME, WEBSITE, SERVER, API, DATABASE, SERVICE, TLS_CERTIFICATE)`  
+`id, organization_id FK CASCADE, parent_asset_id self FK SET NULL`
+`type IN (DOMAIN, HOSTNAME, WEBSITE, SERVER, API, DATABASE, SERVICE, TLS_CERTIFICATE)`
 `name, hostname, address, environment IN (production,staging,development,other), status IN (active,inactive,archived,unknown), kind, is_primary, metadata JSONB, last_observed_at, created_by, timestamps`
 
 ### tls_certificates
-`id, organization_id, asset_id SET NULL, provider, serial, fingerprint_sha256, issuer, subject, not_before, not_after, sans JSONB, is_wildcard, auto_renew, renewal_method, last_observed_at`  
-`observation_status IN (VALID, EXPIRING, EXPIRED, HOSTNAME_MISMATCH, CHAIN_ERROR, UNKNOWN)`  
-`hostname_match, metadata, created_by, timestamps`  
+`id, organization_id, asset_id SET NULL, provider, serial, fingerprint_sha256, issuer, subject, not_before, not_after, sans JSONB, is_wildcard, auto_renew, renewal_method, last_observed_at`
+`observation_status IN (VALID, EXPIRING, EXPIRED, HOSTNAME_MISMATCH, CHAIN_ERROR, UNKNOWN)`
+`hostname_match, metadata, created_by, timestamps`
 **No private key.**
 
 ### ai_memory
 `user_id, role dumbo|chico, message` — **not org-scoped** (deuda PHASE_1 leftover).
 
 ### activity_logs / security_logs
-`user_id, organization_id SET NULL, action(+risk_level), details JSONB`  
+`user_id, organization_id SET NULL, action(+risk_level), details JSONB`
 API security dashboard **no** filtra por org (deuda).
 
 ### services
@@ -80,38 +81,38 @@ Tenant columns nullable SET NULL — Phase 1 backfill. TARGET: tratar `organizat
 ## 3. EXISTS_VIA_ENSURE (deuda)
 
 ### client_diagnostics
-Creada en `ensureClientDiagnosticsTable.js`: `user_id`, score, `risk_level`, JSONB strengths/risks/priorities/answers.  
-Migración 001 añade `organization_id` si existe.  
+Creada en `ensureClientDiagnosticsTable.js`: `user_id`, score, `risk_level`, JSONB strengths/risks/priorities/answers.
+Migración 001 añade `organization_id` si existe.
 **Acción futura (no ahora):** promover a `schema.sql`.
 
 ---
 
-## 4. PHASE_3 (diseño — NO CREAR AHORA)
+## 4. PHASE_3 (EXISTS — CURRENT)
+
+Tipos monitor implementados: **HTTP | TLS | DNS** (TCP/ICMP/CUSTOM = FUTURE).
+Health: **calculada en lectura** (`healthEngine`); no tabla `health_snapshots`.
+Overall visual: `HEALTHY | WARNING | CRITICAL | UNKNOWN`.
 
 ### monitors
-`id, organization_id NOT NULL, asset_id NOT NULL, type` (HTTP, TLS, DNS, TCP, ICMP, CUSTOM)  
-`interval_seconds, enabled, config JSONB, created_by, timestamps`  
-UNIQUE lógico: un tipo activo por asset salvo config distinta explícita.
+`organization_id, asset_id, type, name, status` (ACTIVE|PAUSED|DISABLED|ERROR), `enabled`, `interval_seconds`, `timeout_ms`, `config JSONB` (sin secretos), `last_check_at`, `next_check_at`, `created_by`, timestamps.
+Unique parcial: un tipo activo por asset.
+
+### monitor_checks
+`monitor_id, organization_id, asset_id, status` (QUEUED|RUNNING|SUCCEEDED|FAILED|TIMED_OUT|CANCELLED), `started_at`, `finished_at`, `error_class`, `duration_ms`
 
 ### observations
-`id, organization_id NOT NULL, monitor_id, asset_id, checked_at, ok BOOLEAN, status_code, latency_ms, error_class, evidence JSONB, source IN (PLATFORM, AGENT)`  
-Inmutable (append-only).
-
-### health_snapshots (opcional; puede ser vista materializada)
-`organization_id, asset_id, overall IN (HEALTHY, OBSERVE, WARNING, HIGH, CRITICAL, UNKNOWN), coverage JSONB, computed_at, basis_observation_ids`
+Append-only: `monitor_check_id, monitor_id, asset_id, organization_id, observed_at, ok, status_code, latency_ms, error_class, classification` (DETECTED), `evidence JSONB`
 
 ### alerts
-`id, organization_id NOT NULL, asset_id, monitor_id, severity, state IN (OPEN, ACKED, CLOSED), fingerprint, title, opened_at, closed_at, evidence JSONB`  
-Dedup por fingerprint + org.
+`severity` (WARNING|CRITICAL), `state` (OPEN|ACKNOWLEDGED|RESOLVED), `fingerprint`, unique parcial org+fingerprint en abiertos.
 
 ### incidents
-`id, organization_id NOT NULL, title, severity, state IN (OPEN, MITIGATED, RESOLVED, CLOSED), owner_user_id, opened_at, resolved_at, summary`
+`state` (OPEN|INVESTIGATING|MITIGATED|RESOLVED), `severity`, `correlation_key`, unique parcial org+key en no-resueltos.
 
 ### incident_events
-`id, incident_id, organization_id, kind IN (ALERT_LINKED, NOTE, ACTION, VERIFY, STATE_CHANGE), payload JSONB, actor_user_id, created_at`  
-Append-only.
+Append-only: `ALERT_LINKED | NOTE | STATE_CHANGE | EVIDENCE` (kinds ACTION_A/B/C reservados, no ejecutar).
 
-Índices: `(organization_id, state)`, `(organization_id, asset_id, checked_at DESC)`.
+Índices: `(organization_id, state)`, `(organization_id, asset_id, observed_at DESC)`, `next_check_at`.
 
 ---
 
@@ -149,7 +150,7 @@ Secretos de agente: hash + rotación; nunca plaintext en fila de log.
 `id, organization_id, type, period, file_uri, generated_at`
 
 ### audit_events
-Producto de auditoría NOC: `actor_user_id, organization_id NULL` (NULL = plataforma), `action, resource, ip, details`  
+Producto de auditoría NOC: `actor_user_id, organization_id NULL` (NULL = plataforma), `action, resource, ip, details`
 Hoy `activity_logs` es semilla, no reemplazo completo.
 
 ### support_tickets
@@ -159,9 +160,9 @@ Evolución de `client_messages` / `form_submissions` — FUTURE si se unifica; n
 
 ## 8. Reglas
 
-1. **No** tablas Phase 3 en esta ejecución.  
-2. FK `organization_id` ON DELETE CASCADE en recursos operativos; logs SET NULL o retain según retención (decidir en P8).  
-3. Queries always `WHERE organization_id = $ctx`.  
-4. Observations/events append-only — no UPDATE de evidencia histórica.  
-5. TLS private keys: never a column.  
+1. Phase 3 tablas EXISTS; rollback solo `003_*_down.sql` manual (nunca vía migrate forward).
+2. FK `organization_id` ON DELETE CASCADE en recursos operativos; logs SET NULL o retain según retención (decidir en P8).
+3. Queries always `WHERE organization_id = $ctx`.
+4. Observations/events append-only — no UPDATE de evidencia histórica.
+5. TLS private keys: never a column.
 6. `UNKNOWN` es un valor de dominio, no un NULL silencioso en status enums que impliquen salud.

@@ -4,7 +4,7 @@
 PHASE_0 = COMPLETE 3444916
 PHASE_1 = COMPLETE c19a8ce
 PHASE_2 = COMPLETE ec27eb9
-PHASE_3 = NOT AUTHORIZED
+PHASE_3 = COMPLETE (monitoring APIs + engines; no UI)
 STASH = do not apply
 ```
 
@@ -17,8 +17,8 @@ STASH = do not apply
 | 0 | Organization foundation | DONE | tenant exists |
 | 1 | Tenant scoping | DONE | client APIs scoped |
 | 2 | Assets + TLS | DONE | something to monitor |
-| 3 | Monitoring + alerts + incidents | NEXT (authz required) | critical path core |
-| 4 | Client private experience | after/with 3 APIs | clients must see truth |
+| 3 | Monitoring + alerts + incidents | DONE (backend/APIs) | critical path core |
+| 4 | Client private experience | NEXT | clients must see truth |
 | 5 | Internal NOC | after 3 | operators need queue |
 | 6 | Runbooks + remediation | after incidents | A/B/C needs a case |
 | 7 | Agents | after monitors | extra observation source |
@@ -28,7 +28,7 @@ STASH = do not apply
 | 11 | Pilot customers | after 3–5 min | real orgs |
 | 12 | Production readiness | last | drills, backups, freeze |
 
-Relume/Framer: **between** this blueprint and Phase 4/5 UI implementation (can start Relume now; cannot implement P3).
+Relume/Framer: Design Contract congelado; UI Client/NOC = Phase 4/5 (no mezclar con este backend Phase 3).
 
 ---
 
@@ -53,7 +53,8 @@ organization → asset → monitor → check → observation
 | Slice | Class |
 |-------|--------|
 | Org + asset + TLS on discover | DONE |
-| Pipeline + honest health + alert + incident + one client view + one staff view | **MVP** |
+| Pipeline + honest health + alert + incident (APIs) | DONE (Phase 3) |
+| One client view + one staff view | **MVP** restante (Phase 4/5) |
 | Full portal IA + full NOC | V1 |
 | A/B/C execution + agents | V1.5 |
 | Prediction ML, billing | FUTURE |
@@ -78,7 +79,7 @@ ROLLBACK
 EXIT CRITERIA (DoD)
 ```
 
-### Phase 3 template (design only — do not execute)
+### Phase 3 template (IMPLEMENTED — backend; see runbook)
 
 | Field | Content |
 |-------|---------|
@@ -107,10 +108,10 @@ Architecture coherent · migration safe (no accidental `_down`) · tenant isolat
 
 ---
 
-## 6. Immediate next (after this doc commit)
+## 6. Immediate next
 
-1. Relume using `handoff/ARGOS_RELUME_HANDOFF.md`
-2. Human approve Relume
-3. Framer + fill Design Contract
-4. Human authorize Phase 3 implementation
-5. Never `git stash pop`
+1. Phase 4 — Client private experience (UI sobre APIs Phase 3; Design Contract)
+2. Phase 5 — Internal NOC
+3. Never `git stash pop`
+4. No push/PR/deploy sin autorización humana explícita
+5. Status: `docs/architecture/ARGOS_PHASE_3_STATUS.md` · Runbook: `docs/runbooks/ARGOS_PHASE_3_MONITORING.md`

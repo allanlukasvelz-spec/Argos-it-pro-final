@@ -13,6 +13,11 @@ const { ensureRefreshSessionsTable } = require("./lib/ensureRefreshSessions");
 const { ensureClientDiagnosticsTable } = require("./lib/ensureClientDiagnosticsTable");
 const { ensureOrganizationsFoundation } = require("./lib/ensureOrganizations");
 const { ensureAssetsTables } = require("./lib/ensureAssets");
+const { ensureMonitorsTables } = require("./lib/ensureMonitors");
+const {
+  createMonitorScheduler,
+  isSchedulerEnabled
+} = require("./lib/monitoring/scheduler");
 
 const authRoutes = require("./routes/auth");
 const aiRoutes = require("./routes/ai");
@@ -220,8 +225,9 @@ async function start() {
     await ensureClientDiagnosticsTable(pool);
     await ensureOrganizationsFoundation(pool);
     await ensureAssetsTables(pool);
+    await ensureMonitorsTables(pool);
   } catch (err) {
-    console.error("❌ No se pudo asegurar tablas de arranque (sessions/diagnostics/orgs/assets):", err.message);
+    console.error("❌ No se pudo asegurar tablas de arranque (sessions/diagnostics/orgs/assets/monitors):", err.message);
     process.exit(1);
   }
 
@@ -233,6 +239,18 @@ async function start() {
       console.log(`📡 WebSockets desactivados (ENABLE_SOCKET_IO=false)`);
     }
     console.log(`🤖 IA (Chico + Dumbo) lista`);
+
+    if (isSchedulerEnabled()) {
+      try {
+        const scheduler = createMonitorScheduler(pool);
+        scheduler.start();
+        console.log(`⏱️  Monitor scheduler activo (ENABLE_MONITOR_SCHEDULER)`);
+      } catch (schedErr) {
+        console.error("[MONITOR] No se pudo iniciar scheduler:", schedErr.message);
+      }
+    } else {
+      console.log(`⏱️  Monitor scheduler desactivado (ENABLE_MONITOR_SCHEDULER=false)`);
+    }
   });
 }
 

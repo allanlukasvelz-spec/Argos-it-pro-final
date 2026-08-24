@@ -48,7 +48,7 @@ Reglas:
 | BACKUP | SERVICE/SERVER | last success timestamp (agent or API) | 7–8 |
 | CUSTOM | — | JSON probe spec | FUTURE |
 
-CURRENT: TLS observation **on-demand** en `POST /api/client/domains/discover`. No scheduler. No HTTP monitor.
+CURRENT (Phase 3): monitors HTTP/TLS/DNS provisionados al create/discover; scheduler in-process; observations → health (4 estados) → alerts → incidents. TLS on-demand en discover sigue disponible. TCP = FUTURE.
 
 ---
 
@@ -122,10 +122,14 @@ Confidence: `HIGH | MEDIUM | LOW | UNKNOWN`. **Prohibido** % inventado.
 
 ---
 
-## 8. APIs TARGET (not implemented)
+## 8. APIs
 
-Client (tenant): `GET /api/client/monitors`, `GET /api/client/health`, `GET /api/client/observations?asset_id=`  
-NOC (staff): `GET /api/noc/monitors`, force-check Level 1, scheduler status.
+**CURRENT (Client tenant, read-only):**
+`GET /api/client/monitoring`, `GET /api/client/health?asset_id=`, `GET /api/client/monitors`, `GET /api/client/alerts`, `GET /api/client/incidents` (+ `/:id`).
+Observations list API: not required for Phase 3 DoD (evidence via engines/alerts).
+
+**TARGET still open:**
+`GET /api/client/observations?asset_id=` · NOC: `GET /api/noc/monitors`, force-check Level 1, scheduler status (Phase 5).
 
 ---
 
@@ -135,6 +139,8 @@ NOC (staff): `GET /api/noc/monitors`, force-check Level 1, scheduler status.
 |------------|---------|
 | Asset registry | DONE |
 | TLS snapshot on discover | DONE |
-| Periodic HTTP/DNS/TCP | NOT_IMPLEMENTED |
-| Health engine | NOT_IMPLEMENTED |
+| Periodic HTTP/TLS/DNS | DONE (Phase 3); TCP = FUTURE |
+| Health engine (4 overall) | DONE — UNKNOWN ≠ HEALTHY |
+| Alerts + incidents | DONE (dedupe / correlate) |
 | Client “audit score” on dashboard | website_audits / diagnostics — **not** monitor health; do not relabel |
+| Client / NOC UI | NOT_IMPLEMENTED (Phase 4/5) |

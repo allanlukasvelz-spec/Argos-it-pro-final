@@ -2,6 +2,7 @@ const express = require("express");
 const { ASSET_TYPES, isAllowedAssetType } = require("../lib/ensureAssets");
 const hostnameSecurity = require("../lib/hostnameSecurity");
 const tlsStatus = require("../lib/tlsStatus");
+const { provisionMonitorsForAsset } = require("../lib/monitoring/provisionMonitors");
 
 function clean(value = "", limit = 500) {
   return String(value ?? "").trim().slice(0, limit);
@@ -129,7 +130,22 @@ function createAssetsRouter(pool) {
         ]
       );
 
-      res.status(201).json({ asset: serializeAsset(ins.rows[0]) });
+      const asset = ins.rows[0];
+      if (hostname && ["DOMAIN", "HOSTNAME", "WEBSITE"].includes(type)) {
+        try {
+          await provisionMonitorsForAsset(pool, {
+            organizationId: orgId,
+            assetId: asset.id,
+            hostname,
+            createdBy: userId,
+            assetType: type
+          });
+        } catch (provErr) {
+          console.error("[ASSETS] provision monitors:", provErr.message);
+        }
+      }
+
+      res.status(201).json({ asset: serializeAsset(asset) });
     } catch (error) {
       if (error.code === "23505") {
         return res.status(409).json({ error: "Ya existe un activo activo con ese hostname y tipo." });
@@ -391,6 +407,18 @@ function createAssetsRouter(pool) {
           ]
         );
         certificate = tlsStatus.serializeTlsCertificate(certIns.rows[0]);
+      }
+
+      try {
+        await provisionMonitorsForAsset(pool, {
+          organizationId: orgId,
+          assetId: asset.id,
+          hostname,
+          createdBy: userId,
+          assetType: type
+        });
+      } catch (provErr) {
+        console.error("[ASSETS] discover provision monitors:", provErr.message);
       }
 
       res.status(201).json({

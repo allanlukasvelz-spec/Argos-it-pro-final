@@ -392,6 +392,14 @@ function createFakePool() {
       return { rows: [row], rowCount: 1 };
     }
 
+    // Phase 3 provisionMonitorsForAsset (no-op stubs — isolation is asset-scoped)
+    if (s.includes("FROM monitors") && s.includes("organization_id") && s.includes("asset_id") && s.includes("type")) {
+      return { rows: [], rowCount: 0 };
+    }
+    if (s.includes("INSERT INTO monitors")) {
+      return { rows: [{ id: 1 }], rowCount: 1 };
+    }
+
     throw new Error(`Unhandled SQL in fake pool: ${s.slice(0, 200)}`);
   }
 
