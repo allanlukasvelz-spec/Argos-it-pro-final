@@ -12,7 +12,12 @@
 
 | File | Purpose |
 |------|---------|
-| [ARGOS_DESIGN_SYSTEM.md](./ARGOS_DESIGN_SYSTEM.md) | Master design system specification |
+| [ARGOS_DESIGN_SYSTEM.md](./ARGOS_DESIGN_SYSTEM.md) | Master design system specification (21.3 freeze) |
+| [ARGOS_DESIGN_CONTRACT.md](./ARGOS_DESIGN_CONTRACT.md) | Client + NOC visual contract (spec only; UI not authorized) |
+| [ARGOS_COMPONENT_SYSTEM.md](./ARGOS_COMPONENT_SYSTEM.md) | Target reusable components (conceptual) |
+| [ARGOS_RESPONSIVE_BEHAVIOR.md](./ARGOS_RESPONSIVE_BEHAVIOR.md) | Client mobile-first / NOC desktop-first |
+| [ARGOS_UI_STATE_MATRIX.md](./ARGOS_UI_STATE_MATRIX.md) | Health, unknown, provenance, A/B/C states |
+| [ARGOS_CLIENT_NOC_VISUAL_RULES.md](./ARGOS_CLIENT_NOC_VISUAL_RULES.md) | Two experiences, one brand DNA |
 | [cab-decisions.md](./cab-decisions.md) | Closed CAB Decision Register (21.2 → 21.3) |
 | [corporate-foundation-21-4.md](./corporate-foundation-21-4.md) | Corporate foundation + /contacto pilot (21.4) |
 | [corporate-chrome-21-5.md](./corporate-chrome-21-5.md) | Corporate chrome ownership + /contacto header/footer (21.5) |
@@ -38,7 +43,7 @@
 2. Brand tokens (`--argos-brand-*`) are **CANONICAL** but **not wired** to components in 21.3.
 3. Semantic tokens remain mapped to **legacy** production appearance.
 4. Client work (UDIC, TusetCN, Flores Galí, landscaping, etc.) is **not** a brand source.
-5. Control Center visual direction remains **DEFERRED** (`CONTROL_CENTER_FROZEN = NO`).
+5. Control Center visual direction remains **DEFERRED** (`CONTROL_CENTER_FROZEN = NO`). Internal product target is **NOC** (`/noc`); see Client/NOC design contract (spec only).
 6. `#072648` is **REJECTED** as brand primary.
 7. Font **roles** are frozen; Inter/Cormorant are **not loaded**.
 

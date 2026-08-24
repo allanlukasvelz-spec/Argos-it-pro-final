@@ -1,84 +1,73 @@
 # ARGOS Design Contract
 
 ```
-STATUS = AWAITING_RELUME_AND_FRAMER
+STATUS = SPEC_COMPLETE_POINTER
 STAGE = 1_ARCHITECTURAL_PRODUCT_BLUEPRINT
-AUTHORITY = LEVEL_4_WHEN_COMPLETE
-IMPLEMENTATION_BINDING = NO
+AUTHORITY = LEVEL_4_SPEC (Client + NOC visual)
+IMPLEMENTATION_BINDING = YES when a UI phase is authorized
+CURSOR_MAY_IMPLEMENT_FINAL_UI = NO
+PHASE_3_AUTHORIZED = NO
 ```
 
-Este documento será el **contrato definitivo** que Cursor deberá obedecer durante la implementación visual (Nivel 5).
+The visual specification for **Client Portal** and **Internal NOC** now lives in `docs/design/`, not in this placeholder.
 
-**No está completo.** Completarlo ahora con valores inventados violaría el flujo Cursor → Relume → Framer → Cursor.
+**Canonical files:**
+
+| File | Role |
+|------|------|
+| [docs/design/ARGOS_DESIGN_CONTRACT.md](../design/ARGOS_DESIGN_CONTRACT.md) | Tokens, type, spacing, shells, semantics |
+| [docs/design/ARGOS_COMPONENT_SYSTEM.md](../design/ARGOS_COMPONENT_SYSTEM.md) | Reusable components (conceptual) |
+| [docs/design/ARGOS_RESPONSIVE_BEHAVIOR.md](../design/ARGOS_RESPONSIVE_BEHAVIOR.md) | Desktop / tablet / mobile |
+| [docs/design/ARGOS_UI_STATE_MATRIX.md](../design/ARGOS_UI_STATE_MATRIX.md) | Health, unknown, A/B/C, provenance |
+| [docs/design/ARGOS_CLIENT_NOC_VISUAL_RULES.md](../design/ARGOS_CLIENT_NOC_VISUAL_RULES.md) | Two languages, one DNA |
+
+Framer project **ARGOS — Product UI Master** (`/dashboard`, `/noc`) is a **visual reference** (`PIXEL_PERFECT = NO`, `FRAMER_SOURCE_OF_TRUTH = NO`). Relume is IA/UX. Product capabilities remain the Master Blueprint + verified repository.
+
+PUBLIC Corporate freeze is unchanged: [docs/design/ARGOS_VISUAL_FREEZE_21_6B.md](../design/ARGOS_VISUAL_FREEZE_21_6B.md).
 
 ---
 
-## 1. Qué queda cerrado ya (Nivel 1–2 + marca existente)
+## 1. Clauses already closed (Nivel 1–2 + marca)
 
-Estas cláusulas **no esperan** a Relume/Framer. Relume y Framer no pueden contradecirlas.
+These still do not wait on tools. Relume/Framer/this spec cannot contradict them.
 
 | Cláusula | Valor | Fuente |
 |----------|-------|--------|
-| Tres experiencias, un núcleo | PUBLIC / CLIENT / NOC sobre el mismo ARGOS Core | Blueprint de producto |
+| Tres experiencias, un núcleo | PUBLIC / CLIENT / NOC | Blueprint |
 | Aislamiento de tenant | ORG A no ve ORG B | Seguridad |
 | UNKNOWN ≠ HEALTHY | Sin datos suficientes no se afirma protección | Producto |
-| Números de demo | Etiqueta MOCK / DEMO / PLACEHOLDER | Producto |
-| Automatización Level 3+ | Requiere aprobación humana en UI | Producto |
-| Logo / Chico / Dumbo | PROTECTED; no regenerar | Design Director Brief |
-| Paleta canónica Corporate | `#1F3A5F` `#2F7D6D` `#F7F7F5` `#0B1320` | CAB-DS-01 |
-| Tipografía Corporate | Cormorant display + Inter body/UI; Manrope REJECTED | Brief |
+| Números de demo | MOCK / DEMO / PLACEHOLDER | Producto |
+| Automatización Level 3+ | Aprobación humana en UI | Producto |
+| Logo / Chico / Dumbo | PROTECTED | Design Director Brief |
+| Paleta canónica | `#1F3A5F` `#2F7D6D` `#F7F7F5` `#0B1320` | CAB-DS-01 |
+| Tipografía Corporate | Cormorant display + Inter UI; Manrope REJECTED | Brief |
 | Dirección Corporate | QUIET_AUTHORITY / LIGHT_PREMIUM_INSTITUTIONAL | Visual Freeze 21.6B |
 | Mascotas | ASSISTANT_ONLY; WALK REJECTED | Mascot freezes |
-| Rutas públicas actuales | No se eliminan sin aprobación humana | IA actual + Relume handoff |
+| Rutas públicas actuales | No se eliminan sin aprobación humana | IA |
 | Copy inventada | `AI_DRAFT_DO_NOT_SHIP` | Brief |
 
 ---
 
-## 2. Qué queda expresamente abierto
+## 2. What this pointer no longer leaves open (Client + NOC masters)
 
-| Decisión | Estado | Quién la cierra |
-|----------|--------|-----------------|
-| Sitemap TARGET (páginas públicas nuevas) | OPEN | Relume + humano |
-| Jerarquía de navegación portal cliente | OPEN (estructura propuesta en blueprint) | Relume + humano |
-| Jerarquía de navegación NOC | OPEN (estructura propuesta en blueprint) | Relume + humano |
-| Composición visual definitiva | OPEN | Framer + humano |
-| Tipografía definitiva del portal y del NOC | OPEN | Framer + humano (Corporate ya tiene freeze) |
-| Spacing / tamaños exactos | OPEN | Framer + humano |
-| Motion definitivo | OPEN | Framer + humano |
-| Representación final de dashboards | OPEN | Framer + humano |
-| Migración visual Home producción | NO autorizada | Freeze 21.6B + fase visual futura |
+| Decisión | Estado |
+|----------|--------|
+| Jerarquía Resumen `/dashboard` | FROZEN (human PASS_WITH_REFINEMENTS) |
+| Jerarquía Command Center `/noc` | FROZEN |
+| IA nav Relume | FROZEN (sitemap destinations) |
+| Spacing / type / badges / responsive strategy | SPECIFIED in `docs/design/` |
+| Composición pixel-perfect | NO — Framer is reference |
+| PUBLIC restyle | NOT AUTHORIZED |
+| Phase 3 / monitoring / NOC runtime | NOT AUTHORIZED |
 
 ---
 
-## 3. Plantilla que se rellenará después
-
-Cuando Relume y Framer estén aprobados, este archivo deberá incluir:
-
-1. Sitemap congelado (rutas + labels).
-2. Componentes canónicos (nombre, propósito, estados).
-3. Tokens visuales por experiencia (Public / Client / NOC).
-4. Semántica de estados (PROTECTED … UNKNOWN) con color y forma **aprobados**.
-5. Breakpoints y comportamiento responsive congelado.
-6. Accesibilidad: contraste, foco, landmarks, reduced motion.
-7. Lista de assets permitidos y prohibidos.
-8. Criterio de aceptación visual por ruta.
-9. Firma humana: `DESIGN_CONTRACT_STATUS = BINDING`.
-
-Hasta entonces:
+## 3. Implementation gate
 
 ```
-CURSOR_MAY_IMPLEMENT_FUNCTION = YES (solo fases autorizadas)
+CURSOR_MAY_IMPLEMENT_FUNCTION = YES (only authorized engineering phases)
 CURSOR_MAY_IMPLEMENT_FINAL_UI = NO
-RELUME_REQUIRED = YES
-FRAMER_REQUIRED = YES
+RELUME_REQUIRED = DONE (IA approved)
+FRAMER_REQUIRED = MASTER_SCREENS_DONE (not exportable production)
+DESIGN_CONTRACT_STATUS = SPEC_COMPLETE
 ```
-
----
-
-## 4. Relación con documentos vivos
-
-- Principios de marca vigentes: `docs/design/ARGOS_DESIGN_DIRECTOR_BRIEF.md`
-- Freeze visual Corporate: `docs/design/ARGOS_VISUAL_FREEZE_21_6B.md`
-- Entrada Relume: `docs/blueprint/handoff/ARGOS_RELUME_HANDOFF.md`
-- Entrada Framer (borrador): `docs/blueprint/handoff/ARGOS_FRAMER_HANDOFF.md`
-- Función de producto: `docs/blueprint/ARGOS_MASTER_PRODUCT_BLUEPRINT.md`

@@ -1,11 +1,14 @@
 # ARGOS — Handoff Relume
 
 ```
-STATUS = READY_FOR_RELUME
+STATUS = UX_ARCHITECTURE_APPROVED
+SITEMAP = FROZEN
+P1-P4_WIREFRAMES = GENERATED
 STAGE = 1_ARCHITECTURAL_PRODUCT_BLUEPRINT
-AUDIENCE = Relume (IA + UX + wireframes)
+AUDIENCE = Relume (IA + UX + wireframes) — complete
 SECRETS = NONE
 BACKEND_DETAIL = MINIMAL
+VISUAL_SPEC = docs/design/ARGOS_DESIGN_CONTRACT.md
 ```
 
 Relume diseña **sitemap, jerarquía, navegación, journeys, secciones, jerarquía de componentes, wireframes y prioridades responsive**.
@@ -14,7 +17,7 @@ Relume **no** decide: aislamiento de tenants, niveles de automatización, semán
 
 Si un wireframe contradice el Nivel 1–2, gana el blueprint de producto.
 
-**UI final = PENDING FRAMER.** Los wireframes de Relume no se presentan como diseño visual definitivo.
+**UI final = specified in `docs/design/` (not Relume pixels; not Framer export).** Relume wireframes are IA/UX. Marketing template residue (hero, FAQ, testimonials) must not survive into Client/NOC.
 
 ---
 

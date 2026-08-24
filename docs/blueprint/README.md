@@ -37,7 +37,7 @@ Esta carpeta **no** sustituye Relume ni Framer.
 
 - **Wireframes aquí = estructurales.**
 - **UI final = PENDING RELUME + FRAMER.**
-- El contrato de diseño (`ARGOS_DESIGN_CONTRACT.md`) permanece `AWAITING_RELUME_AND_FRAMER`.
+- El contrato visual Client + NOC está en `docs/design/ARGOS_DESIGN_CONTRACT.md` (`SPEC_COMPLETE`). Este directorio no autoriza implementar esa UI ni Phase 3.
 
 ---
 
@@ -48,7 +48,7 @@ Esta carpeta **no** sustituye Relume ni Framer.
 | [ARGOS_MASTER_PRODUCT_BLUEPRINT.md](./ARGOS_MASTER_PRODUCT_BLUEPRINT.md) | **SOURCE OF TRUTH** — especificación completa |
 | [ARGOS_MASTER_BLUEPRINT.html](./ARGOS_MASTER_BLUEPRINT.html) | Plano navegable (local) |
 | [ARGOS_MASTER_BLUEPRINT.pptx](./ARGOS_MASTER_BLUEPRINT.pptx) | Presentación de blueprint arquitectónico (no diseño visual final) |
-| [ARGOS_DESIGN_CONTRACT.md](./ARGOS_DESIGN_CONTRACT.md) | Contrato de implementación visual — **placeholder** hasta Relume + Framer |
+| [ARGOS_DESIGN_CONTRACT.md](./ARGOS_DESIGN_CONTRACT.md) | Puntero al contrato visual en `docs/design/` — **SPEC_COMPLETE**; UI no autorizada |
 
 ---
 

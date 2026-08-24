@@ -1,16 +1,18 @@
 # ARGOS — Handoff Framer (DRAFT)
 
 ```
-STATUS = DRAFT
+STATUS = MASTER_SCREENS_DONE
 COMPLETE_AFTER = RELUME_APPROVED
 STAGE = 1_ARCHITECTURAL_PRODUCT_BLUEPRINT
 PIXEL_PERFECT = NO
 FINAL_UI_FREEZE = NO
+FRAMER_PROJECT = ARGOS — Product UI Master
+CLIENT_MASTER = /dashboard
+NOC_MASTER = /noc
+VISUAL_SPEC = docs/design/ARGOS_DESIGN_CONTRACT.md
 ```
 
-Este documento **no congela** el diseño final. Define principios, restricciones y semántica que Framer deberá respetar cuando Relume haya aprobado la IA/UX.
-
-Completar las secciones marcadas `TBD_AFTER_RELUME` solo después de ese gate.
+Este documento **no congela** el diseño pixel-perfect. Los masters Framer `/dashboard` y `/noc` más `docs/design/ARGOS_DESIGN_CONTRACT.md` cierran jerarquía, semántica y sistema visual **sin** autorizar implementación ni exportar Framer a producción.
 
 No incluye secretos ni detalle de implementación backend.
 
