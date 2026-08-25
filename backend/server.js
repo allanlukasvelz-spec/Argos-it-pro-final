@@ -14,6 +14,7 @@ const { ensureClientDiagnosticsTable } = require("./lib/ensureClientDiagnosticsT
 const { ensureOrganizationsFoundation } = require("./lib/ensureOrganizations");
 const { ensureAssetsTables } = require("./lib/ensureAssets");
 const { ensureMonitorsTables } = require("./lib/ensureMonitors");
+const { ensureRemediationTables } = require("./lib/ensureRemediation");
 const {
   createMonitorScheduler,
   isSchedulerEnabled
@@ -181,7 +182,9 @@ app.use(
 // Phase 5 — Internal NOC (global staff only; never weaken /api/client)
 const requireNocAccess = require("./middleware/requireNocAccess");
 const createNocRouter = require("./routes/noc");
+const createNocRemediationRouter = require("./routes/nocRemediation");
 app.use("/api/noc", authMiddleware, requireNocAccess, createNocRouter(pool));
+app.use("/api/noc", authMiddleware, requireNocAccess, createNocRemediationRouter(pool));
 
 // Health check — verifies database connectivity
 app.get("/api/health", async (req, res) => {
@@ -231,8 +234,9 @@ async function start() {
     await ensureOrganizationsFoundation(pool);
     await ensureAssetsTables(pool);
     await ensureMonitorsTables(pool);
+    await ensureRemediationTables(pool);
   } catch (err) {
-    console.error("❌ No se pudo asegurar tablas de arranque (sessions/diagnostics/orgs/assets/monitors):", err.message);
+    console.error("❌ No se pudo asegurar tablas de arranque (sessions/diagnostics/orgs/assets/monitors/remediation):", err.message);
     process.exit(1);
   }
 

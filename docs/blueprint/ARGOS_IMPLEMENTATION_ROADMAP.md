@@ -7,6 +7,7 @@ PHASE_2 = COMPLETE ec27eb9
 PHASE_3 = COMPLETE 61148f4
 PHASE_4 = COMPLETE (client portal UI; no NOC)
 PHASE_5 = COMPLETE (internal NOC /api/noc + /noc; read-only)
+PHASE_6 = COMPLETE (runbooks + typed remediation; simulator L2; no customer infra mutation)
 STASH = do not apply
 ```
 
@@ -22,7 +23,8 @@ STASH = do not apply
 | 3 | Monitoring + alerts + incidents | DONE (backend/APIs) | critical path core |
 | 4 | Client private experience | DONE (UI `/dashboard/*`) | clients must see truth |
 | 5 | Internal NOC | DONE (UI `/noc` + `/api/noc/*`) | operators need queue |
-| 6 | Runbooks + remediation | NEXT | A/B/C needs a case |
+| 6 | Runbooks + remediation | DONE (engine + simulator) | A/B/C needs a case |
+| 7 | Agents | NEXT | extra observation source |
 | 7 | Agents | after monitors | extra observation source |
 | 8 | Notifications + reporting | after alerts | who to tell |
 | 9 | Preventive intelligence | after history | else fake prediction |
@@ -112,7 +114,7 @@ Architecture coherent · migration safe (no accidental `_down`) · tenant isolat
 
 ## 6. Immediate next
 
-1. Phase 6 — Runbooks + remediation (solo con autorización humana)
+1. Phase 7 — Agents (solo con autorización humana)
 2. Never `git stash pop`
 3. No push/PR/deploy sin autorización humana explícita
-4. Status: `docs/architecture/ARGOS_PHASE_5_STATUS.md` · Runbook: `docs/runbooks/ARGOS_PHASE_5_NOC.md`
+4. Status: `docs/architecture/ARGOS_PHASE_6_STATUS.md` · Runbook: `docs/runbooks/ARGOS_PHASE_6_RUNBOOK_ENGINE.md`

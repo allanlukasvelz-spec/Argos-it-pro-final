@@ -169,7 +169,7 @@ Resto de páginas: `ARGOS_FINAL_CLIENT_PORTAL_BLUEPRINT.md`.
 
 ### C.0 CURRENT
 
-`IMPLEMENTED` (Phase 5). `frontend/app/noc/*` + `GET /api/noc/*` read-only, gate `admin|super_admin`. Placeholders honestos P6–P9. `/api/client/*` sin cambios. `GET /api/security/stats` sigue siendo admin global aparte, no sustituye al NOC.
+`IMPLEMENTED` (Phase 5 + Phase 6). `frontend/app/noc/*` + `GET/POST /api/noc/*` con runbooks/remediation tipada. Placeholders P7–P9 (agents/reports/predictions). `/api/client/*` sin remediación. `GET /api/security/stats` sigue siendo admin global aparte.
 
 ### C.1 TARGET tree
 

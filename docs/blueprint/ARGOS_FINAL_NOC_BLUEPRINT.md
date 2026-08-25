@@ -2,7 +2,7 @@
 
 ```
 ROOT = /noc
-CURRENT = IMPLEMENTED (Phase 5 read-only; placeholders P6–P9)
+CURRENT = IMPLEMENTED (Phase 5 + Phase 6 runbooks/remediation; placeholders P7–P9)
 PHASE = 5 (UI + APIs) on Phase 0–4 data
 USER = ARGOS staff (admin / super_admin)
 TONE = dense, fast, evidence-driven

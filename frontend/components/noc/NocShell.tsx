@@ -38,8 +38,8 @@ export const NOC_NAV: NavSection[] = [
       { href: "/noc/predicted-risks", label: "Predicted Risks", placeholder: true },
       { href: "/noc/preventive-actions", label: "Preventive Actions", placeholder: true },
       { href: "/noc/agents", label: "Agents", placeholder: true },
-      { href: "/noc/runbooks", label: "Runbooks", placeholder: true },
-      { href: "/noc/remediations", label: "Remediations", placeholder: true },
+      { href: "/noc/runbooks", label: "Runbooks" },
+      { href: "/noc/remediations", label: "Remediations" },
       { href: "/noc/reports", label: "Reports", placeholder: true }
     ]
   },
