@@ -165,20 +165,3 @@ describe("configureEvidenceStore backend selection", () => {
     assert.equal(isS3EvidenceStore(), true);
   });
 });
-
-describe("MinIO integration (optional)", () => {
-  it("live MinIO roundtrip when ARGOS_MINIO_POC=1", async (t) => {
-    if (process.env.ARGOS_MINIO_POC !== "1") {
-      t.skip("Set ARGOS_MINIO_POC=1 with local MinIO running");
-      return;
-    }
-    configureEvidenceStore({ backend: "s3" });
-    const store = require("./evidenceStore").getEvidenceStore();
-    const key = buildObjectKey(99, "11111111-1111-1111-1111-111111111111");
-    await store.put(key, Buffer.from('{"minio":true}', "utf8"));
-    const got = await store.get(key);
-    assert.equal(got.toString("utf8"), '{"minio":true}\n');
-    await store.delete(key);
-    setEvidenceStoreForTests(new NoopEvidenceStore());
-  });
-});

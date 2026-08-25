@@ -1,4 +1,10 @@
 # MinIO local POC overlay — LOCAL/TEST ONLY. Not for production.
+#
+# MINIO_IMAGE_POLICY=POC_ONLY
+# Images use `latest` temporarily to reproduce validated local runs.
+# Before any production adoption, pin a verified immutable MinIO version/digest.
+# `latest` is NOT production-safe.
+#
 # Usage:
 #   cp docker/.env.minio-poc.example docker/.env.minio-poc
 #   docker compose -f docker/docker-compose.yml -f docker/docker-compose.minio-poc.yml --env-file docker/.env.minio-poc up -d minio minio-init
@@ -8,7 +14,7 @@
 
 services:
   minio:
-    image: minio/minio:RELEASE.2024-12-18T13-15-44Z
+    image: minio/minio:latest
     container_name: argos-minio-poc
     command: server /data --console-address ":9001"
     environment:
@@ -36,7 +42,7 @@ services:
       - default
 
   minio-init:
-    image: minio/mc:RELEASE.2024-12-18T13-15-44Z
+    image: minio/mc:latest
     container_name: argos-minio-poc-init
     depends_on:
       minio:

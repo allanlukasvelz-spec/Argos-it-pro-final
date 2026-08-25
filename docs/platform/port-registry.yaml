@@ -89,3 +89,30 @@ ports:
     owner: platform
     status: POC_LOCAL
     public: NO
+
+  # Local collision-safe alternate (validated 2026-08-26 when host 9000 occupied)
+  - service: minio-alt
+    port: 9010
+    protocol: tcp
+    bind: "127.0.0.1 (POC overlay)"
+    exposure: private
+    auth: access_keys
+    tls: optional_local
+    purpose: MinIO S3 API alternate host bind
+    owner: platform
+    status: POC_LOCAL
+    public: NO
+    notes: "Set MINIO_API_PORT=9010 in docker/.env.minio-poc"
+
+  - service: minio-console-alt
+    port: 9011
+    protocol: tcp
+    bind: "127.0.0.1 (POC overlay)"
+    exposure: localhost_only
+    auth: MINIO_ROOT_USER/PASSWORD
+    tls: optional_local
+    purpose: MinIO console alternate host bind
+    owner: platform
+    status: POC_LOCAL
+    public: NO
+    notes: "Set MINIO_CONSOLE_PORT=9011 in docker/.env.minio-poc"

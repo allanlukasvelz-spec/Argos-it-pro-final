@@ -12,6 +12,20 @@ AUDIENCE = operators / NOC
 3. Local override: `ARGOS_EVIDENCE_ROOT=/path/outside/public`
 4. MinIO POC (optional): see `docs/platform/ARGOS_MINIO_LOCAL_POC.md` — set `ARGOS_EVIDENCE_STORE=s3`
 
+## Live MinIO validation (POC)
+
+| Command | MinIO live |
+|---------|------------|
+| `npm run verify:backend` | SKIPPED |
+| `ARGOS_MINIO_POC=1 npm run verify:minio-live` | RUNS |
+| `ARGOS_MINIO_POC=1 npm run verify:backend` | RUNS (after unit suite) |
+
+Validated locally on API **9010** / console **9011** when host **9000** was occupied.
+
+See `docs/architecture/ARGOS_OBJECT_STORAGE_LIVE_VALIDATION.md`.
+
+Do not auto-start Docker from verify scripts.
+
 ## Reconciliation (POC)
 
 ```
