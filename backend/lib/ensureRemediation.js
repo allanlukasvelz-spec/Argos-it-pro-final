@@ -114,9 +114,14 @@ const SEED_RUNBOOKS = [
 ];
 
 async function ensureRemediationTables(pool) {
+  // backend/lib → repo root is ../..
   const migrationPath = path.join(
     __dirname,
-    "../../../database/migrations/004_runbooks_remediation.sql"
+    "..",
+    "..",
+    "database",
+    "migrations",
+    "004_runbooks_remediation.sql"
   );
   const sql = fs.readFileSync(migrationPath, "utf8");
   // Strip BEGIN/COMMIT for nested-safe execution — run statements via pool
