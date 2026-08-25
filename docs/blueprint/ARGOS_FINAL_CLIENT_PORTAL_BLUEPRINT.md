@@ -2,8 +2,8 @@
 
 ```
 ROOT = /dashboard
-CURRENT = SINGLE PAGE PARTIAL
-TARGET = TREE (PHASE_4)
+CURRENT = PHASE_4 TREE IMPLEMENTED (ClientShell + /dashboard/* real APIs)
+TARGET = TREE (Design Contract frozen)
 TONE = calm, clear, premium, not NOC
 ```
 
@@ -13,15 +13,15 @@ Preguntas en 10s: ¿protegido? ¿riesgo? ¿incidencias? ¿qué previno ARGOS? ¿
 
 ## Shell TARGET
 
-Header: ARGOS · **org name** · profile/logout  
-Sidebar: nav IA. Mobile: status first, nav drawer.  
+Header: ARGOS · **org name** · profile/logout
+Sidebar: nav IA. Mobile: status first, nav drawer.
 Guard: cookie + membership. `org_viewer` = read only.
 
 ---
 
 ## Page contracts
 
-Shared states: `loading` `empty` `unknown` `warning` `critical` `error` (+ `healthy` only with evidence).  
+Shared states: `loading` `empty` `unknown` `warning` `critical` `error` (+ `healthy` only with evidence).
 Shared security: tenant JWT. Mock numbers labeled MOCK.
 
 ### Resumen `/dashboard`
@@ -30,9 +30,9 @@ Shared security: tenant JWT. Mock numbers labeled MOCK.
 |--|--|
 | PURPOSE | Situación de protección |
 | PRIMARY QUESTION | ¿Estoy protegido ahora? |
-| DATA CURRENT | portal, assets, TLS |
-| DATA TARGET | + health, alerts, incidents, preventive |
-| API CURRENT | GET `/api/client/portal` `/assets` `/tls` |
+| DATA CURRENT | portal, assets, TLS, monitoring health, alerts, incidents |
+| DATA TARGET | + preventive actions (Phase 6), reports (Phase 8) |
+| API CURRENT | GET `/api/client/portal` `/assets` `/tls` `/monitoring` `/monitors` `/alerts` `/incidents` |
 | COMPONENTS | ProtectionStatus, HealthOverview, PreventiveList, AttentionRequired |
 | PRIMARY ACTION | Atender ítems de atención |
 | SECONDARY | Ver activos / soporte |
@@ -46,16 +46,16 @@ Wireframe estructural: Master §7.2.
 
 ### Mis activos `/dashboard/activos` (+ tipos)
 
-PURPOSE: inventario. DATA: assets (+ TLS). API: CRUD `/api/client/assets` (EXISTS), discover domains (EXISTS).  
-PRIMARY: añadir activo (owner/admin). SECONDARY: detalle.  
-EMPTY: CTA discover hostname.  
+PURPOSE: inventario. DATA: assets (+ TLS). API: CRUD `/api/client/assets` (EXISTS), discover domains (EXISTS).
+PRIMARY: añadir activo (owner/admin). SECONDARY: detalle.
+EMPTY: CTA discover hostname.
 PERMISSIONS: viewer no POST/PATCH/DELETE.
 
 Subrutas filtran `type`. Detalle: hostname, env, status, last_observed, children, TLS if any.
 
 ### Monitorización `/dashboard/monitorizacion`
 
-PHASE_3/4. PURPOSE: qué se vigila y último check. DATA: monitors + last observation.  
+PHASE_3/4. PURPOSE: qué se vigila y último check. DATA: monitors + last observation.
 UNKNOWN si no hay monitors. No mostrar uptime inventado.
 
 ### Seguridad `/dashboard/seguridad`

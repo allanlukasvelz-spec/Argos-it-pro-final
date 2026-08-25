@@ -4,7 +4,8 @@
 PHASE_0 = COMPLETE 3444916
 PHASE_1 = COMPLETE c19a8ce
 PHASE_2 = COMPLETE ec27eb9
-PHASE_3 = COMPLETE (monitoring APIs + engines; no UI)
+PHASE_3 = COMPLETE 61148f4
+PHASE_4 = COMPLETE (client portal UI; no NOC)
 STASH = do not apply
 ```
 
@@ -18,8 +19,8 @@ STASH = do not apply
 | 1 | Tenant scoping | DONE | client APIs scoped |
 | 2 | Assets + TLS | DONE | something to monitor |
 | 3 | Monitoring + alerts + incidents | DONE (backend/APIs) | critical path core |
-| 4 | Client private experience | NEXT | clients must see truth |
-| 5 | Internal NOC | after 3 | operators need queue |
+| 4 | Client private experience | DONE (UI `/dashboard/*`) | clients must see truth |
+| 5 | Internal NOC | NEXT | operators need queue |
 | 6 | Runbooks + remediation | after incidents | A/B/C needs a case |
 | 7 | Agents | after monitors | extra observation source |
 | 8 | Notifications + reporting | after alerts | who to tell |
@@ -110,8 +111,7 @@ Architecture coherent · migration safe (no accidental `_down`) · tenant isolat
 
 ## 6. Immediate next
 
-1. Phase 4 — Client private experience (UI sobre APIs Phase 3; Design Contract)
-2. Phase 5 — Internal NOC
-3. Never `git stash pop`
-4. No push/PR/deploy sin autorización humana explícita
-5. Status: `docs/architecture/ARGOS_PHASE_3_STATUS.md` · Runbook: `docs/runbooks/ARGOS_PHASE_3_MONITORING.md`
+1. Phase 5 — Internal NOC (solo con autorización humana)
+2. Never `git stash pop`
+3. No push/PR/deploy sin autorización humana explícita
+4. Status: `docs/architecture/ARGOS_PHASE_4_STATUS.md` · Runbook: `docs/runbooks/ARGOS_PHASE_4_CLIENT_PORTAL.md`
