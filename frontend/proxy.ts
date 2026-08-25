@@ -7,7 +7,7 @@ const AUTH_SESSION_COOKIE = "argos_session";
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (pathname.startsWith("/dashboard")) {
+  if (pathname.startsWith("/dashboard") || pathname.startsWith("/noc")) {
     if (request.cookies.get(AUTH_SESSION_COOKIE)?.value !== "1") {
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
@@ -41,6 +41,8 @@ export const config = {
   matcher: [
     "/dashboard",
     "/dashboard/:path*",
+    "/noc",
+    "/noc/:path*",
     "/auth/login",
     "/auth/register",
     "/mascot-motion-lab",

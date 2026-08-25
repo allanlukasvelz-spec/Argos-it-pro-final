@@ -87,7 +87,7 @@ Non-negotiable product clauses:
 | `/dashboard` | Single page, no app sidebar, `ArgosPageShell`, portal + assets + TLS | ClientShell + frozen Resumen hierarchy |
 | Health engine | NOT EXISTS (Phase 3) | Visual states specified; data remains Phase 3 |
 | Alerts / incidents | NOT EXISTS | Cards/queue specified; empty/unknown until Phase 3 |
-| `/noc` | NOT_IMPLEMENTED | NocShell specified; no runtime |
+| `/noc` | IMPLEMENTED (Phase 5 read-only) | NocShell specified; no runtime |
 | Painted colors | Semantic tokens → **legacy** `#2563EB` / `#18D4F7` | Client/NOC **target** uses canonical brand tokens below |
 | Fonts | Roles frozen; Inter/Cormorant **not loaded** | Load Inter for Client/NOC when UI phase is authorized |
 | PUBLIC | 21.6B freeze | Unchanged |

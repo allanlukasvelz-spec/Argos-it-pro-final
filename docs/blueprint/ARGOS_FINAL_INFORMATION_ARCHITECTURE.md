@@ -169,7 +169,7 @@ Resto de páginas: `ARGOS_FINAL_CLIENT_PORTAL_BLUEPRINT.md`.
 
 ### C.0 CURRENT
 
-`NOT_IMPLEMENTED`. No `app/noc`. `GET /api/security/stats` es admin global, **no** es NOC.
+`IMPLEMENTED` (Phase 5). `frontend/app/noc/*` + `GET /api/noc/*` read-only, gate `admin|super_admin`. Placeholders honestos P6–P9. `/api/client/*` sin cambios. `GET /api/security/stats` sigue siendo admin global aparte, no sustituye al NOC.
 
 ### C.1 TARGET tree
 

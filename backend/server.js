@@ -178,6 +178,11 @@ app.use(
   createClientRouter(pool)
 );
 
+// Phase 5 — Internal NOC (global staff only; never weaken /api/client)
+const requireNocAccess = require("./middleware/requireNocAccess");
+const createNocRouter = require("./routes/noc");
+app.use("/api/noc", authMiddleware, requireNocAccess, createNocRouter(pool));
+
 // Health check — verifies database connectivity
 app.get("/api/health", async (req, res) => {
   try {

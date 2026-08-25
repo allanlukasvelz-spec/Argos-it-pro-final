@@ -2,9 +2,9 @@
 
 ```
 ROOT = /noc
-CURRENT = NOT_IMPLEMENTED
-PHASE = 5 (UI) + 3 (data)
-USER = ARGOS staff (admin / super_admin / future noc_operator)
+CURRENT = IMPLEMENTED (Phase 5 read-only; placeholders P6–P9)
+PHASE = 5 (UI + APIs) on Phase 0–4 data
+USER = ARGOS staff (admin / super_admin)
 TONE = dense, fast, evidence-driven
 ```
 
