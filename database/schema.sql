@@ -370,3 +370,277 @@ CREATE TABLE IF NOT EXISTS refresh_sessions (
 CREATE INDEX IF NOT EXISTS idx_refresh_sessions_user ON refresh_sessions(user_id);
 CREATE INDEX IF NOT EXISTS idx_refresh_sessions_jti ON refresh_sessions(jti);
 CREATE INDEX IF NOT EXISTS idx_refresh_sessions_expires ON refresh_sessions(expires_at);
+
+-- =============================================================================
+-- Phase 6–7 tables (aligned with migrations 004 + 005 for Docker init completeness)
+-- Source: database/migrations/004_runbooks_remediation.sql
+--          database/migrations/005_agents_observation.sql
+-- Boot ensure* still applies these; keeping schema.sql complete for initdb.
+-- =============================================================================
+
+
+
+CREATE TABLE IF NOT EXISTS runbooks (
+  id SERIAL PRIMARY KEY,
+  slug TEXT NOT NULL UNIQUE,
+  name TEXT NOT NULL,
+  description TEXT NOT NULL DEFAULT '',
+  status TEXT NOT NULL DEFAULT 'ACTIVE'
+    CHECK (status IN ('DRAFT', 'ACTIVE', 'DEPRECATED')),
+  applies_to JSONB NOT NULL DEFAULT '{}'::jsonb,
+  automation_max_level INT NOT NULL DEFAULT 0
+    CHECK (automation_max_level >= 0 AND automation_max_level <= 4),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS runbook_versions (
+  id SERIAL PRIMARY KEY,
+  runbook_id INT NOT NULL REFERENCES runbooks(id) ON DELETE CASCADE,
+  version INT NOT NULL CHECK (version >= 1),
+  steps JSONB NOT NULL,
+  changelog TEXT NOT NULL DEFAULT '',
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE (runbook_id, version)
+);
+
+CREATE INDEX IF NOT EXISTS idx_runbook_versions_runbook
+  ON runbook_versions(runbook_id, version DESC);
+
+CREATE TABLE IF NOT EXISTS remediation_executions (
+  id SERIAL PRIMARY KEY,
+  organization_id INT NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+  incident_id INT REFERENCES incidents(id) ON DELETE SET NULL,
+  asset_id INT REFERENCES assets(id) ON DELETE SET NULL,
+  runbook_id INT NOT NULL REFERENCES runbooks(id) ON DELETE RESTRICT,
+  runbook_version_id INT NOT NULL REFERENCES runbook_versions(id) ON DELETE RESTRICT,
+  execution_key TEXT NOT NULL,
+  letter TEXT NOT NULL DEFAULT 'A'
+    CHECK (letter IN ('A', 'B', 'C')),
+  action_type TEXT NOT NULL,
+  safety_level TEXT NOT NULL
+    CHECK (safety_level IN ('L0', 'L1', 'L2', 'L3', 'L4')),
+  state TEXT NOT NULL DEFAULT 'PLANNED'
+    CHECK (state IN (
+      'PLANNED',
+      'DRY_RUN_COMPLETE',
+      'AWAITING_APPROVAL',
+      'APPROVED',
+      'RUNNING',
+      'VERIFYING',
+      'SUCCEEDED',
+      'FAILED',
+      'ROLLING_BACK',
+      'ROLLED_BACK',
+      'ROLLBACK_FAILED',
+      'SAFE_STOPPED',
+      'CANCELLED'
+    )),
+  hypothesis TEXT,
+  confidence TEXT
+    CHECK (confidence IS NULL OR confidence IN ('HIGH', 'MEDIUM', 'LOW', 'UNKNOWN')),
+  evidence_in JSONB NOT NULL DEFAULT '{}'::jsonb,
+  evidence_out JSONB NOT NULL DEFAULT '{}'::jsonb,
+  failure_evidence JSONB NOT NULL DEFAULT '{}'::jsonb,
+  expected_result TEXT,
+  verification_plan JSONB NOT NULL DEFAULT '{}'::jsonb,
+  rollback_plan JSONB NOT NULL DEFAULT '{}'::jsonb,
+  input JSONB NOT NULL DEFAULT '{}'::jsonb,
+  warnings JSONB NOT NULL DEFAULT '[]'::jsonb,
+  actor_user_id INT REFERENCES users(id) ON DELETE SET NULL,
+  requested_by INT REFERENCES users(id) ON DELETE SET NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  started_at TIMESTAMPTZ,
+  finished_at TIMESTAMPTZ,
+  UNIQUE (organization_id, execution_key)
+);
+
+CREATE INDEX IF NOT EXISTS idx_remediation_exec_org
+  ON remediation_executions(organization_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_remediation_exec_incident
+  ON remediation_executions(incident_id)
+  WHERE incident_id IS NOT NULL;
+CREATE INDEX IF NOT EXISTS idx_remediation_exec_state
+  ON remediation_executions(organization_id, state);
+
+CREATE TABLE IF NOT EXISTS remediation_approvals (
+  id SERIAL PRIMARY KEY,
+  organization_id INT NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+  execution_id INT NOT NULL REFERENCES remediation_executions(id) ON DELETE CASCADE,
+  requested_by INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  approved_by INT REFERENCES users(id) ON DELETE SET NULL,
+  decision TEXT NOT NULL DEFAULT 'PENDING'
+    CHECK (decision IN ('PENDING', 'APPROVED', 'DENIED', 'EXPIRED', 'CONSUMED')),
+  reason TEXT,
+  scope_hash TEXT NOT NULL,
+  requested_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  decided_at TIMESTAMPTZ,
+  expires_at TIMESTAMPTZ NOT NULL,
+  consumed_at TIMESTAMPTZ
+);
+
+CREATE INDEX IF NOT EXISTS idx_remediation_approvals_exec
+  ON remediation_approvals(execution_id, decision);
+
+CREATE TABLE IF NOT EXISTS remediation_events (
+  id SERIAL PRIMARY KEY,
+  organization_id INT NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+  execution_id INT NOT NULL REFERENCES remediation_executions(id) ON DELETE CASCADE,
+  kind TEXT NOT NULL,
+  actor_user_id INT REFERENCES users(id) ON DELETE SET NULL,
+  payload JSONB NOT NULL DEFAULT '{}'::jsonb,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_remediation_events_exec
+  ON remediation_events(execution_id, created_at ASC);
+
+-- Simulator fixture store (Phase 6B L2 demo only — never customer infra)
+CREATE TABLE IF NOT EXISTS remediation_test_flags (
+  id SERIAL PRIMARY KEY,
+  organization_id INT NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+  flag_key TEXT NOT NULL,
+  flag_value TEXT NOT NULL DEFAULT '',
+  version INT NOT NULL DEFAULT 0,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE (organization_id, flag_key)
+);
+
+
+
+-- Allow AGENT observations without a platform monitor row
+ALTER TABLE observations
+  ALTER COLUMN monitor_id DROP NOT NULL;
+
+-- ---------------------------------------------------------------------------
+-- agents
+-- ---------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS agents (
+  id SERIAL PRIMARY KEY,
+  organization_id INT NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+  asset_id INT NOT NULL REFERENCES assets(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'ENROLLMENT_PENDING'
+    CHECK (status IN (
+      'ENROLLMENT_PENDING', 'ONLINE', 'STALE', 'OFFLINE', 'UNKNOWN', 'REVOKED'
+    )),
+  capabilities JSONB NOT NULL DEFAULT '["HEARTBEAT"]'::jsonb,
+  agent_version TEXT,
+  last_seen_at TIMESTAMPTZ,
+  last_seq BIGINT NOT NULL DEFAULT 0,
+  metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  revoked_at TIMESTAMPTZ
+);
+
+CREATE INDEX IF NOT EXISTS idx_agents_org ON agents(organization_id);
+CREATE INDEX IF NOT EXISTS idx_agents_asset ON agents(asset_id);
+CREATE INDEX IF NOT EXISTS idx_agents_status ON agents(status);
+CREATE INDEX IF NOT EXISTS idx_agents_last_seen ON agents(last_seen_at);
+
+-- ---------------------------------------------------------------------------
+-- enrollment tokens (plaintext never stored)
+-- ---------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS agent_enrollments (
+  id SERIAL PRIMARY KEY,
+  organization_id INT NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+  asset_id INT NOT NULL REFERENCES assets(id) ON DELETE CASCADE,
+  token_hash TEXT NOT NULL UNIQUE,
+  capabilities JSONB NOT NULL DEFAULT '["HEARTBEAT"]'::jsonb,
+  status TEXT NOT NULL DEFAULT 'PENDING'
+    CHECK (status IN ('PENDING', 'CONSUMED', 'EXPIRED', 'REVOKED')),
+  expires_at TIMESTAMPTZ NOT NULL,
+  consumed_at TIMESTAMPTZ,
+  created_by INT REFERENCES users(id) ON DELETE SET NULL,
+  agent_id INT REFERENCES agents(id) ON DELETE SET NULL,
+  agent_name_hint TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_agent_enrollments_org ON agent_enrollments(organization_id);
+CREATE INDEX IF NOT EXISTS idx_agent_enrollments_status ON agent_enrollments(status, expires_at);
+
+-- ---------------------------------------------------------------------------
+-- credentials (secret_hash only)
+-- ---------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS agent_credentials (
+  id SERIAL PRIMARY KEY,
+  agent_id INT NOT NULL REFERENCES agents(id) ON DELETE CASCADE,
+  organization_id INT NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+  secret_hash TEXT NOT NULL,
+  version INT NOT NULL DEFAULT 1,
+  status TEXT NOT NULL DEFAULT 'ACTIVE'
+    CHECK (status IN ('ACTIVE', 'ROTATING', 'REVOKED')),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  revoked_at TIMESTAMPTZ,
+  UNIQUE (agent_id, version)
+);
+
+CREATE INDEX IF NOT EXISTS idx_agent_credentials_agent ON agent_credentials(agent_id)
+  WHERE status = 'ACTIVE';
+
+-- ---------------------------------------------------------------------------
+-- heartbeats
+-- ---------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS agent_heartbeats (
+  id BIGSERIAL PRIMARY KEY,
+  agent_id INT NOT NULL REFERENCES agents(id) ON DELETE CASCADE,
+  organization_id INT NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+  seq BIGINT NOT NULL,
+  agent_reported_at TIMESTAMPTZ,
+  received_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  agent_version TEXT,
+  capabilities JSONB,
+  payload JSONB NOT NULL DEFAULT '{}'::jsonb,
+  UNIQUE (agent_id, seq)
+);
+
+CREATE INDEX IF NOT EXISTS idx_agent_heartbeats_agent_time
+  ON agent_heartbeats(agent_id, received_at DESC);
+
+-- ---------------------------------------------------------------------------
+-- typed observations (raw + optional projection)
+-- ---------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS agent_observations (
+  id BIGSERIAL PRIMARY KEY,
+  agent_id INT NOT NULL REFERENCES agents(id) ON DELETE CASCADE,
+  organization_id INT NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+  asset_id INT NOT NULL REFERENCES assets(id) ON DELETE CASCADE,
+  type TEXT NOT NULL,
+  schema_version INT NOT NULL DEFAULT 1,
+  idempotency_key TEXT NOT NULL,
+  observed_at TIMESTAMPTZ NOT NULL,
+  received_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  status TEXT NOT NULL DEFAULT 'ACCEPTED'
+    CHECK (status IN ('ACCEPTED', 'REJECTED')),
+  reject_reason TEXT,
+  measurement JSONB NOT NULL DEFAULT '{}'::jsonb,
+  projected_observation_id INT REFERENCES observations(id) ON DELETE SET NULL,
+  UNIQUE (agent_id, idempotency_key)
+);
+
+CREATE INDEX IF NOT EXISTS idx_agent_observations_asset_time
+  ON agent_observations(asset_id, received_at DESC);
+CREATE INDEX IF NOT EXISTS idx_agent_observations_org
+  ON agent_observations(organization_id, received_at DESC);
+
+-- ---------------------------------------------------------------------------
+-- security / audit events (redacted details)
+-- ---------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS agent_security_events (
+  id BIGSERIAL PRIMARY KEY,
+  organization_id INT REFERENCES organizations(id) ON DELETE SET NULL,
+  agent_id INT REFERENCES agents(id) ON DELETE SET NULL,
+  kind TEXT NOT NULL,
+  severity TEXT NOT NULL DEFAULT 'INFO'
+    CHECK (severity IN ('INFO', 'WARNING', 'CRITICAL')),
+  details JSONB NOT NULL DEFAULT '{}'::jsonb,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_agent_security_events_org
+  ON agent_security_events(organization_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_agent_security_events_agent
+  ON agent_security_events(agent_id, created_at DESC);

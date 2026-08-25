@@ -62,6 +62,20 @@ Revert commit; schema objects remain IF NOT EXISTS (safe). Remove platform lib.
 
 ```
 FOUNDATION_IMPLEMENTATION = GO
+FOUNDATION_IMPLEMENTED = YES
+FOUNDATION_COMMIT = (see git feat(platform) commit)
 ```
 
 Scope locked to items marked ADOPT_NOW above. Anything else = HOLD until new gate.
+
+### Implemented in foundation commit
+
+- `backend/lib/platform/*` (storage classes, telemetry no-op, evidence store fail-closed, port registry)
+- `GET /api/noc/platform-health` enrichment (process snapshot + invariants)
+- `database/schema.sql` aligned with migrations 004 + 005
+- Unit tests `backend/lib/platform/platform.test.js`
+- Optional env documentation in `backend/.env.example`
+
+### Not implemented (correctly deferred)
+
+No Prometheus/Grafana/MinIO/Vault/Temporal/K8s/Wazuh/Nmap/ZAP containers or npm exporters.

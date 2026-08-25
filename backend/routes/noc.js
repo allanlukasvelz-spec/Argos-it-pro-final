@@ -96,20 +96,42 @@ function createNocRouter(pool) {
   });
 
   router.get("/platform-health", async (_req, res) => {
+    const { getPlatformProcessSnapshot, emitPlatformEvent } = require("../lib/platform/telemetry");
+    const { listCurrentPorts } = require("../lib/platform/portRegistry");
     try {
       await pool.query("SELECT 1");
+      const processSnapshot = getPlatformProcessSnapshot();
+      emitPlatformEvent("platform.health.ok", { db: "connected" });
       res.json({
         status: "OK",
         db: "connected",
         meaning:
           "Process and database connectivity only. Does not imply customer estates are healthy.",
+        process: processSnapshot,
+        ports: listCurrentPorts().map((p) => ({
+          service: p.service,
+          port: p.port,
+          exposure: p.exposure
+        })),
+        invariants: {
+          platformHealthyImpliesCustomersHealthy: false,
+          remoteExecution: false,
+          remoteRemediation: false
+        },
         timestamp: new Date().toISOString()
       });
     } catch {
+      emitPlatformEvent("platform.health.degraded", { db: "disconnected" });
       res.status(503).json({
         status: "DEGRADED",
         db: "disconnected",
         meaning: "Database unreachable. Platform health is degraded.",
+        process: getPlatformProcessSnapshot(),
+        invariants: {
+          platformHealthyImpliesCustomersHealthy: false,
+          remoteExecution: false,
+          remoteRemediation: false
+        },
         timestamp: new Date().toISOString()
       });
     }
