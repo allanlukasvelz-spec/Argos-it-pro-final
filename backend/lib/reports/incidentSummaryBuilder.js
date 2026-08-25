@@ -59,9 +59,9 @@ async function buildIncidentSummaryModel(pool, { organizationId, incidentId, rep
   const evidenceResult = await pool.query(
     `SELECT eo.id, eo.sha256, eo.created_at, eo.mime_type, eo.incident_id
      FROM evidence_objects eo
-     WHERE eo.organization_id = $1 AND eo.incident_id = $2 AND eo.status = 'AVAILABLE'
+     WHERE eo.organization_id = $1 AND eo.incident_id::text = $2::text AND eo.status = 'AVAILABLE'
      ORDER BY eo.created_at ASC`,
-    [organizationId, incidentId]
+    [organizationId, String(incidentId)]
   );
 
   const verifiedEvidence = evidenceResult.rows.map((row) => ({
@@ -77,14 +77,14 @@ async function buildIncidentSummaryModel(pool, { organizationId, incidentId, rep
 
   let remediationSummary = null;
   const remResult = await pool.query(
-    `SELECT id, status, action_type FROM remediation_executions
+    `SELECT id, state, action_type FROM remediation_executions
      WHERE organization_id = $1 AND incident_id = $2
      ORDER BY created_at DESC LIMIT 1`,
     [organizationId, incidentId]
   );
   if (remResult.rows[0]) {
     const r = remResult.rows[0];
-    remediationSummary = `Ejecución ${r.id}: ${r.action_type} — estado ${r.status}`;
+    remediationSummary = `Ejecución ${r.id}: ${r.action_type} — estado ${r.state}`;
   }
 
   let healthLabel = "UNKNOWN";

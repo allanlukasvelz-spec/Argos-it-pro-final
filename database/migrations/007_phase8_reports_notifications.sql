@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS report_runs (
   period_start TIMESTAMPTZ,
   period_end TIMESTAMPTZ,
   template_version TEXT NOT NULL,
-  evidence_object_id TEXT REFERENCES evidence_objects(id) ON DELETE SET NULL,
+  evidence_object_id TEXT,
   data_freshness TIMESTAMPTZ,
   error_code TEXT,
   error_message TEXT,
@@ -104,6 +104,9 @@ CREATE TABLE IF NOT EXISTS notifications (
 CREATE INDEX IF NOT EXISTS idx_notifications_user_unread
   ON notifications(user_id, created_at DESC)
   WHERE read_at IS NULL;
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_notifications_event_user
+  ON notifications(event_id, user_id);
 
 CREATE TABLE IF NOT EXISTS notification_preferences (
   id SERIAL PRIMARY KEY,

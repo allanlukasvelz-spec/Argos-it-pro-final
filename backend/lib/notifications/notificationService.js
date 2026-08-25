@@ -48,14 +48,15 @@ function createNotificationService(pool) {
 
     let created = 0;
     for (const recipient of recipients) {
-      const userDedupe = `${dedupeKey}:user:${recipient.userId}`;
       const notifId = randomUUID();
       try {
-        await pool.query(
+        const ins = await pool.query(
           `INSERT INTO notifications (
              id, organization_id, user_id, event_id, event_type, severity,
              title, body, link_target
-           ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+           ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+           ON CONFLICT (event_id, user_id) DO NOTHING
+           RETURNING id`,
           [
             notifId,
             organizationId,
@@ -68,10 +69,13 @@ function createNotificationService(pool) {
             `/dashboard/informes?report=${reportId}`
           ]
         );
+        if (!ins.rows[0]) {
+          continue;
+        }
         created += 1;
         await auditNotification(recipient.userId, organizationId, "notification_created", {
           eventType: NOTIFICATION_EVENT_REPORT_READY,
-          notificationId: notifId,
+          notificationId: ins.rows[0].id,
           reportRunId
         });
       } catch (err) {
@@ -79,7 +83,6 @@ function createNotificationService(pool) {
           console.error("[NOTIFY] insert failed:", err.message);
         }
       }
-      void userDedupe;
     }
 
     if (requestedBy) {
