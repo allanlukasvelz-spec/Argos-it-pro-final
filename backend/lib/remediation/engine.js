@@ -299,6 +299,7 @@ function buildCtx(clientOrPool, execution, actorUserId, extras = {}) {
     organizationId: execution.organization_id,
     incidentId: execution.incident_id,
     assetId: execution.asset_id,
+    executionId: execution.id,
     input: execution.input || {},
     evidenceIn: execution.evidence_in || {},
     evidenceOut: execution.evidence_out || {},

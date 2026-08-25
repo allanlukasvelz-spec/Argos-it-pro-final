@@ -144,6 +144,7 @@ function createEvidenceService(pool) {
     const inspection = await runInspectionHook({ mimeType, byteLength: buffer.length });
 
     const client = await pool.connect();
+    let objectKeyWritten = null;
     try {
       await client.query("BEGIN");
       const insert = await client.query(
@@ -174,12 +175,14 @@ function createEvidenceService(pool) {
 
       try {
         await store.put(objectKey, buffer);
+        objectKeyWritten = objectKey;
       } catch (putErr) {
         await client.query("ROLLBACK");
         throw mapPolicyError(putErr);
       }
 
       await client.query("COMMIT");
+      objectKeyWritten = null;
       const row = insert.rows[0];
       await auditEvidence(pool, {
         userId: input.createdBy,
@@ -194,6 +197,13 @@ function createEvidenceService(pool) {
       });
       return { row, created: true };
     } catch (err) {
+      if (objectKeyWritten) {
+        try {
+          await getEvidenceStore().delete(objectKeyWritten);
+        } catch (cleanupErr) {
+          console.error("[EvidenceService] orphan compensation delete failed:", cleanupErr.message);
+        }
+      }
       try {
         await client.query("ROLLBACK");
       } catch {
