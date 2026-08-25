@@ -4,7 +4,7 @@
 STATUS = PASS_WITH_LIMITATIONS
 DATE = 2026-08-25
 BASELINE_COMMIT = 7693135
-VALIDATION_COMMIT = (see git after this doc lands)
+VALIDATION_COMMIT = 3f3cce2
 BRANCH = feature/argos-multitenant-platform
 PRODUCTION_USED = NO
 ```
