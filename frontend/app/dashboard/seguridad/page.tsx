@@ -11,6 +11,7 @@ import {
   StatusBadge,
   UnknownState
 } from "@/components/client/Status";
+import { ChicoGuardianBanner } from "@/components/client/ChicoGuardianBanner";
 import { fetchAlerts, fetchMonitoring, fetchTls } from "@/lib/clientApi";
 import type { ClientAlert, ClientTlsCertificate, MonitoringSummary } from "@/lib/clientTypes";
 
@@ -56,6 +57,7 @@ export default function SeguridadPage() {
         eyebrow="Señales disponibles"
         meta="Sin escáner de vulnerabilidades. Solo señales reales (TLS, cobertura, alertas)."
       />
+      <ChicoGuardianBanner stronger />
 
       <div className="cp-grid cp-grid--3" style={{ marginBottom: "1rem" }}>
         <MetricCard

@@ -42,6 +42,7 @@ Related documents:
 | [ARGOS_RESPONSIVE_BEHAVIOR.md](./ARGOS_RESPONSIVE_BEHAVIOR.md) | Desktop / tablet / mobile |
 | [ARGOS_UI_STATE_MATRIX.md](./ARGOS_UI_STATE_MATRIX.md) | Screen and data states |
 | [ARGOS_CLIENT_NOC_VISUAL_RULES.md](./ARGOS_CLIENT_NOC_VISUAL_RULES.md) | Two languages, one DNA |
+| [ARGOS_CHICO_SECURITY_GUARDIAN_CONTRACT.md](./ARGOS_CHICO_SECURITY_GUARDIAN_CONTRACT.md) | CHICO Security Guardian TARGET (Client security; runtime NO) |
 | [tokens.md](./tokens.md) | Existing token architecture (21.3) |
 | [ARGOS_VISUAL_FREEZE_21_6B.md](./ARGOS_VISUAL_FREEZE_21_6B.md) | Public Corporate freeze |
 | [../blueprint/ARGOS_DESIGN_CONTRACT.md](../blueprint/ARGOS_DESIGN_CONTRACT.md) | Blueprint pointer |
@@ -76,7 +77,11 @@ Non-negotiable product clauses:
 - Coverage `N/M` != complete protection.
 - MOCK / DEMO / PLACEHOLDER labels on prototype numbers only; production uses real evidence or honest unknown/empty.
 - Automation L3 = human approval. L4 = never automatic. No silent auto-fix.
-- Logo, Chico, Dumbo: PROTECTED. Mascots = `ASSISTANT_ONLY`. Not in Client/NOC chrome.
+- Logo, Chico, Dumbo: PROTECTED. Exactly two canonical robots: **CHICO** + **DUMBO**.
+- **CHICO** = ARGOS SECURITY GUARDIAN (customer-facing). **DUMBO** = UX/guide role preserved.
+- Mascot placement **CURRENT (21.6B):** `ASSISTANT_ONLY` (historical freeze; public/assistant docks).
+- Mascot placement **TARGET (amendment 2026-08-25):** CHICO is **permitted** as contextual Security Guardian presence on Client security surfaces (`/dashboard`, `/dashboard/seguridad`, `/dashboard/monitorizacion`, `/dashboard/alertas`, `/dashboard/incidentes`, `/dashboard/prevencion` + shared security components). See [ARGOS_CHICO_SECURITY_GUARDIAN_CONTRACT.md](./ARGOS_CHICO_SECURITY_GUARDIAN_CONTRACT.md).
+- Still **forbidden:** CHICO/DUMBO in NOC chrome; DUMBO as security state; mascot-driven portal; regenerating assets. **Runtime CHICO Client UI = NOT AUTHORIZED** until a separate UI phase.
 
 ---
 
@@ -451,12 +456,14 @@ Predicted risks: Phase 9. Until methodology exists: empty or `DETECTED · PLANNE
 ## 17. Implementation gate (explicit)
 
 ```
-DESIGN_CONTRACT_STATUS     = SPEC_COMPLETE
-CURSOR_MAY_IMPLEMENT_UI    = NO
-PHASE_3_EXECUTED           = NO
-PUBLIC_CHANGED             = NO
-FRAMER_EXPORT              = NO
-FRAMER_PUBLISH             = NO
+DESIGN_CONTRACT_STATUS              = SPEC_COMPLETE
+CHICO_SECURITY_GUARDIAN_AMENDMENT   = APPROVED (TARGET docs)
+CURSOR_MAY_IMPLEMENT_UI             = NO
+CURSOR_MAY_IMPLEMENT_CHICO_CLIENT_UI = NO
+PHASE_3_EXECUTED                    = NO
+PUBLIC_CHANGED                      = NO
+FRAMER_EXPORT                       = NO
+FRAMER_PUBLISH                      = NO
 ```
 
-A future authorized UI phase must implement **this** contract, not copy Framer-generated code.
+A future authorized UI phase must implement **this** contract (and the CHICO Guardian contract where Client security presence is in scope), not copy Framer-generated code.

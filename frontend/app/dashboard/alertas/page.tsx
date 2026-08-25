@@ -8,6 +8,7 @@ import {
   PageHeader,
   StatusBadge
 } from "@/components/client/Status";
+import { ChicoGuardianBanner } from "@/components/client/ChicoGuardianBanner";
 import { fetchAlerts } from "@/lib/clientApi";
 import type { ClientAlert } from "@/lib/clientTypes";
 import { clientReasonCopy, relativeTimeEs } from "@/lib/clientCopy";
@@ -43,6 +44,7 @@ export default function AlertasPage() {
         eyebrow="Atención"
         meta="Listado tenant-scoped. Cero alertas ≠ HEALTHY."
       />
+      <ChicoGuardianBanner />
 
       {alerts.length === 0 ? (
         <EmptyState

@@ -20,6 +20,7 @@ The visual specification for **Client Portal** and **Internal NOC** now lives in
 | [docs/design/ARGOS_RESPONSIVE_BEHAVIOR.md](../design/ARGOS_RESPONSIVE_BEHAVIOR.md) | Desktop / tablet / mobile |
 | [docs/design/ARGOS_UI_STATE_MATRIX.md](../design/ARGOS_UI_STATE_MATRIX.md) | Health, unknown, A/B/C, provenance |
 | [docs/design/ARGOS_CLIENT_NOC_VISUAL_RULES.md](../design/ARGOS_CLIENT_NOC_VISUAL_RULES.md) | Two languages, one DNA |
+| [docs/design/ARGOS_CHICO_SECURITY_GUARDIAN_CONTRACT.md](../design/ARGOS_CHICO_SECURITY_GUARDIAN_CONTRACT.md) | CHICO Security Guardian TARGET (runtime NO) |
 
 Framer project **ARGOS — Product UI Master** (`/dashboard`, `/noc`) is a **visual reference** (`PIXEL_PERFECT = NO`, `FRAMER_SOURCE_OF_TRUTH = NO`). Relume is IA/UX. Product capabilities remain the Master Blueprint + verified repository.
 
@@ -42,7 +43,7 @@ These still do not wait on tools. Relume/Framer/this spec cannot contradict them
 | Paleta canónica | `#1F3A5F` `#2F7D6D` `#F7F7F5` `#0B1320` | CAB-DS-01 |
 | Tipografía Corporate | Cormorant display + Inter UI; Manrope REJECTED | Brief |
 | Dirección Corporate | QUIET_AUTHORITY / LIGHT_PREMIUM_INSTITUTIONAL | Visual Freeze 21.6B |
-| Mascotas | ASSISTANT_ONLY; WALK REJECTED | Mascot freezes |
+| Mascotas | CURRENT: ASSISTANT_ONLY; WALK REJECTED. TARGET: CHICO Security Guardian allowed on Client security surfaces (docs only; runtime NO). DUMBO = guide preserved | Mascot freezes + CHICO Guardian contract |
 | Rutas públicas actuales | No se eliminan sin aprobación humana | IA |
 | Copy inventada | `AI_DRAFT_DO_NOT_SHIP` | Brief |
 

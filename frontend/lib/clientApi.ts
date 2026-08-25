@@ -53,6 +53,22 @@ export async function fetchIncident(id: number): Promise<{
   return data;
 }
 
+export async function fetchGuardian(): Promise<{
+  chico: {
+    role?: string;
+    state: string;
+    label?: string;
+    message: string;
+    meta?: Record<string, unknown>;
+  };
+  agents: { id: number; assetId: number; status: string; lastSeenAt: string | null }[];
+  overall: string;
+  freshness: string;
+}> {
+  const { data } = await API.get("/api/client/guardian");
+  return data;
+}
+
 export async function discoverDomain(hostname: string) {
   const { data } = await API.post("/api/client/domains/discover", { hostname });
   return data;

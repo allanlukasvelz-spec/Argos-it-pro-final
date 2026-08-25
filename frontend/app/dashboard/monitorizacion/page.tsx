@@ -9,6 +9,7 @@ import {
   PageHeader,
   StatusBadge
 } from "@/components/client/Status";
+import { ChicoGuardianBanner } from "@/components/client/ChicoGuardianBanner";
 import { fetchMonitoring, fetchMonitors } from "@/lib/clientApi";
 import type { ClientMonitor, MonitoringSummary } from "@/lib/clientTypes";
 import { relativeTimeEs } from "@/lib/clientCopy";
@@ -52,6 +53,7 @@ export default function MonitorizacionPage() {
         eyebrow="Observación"
         meta="Sin observación fresca → UNKNOWN. Un fallo del runner no implica HEALTHY del destino."
       />
+      <ChicoGuardianBanner />
 
       <div className="cp-card" style={{ marginBottom: "1rem" }}>
         <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", alignItems: "center" }}>

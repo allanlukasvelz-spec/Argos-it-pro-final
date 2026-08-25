@@ -28,6 +28,20 @@ DIAGNOSTIC_MASCOT_OWNERSHIP = NOT_FROZEN
 
 Role contract (do not duplicate here): [ARGOS_MASCOT_ROLE_SEMANTICS_FREEZE_21_6B.md](./ARGOS_MASCOT_ROLE_SEMANTICS_FREEZE_21_6B.md)
 
+### Amendment note (2026-08-25) — CURRENT vs TARGET
+
+This freeze document remains the **historical CURRENT** record of `ASSISTANT_ONLY` production placement (what was authorized and what shipped under 7A–8D).
+
+A later **Design Contract amendment** defines **TARGET** Client security placement for CHICO as Security Guardian. That TARGET does **not** rewrite this freeze’s history and does **not** authorize runtime UI by itself.
+
+Canonical TARGET: [ARGOS_CHICO_SECURITY_GUARDIAN_CONTRACT.md](./ARGOS_CHICO_SECURITY_GUARDIAN_CONTRACT.md).
+
+```
+PLACEMENT_FREEZE_21_6B_STATUS     = HISTORICAL_CURRENT (ASSISTANT_ONLY shipped)
+CHICO_SECURITY_GUARDIAN_TARGET    = DOCUMENTED (Client security surfaces)
+CHICO_RUNTIME_UI_AUTHORIZED       = NO
+```
+
 ---
 
 ## Authority chain (reference only — do not rewrite)
@@ -296,3 +310,5 @@ HISTORICAL_PRODUCTION_IMPLEMENTATION_AUTHORIZATION_AT_5A = NO
 ```
 
 Still **not** authorized by this placement freeze: Home hero mascot, Corporate header mascot, Control Center mascot, WALK, diagnostic exclusive ownership.
+
+**Not authorized by the later CHICO Guardian TARGET alone:** React/CSS/sprites/animation for Client security chrome — requires a separate UI implementation authorization.

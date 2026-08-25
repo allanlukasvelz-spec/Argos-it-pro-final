@@ -11,24 +11,29 @@ import {
   PageHeader,
   StatusBadge
 } from "@/components/client/Status";
-import { fetchMonitoring, fetchPortal } from "@/lib/clientApi";
+import { fetchMonitoring, fetchPortal, fetchGuardian } from "@/lib/clientApi";
 import type { ClientPortalPayload, MonitoringSummary } from "@/lib/clientTypes";
 import { coverageLabelEs, healthLabelEs, relativeTimeEs } from "@/lib/clientCopy";
 import { deriveProtectionSummary } from "@/lib/clientHealthSemantics";
+import { ChicoGuardian } from "@/components/client/ChicoGuardian";
 
 export default function ResumenPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [portal, setPortal] = useState<ClientPortalPayload | null>(null);
   const [monitoring, setMonitoring] = useState<MonitoringSummary | null>(null);
+  const [guardian, setGuardian] = useState<Awaited<ReturnType<typeof fetchGuardian>>["chico"] | null>(
+    null
+  );
 
   const load = useCallback(async () => {
     setLoading(true);
     setError(false);
     try {
-      const [p, m] = await Promise.all([fetchPortal(), fetchMonitoring()]);
+      const [p, m, g] = await Promise.all([fetchPortal(), fetchMonitoring(), fetchGuardian()]);
       setPortal(p);
       setMonitoring(m);
+      setGuardian(g.chico);
     } catch {
       setError(true);
     } finally {
@@ -62,6 +67,8 @@ export default function ResumenPage() {
         eyebrow="Resumen"
         meta="Estado basado en evidencia real. Sin monitors o sin evidencia fresca ≠ protegido."
       />
+
+      <ChicoGuardian guardian={guardian} compact />
 
       <section aria-labelledby="protection-heading" style={{ marginBottom: "1.25rem" }}>
         <h2 id="protection-heading" className="cp-page-header__eyebrow">

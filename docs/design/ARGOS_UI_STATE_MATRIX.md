@@ -178,6 +178,25 @@ UNKNOWN KPI card uses dashed treatment, not teal.
 
 ---
 
+## 10b. CHICO Security Guardian presentation states (TARGET)
+
+Canonical mapping lives in [ARGOS_CHICO_SECURITY_GUARDIAN_CONTRACT.md](./ARGOS_CHICO_SECURITY_GUARDIAN_CONTRACT.md).
+
+| Invariant (must hold in any CHICO UI) | |
+|---------------------------------------|---|
+| UNKNOWN ≠ HEALTHY | dashed / never teal check |
+| NO ALERTS ≠ HEALTHY | |
+| NO INCIDENTS ≠ PROTECTED | |
+| AGENT OFFLINE ≠ customer unsafe (alone) | |
+| PLATFORM HEALTHY ≠ customer healthy | |
+| ACTION EXECUTED ≠ ACTION VERIFIED | |
+
+CHICO presentation states (IDLE/MONITORING, HEALTHY, ATTENTION, WARNING, CRITICAL, INCIDENT, UNKNOWN, AGENT_OFFLINE, ACTION subtree) are **not** a second health engine — they derive from Core / Phase 3–6 backend sources documented in the Guardian contract.
+
+`RUNTIME = NO` for CHICO Client security chrome until separately authorized.
+
+---
+
 ## 11. Consistency with current code
 
 | Claim | Repo truth |
@@ -185,5 +204,6 @@ UNKNOWN KPI card uses dashed treatment, not teal.
 | Dashboard health strip | Does not exist; do not fake from website audit score |
 | Audit score | May show as **one-time website audit**, never 24/7 health |
 | Empty audit score `—` | Keep honesty; do not fill 96 |
-| `/api/noc/*` | NOT EXISTS |
-| Alerts/incidents tables | Phase 3 — not created in this documentation phase |
+| `/api/noc/*` | EXISTS (Phase 5 read-only) — matrix row historically said NOT EXISTS; do not invent new capabilities here |
+| Alerts/incidents tables | Phase 3 implemented in repo; this matrix remains visual semantics |
+| CHICO Client Security Guardian chrome | **NOT IMPLEMENTED** (TARGET docs only) |

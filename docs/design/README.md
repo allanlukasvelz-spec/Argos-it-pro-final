@@ -4,7 +4,9 @@
 
 **Status:** Level 1 ACTIVE — canonical brand tokens and Corporate foundation active; Quiet Authority desktop Home visual direction HUMAN-FROZEN for lab/spec purposes; mascot motion laboratory AUTHORIZED; production Home migration NOT AUTHORIZED.
 
-**Mascot current status (after 21.6B.7A–8D):** ClientAssistants production dock migrated to frozen V1; placement remains ASSISTANT_ONLY; static legacy diagnostic banner migrated; R2 soft role semantics frozen. Home/Corporate mascot placement still prohibited. Control Center mascot placement unresolved. Diagnostic mascot ownership unresolved. WALK remains REJECTED.
+**Mascot CURRENT (after 21.6B.7A–8D):** ClientAssistants production dock migrated to frozen V1; placement remains ASSISTANT_ONLY for what shipped; static legacy diagnostic banner migrated; R2 soft role semantics frozen. Home/Corporate mascot placement still prohibited. Control Center mascot placement unresolved. Diagnostic mascot ownership unresolved. WALK remains REJECTED.
+
+**Mascot TARGET (Design Contract amendment 2026-08-25):** CHICO = ARGOS SECURITY GUARDIAN permitted on Client security surfaces (docs only). DUMBO = UX/guide preserved. Runtime CHICO Client UI **not authorized**. See [ARGOS_CHICO_SECURITY_GUARDIAN_CONTRACT.md](./ARGOS_CHICO_SECURITY_GUARDIAN_CONTRACT.md).
 
 **Visual change in 21.5:** YES — `/contacto` header/footer only
 
@@ -18,6 +20,7 @@
 | [ARGOS_RESPONSIVE_BEHAVIOR.md](./ARGOS_RESPONSIVE_BEHAVIOR.md) | Client mobile-first / NOC desktop-first |
 | [ARGOS_UI_STATE_MATRIX.md](./ARGOS_UI_STATE_MATRIX.md) | Health, unknown, provenance, A/B/C states |
 | [ARGOS_CLIENT_NOC_VISUAL_RULES.md](./ARGOS_CLIENT_NOC_VISUAL_RULES.md) | Two experiences, one brand DNA |
+| [ARGOS_CHICO_SECURITY_GUARDIAN_CONTRACT.md](./ARGOS_CHICO_SECURITY_GUARDIAN_CONTRACT.md) | CHICO Security Guardian TARGET contract (Client security; runtime NO) |
 | [cab-decisions.md](./cab-decisions.md) | Closed CAB Decision Register (21.2 → 21.3) |
 | [corporate-foundation-21-4.md](./corporate-foundation-21-4.md) | Corporate foundation + /contacto pilot (21.4) |
 | [corporate-chrome-21-5.md](./corporate-chrome-21-5.md) | Corporate chrome ownership + /contacto header/footer (21.5) |

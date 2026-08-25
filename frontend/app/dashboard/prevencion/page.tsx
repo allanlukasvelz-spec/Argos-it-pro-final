@@ -1,6 +1,7 @@
 "use client";
 
 import { NotAvailableState, PageHeader } from "@/components/client/Status";
+import { ChicoGuardianBanner } from "@/components/client/ChicoGuardianBanner";
 
 export default function PrevencionPage() {
   return (
@@ -8,11 +9,12 @@ export default function PrevencionPage() {
       <PageHeader
         title="Prevención"
         eyebrow="Acciones preventivas"
-        meta="Phase 6 — sin registros runtime en Phase 4."
+        meta="Recomendaciones solo cuando existan hallazgos reales con capacidad de soporte."
       />
+      <ChicoGuardianBanner />
       <NotAvailableState
         title="Prevención aún no disponible"
-        description="No existen preventive_actions en el backend actual. Cuando Phase 6 genere acciones DETECTED, aparecerán aquí. No se muestran predicciones inventadas."
+        description="No existen preventive_actions en el backend actual. Cuando existan hallazgos DETECTED, aparecerán aquí. No se muestran predicciones inventadas."
       />
     </div>
   );

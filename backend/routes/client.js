@@ -47,6 +47,9 @@ async function notifyFormspree(subject, payload) {
 function createClientRouter(pool) {
   const router = express.Router();
   const createDiagnosticsRouter = require("./clientDiagnostics");
+  const createClientGuardianRouter = require("./clientGuardian");
+
+  router.use(createClientGuardianRouter(pool));
 
   router.get("/portal", async (req, res) => {
     try {

@@ -123,6 +123,16 @@ CAB-DS-07 (Control Center visual deferred) is not reopened for production paint.
 
 ---
 
-## 9. Mascots
+## 9. Mascots / Security Guardian
 
-`ASSISTANT_ONLY`. Not in Client or NOC headers. WALK rejected. Placement freeze 21.6B still governs production docks.
+**Canonical personas:** CHICO = ARGOS SECURITY GUARDIAN · DUMBO = UX/guide **preserved**. Two robots only.
+
+| Layer | Rule |
+|-------|------|
+| CURRENT (21.6B freeze) | `ASSISTANT_ONLY` production docks; WALK rejected; historical placement freeze still describes **what shipped** |
+| TARGET (Design Contract amendment) | CHICO **may** appear as contextual guardian presence on Client security routes (`/dashboard`, seguridad, monitorización, alertas, incidentes, prevención) — see [ARGOS_CHICO_SECURITY_GUARDIAN_CONTRACT.md](./ARGOS_CHICO_SECURITY_GUARDIAN_CONTRACT.md) |
+| NOC | No mascot chrome (operators use evidence, not guardian persona) |
+| DUMBO | Must not represent monitoring, health, incidents, remediation, agents, or verification |
+| Runtime | CHICO Client security UI **not authorized** by this doc alone |
+
+CHICO must not dominate the portal, cover tables/controls, or fake animation. Frozen Resumen hierarchy remains authoritative.

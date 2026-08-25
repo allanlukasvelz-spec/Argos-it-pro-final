@@ -277,6 +277,25 @@ Supplementary. Status must remain visible without hover.
 
 ---
 
+## 7b. CHICO Security Guardian (TARGET conceptual — runtime NO)
+
+Canonical contract: [ARGOS_CHICO_SECURITY_GUARDIAN_CONTRACT.md](./ARGOS_CHICO_SECURITY_GUARDIAN_CONTRACT.md).
+
+| Component | Responsibility |
+|-----------|----------------|
+| `ChicoGuardianStatus` | Compact org-level guardian presence on `/dashboard` |
+| `ChicoSecurityPresence` | Stronger presence on `/dashboard/seguridad` |
+| `ChicoStateExplainer` | Short customer copy bound to one Core object |
+| `ChicoActionLifecycle` | PROPOSED → … → VERIFIED / FAILED / SAFE_STOP / HUMAN_ESCALATION |
+
+**Props (conceptual):** `organizationId`, `presentationState`, `backendRefs[]`, `freshness`, `provenance`, `density: 'client'`.
+
+**Rules:** must accept UNKNOWN; must not claim HEALTHY without evidence flags; must not cover tables/controls; Dumbo components must not bind to security state props.
+
+**Not authorized:** React/CSS/sprites under this documentation amendment.
+
+---
+
 ## 8. Out of scope until later pages
 
 Do not invent runtime components for Relume pages not yet mastered (full Incident Detail, TLS slice, etc.). Reuse the system above when those pages are specified.

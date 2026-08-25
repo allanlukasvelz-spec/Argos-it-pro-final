@@ -15,6 +15,7 @@ const { ensureOrganizationsFoundation } = require("./lib/ensureOrganizations");
 const { ensureAssetsTables } = require("./lib/ensureAssets");
 const { ensureMonitorsTables } = require("./lib/ensureMonitors");
 const { ensureRemediationTables } = require("./lib/ensureRemediation");
+const { ensureAgentsTables } = require("./lib/ensureAgents");
 const {
   createMonitorScheduler,
   isSchedulerEnabled
@@ -183,8 +184,13 @@ app.use(
 const requireNocAccess = require("./middleware/requireNocAccess");
 const createNocRouter = require("./routes/noc");
 const createNocRemediationRouter = require("./routes/nocRemediation");
+const createNocAgentsRouter = require("./routes/nocAgents");
+const createAgentV1Router = require("./routes/agentV1");
 app.use("/api/noc", authMiddleware, requireNocAccess, createNocRouter(pool));
 app.use("/api/noc", authMiddleware, requireNocAccess, createNocRemediationRouter(pool));
+app.use("/api/noc", authMiddleware, requireNocAccess, createNocAgentsRouter(pool));
+// Phase 7 — technical agent ingest (credential auth; no cookie CSRF path)
+app.use("/api/agent/v1", createAgentV1Router(pool));
 
 // Health check — verifies database connectivity
 app.get("/api/health", async (req, res) => {
@@ -235,8 +241,9 @@ async function start() {
     await ensureAssetsTables(pool);
     await ensureMonitorsTables(pool);
     await ensureRemediationTables(pool);
+    await ensureAgentsTables(pool);
   } catch (err) {
-    console.error("❌ No se pudo asegurar tablas de arranque (sessions/diagnostics/orgs/assets/monitors/remediation):", err.message);
+    console.error("❌ No se pudo asegurar tablas de arranque (sessions/diagnostics/orgs/assets/monitors/remediation/agents):", err.message);
     process.exit(1);
   }
 

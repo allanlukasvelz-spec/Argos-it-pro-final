@@ -8,6 +8,7 @@ import {
   PageHeader,
   StatusBadge
 } from "@/components/client/Status";
+import { ChicoGuardianBanner } from "@/components/client/ChicoGuardianBanner";
 import { fetchIncident, fetchIncidents } from "@/lib/clientApi";
 import type { ClientIncident } from "@/lib/clientTypes";
 import { relativeTimeEs } from "@/lib/clientCopy";
@@ -62,6 +63,7 @@ export default function IncidentesPage() {
         eyebrow="Situaciones abiertas"
         meta="Vista de cliente. Sin herramientas NOC ni remediación A/B/C."
       />
+      <ChicoGuardianBanner />
 
       {incidents.length === 0 ? (
         <EmptyState
