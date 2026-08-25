@@ -10,6 +10,7 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   workers: 1,
   reporter: "list",
+  globalSetup: require.resolve("./e2e/global-setup.ts"),
 
   use: {
     baseURL: e2eOrigin,
@@ -40,8 +41,12 @@ export default defineConfig({
       stderr: "pipe",
       env: {
         ...process.env,
-        // e2e auth-flow registers/logins several users; default AUTH_RATE_LIMIT_MAX=8 is too low
-        AUTH_RATE_LIMIT_MAX: process.env.AUTH_RATE_LIMIT_MAX || "40",
+        // Production default AUTH_RATE_LIMIT_MAX=8 stays for real deploys.
+        // Local E2E: keep strict max but allow deterministic counter reset between suites.
+        AUTH_RATE_LIMIT_MAX: process.env.AUTH_RATE_LIMIT_MAX || "8",
+        ARGOS_ALLOW_RATE_LIMIT_RESET: "1",
+        // Ensure test reset route is mountable (never set production here).
+        NODE_ENV: process.env.NODE_ENV === "production" ? "test" : process.env.NODE_ENV || "test",
       },
     },
     {

@@ -1,17 +1,18 @@
 # ARGOS Phase 7 — Status
 
 ```
-STATUS = IMPLEMENTED (MVP) + FUNCTIONALLY_VALIDATED (PASS_WITH_LIMITATIONS)
+STATUS = IMPLEMENTED (MVP) + FUNCTIONALLY_VALIDATED (PASS — Phase 7.1 closure)
 HEAD_BASELINE_BEFORE = 9a5e8cd
 IMPLEMENTATION_COMMIT = 7693135
+CLOSURE_BASELINE = 339bf05
 DATE = 2026-08-25
 BRANCH = feature/argos-multitenant-platform
 REMOTE_REMEDIATION = NOT_AUTHORIZED
 PRODUCTION_DEPLOY = NO
 ```
 
-Functional validation report: [`ARGOS_PHASE_7_FUNCTIONAL_VALIDATION.md`](./ARGOS_PHASE_7_FUNCTIONAL_VALIDATION.md)
-Artifacts: `docs/architecture/phase7-validation-artifacts/`
+Functional validation report: [`ARGOS_PHASE_7_FUNCTIONAL_VALIDATION.md`](./ARGOS_PHASE_7_FUNCTIONAL_VALIDATION.md)  
+Artifacts: `docs/architecture/phase7-validation-artifacts/` (+ `phase71/` CHICO/NOC captures)
 
 ## What shipped
 

@@ -1,4 +1,5 @@
 const rateLimit = require("express-rate-limit");
+const { createRegisteredStore } = require("../lib/rateLimitRegistry");
 
 const EMAIL_REGEX =
   /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
@@ -14,6 +15,7 @@ const generalLimiter = rateLimit({
   max: Number(process.env.RATE_LIMIT_MAX || 120),
   standardHeaders: true,
   legacyHeaders: false,
+  store: createRegisteredStore(),
   message: { error: "Demasiadas solicitudes. Intentalo de nuevo mas tarde." }
 });
 
@@ -22,6 +24,7 @@ const authLimiter = rateLimit({
   max: Number(process.env.AUTH_RATE_LIMIT_MAX || 8),
   standardHeaders: true,
   legacyHeaders: false,
+  store: createRegisteredStore(),
   message: { error: "Demasiados intentos. Intentalo de nuevo en unos minutos." }
 });
 
@@ -30,6 +33,7 @@ const aiLimiter = rateLimit({
   max: Number(process.env.AI_RATE_LIMIT_MAX || 30),
   standardHeaders: true,
   legacyHeaders: false,
+  store: createRegisteredStore(),
   message: { error: "Demasiadas solicitudes a la IA. Intentalo de nuevo en unos minutos." }
 });
 
@@ -38,6 +42,7 @@ const contactLimiter = rateLimit({
   max: Number(process.env.CONTACT_RATE_LIMIT_MAX || 5),
   standardHeaders: true,
   legacyHeaders: false,
+  store: createRegisteredStore(),
   message: { error: "Demasiadas consultas enviadas desde esta IP." }
 });
 

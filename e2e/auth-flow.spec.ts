@@ -1,7 +1,12 @@
 import { test, expect, type Page, type APIRequestContext, type Cookie } from "@playwright/test";
+import { resetAuthRateLimits } from "./helpers/resetRateLimits";
 
 const BACKEND = "http://127.0.0.1:4000";
 const PASSWORD = "E2eSecure2026!x";
+
+test.beforeEach(async () => {
+  await resetAuthRateLimits();
+});
 
 function uniqueEmail(): string {
   const ts = Date.now();
@@ -114,7 +119,7 @@ test.describe("authenticated flow (HttpOnly cookies)", () => {
       .getByRole("button", { name: /Cerrar sesión|Sign out/i })
       .click();
 
-    await expect(page).toHaveURL(/^\/$|\/auth\/login/, { timeout: 10_000 });
+    await expect(page).toHaveURL(/\/(auth\/login)?$/, { timeout: 10_000 });
 
     await page.waitForFunction(
       () => !document.cookie.includes("argos_session=1"),

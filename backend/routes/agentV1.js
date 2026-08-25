@@ -3,6 +3,7 @@
  */
 const express = require("express");
 const rateLimit = require("express-rate-limit");
+const { createRegisteredStore } = require("../lib/rateLimitRegistry");
 const agentAuth = require("../middleware/agentAuth");
 const {
   enrollAgent,
@@ -16,6 +17,7 @@ const agentEnrollLimiter = rateLimit({
   max: 30,
   standardHeaders: true,
   legacyHeaders: false,
+  store: createRegisteredStore(),
   message: { error: "Too many enrollment attempts", code: "RATE_LIMIT" }
 });
 
@@ -24,6 +26,7 @@ const agentIngestLimiter = rateLimit({
   max: 120,
   standardHeaders: true,
   legacyHeaders: false,
+  store: createRegisteredStore(),
   message: { error: "Agent rate limit", code: "RATE_LIMIT" }
 });
 

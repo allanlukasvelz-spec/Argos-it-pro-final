@@ -70,6 +70,14 @@ async function main() {
   fs.mkdirSync(OUT_DIR, { recursive: true });
 
   // Health
+  try {
+    const reset = await req("POST", "/api/test/reset-rate-limits");
+    if (reset.status === 200) note(`rate_limit_reset stores=${reset.json?.storesReset}`);
+    else note(`rate_limit_reset unavailable status=${reset.status}`);
+  } catch (e) {
+    note(`rate_limit_reset error: ${e.message}`);
+  }
+
   const health = await req("GET", "/api/health");
   if (health.status === 200 && health.json?.db === "connected") {
     pass("health", health.json);

@@ -1,7 +1,12 @@
 import { test, expect, type Page, type APIRequestContext } from "@playwright/test";
+import { resetAuthRateLimits } from "./helpers/resetRateLimits";
 
 const BACKEND = "http://127.0.0.1:4000";
 const PASSWORD = "E2eSecure2026!x";
+
+test.beforeEach(async () => {
+  await resetAuthRateLimits();
+});
 
 function uniqueEmail(): string {
   return `argos-e2e-p4-${Date.now()}-${Math.random().toString(36).slice(2, 8)}@example.test`;
@@ -49,11 +54,11 @@ test.describe("Phase 4 client portal", () => {
 
     await page.getByRole("navigation").getByRole("link", { name: "Informes" }).click();
     await expect(page).toHaveURL(/\/dashboard\/informes/);
-    await expect(page.getByText(/NOT_AVAILABLE_YET|aún no disponible/i)).toBeVisible();
+    await expect(page.getByText(/NOT_AVAILABLE_YET|aún no disponible/i).first()).toBeVisible();
 
     await page.getByRole("navigation").getByRole("link", { name: "Prevención" }).click();
     await expect(page).toHaveURL(/\/dashboard\/prevencion/);
-    await expect(page.getByText(/NOT_AVAILABLE_YET|aún no disponible/i)).toBeVisible();
+    await expect(page.getByText(/NOT_AVAILABLE_YET|aún no disponible/i).first()).toBeVisible();
 
     // No NOC route in client nav
     await expect(page.getByRole("link", { name: /^NOC$/i })).toHaveCount(0);

@@ -169,6 +169,14 @@ app.use("/api/auth", authRoutes);
 app.use("/api/ai/public", aiLimiter, require("./routes/ai-public"));
 app.use("/api/contact", contactRoutes);
 
+// Local/test only: rate-limit counter reset (never in production)
+if (
+  process.env.NODE_ENV !== "production" &&
+  process.env.ARGOS_ALLOW_RATE_LIMIT_RESET === "1"
+) {
+  app.use("/api/test", require("./routes/testOnly")());
+}
+
 // Rutas protegidas
 app.use("/api/ai", aiLimiter, authMiddleware, aiRoutes);
 app.use("/api/security", authMiddleware, securityRoutes);
