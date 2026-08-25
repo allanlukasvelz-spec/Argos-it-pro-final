@@ -120,6 +120,31 @@ export type ClientIncident = {
   resolvedAt: string | null;
 };
 
+export type ClientReport = {
+  id: string;
+  reportType: string;
+  title: string;
+  status: string | null;
+  latestRunId: string | null;
+  incidentId: number | null;
+  generatedAt: string | null;
+  dataFreshness: string | null;
+  templateVersion: string | null;
+  errorCode: string | null;
+  createdAt: string;
+};
+
+export type ClientNotification = {
+  id: string;
+  eventType: string;
+  severity: string;
+  title: string;
+  body: string;
+  linkTarget: string | null;
+  readAt: string | null;
+  createdAt: string;
+};
+
 export type MonitoringSummary = {
   organizationId: number;
   overall: HealthOverall;

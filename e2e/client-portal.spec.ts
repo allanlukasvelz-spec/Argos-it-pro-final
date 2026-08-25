@@ -54,7 +54,8 @@ test.describe("Phase 4 client portal", () => {
 
     await page.getByRole("navigation").getByRole("link", { name: "Informes" }).click();
     await expect(page).toHaveURL(/\/dashboard\/informes/);
-    await expect(page.getByText(/NOT_AVAILABLE_YET|aún no disponible/i).first()).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Informes" })).toBeVisible();
+    await expect(page.getByText(/datos verificados de ARGOS|Aún no hay informes/i).first()).toBeVisible();
 
     await page.getByRole("navigation").getByRole("link", { name: "Prevención" }).click();
     await expect(page).toHaveURL(/\/dashboard\/prevencion/);

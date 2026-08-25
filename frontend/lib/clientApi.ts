@@ -4,7 +4,9 @@ import type {
   ClientAsset,
   ClientIncident,
   ClientMonitor,
+  ClientNotification,
   ClientPortalPayload,
+  ClientReport,
   ClientTlsCertificate,
   MonitoringSummary
 } from "@/lib/clientTypes";
@@ -81,6 +83,34 @@ export async function postImprovement(body: Record<string, unknown>) {
 
 export async function postMessage(body: Record<string, unknown>) {
   const { data } = await API.post("/api/client/messages", body);
+  return data;
+}
+
+export async function fetchReports(): Promise<ClientReport[]> {
+  const { data } = await API.get<{ reports: ClientReport[] }>("/api/client/reports");
+  return data.reports || [];
+}
+
+export async function requestIncidentReport(incidentId: number, idempotencyKey?: string) {
+  const { data } = await API.post("/api/client/reports", { incidentId, idempotencyKey });
+  return data;
+}
+
+export async function downloadReportPdf(reportId: string): Promise<Blob> {
+  const { data } = await API.get(`/api/client/reports/${reportId}/content`, {
+    responseType: "blob"
+  });
+  return data as Blob;
+}
+
+export async function fetchNotifications(unreadOnly = false): Promise<ClientNotification[]> {
+  const q = unreadOnly ? "?unread=1" : "";
+  const { data } = await API.get<{ items: ClientNotification[] }>(`/api/client/notifications${q}`);
+  return data.items || [];
+}
+
+export async function markNotificationRead(id: string) {
+  const { data } = await API.patch(`/api/client/notifications/${id}/read`);
   return data;
 }
 

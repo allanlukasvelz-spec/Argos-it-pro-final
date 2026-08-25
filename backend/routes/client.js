@@ -285,6 +285,8 @@ function createClientRouter(pool) {
   router.use(require("./clientAssets")(pool));
   router.use(require("./clientMonitoring")(pool));
   router.use("/evidence", require("./clientEvidence")(pool));
+  router.use("/reports", require("./clientReports")(pool));
+  router.use("/notifications", require("./clientNotifications")(pool));
 
   router.post("/messages", async (req, res) => {
     try {

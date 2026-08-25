@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, type ReactNode } from "react";
 import { useAuthStore } from "@/lib/auth";
+import { ClientNotificationsBell } from "@/components/client/ClientNotificationsBell";
 import { useRouter } from "next/navigation";
 import { fetchPortal } from "@/lib/clientApi";
 
@@ -123,6 +124,7 @@ export default function ClientPortalShell({ children }: { children: ReactNode })
             </Link>
           </div>
           <div className="cp-topbar__meta">
+            <ClientNotificationsBell />
             <span>{orgName}</span>
             <span aria-live="polite">{freshness}</span>
             <span>{userName}</span>

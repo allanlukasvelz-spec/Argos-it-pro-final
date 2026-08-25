@@ -40,7 +40,7 @@ export const NOC_NAV: NavSection[] = [
       { href: "/noc/agents", label: "Agents" },
       { href: "/noc/runbooks", label: "Runbooks" },
       { href: "/noc/remediations", label: "Remediations" },
-      { href: "/noc/reports", label: "Reports", placeholder: true }
+      { href: "/noc/reports", label: "Reports" }
     ]
   },
   {
