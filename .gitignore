@@ -53,5 +53,8 @@ build/
 logs/
 *.log
 
+# Private evidence object bytes (never commit)
+backend/data/evidence/
+
 # Local Docker overrides (e.g. host port 5433)
 docker/docker-compose.override.yml

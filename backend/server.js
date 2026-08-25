@@ -193,10 +193,14 @@ const requireNocAccess = require("./middleware/requireNocAccess");
 const createNocRouter = require("./routes/noc");
 const createNocRemediationRouter = require("./routes/nocRemediation");
 const createNocAgentsRouter = require("./routes/nocAgents");
+const createNocEvidenceRouter = require("./routes/nocEvidence");
 const createAgentV1Router = require("./routes/agentV1");
+const { configureEvidenceStore } = require("./lib/platform/evidenceStore");
+const { ensureEvidenceObjectsTable } = require("./lib/ensureEvidenceObjects");
 app.use("/api/noc", authMiddleware, requireNocAccess, createNocRouter(pool));
 app.use("/api/noc", authMiddleware, requireNocAccess, createNocRemediationRouter(pool));
 app.use("/api/noc", authMiddleware, requireNocAccess, createNocAgentsRouter(pool));
+app.use("/api/noc/evidence", authMiddleware, requireNocAccess, createNocEvidenceRouter(pool));
 // Phase 7 — technical agent ingest (credential auth; no cookie CSRF path)
 app.use("/api/agent/v1", createAgentV1Router(pool));
 
@@ -243,6 +247,7 @@ server.on("error", (err) => {
 
 async function start() {
   try {
+    configureEvidenceStore();
     await ensureRefreshSessionsTable(pool);
     await ensureClientDiagnosticsTable(pool);
     await ensureOrganizationsFoundation(pool);
@@ -250,8 +255,9 @@ async function start() {
     await ensureMonitorsTables(pool);
     await ensureRemediationTables(pool);
     await ensureAgentsTables(pool);
+    await ensureEvidenceObjectsTable(pool);
   } catch (err) {
-    console.error("❌ No se pudo asegurar tablas de arranque (sessions/diagnostics/orgs/assets/monitors/remediation/agents):", err.message);
+    console.error("❌ No se pudo asegurar tablas de arranque (sessions/diagnostics/orgs/assets/monitors/remediation/agents/evidence):", err.message);
     process.exit(1);
   }
 

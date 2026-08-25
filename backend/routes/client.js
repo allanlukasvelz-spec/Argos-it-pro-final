@@ -284,6 +284,7 @@ function createClientRouter(pool) {
   router.use(createDiagnosticsRouter(pool));
   router.use(require("./clientAssets")(pool));
   router.use(require("./clientMonitoring")(pool));
+  router.use("/evidence", require("./clientEvidence")(pool));
 
   router.post("/messages", async (req, res) => {
     try {

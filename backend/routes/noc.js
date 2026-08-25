@@ -98,6 +98,7 @@ function createNocRouter(pool) {
   router.get("/platform-health", async (_req, res) => {
     const { getPlatformProcessSnapshot, emitPlatformEvent } = require("../lib/platform/telemetry");
     const { listCurrentPorts } = require("../lib/platform/portRegistry");
+    const { isEvidenceStoreConfigured, getConfiguredEvidenceRoot } = require("../lib/platform/evidenceStore");
     try {
       await pool.query("SELECT 1");
       const processSnapshot = getPlatformProcessSnapshot();
@@ -108,6 +109,11 @@ function createNocRouter(pool) {
         meaning:
           "Process and database connectivity only. Does not imply customer estates are healthy.",
         process: processSnapshot,
+        evidenceStore: {
+          configured: isEvidenceStoreConfigured(),
+          adapter: isEvidenceStoreConfigured() ? "local_private" : "none",
+          rootConfigured: Boolean(getConfiguredEvidenceRoot())
+        },
         ports: listCurrentPorts().map((p) => ({
           service: p.service,
           port: p.port,
