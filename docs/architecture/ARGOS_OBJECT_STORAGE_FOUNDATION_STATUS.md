@@ -1,7 +1,7 @@
 # ARGOS Object Storage Foundation — Status
 
 ```
-DATE = 2026-08-25
+DATE = 2026-08-26
 BRANCH = feature/argos-multitenant-platform
 ```
 
@@ -11,31 +11,41 @@ BRANCH = feature/argos-multitenant-platform
 |-----------|-------------|--------|
 | Interface + NoopEvidenceStore | `evidenceStore.js` | DONE |
 | LocalPrivateObjectStore | `localPrivateObjectStore.js` | DONE |
+| S3CompatibleObjectStore | `s3CompatibleObjectStore.js` | POC_LOCAL |
+| MinIO local overlay | `docker/docker-compose.minio-poc.yml` | POC_LOCAL |
+| Backend selection | `ARGOS_EVIDENCE_STORE=local\|s3` | DONE |
 | evidence_objects table (006) | migration + schema | DONE |
 | EvidenceService | policy, SHA-256, quota hooks | DONE |
 | Client/NOC retrieval | `clientEvidence`, `nocEvidence` | DONE |
 | Phase 6 producer | `INCIDENT_EVIDENCE_REFRESH` | DONE |
+| Reconciliation dry-run | `evidenceReconciliation.js` | POC |
 
-## Phase 6 integration summary
+## Backends
 
-**Before:** append-only `incident_events` JSONB payload with sanitized inline snapshot.
+| Backend | Use |
+|---------|-----|
+| `local` | Default dev/test (`backend/data/evidence`) |
+| `s3` | MinIO POC / future S3-compatible production |
 
-**After:** deterministic JSON artifact in object store + `incident_events.payload.evidenceObjectId` reference.
+**No silent fallback** between backends.
 
 ## Not implemented
 
-- MinIO / S3
+- Cloud AWS S3 production deployment
 - Phase 8 report PDFs
 - Agent binary uploads
-- Malware scanner
-- Automated orphan sweeper
+- Malware scanner (`NOT_SCANNED != CLEAN` preserved)
+- Automated orphan sweeper (dry-run only)
+- Client presigned URLs
 
 ## Verification
 
 ```bash
 npm run verify:backend
-# includes backend/lib/remediation/evidence.producer.test.js
+# includes evidence.foundation, evidence.producer, s3 adapter, reconciliation tests
 ```
+
+Optional MinIO live: see `docs/platform/ARGOS_MINIO_LOCAL_POC.md`
 
 ## Human review
 

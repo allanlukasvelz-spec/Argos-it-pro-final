@@ -7,9 +7,18 @@ AUDIENCE = operators / NOC
 
 ## Local development
 
-1. Backend boot calls `configureEvidenceStore()` — default root `backend/data/evidence/`
+1. Backend boot calls `configureEvidenceStore()` — default `ARGOS_EVIDENCE_STORE=local` → `backend/data/evidence/`
 2. Migration 006 applied at boot via `ensureEvidenceObjectsTable`
-3. Override: `ARGOS_EVIDENCE_ROOT=/path/outside/public`
+3. Local override: `ARGOS_EVIDENCE_ROOT=/path/outside/public`
+4. MinIO POC (optional): see `docs/platform/ARGOS_MINIO_LOCAL_POC.md` — set `ARGOS_EVIDENCE_STORE=s3`
+
+## Reconciliation (POC)
+
+```
+GET /api/noc/evidence/reconcile?dry_run=1
+```
+
+See `docs/platform/ARGOS_OBJECT_RECONCILIATION.md`
 
 ## Triggering evidence refresh
 

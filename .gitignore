@@ -20,6 +20,7 @@ out/
 .env.*
 !.env.example
 !**/.env.example
+!docker/.env.minio-poc.example
 backend/.env
 frontend/.env.local
 docker/.env

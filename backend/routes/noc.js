@@ -98,11 +98,21 @@ function createNocRouter(pool) {
   router.get("/platform-health", async (_req, res) => {
     const { getPlatformProcessSnapshot, emitPlatformEvent } = require("../lib/platform/telemetry");
     const { listCurrentPorts } = require("../lib/platform/portRegistry");
-    const { isEvidenceStoreConfigured, getConfiguredEvidenceRoot } = require("../lib/platform/evidenceStore");
+    const {
+      isEvidenceStoreConfigured,
+      getConfiguredEvidenceRoot,
+      getConfiguredBackend,
+      isLocalEvidenceStore,
+      isS3EvidenceStore
+    } = require("../lib/platform/evidenceStore");
     try {
       await pool.query("SELECT 1");
       const processSnapshot = getPlatformProcessSnapshot();
       emitPlatformEvent("platform.health.ok", { db: "connected" });
+      let adapter = "none";
+      if (isLocalEvidenceStore()) adapter = "local_private";
+      else if (isS3EvidenceStore()) adapter = "s3_compatible";
+      else if (isEvidenceStoreConfigured()) adapter = "configured";
       res.json({
         status: "OK",
         db: "connected",
@@ -111,7 +121,8 @@ function createNocRouter(pool) {
         process: processSnapshot,
         evidenceStore: {
           configured: isEvidenceStoreConfigured(),
-          adapter: isEvidenceStoreConfigured() ? "local_private" : "none",
+          backend: getConfiguredBackend(),
+          adapter,
           rootConfigured: Boolean(getConfiguredEvidenceRoot())
         },
         ports: listCurrentPorts().map((p) => ({

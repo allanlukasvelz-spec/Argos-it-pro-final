@@ -108,6 +108,24 @@ function createNocEvidenceRouter(pool) {
     }
   });
 
+  router.get("/reconcile", async (req, res) => {
+    try {
+      const { reconcileEvidence } = require("../lib/platform/evidenceReconciliation");
+      const orgFilter = parseOrgId(req.query.organization_id ?? req.query.organizationId);
+      const dryRun = String(req.query.dry_run ?? "1") !== "0";
+      const scanStoreOrphans = String(req.query.scan_orphans ?? "0") === "1";
+      const report = await reconcileEvidence(pool, {
+        organizationId: orgFilter || undefined,
+        dryRun,
+        scanStoreOrphans
+      });
+      res.json(report);
+    } catch (err) {
+      console.error("[NOC EVIDENCE] reconcile:", err.message);
+      res.status(500).json({ error: "Error en reconciliación de evidencia" });
+    }
+  });
+
   router.get("/:id", async (req, res) => {
     try {
       const row = await evidence.getMetadata(req.params.id, {

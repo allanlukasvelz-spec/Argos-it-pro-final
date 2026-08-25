@@ -1,19 +1,16 @@
 /**
- * Local private ObjectStore adapter — replaceable by MinIO/S3 later.
+ * Local private ObjectStore adapter — replaceable by S3-compatible backend.
  * Opaque server-generated keys only; never expose physical paths.
  */
 const fs = require("fs");
 const fsp = require("fs/promises");
 const path = require("path");
-
-const OBJECT_KEY_PATTERN = /^org\/\d+\/ev\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
-
-class ObjectStoreError extends Error {
-  constructor(code, message) {
-    super(message);
-    this.code = code;
-  }
-}
+const {
+  ObjectStoreError,
+  OBJECT_KEY_PATTERN,
+  assertValidObjectKey,
+  buildObjectKey
+} = require("./objectKey");
 
 class LocalPrivateObjectStore {
   constructor({ rootDir }) {
@@ -23,19 +20,8 @@ class LocalPrivateObjectStore {
     this.rootDir = path.resolve(rootDir);
   }
 
-  assertValidObjectKey(objectKey) {
-    const normalized = String(objectKey || "").replace(/\\/g, "/").trim();
-    if (!OBJECT_KEY_PATTERN.test(normalized)) {
-      throw new ObjectStoreError("INVALID_OBJECT_KEY", "Invalid object key");
-    }
-    if (normalized.includes("..") || normalized.includes("\0")) {
-      throw new ObjectStoreError("PATH_TRAVERSAL", "Path traversal rejected");
-    }
-    return normalized;
-  }
-
   resolvePhysicalPath(objectKey) {
-    const normalized = this.assertValidObjectKey(objectKey);
+    const normalized = assertValidObjectKey(objectKey);
     const fullPath = path.resolve(this.rootDir, normalized);
     const rootWithSep = this.rootDir.endsWith(path.sep) ? this.rootDir : `${this.rootDir}${path.sep}`;
     if (!fullPath.startsWith(rootWithSep)) {
@@ -76,6 +62,26 @@ class LocalPrivateObjectStore {
     return fsp.readFile(target);
   }
 
+  async head(objectKey) {
+    const target = this.resolvePhysicalPath(objectKey);
+    try {
+      const stat = await fsp.lstat(target);
+      if (stat.isSymbolicLink()) {
+        throw new ObjectStoreError("SYMLINK_ESCAPE", "Symlink escape rejected");
+      }
+      if (!stat.isFile()) {
+        throw new ObjectStoreError("NOT_FOUND", "Object not found");
+      }
+      return { objectKey, byteLength: stat.size, exists: true };
+    } catch (err) {
+      if (err instanceof ObjectStoreError) throw err;
+      if (err && err.code === "ENOENT") {
+        throw new ObjectStoreError("NOT_FOUND", "Object not found");
+      }
+      throw err;
+    }
+  }
+
   async delete(objectKey) {
     const target = this.resolvePhysicalPath(objectKey);
     try {
@@ -91,25 +97,58 @@ class LocalPrivateObjectStore {
 
   async exists(objectKey) {
     try {
-      const target = this.resolvePhysicalPath(objectKey);
-      const stat = await fsp.lstat(target);
-      return stat.isFile() && !stat.isSymbolicLink();
-    } catch {
-      return false;
+      await this.head(objectKey);
+      return true;
+    } catch (err) {
+      if (err instanceof ObjectStoreError && err.code === "NOT_FOUND") {
+        return false;
+      }
+      throw err;
     }
   }
-}
 
-function buildObjectKey(organizationId, evidenceId) {
-  const orgId = Number(organizationId);
-  if (!Number.isInteger(orgId) || orgId <= 0) {
-    throw new ObjectStoreError("INVALID_ORG", "Invalid organization id");
+  /**
+   * Internal reconciliation helper — lists keys under org prefix (bounded).
+   * @param {string} prefix e.g. org/10/ev/
+   * @param {{ maxKeys?: number }} options
+   */
+  async listKeysUnderPrefix(prefix, { maxKeys = 500 } = {}) {
+    const normalized = String(prefix || "").replace(/\\/g, "/");
+    if (!normalized.startsWith("org/") || normalized.includes("..")) {
+      throw new ObjectStoreError("INVALID_PREFIX", "Invalid list prefix");
+    }
+    const base = path.resolve(this.rootDir, normalized);
+    const rootWithSep = this.rootDir.endsWith(path.sep) ? this.rootDir : `${this.rootDir}${path.sep}`;
+    if (!base.startsWith(rootWithSep)) {
+      throw new ObjectStoreError("PATH_TRAVERSAL", "Path traversal rejected");
+    }
+    const keys = [];
+    async function walk(dir, relPrefix) {
+      if (keys.length >= maxKeys) return;
+      let entries;
+      try {
+        entries = await fsp.readdir(dir, { withFileTypes: true });
+      } catch (err) {
+        if (err && err.code === "ENOENT") return;
+        throw err;
+      }
+      for (const entry of entries) {
+        if (keys.length >= maxKeys) break;
+        const rel = relPrefix ? `${relPrefix}/${entry.name}` : entry.name;
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) {
+          await walk(full, rel);
+        } else if (entry.isFile() && !entry.name.endsWith(".tmp")) {
+          const key = rel.replace(/\\/g, "/");
+          if (OBJECT_KEY_PATTERN.test(key)) {
+            keys.push(key);
+          }
+        }
+      }
+    }
+    await walk(base, normalized.replace(/\/$/, ""));
+    return keys;
   }
-  const id = String(evidenceId || "").trim();
-  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(id)) {
-    throw new ObjectStoreError("INVALID_EVIDENCE_ID", "Invalid evidence id");
-  }
-  return `org/${orgId}/ev/${id}`;
 }
 
 module.exports = {

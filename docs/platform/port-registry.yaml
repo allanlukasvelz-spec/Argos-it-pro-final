@@ -69,10 +69,23 @@ ports:
   - service: minio
     port: 9000
     protocol: tcp
-    bind: private
+    bind: "127.0.0.1 (POC overlay)"
     exposure: private
     auth: access_keys
-    tls: recommended
-    purpose: OBJECT store
+    tls: optional_local
+    purpose: OBJECT store API (S3-compatible)
     owner: platform
-    status: TARGET_MVP
+    status: POC_LOCAL
+    public: NO
+
+  - service: minio-console
+    port: 9001
+    protocol: tcp
+    bind: "127.0.0.1 (POC overlay)"
+    exposure: localhost_only
+    auth: MINIO_ROOT_USER/PASSWORD
+    tls: optional_local
+    purpose: MinIO admin console (POC)
+    owner: platform
+    status: POC_LOCAL
+    public: NO

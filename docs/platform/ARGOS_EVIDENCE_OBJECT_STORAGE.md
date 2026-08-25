@@ -29,7 +29,7 @@ GET /api/noc/evidence/:id/content     (NOC audited)
 | Layer | Store | Content |
 |-------|-------|---------|
 | TRANSACTIONAL | PostgreSQL | `evidence_objects`, `incident_events` |
-| OBJECT | LocalPrivateObjectStore | JSON artifact bytes |
+| OBJECT | LocalPrivateObjectStore **or** S3CompatibleObjectStore (MinIO POC) | JSON artifact bytes |
 
 Legacy JSONB evidence in `observations` / `alerts` / remediation fields is **unchanged**.
 

@@ -62,9 +62,18 @@ const PORT_REGISTRY = Object.freeze([
     port: 9000,
     protocol: "tcp",
     exposure: "private",
-    purpose: "OBJECT store",
+    purpose: "OBJECT store API (S3-compatible)",
     owner: "platform",
-    status: "TARGET_MVP"
+    status: "POC_LOCAL"
+  },
+  {
+    service: "minio-console",
+    port: 9001,
+    protocol: "tcp",
+    exposure: "localhost_only",
+    purpose: "MinIO admin console (POC)",
+    owner: "platform",
+    status: "POC_LOCAL"
   }
 ]);
 
