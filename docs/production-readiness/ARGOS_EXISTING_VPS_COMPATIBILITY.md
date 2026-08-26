@@ -1,11 +1,29 @@
 # ARGOS — Existing VPS Compatibility Decision
 
 ```
-CAN_HOST_ARGOS_STAGING = YES_WITH_CHANGES
-NEW_VPS_REQUIRED       = NO  (per human USE_EXISTING_VPS_FIRST)
+CAN_HOST_ARGOS_STAGING = NO
+REASON                 = Multi-tenant Plesk host overloaded (disk 96%, load >10, 65 vhosts); see H1–H2 result
+NEW_VPS_REQUIRED       = REVIEW_REQUIRED (recommended YES for Argos)
+SSH_ACCESS             = RESTORED (udic @ 2220, key-only verified)
 DEPLOY_NOW             = NO
-SSH_ACCESS             = BLOCKED_UNTIL_KEY_AUTHORIZED
 ```
+
+## Update after H1–H2 live audit (2026-08-26)
+
+Prior external-only verdict `YES_WITH_CHANGES` is **superseded**.
+
+Live facts:
+
+- AlmaLinux 8.10 + Plesk Obsidian (not Ubuntu 24.04 as declared)
+- ~455 GB disk, **96% full**
+- Load average **~11** on 2 vCPU, **no swap**
+- **65** vhosts under `/var/www/vhosts` (udic.es + many others)
+- Docker **absent**
+- SSH key access for `udic` restored; firewall/sshd hardening deferred (no sudo)
+
+**Do not deploy Argos on this VPS.** Prefer a dedicated Hostinger KVM for `staging.argos-it.es` within the €80 budget, keeping this host for UDIC/customers only.
+
+Canonical detail: [ARGOS_EXISTING_VPS_H1_H2_RESULT.md](./ARGOS_EXISTING_VPS_H1_H2_RESULT.md)
 
 ## Decision
 

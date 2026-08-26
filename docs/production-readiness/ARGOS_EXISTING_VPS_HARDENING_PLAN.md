@@ -170,6 +170,13 @@ Any change that can impact UDIC/Plesk requires **explicit human review**.
 | Staging→prod resources | Process | Distinct secrets/accounts | Human error |
 | Restore destroys UDIC | Provider whole-VM restore | Argos isolated volumes + app-level backup | Coupled if VM restore used |
 
-## STOP
+## H1 / H2 status (2026-08-26)
 
-No hardening step is authorized by this document alone.
+| Item | Status |
+|------|--------|
+| H1 SSH access | **DONE** — key-only session verified for `udic` @ 2220 |
+| H1 sshd hardening (disable password/root) | **DEFERRED** — needs root sudo + zero-lockout plan |
+| H2 firewall changes | **DEFERRED** — firewalld active; no passwordless sudo; multi-tenant risk |
+| Full result | [ARGOS_EXISTING_VPS_H1_H2_RESULT.md](./ARGOS_EXISTING_VPS_H1_H2_RESULT.md) |
+
+**Argos must not be deployed on this host** until a dedicated VPS is chosen (disk/load/multi-tenant).
