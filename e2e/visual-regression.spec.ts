@@ -6,7 +6,8 @@ import {
   stabilizePage,
 } from "./helpers/visual-stable";
 
-const BACKEND = "http://127.0.0.1:4000";
+import { BACKEND, e2eAuthHeaders } from "./helpers/e2eEnv";
+
 const PASSWORD = "E2eSecure2026!";
 const VISUAL_DASHBOARD_EMAIL = "argos-visual-regression@example.test";
 const VISUAL_DASHBOARD_USER = {
@@ -19,6 +20,7 @@ const VISUAL_DASHBOARD_USER = {
 async function ensureVisualDashboardUser(request: import("@playwright/test").APIRequestContext): Promise<void> {
   const register = await request.post(`${BACKEND}/api/auth/register`, {
     data: VISUAL_DASHBOARD_USER,
+    headers: e2eAuthHeaders(),
   });
   if (![201, 400, 409].includes(register.status())) {
     throw new Error(`visual dashboard register unexpected status ${register.status()}`);

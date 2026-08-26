@@ -1,11 +1,20 @@
 import { test, expect, type Page, type APIRequestContext } from "@playwright/test";
 import { resetAuthRateLimits } from "./helpers/resetRateLimits";
+import { BACKEND, e2eAuthHeaders, isStagingE2e } from "./helpers/e2eEnv";
+import { gotoE2e } from "./helpers/e2eNav";
 
-const BACKEND = "http://127.0.0.1:4000";
 const PASSWORD = "E2eSecure2026!x";
+let stagingFwd = 40;
 
-test.beforeEach(async () => {
+test.beforeEach(async ({ page }) => {
   await resetAuthRateLimits();
+  if (isStagingE2e) {
+    stagingFwd = (stagingFwd % 200) + 1;
+    await page.context().setExtraHTTPHeaders({
+      "X-Forwarded-For": `203.0.113.${stagingFwd}`,
+      Origin: process.env.E2E_ORIGIN || "http://127.0.0.1:3010"
+    });
+  }
 });
 
 function uniqueEmail(): string {
@@ -14,20 +23,22 @@ function uniqueEmail(): string {
 
 async function registerViaAPI(request: APIRequestContext, email: string) {
   const res = await request.post(`${BACKEND}/api/auth/register`, {
-    data: { email, password: PASSWORD, name: "E2E P4", company: "E2E Corp" }
+    data: { email, password: PASSWORD, name: "E2E P4", company: "E2E Corp" },
+    headers: e2eAuthHeaders()
   });
   expect(res.status()).toBe(201);
 }
 
 async function loginViaUI(page: Page, email: string) {
-  await page.goto("/auth/login");
+  await gotoE2e(page, "/auth/login");
   await page.locator("#login-email").fill(email);
   await page.locator("#login-password").fill(PASSWORD);
-  await Promise.all([
+  const [response] = await Promise.all([
     page.waitForResponse((r) => r.url().includes("/api/auth/login") && r.request().method() === "POST"),
     page.getByRole("button", { name: /Iniciar sesion/i }).click()
   ]);
-  await expect(page).toHaveURL(/\/dashboard/, { timeout: 10_000 });
+  expect(response.status(), `login HTTP ${response.status()}`).toBe(200);
+  await expect(page).toHaveURL(/\/dashboard/, { timeout: 15_000 });
 }
 
 test.describe("Phase 4 client portal", () => {

@@ -58,3 +58,13 @@ bash scripts/staging/failure-injection.sh
 bash scripts/staging/rollback-rehearsal.sh
 npm run verify:backend
 ```
+
+
+## G12/G13 closure (2026-08-26)
+
+Historical: G12/G13 previously SKIP/PARTIAL after staging foundation.
+
+Update:
+
+- **G12=PASS** — live HTTP isolation (`scripts/staging/g12-tenant-isolation.js`)
+- **G13=PASS_WITH_LIMITATIONS** — Playwright against staging FE/API; phase7 + NOC visual skipped for topology/fixture reasons (see `ARGOS_STAGING_E2E_CLOSURE.md`)

@@ -2,14 +2,23 @@ import { test, expect, type Page, type APIRequestContext } from "@playwright/tes
 import { createRequire } from "node:module";
 import path from "node:path";
 import { resetAuthRateLimits } from "./helpers/resetRateLimits";
+import { BACKEND, ORIGIN, e2eAuthHeaders } from "./helpers/e2eEnv";
 
 const require = createRequire(path.join(process.cwd(), "backend/package.json"));
 const { Client } = require("pg");
 const bcrypt = require("bcrypt");
 require("dotenv").config({ path: path.join(process.cwd(), "backend/.env") });
 
-const BACKEND = "http://127.0.0.1:4000";
 const PASSWORD = "E2ePhase7Agents2026!x";
+
+test.beforeAll(() => {
+  if (process.env.E2E_STAGING === "1") {
+    test.skip(
+      true,
+      "Phase 7 agent E2E needs direct local DATABASE_URL; staging Postgres is private-network only"
+    );
+  }
+});
 
 async function assertLocalDb() {
   const u = process.env.DATABASE_URL || "";
@@ -82,7 +91,7 @@ async function loginUi(page: Page, email: string) {
 async function loginApi(request: APIRequestContext, email: string) {
   const res = await request.post(`${BACKEND}/api/auth/login`, {
     data: { email, password: PASSWORD },
-    headers: { Origin: "http://127.0.0.1:3000" }
+    headers: { Origin: ORIGIN }
   });
   expect(res.status(), `login ${email}`).toBe(200);
   return res;
@@ -103,7 +112,7 @@ test.describe("Phase 7 agents lifecycle (local)", () => {
 
     const enroll = await request.post(`${BACKEND}/api/noc/agents/enrollments`, {
       data: { organizationId: topo.orgId, assetId: topo.assetId },
-      headers: { Origin: "http://127.0.0.1:3000" }
+      headers: { Origin: ORIGIN }
     });
     expect(enroll.status()).toBe(201);
     const enrollBody = await enroll.json();
@@ -116,7 +125,7 @@ test.describe("Phase 7 agents lifecycle (local)", () => {
         name: "e2e-ref-agent",
         agentVersion: "0.0.1-e2e"
       },
-      headers: { Origin: "http://127.0.0.1:3000" }
+      headers: { Origin: ORIGIN }
     });
     expect(agentEnroll.status()).toBe(201);
     const agentBody = await agentEnroll.json();
@@ -127,7 +136,7 @@ test.describe("Phase 7 agents lifecycle (local)", () => {
       data: { seq: 1, status: "ONLINE" },
       headers: {
         Authorization: `Bearer ${agentBody.credential}`,
-        Origin: "http://127.0.0.1:3000"
+        Origin: ORIGIN
       }
     });
     expect(hb.status()).toBe(200);
@@ -161,7 +170,7 @@ test.describe("Phase 7 agents lifecycle (local)", () => {
     await loginUi(page, topo.adminEmail);
     const revoke = await request.post(
       `${BACKEND}/api/noc/agents/${agentBody.agentId}/revoke`,
-      { headers: { Origin: "http://127.0.0.1:3000" } }
+      { headers: { Origin: ORIGIN } }
     );
     expect(revoke.status()).toBe(200);
 
@@ -169,7 +178,7 @@ test.describe("Phase 7 agents lifecycle (local)", () => {
       data: { seq: 2, status: "ONLINE" },
       headers: {
         Authorization: `Bearer ${agentBody.credential}`,
-        Origin: "http://127.0.0.1:3000"
+        Origin: ORIGIN
       }
     });
     expect([401, 403]).toContain(hbAfter.status());

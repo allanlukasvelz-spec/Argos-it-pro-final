@@ -1,7 +1,7 @@
 import { test, expect, type Page, type APIRequestContext, type Cookie } from "@playwright/test";
 import { resetAuthRateLimits } from "./helpers/resetRateLimits";
+import { BACKEND, ORIGIN, e2eAuthHeaders } from "./helpers/e2eEnv";
 
-const BACKEND = "http://127.0.0.1:4000";
 const PASSWORD = "E2eSecure2026!x";
 
 test.beforeEach(async () => {
@@ -17,6 +17,7 @@ function uniqueEmail(): string {
 async function registerViaAPI(request: APIRequestContext, email: string): Promise<void> {
   const res = await request.post(`${BACKEND}/api/auth/register`, {
     data: { email, password: PASSWORD, name: "E2E User", company: "E2E Corp" },
+    headers: e2eAuthHeaders()
   });
   expect(res.status(), `register API should return 201 (got ${res.status()})`).toBe(201);
 }
@@ -196,18 +197,18 @@ test.describe("authenticated flow (HttpOnly cookies)", () => {
       headers: {
         Cookie: cookieHeader,
         "Content-Type": "application/json",
-        Origin: "http://127.0.0.1:3000",
+        Origin: ORIGIN,
       },
       data: {},
     });
-    // Origin must be in CORS_ORIGINS / FRONTEND_URL; local default is localhost:3000
+    // Origin must be in CORS_ORIGINS / FRONTEND_URL
     const refreshLocalhost = refreshOk.status() === 200
       ? refreshOk
       : await request.post(`${BACKEND}/api/auth/refresh`, {
           headers: {
             Cookie: cookieHeader,
             "Content-Type": "application/json",
-            Origin: "http://localhost:3000",
+            Origin: ORIGIN.includes("3010") ? "http://127.0.0.1:3010" : "http://localhost:3000",
           },
           data: {},
         });

@@ -1,17 +1,18 @@
 /**
- * Playwright global setup — reset auth rate-limit counters before E2E.
- * Requires backend with ARGOS_ALLOW_RATE_LIMIT_RESET=1 (see playwright.config.ts).
+ * Playwright global setup — reset auth rate-limit counters before E2E when available.
+ * Staging intentionally omits the endpoint; soft-skip (see E2E_STAGING=1).
  */
 async function globalSetup() {
   const backend = process.env.E2E_BACKEND_URL || "http://127.0.0.1:4000";
+  const origin = process.env.E2E_ORIGIN || "http://127.0.0.1:3000";
   try {
     const res = await fetch(`${backend}/api/test/reset-rate-limits`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", Origin: "http://127.0.0.1:3000" }
+      headers: { "Content-Type": "application/json", Origin: origin }
     });
     if (res.status === 404) {
       console.warn(
-        "[e2e] rate-limit reset unavailable (start backend with ARGOS_ALLOW_RATE_LIMIT_RESET=1)"
+        "[e2e] rate-limit reset unavailable (staging fail-closed or flag unset)"
       );
       return;
     }
