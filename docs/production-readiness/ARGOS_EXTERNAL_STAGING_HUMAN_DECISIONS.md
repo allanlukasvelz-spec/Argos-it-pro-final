@@ -29,6 +29,7 @@ REMOTE_REMEDIATION            = NO
 | D8 | Secret management | **HOST_FILE_0600_WITH_ROTATION**; Vault deferred | RECORDED |
 | D9 | Staging harness | **ENABLED_STAGING_ONLY**; strong token; IP restrict if practical | RECORDED |
 | D10 | Billable infrastructure | **AUTHORIZED_FOR_STAGING_ONLY** | RECORDED |
+| D11 | Staging host strategy | **DEDICATED_ARGOS_ONLY_VPS** (Ubuntu 24.04, 4 vCPU rec / 8 GB / ≥100 GB / swap) — existing Plesk VPS **vetoed** | RECORDED |
 
 ## Hard limits (binding)
 
@@ -55,14 +56,13 @@ REMOTE_REMEDIATION            = NO
 
 ## Implications for next gate (not executed here)
 
-1. Provision Hostinger VPS in Europe West within €80/mo envelope (compute + disk + off-host backup + uptime + TLS).
-2. DNS: create/point **only** `staging.argos-it.es` (no production DNS changes).
-3. TLS on that hostname; `ARGOS_COOKIE_SECURE=1`; CORS/CSRF = `https://staging.argos-it.es`.
-4. MinIO private (no public 9000/9001); Postgres private.
-5. Off-host S3-compatible bucket for backups (credentials in host file 0600).
-6. ≥1 external uptime probe against FE + `/api/live` or `/api/ready`.
-7. Harness enabled with unique strong token; IP allowlist if practical (CI/operator).
-8. Synthetic data only; no customer agents.
+1. ~~Use existing Plesk VPS~~ **SUPERSEDED** — veto after H1–H2 ([ARGOS_EXISTING_VPS_H1_H2_RESULT.md](./ARGOS_EXISTING_VPS_H1_H2_RESULT.md)).
+2. Provision **dedicated** Hostinger VPS per [ARGOS_DEDICATED_STAGING_VPS_SPEC.md](./ARGOS_DEDICATED_STAGING_VPS_SPEC.md) — requires explicit **EXTERNAL_STAGING_VPS_PROVISION** authorization.
+3. DNS: create/point **only** `staging.argos-it.es` (no production DNS changes).
+4. TLS + `ARGOS_COOKIE_SECURE=1`; CORS/CSRF = `https://staging.argos-it.es`.
+5. MinIO + Postgres private; publish only 22 (restricted), 80, 443.
+6. Off-host S3-compatible backups (D5); ≥1 external uptime probe (D7).
+7. Synthetic data only; no customer agents.
 
 ## Sign-off block
 
