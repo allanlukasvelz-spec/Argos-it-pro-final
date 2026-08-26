@@ -76,5 +76,6 @@ Until D1–D10 are answered and a **separate** implementation gate is authorized
 ## Recommended next step
 
 1. ~~Human completes [ARGOS_EXTERNAL_STAGING_HUMAN_DECISIONS.md](./ARGOS_EXTERNAL_STAGING_HUMAN_DECISIONS.md)~~ **DONE** (2026-08-26)
-2. Human authorizes **EXTERNAL_STAGING_IMPLEMENTATION** gate (create Hostinger VPS, DNS for `staging.argos-it.es` only, spend within €80)
-3. Execute runbook with recorded Git SHA and release gates
+2. ~~Audit existing Hostinger VPS~~ **DONE** — see [ARGOS_EXISTING_VPS_AUDIT.md](./ARGOS_EXISTING_VPS_AUDIT.md) (`CAN_HOST=YES_WITH_CHANGES`; SSH key auth still blocked)
+3. Human: authorize operator SSH pubkey + accept shared UDIC/Plesk risk; then authorize **HARDENING** (H1–H11) and later **EXTERNAL_STAGING_IMPLEMENTATION**
+4. Execute runbook with recorded Git SHA and release gates
