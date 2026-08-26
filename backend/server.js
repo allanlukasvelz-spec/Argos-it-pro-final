@@ -169,12 +169,14 @@ app.use("/api/auth", authRoutes);
 app.use("/api/ai/public", aiLimiter, require("./routes/ai-public"));
 app.use("/api/contact", contactRoutes);
 
-// Local/test only: rate-limit counter reset (never in production)
-if (
-  process.env.NODE_ENV !== "production" &&
-  process.env.ARGOS_ALLOW_RATE_LIMIT_RESET === "1"
-) {
+// Local/test only: rate-limit counter reset (never staging/production — fail closed)
+const { isRateLimitResetAllowed } = require("./lib/ops/testSurfacePolicy");
+if (isRateLimitResetAllowed()) {
   app.use("/api/test", require("./routes/testOnly")());
+} else if (process.env.ARGOS_ALLOW_RATE_LIMIT_RESET === "1") {
+  console.warn(
+    "[SECURITY] ARGOS_ALLOW_RATE_LIMIT_RESET ignored (staging/production or NODE_ENV not test|development)"
+  );
 }
 
 // Rutas protegidas
@@ -207,13 +209,119 @@ app.use("/api/noc", authMiddleware, requireNocAccess, createNocReportsRouter(poo
 // Phase 7 — technical agent ingest (credential auth; no cookie CSRF path)
 app.use("/api/agent/v1", createAgentV1Router(pool));
 
-// Health check — verifies database connectivity
+// Liveness — process up only (do not conflate with customer health)
+app.get("/api/live", (_req, res) => {
+  res.json({
+    status: "LIVE",
+    meaning: "Process is running. Not readiness. Not customer health.",
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Readiness — platform dependencies required to accept traffic
+app.get("/api/ready", async (_req, res) => {
+  const {
+    isEvidenceStoreConfigured,
+    getConfiguredBackend,
+    getEvidenceStore
+  } = require("./lib/platform/evidenceStore");
+  const checks = { db: "unknown", schema: "unknown", evidenceStore: "unknown" };
+  try {
+    await pool.query("SELECT 1");
+    checks.db = "ok";
+  } catch {
+    checks.db = "fail";
+    return res.status(503).json({
+      status: "NOT_READY",
+      checks,
+      meaning: "Database unreachable. Not customer health.",
+      timestamp: new Date().toISOString()
+    });
+  }
+
+  try {
+    const schema = await pool.query(
+      `SELECT to_regclass('public.organizations') AS organizations,
+              to_regclass('public.platform_jobs') AS platform_jobs,
+              to_regclass('public.evidence_objects') AS evidence_objects`
+    );
+    const row = schema.rows[0] || {};
+    if (!row.organizations || !row.platform_jobs || !row.evidence_objects) {
+      checks.schema = "incompatible";
+      return res.status(503).json({
+        status: "NOT_READY",
+        checks,
+        meaning: "Schema missing required relations. Migration gate failed.",
+        timestamp: new Date().toISOString()
+      });
+    }
+    checks.schema = "ok";
+  } catch {
+    checks.schema = "fail";
+    return res.status(503).json({
+      status: "NOT_READY",
+      checks,
+      meaning: "Schema verification failed.",
+      timestamp: new Date().toISOString()
+    });
+  }
+
+  if (!isEvidenceStoreConfigured()) {
+    checks.evidenceStore = "not_configured";
+    return res.status(503).json({
+      status: "NOT_READY",
+      checks,
+      backend: getConfiguredBackend(),
+      meaning: "Evidence object store not configured.",
+      timestamp: new Date().toISOString()
+    });
+  }
+
+  try {
+    const store = getEvidenceStore();
+    if (typeof store.exists === "function") {
+      // Valid key shape; missing object → false. Network/auth failures throw.
+      await store.exists("org/1/ev/00000000-0000-4000-8000-000000000001");
+    }
+    checks.evidenceStore = "ok";
+  } catch (err) {
+    checks.evidenceStore = "fail";
+    return res.status(503).json({
+      status: "NOT_READY",
+      checks,
+      backend: getConfiguredBackend(),
+      error: err.message,
+      meaning: "Evidence object store unreachable.",
+      timestamp: new Date().toISOString()
+    });
+  }
+
+  res.json({
+    status: "READY",
+    checks,
+    backend: getConfiguredBackend(),
+    meaning: "API ready for traffic. Not customer estate health.",
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Platform health (public probe) — DB connectivity only; not customer health
 app.get("/api/health", async (req, res) => {
   try {
     await pool.query("SELECT 1");
-    res.json({ status: "OK", db: "connected", timestamp: new Date() });
+    res.json({
+      status: "OK",
+      db: "connected",
+      meaning: "Database reachable. Not customer health. Prefer /api/live and /api/ready for orchestration.",
+      timestamp: new Date()
+    });
   } catch (_err) {
-    res.status(503).json({ status: "DEGRADED", db: "disconnected", timestamp: new Date() });
+    res.status(503).json({
+      status: "DEGRADED",
+      db: "disconnected",
+      meaning: "Database unreachable. Not customer health.",
+      timestamp: new Date()
+    });
   }
 });
 
@@ -275,12 +383,23 @@ async function start() {
     console.log(`🤖 IA (Chico + Dumbo) lista`);
 
     if (isSchedulerEnabled()) {
-      try {
-        const scheduler = createMonitorScheduler(pool);
-        scheduler.start();
-        console.log(`⏱️  Monitor scheduler activo (ENABLE_MONITOR_SCHEDULER)`);
-      } catch (schedErr) {
-        console.error("[MONITOR] No se pudo iniciar scheduler:", schedErr.message);
+      const stagingLike =
+        process.env.ARGOS_ENVIRONMENT === "staging" ||
+        process.env.ARGOS_ENVIRONMENT === "production";
+      if (stagingLike && process.env.ARGOS_SCHEDULER_OWNER !== "1") {
+        console.error(
+          "[MONITOR] SCHEDULER_SCALE_BLOCKER: refusing scheduler start without ARGOS_SCHEDULER_OWNER=1 (exactly one API replica)"
+        );
+      } else {
+        try {
+          const scheduler = createMonitorScheduler(pool);
+          scheduler.start();
+          console.log(
+            `⏱️  Monitor scheduler activo (ENABLE_MONITOR_SCHEDULER) owner=${process.env.ARGOS_SCHEDULER_OWNER || "unset"} SCHEDULER_SCALE_BLOCKER=YES`
+          );
+        } catch (schedErr) {
+          console.error("[MONITOR] No se pudo iniciar scheduler:", schedErr.message);
+        }
       }
     } else {
       console.log(`⏱️  Monitor scheduler desactivado (ENABLE_MONITOR_SCHEDULER=false)`);

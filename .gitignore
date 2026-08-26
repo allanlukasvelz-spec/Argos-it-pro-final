@@ -21,9 +21,13 @@ out/
 !.env.example
 !**/.env.example
 !docker/.env.minio-poc.example
+!docker/.env.staging.example
 backend/.env
 frontend/.env.local
 docker/.env
+docker/.env.staging
+docker/.env.minio-poc
+
 
 # IDE
 .vscode/
@@ -56,6 +60,9 @@ logs/
 
 # Private evidence object bytes (never commit)
 backend/data/evidence/
+
+# Staging local backups (never commit dumps)
+var/staging-backups/
 
 # Local Docker overrides (e.g. host port 5433)
 docker/docker-compose.override.yml

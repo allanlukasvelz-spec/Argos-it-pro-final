@@ -18,10 +18,12 @@ describe("rateLimitRegistry", () => {
     assert.equal(c.totalHits, 1);
   });
 
-  it("isRateLimitResetAllowed requires flag and non-production", () => {
+  it("isRateLimitResetAllowed requires flag and test|development; staging fails closed", () => {
     const prevEnv = process.env.NODE_ENV;
     const prevFlag = process.env.ARGOS_ALLOW_RATE_LIMIT_RESET;
+    const prevArgos = process.env.ARGOS_ENVIRONMENT;
     try {
+      delete process.env.ARGOS_ENVIRONMENT;
       process.env.NODE_ENV = "production";
       process.env.ARGOS_ALLOW_RATE_LIMIT_RESET = "1";
       assert.equal(isRateLimitResetAllowed(), false);
@@ -30,6 +32,17 @@ describe("rateLimitRegistry", () => {
       process.env.ARGOS_ALLOW_RATE_LIMIT_RESET = "1";
       assert.equal(isRateLimitResetAllowed(), true);
 
+      process.env.NODE_ENV = "test";
+      process.env.ARGOS_ALLOW_RATE_LIMIT_RESET = "1";
+      assert.equal(isRateLimitResetAllowed(), true);
+
+      process.env.ARGOS_ENVIRONMENT = "staging";
+      process.env.NODE_ENV = "test";
+      process.env.ARGOS_ALLOW_RATE_LIMIT_RESET = "1";
+      assert.equal(isRateLimitResetAllowed(), false);
+
+      delete process.env.ARGOS_ENVIRONMENT;
+      process.env.NODE_ENV = "development";
       process.env.ARGOS_ALLOW_RATE_LIMIT_RESET = "0";
       assert.equal(isRateLimitResetAllowed(), false);
     } finally {
@@ -37,6 +50,8 @@ describe("rateLimitRegistry", () => {
       else process.env.NODE_ENV = prevEnv;
       if (prevFlag === undefined) delete process.env.ARGOS_ALLOW_RATE_LIMIT_RESET;
       else process.env.ARGOS_ALLOW_RATE_LIMIT_RESET = prevFlag;
+      if (prevArgos === undefined) delete process.env.ARGOS_ENVIRONMENT;
+      else process.env.ARGOS_ENVIRONMENT = prevArgos;
     }
   });
 });

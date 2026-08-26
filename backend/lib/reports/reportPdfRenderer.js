@@ -1,13 +1,20 @@
 /**
  * HTML → PDF via Playwright Chromium (worker-only).
  * Security: setContent only, all network requests aborted, no navigation.
- * Set ARGOS_REPORT_PDF_STUB=1 for unit tests without Chromium.
+ * Set ARGOS_REPORT_PDF_STUB=1 for unit tests without Chromium (never staging/production).
  */
+const { isReportPdfStubAllowed } = require("../ops/testSurfacePolicy");
+
 const STUB_HEADER = "%PDF-1.4\n";
 
 async function renderPdfFromHtml(html) {
-  if (process.env.ARGOS_REPORT_PDF_STUB === "1") {
+  if (isReportPdfStubAllowed()) {
     return Buffer.from(`${STUB_HEADER}% ARGOS report stub\n%%EOF\n`, "utf8");
+  }
+  if (process.env.ARGOS_REPORT_PDF_STUB === "1") {
+    const err = new Error("ARGOS_REPORT_PDF_STUB forbidden in staging/production");
+    err.code = "PDF_STUB_FORBIDDEN";
+    throw err;
   }
 
   let chromium;

@@ -1,0 +1,292 @@
+# ARGOS staging stack — LOCAL/ISOLATED staging foundation.
+# NOT production. NOT public DNS. Synthetic data only.
+#
+# Usage:
+#   cp docker/.env.staging.example docker/.env.staging
+#   # edit secrets (never commit docker/.env.staging)
+#   docker compose -f docker/docker-compose.staging.yml --env-file docker/.env.staging up -d --build
+#
+# Scheduler: SINGLE API replica only (SCALE_BLOCKER if duplicated).
+# Rate limits: in-memory (RATE_LIMIT_SCALE_BLOCKER for multi-API).
+
+name: argos-staging
+
+networks:
+  argos_staging_net:
+    driver: bridge
+
+volumes:
+  staging_pg_data:
+  staging_minio_data:
+  staging_evidence_local:
+  staging_backups:
+
+services:
+  postgres:
+    image: postgres:16.6-alpine@sha256:1d04b9ba1d4996401f2552b51beda8187f175c0645c091e4781134fc9c9a3eef
+    container_name: argos-staging-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${STAGING_POSTGRES_DB:-argos_staging}
+      POSTGRES_USER: ${STAGING_POSTGRES_USER:-argos_staging}
+      POSTGRES_PASSWORD: ${STAGING_POSTGRES_PASSWORD:?Set STAGING_POSTGRES_PASSWORD}
+    volumes:
+      - staging_pg_data:/var/lib/postgresql/data
+    networks:
+      - argos_staging_net
+    # No host publish by default — private network only
+    expose:
+      - "5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1G
+    security_opt:
+      - no-new-privileges:true
+    read_only: false
+    user: postgres
+
+  migrate:
+    image: postgres:16.6-alpine@sha256:1d04b9ba1d4996401f2552b51beda8187f175c0645c091e4781134fc9c9a3eef
+    container_name: argos-staging-migrate
+    restart: "no"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${STAGING_POSTGRES_USER:-argos_staging}:${STAGING_POSTGRES_PASSWORD}@postgres:5432/${STAGING_POSTGRES_DB:-argos_staging}
+    volumes:
+      - ../database:/database:ro
+      - ../scripts/staging/migrate-entrypoint.sh:/migrate-entrypoint.sh:ro
+    entrypoint: ["/bin/sh", "/migrate-entrypoint.sh"]
+    networks:
+      - argos_staging_net
+    security_opt:
+      - no-new-privileges:true
+
+  minio:
+    image: minio/minio:RELEASE.2024-12-18T13-15-44Z@sha256:1dce27c494a16bae114774f1cec295493f3613142713130c2d22dd5696be6ad3
+    container_name: argos-staging-minio
+    restart: unless-stopped
+    command: server /data --address ":9000" --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${STAGING_MINIO_ROOT_USER:?Set STAGING_MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${STAGING_MINIO_ROOT_PASSWORD:?Set STAGING_MINIO_ROOT_PASSWORD}
+    volumes:
+      - staging_minio_data:/data
+    networks:
+      - argos_staging_net
+    # Private network only — no host publish (ops via compose network / exec)
+    expose:
+      - "9000"
+      - "9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+    security_opt:
+      - no-new-privileges:true
+
+  minio-init:
+    image: minio/mc:RELEASE.2024-11-17T19-35-25Z@sha256:8f94d208188dcd04bbaa51b54578bb43ea2a663626ca59889c07d4fb8ae9546d
+    container_name: argos-staging-minio-init
+    restart: "no"
+    depends_on:
+      minio:
+        condition: service_healthy
+    environment:
+      MINIO_ROOT_USER: ${STAGING_MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${STAGING_MINIO_ROOT_PASSWORD}
+      MINIO_BUCKET: ${STAGING_MINIO_BUCKET:-argos-evidence-staging}
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set local http://minio:9000 $$MINIO_ROOT_USER $$MINIO_ROOT_PASSWORD &&
+      mc mb --ignore-existing local/$$MINIO_BUCKET &&
+      mc anonymous set none local/$$MINIO_BUCKET &&
+      mc version enable local/$$MINIO_BUCKET || true &&
+      echo 'STAGING MinIO bucket ready (private, anonymous=none)'
+      "
+    networks:
+      - argos_staging_net
+    security_opt:
+      - no-new-privileges:true
+
+  api:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile.staging
+    container_name: argos-staging-api
+    restart: unless-stopped
+    # Exactly one replica — scheduler owner (SCALE_BLOCKER if scaled)
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1G
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+      minio-init:
+        condition: service_completed_successfully
+    environment:
+      NODE_ENV: production
+      ARGOS_ENVIRONMENT: staging
+      PORT: 4000
+      DATABASE_URL: postgresql://${STAGING_POSTGRES_USER:-argos_staging}:${STAGING_POSTGRES_PASSWORD}@postgres:5432/${STAGING_POSTGRES_DB:-argos_staging}
+      JWT_SECRET: ${STAGING_JWT_SECRET:?Set STAGING_JWT_SECRET}
+      JWT_REFRESH_SECRET: ${STAGING_JWT_REFRESH_SECRET:?Set STAGING_JWT_REFRESH_SECRET}
+      ENABLE_SOCKET_IO: "false"
+      ENABLE_MONITOR_SCHEDULER: "true"
+      ARGOS_SCHEDULER_OWNER: "1"
+      FRONTEND_URL: ${STAGING_FRONTEND_URL:-http://127.0.0.1:3010}
+      CORS_ORIGINS: ${STAGING_CORS_ORIGINS:-http://127.0.0.1:3010}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      ARGOS_EVIDENCE_STORE: s3
+      ARGOS_EVIDENCE_S3_ENDPOINT: http://minio:9000
+      ARGOS_EVIDENCE_S3_BUCKET: ${STAGING_MINIO_BUCKET:-argos-evidence-staging}
+      ARGOS_EVIDENCE_S3_ACCESS_KEY: ${STAGING_MINIO_ROOT_USER}
+      ARGOS_EVIDENCE_S3_SECRET_KEY: ${STAGING_MINIO_ROOT_PASSWORD}
+      ARGOS_EVIDENCE_S3_REGION: us-east-1
+      ARGOS_EVIDENCE_S3_FORCE_PATH_STYLE: "true"
+      # Fail-closed test surfaces
+      ARGOS_ALLOW_RATE_LIMIT_RESET: ""
+      ARGOS_REPORT_PDF_STUB: ""
+      ALLOW_NOC_SELF_APPROVAL: ""
+      ARGOS_MINIO_POC: ""
+    ports:
+      - "127.0.0.1:${STAGING_API_PORT:-4010}:4000"
+    volumes:
+      # ensure* boot paths resolve to /database/migrations (repo layout from /app/lib)
+      - ../database:/database:ro
+    networks:
+      - argos_staging_net
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:4000/api/ready').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
+    security_opt:
+      - no-new-privileges:true
+    read_only: false
+
+  worker:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile.worker
+      args:
+        NODE_IMAGE: node:22.14.0-bookworm-slim@sha256:1c18d9ab3af4585870b92e4dbc5cac5a0dc77dd13df1a5905cea89fc720eb05b
+    container_name: argos-staging-worker
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+      minio-init:
+        condition: service_completed_successfully
+      api:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      ARGOS_ENVIRONMENT: staging
+      DATABASE_URL: postgresql://${STAGING_POSTGRES_USER:-argos_staging}:${STAGING_POSTGRES_PASSWORD}@postgres:5432/${STAGING_POSTGRES_DB:-argos_staging}
+      ARGOS_WORKER_POLL_MS: ${ARGOS_WORKER_POLL_MS:-2000}
+      ARGOS_EVIDENCE_STORE: s3
+      ARGOS_EVIDENCE_S3_ENDPOINT: http://minio:9000
+      ARGOS_EVIDENCE_S3_BUCKET: ${STAGING_MINIO_BUCKET:-argos-evidence-staging}
+      ARGOS_EVIDENCE_S3_ACCESS_KEY: ${STAGING_MINIO_ROOT_USER}
+      ARGOS_EVIDENCE_S3_SECRET_KEY: ${STAGING_MINIO_ROOT_PASSWORD}
+      ARGOS_EVIDENCE_S3_REGION: us-east-1
+      ARGOS_EVIDENCE_S3_FORCE_PATH_STYLE: "true"
+      ARGOS_REPORT_PDF_STUB: ""
+      ARGOS_WORKER_HEARTBEAT_PATH: /tmp/argos-worker-heartbeat
+    volumes:
+      - ../database:/database:ro
+    # No ports — worker has no inbound network
+    networks:
+      - argos_staging_net
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "const fs=require('fs');const p=process.env.ARGOS_WORKER_HEARTBEAT_PATH||'/tmp/argos-worker-heartbeat';try{const t=Number(fs.readFileSync(p,'utf8'));process.exit(Date.now()-t<60000?0:1)}catch(e){process.exit(1)}"
+        ]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 3G
+    security_opt:
+      - no-new-privileges:true
+    # Chromium may need writable /tmp — exception documented
+    tmpfs:
+      - /tmp:size=512M,mode=1777
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile.staging
+      args:
+        NEXT_PUBLIC_BACKEND_URL: http://127.0.0.1:${STAGING_API_PORT:-4010}
+    container_name: argos-staging-frontend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_BACKEND_URL: http://127.0.0.1:${STAGING_API_PORT:-4010}
+      BACKEND_URL: http://api:4000
+    ports:
+      - "127.0.0.1:${STAGING_FRONTEND_PORT:-3010}:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - argos_staging_net
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3000/').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+        ]
+      interval: 20s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1G
+    security_opt:
+      - no-new-privileges:true

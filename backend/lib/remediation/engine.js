@@ -404,7 +404,8 @@ async function decideApproval(pool, approvalId, actorUserId, decision, reason) {
     err.code = "INVALID_INPUT";
     throw err;
   }
-  const allowSelf = process.env.ALLOW_NOC_SELF_APPROVAL === "1";
+  const { isNocSelfApprovalAllowed } = require("../ops/testSurfacePolicy");
+  const allowSelf = isNocSelfApprovalAllowed();
   const client = await pool.connect();
   try {
     await client.query("BEGIN");

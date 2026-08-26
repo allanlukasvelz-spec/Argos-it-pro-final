@@ -1,17 +1,20 @@
-ARG NODE_IMAGE=node:22-alpine
+ARG NODE_IMAGE=node:22.14.0-bookworm-slim@sha256:1c18d9ab3af4585870b92e4dbc5cac5a0dc77dd13df1a5905cea89fc720eb05b
 FROM ${NODE_IMAGE}
 
 WORKDIR /app
+
+RUN groupadd --system argos && useradd --system --gid argos --create-home argos
 
 COPY package*.json ./
 RUN npm ci
 
 COPY . .
 
-ARG NEXT_PUBLIC_BACKEND_URL=http://localhost:4000
+ARG NEXT_PUBLIC_BACKEND_URL=http://127.0.0.1:4010
 ENV NEXT_PUBLIC_BACKEND_URL=$NEXT_PUBLIC_BACKEND_URL
 
-RUN npm run build
+RUN npm run build && chown -R argos:argos /app
+USER argos
 
 EXPOSE 3000
 

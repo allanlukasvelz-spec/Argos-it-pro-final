@@ -113,12 +113,24 @@ function createNocRouter(pool) {
       if (isLocalEvidenceStore()) adapter = "local_private";
       else if (isS3EvidenceStore()) adapter = "s3_compatible";
       else if (isEvidenceStoreConfigured()) adapter = "configured";
+
+      let queue = null;
+      try {
+        const q = await pool.query(
+          `SELECT status, COUNT(*)::int AS n FROM platform_jobs GROUP BY status`
+        );
+        queue = Object.fromEntries(q.rows.map((r) => [r.status, r.n]));
+      } catch {
+        queue = { error: "platform_jobs_unavailable" };
+      }
+
       res.json({
         status: "OK",
         db: "connected",
         meaning:
           "Process and database connectivity only. Does not imply customer estates are healthy.",
         process: processSnapshot,
+        queue,
         evidenceStore: {
           configured: isEvidenceStoreConfigured(),
           backend: getConfiguredBackend(),
@@ -133,7 +145,9 @@ function createNocRouter(pool) {
         invariants: {
           platformHealthyImpliesCustomersHealthy: false,
           remoteExecution: false,
-          remoteRemediation: false
+          remoteRemediation: false,
+          schedulerScaleBlocker: true,
+          rateLimitScaleBlocker: true
         },
         timestamp: new Date().toISOString()
       });

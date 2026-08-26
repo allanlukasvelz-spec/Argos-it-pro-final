@@ -1,6 +1,7 @@
 /**
- * Local/test-only helpers. Mounted only when ARGOS_ALLOW_RATE_LIMIT_RESET=1
- * and NODE_ENV !== production. Never weakens production auth limits.
+ * Local/test-only helpers. Mounted only when testSurfacePolicy allows:
+ * NODE_ENV in {test,development} AND ARGOS_ALLOW_RATE_LIMIT_RESET=1.
+ * Never mounts under ARGOS_ENVIRONMENT=staging|production or NODE_ENV=production.
  */
 const express = require("express");
 const {

@@ -1,8 +1,10 @@
 /**
  * Resettable in-memory rate-limit stores for test isolation.
- * Production policy (limits) unchanged; tests may clear counters when
- * ARGOS_ALLOW_RATE_LIMIT_RESET=1 and NODE_ENV !== production.
+ * Production/staging: reset never allowed (fail closed).
+ * Tests/CI: NODE_ENV in {test,development} + ARGOS_ALLOW_RATE_LIMIT_RESET=1.
  */
+
+const { isRateLimitResetAllowed } = require("./ops/testSurfacePolicy");
 
 class ResettableMemoryStore {
   constructor() {
@@ -70,13 +72,6 @@ function resetAllRateLimitStores() {
     store.resetAll();
   }
   return { storesReset: stores.length };
-}
-
-function isRateLimitResetAllowed() {
-  return (
-    process.env.NODE_ENV !== "production" &&
-    process.env.ARGOS_ALLOW_RATE_LIMIT_RESET === "1"
-  );
 }
 
 module.exports = {
