@@ -1,20 +1,12 @@
-import { test, expect, type Page, type APIRequestContext } from "@playwright/test";
+import { test, expect, type APIRequestContext } from "@playwright/test";
 import { resetAuthRateLimits } from "./helpers/resetRateLimits";
-import { BACKEND, e2eAuthHeaders, isStagingE2e } from "./helpers/e2eEnv";
-import { gotoE2e } from "./helpers/e2eNav";
+import { BACKEND, e2eAuthHeaders } from "./helpers/e2eEnv";
+import { loginViaUi } from "./helpers/loginUi";
 
 const PASSWORD = "E2eSecure2026!x";
-let stagingFwd = 40;
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async () => {
   await resetAuthRateLimits();
-  if (isStagingE2e) {
-    stagingFwd = (stagingFwd % 200) + 1;
-    await page.context().setExtraHTTPHeaders({
-      "X-Forwarded-For": `203.0.113.${stagingFwd}`,
-      Origin: process.env.E2E_ORIGIN || "http://127.0.0.1:3010"
-    });
-  }
 });
 
 function uniqueEmail(): string {
@@ -29,23 +21,11 @@ async function registerViaAPI(request: APIRequestContext, email: string) {
   expect(res.status()).toBe(201);
 }
 
-async function loginViaUI(page: Page, email: string) {
-  await gotoE2e(page, "/auth/login");
-  await page.locator("#login-email").fill(email);
-  await page.locator("#login-password").fill(PASSWORD);
-  const [response] = await Promise.all([
-    page.waitForResponse((r) => r.url().includes("/api/auth/login") && r.request().method() === "POST"),
-    page.getByRole("button", { name: /Iniciar sesion/i }).click()
-  ]);
-  expect(response.status(), `login HTTP ${response.status()}`).toBe(200);
-  await expect(page).toHaveURL(/\/dashboard/, { timeout: 15_000 });
-}
-
 test.describe("Phase 4 client portal", () => {
   test("shell navigation reaches real sections", async ({ page, request }) => {
     const email = uniqueEmail();
     await registerViaAPI(request, email);
-    await loginViaUI(page, email);
+    await loginViaUi(page, email, PASSWORD);
 
     await expect(page.getByRole("heading", { name: /Portal de cliente/i })).toBeVisible();
     await expect(page.getByRole("navigation", { name: /Portal de cliente/i })).toBeVisible();

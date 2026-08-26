@@ -15,7 +15,7 @@ test.beforeAll(() => {
   if (process.env.E2E_STAGING === "1") {
     test.skip(
       true,
-      "Phase 7 agent E2E needs direct local DATABASE_URL; staging Postgres is private-network only"
+      "Deliberate: local Phase 7 uses host DATABASE_URL; staging uses e2e/phase7-agents-staging.spec.ts (API harness, no PG publish)"
     );
   }
 });

@@ -18,6 +18,11 @@ export default defineConfig({
   globalSetup: require.resolve("./e2e/global-setup.ts"),
   timeout: 90_000,
 
+  // Deliberate exclusions for staging G13 (documented in ARGOS_STAGING_FINAL_VALIDATION.md):
+  // - visual-regression: pixel baselines are local chromium project; networkidle hangs on staging marketing assets
+  // - phase81-reports-ui: requires local phase81 fixture seed; NOC/client reports covered by noc-visual-staging + phase8 pipeline
+  testIgnore: ["**/visual-regression.spec.ts", "**/phase81-reports-ui.spec.ts"],
+
   use: {
     baseURL: e2eOrigin,
     trace: "on-first-retry",

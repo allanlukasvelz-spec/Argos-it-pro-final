@@ -148,6 +148,9 @@ services:
     environment:
       NODE_ENV: production
       ARGOS_ENVIRONMENT: staging
+      # Local compose is HTTP loopback — Secure cookies break Playwright API jar.
+      # Set ARGOS_COOKIE_SECURE=1 when staging is served behind real TLS.
+      ARGOS_COOKIE_SECURE: ${ARGOS_COOKIE_SECURE:-0}
       PORT: 4000
       DATABASE_URL: postgresql://${STAGING_POSTGRES_USER:-argos_staging}:${STAGING_POSTGRES_PASSWORD}@postgres:5432/${STAGING_POSTGRES_DB:-argos_staging}
       JWT_SECRET: ${STAGING_JWT_SECRET:?Set STAGING_JWT_SECRET}
@@ -170,6 +173,8 @@ services:
       ARGOS_REPORT_PDF_STUB: ""
       ALLOW_NOC_SELF_APPROVAL: ""
       ARGOS_MINIO_POC: ""
+      # Staging E2E harness only (never production). Token from env file.
+      ARGOS_STAGING_HARNESS_TOKEN: ${ARGOS_STAGING_HARNESS_TOKEN:-}
     ports:
       - "127.0.0.1:${STAGING_API_PORT:-4010}:4000"
     volumes:

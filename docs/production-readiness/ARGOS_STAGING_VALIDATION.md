@@ -64,7 +64,16 @@ npm run verify:backend
 
 Historical: G12/G13 previously SKIP/PARTIAL after staging foundation.
 
-Update:
+Update (E2E closure gate):
 
 - **G12=PASS** — live HTTP isolation (`scripts/staging/g12-tenant-isolation.js`)
 - **G13=PASS_WITH_LIMITATIONS** — Playwright against staging FE/API; phase7 + NOC visual skipped for topology/fixture reasons (see `ARGOS_STAGING_E2E_CLOSURE.md`)
+
+### Final validation (same day)
+
+Those G13 limitations are **RESOLVED**:
+
+- Staging harness admin fixture + NOC visual E2E
+- Phase 7 agents E2E without publishing Postgres
+- **G13=PASS** — see `ARGOS_STAGING_FINAL_VALIDATION.md`
+- **FINAL_STATUS=STAGING_VALIDATED**

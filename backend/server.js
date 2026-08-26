@@ -179,6 +179,16 @@ if (isRateLimitResetAllowed()) {
   );
 }
 
+// Staging harness ONLY — synthetic fixture provision; never production
+const {
+  isStagingHarnessAllowed,
+  createStagingHarnessRouter
+} = require("./routes/stagingHarness");
+if (isStagingHarnessAllowed()) {
+  app.use("/api/staging-harness", createStagingHarnessRouter(pool));
+  console.log("[STAGING] harness mounted at /api/staging-harness (token-gated)");
+}
+
 // Rutas protegidas
 app.use("/api/ai", aiLimiter, authMiddleware, aiRoutes);
 app.use("/api/security", authMiddleware, securityRoutes);

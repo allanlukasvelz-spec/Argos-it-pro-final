@@ -47,8 +47,8 @@ Harness adaptations (no staging security flags enabled):
 - Soft-skip rate-limit reset when `E2E_STAGING=1`
 - Unique `X-Forwarded-For` for auth isolation
 - `gotoE2e` uses `domcontentloaded` (staging home never emits `load`)
-- NOC visual skipped without admin fixture (cannot register admin publicly)
-- Phase 7 agents skipped (staging Postgres not host-published)
+- ~~NOC visual skipped without admin fixture~~ → **RESOLVED** (see `ARGOS_STAGING_FINAL_VALIDATION.md`)
+- ~~Phase 7 agents skipped (staging Postgres not host-published)~~ → **RESOLVED** via staging harness E2E
 
 | Metric | Value |
 |--------|--------|
@@ -58,7 +58,7 @@ Harness adaptations (no staging security flags enabled):
 | Skipped | phase7 agents; NOC visual |
 | Flaky | 0 observed after harness fix |
 
-**G13=PASS_WITH_LIMITATIONS** (topology skips documented; not application regressions)
+**G13=PASS_WITH_LIMITATIONS** (topology skips documented; not application regressions) — **historical**. Superseded by **G13=PASS** in `ARGOS_STAGING_FINAL_VALIDATION.md` (2026-08-26 final gate).
 
 ## Phase 8 real report pipeline
 
@@ -95,3 +95,5 @@ Backup stamp `20260826T015153Z`; isolated restore PASS; SHA-256 ok; reconcile dr
 ## Final
 
 `FINAL_STATUS=PASS_WITH_LIMITATIONS` — G12 PASS; G13 limited by private Postgres (phase7) and NOC admin fixture; foundation otherwise closed.
+
+**Update 2026-08-26:** those G13 limitations are **RESOLVED** — see `ARGOS_STAGING_FINAL_VALIDATION.md` (`FINAL_STATUS=STAGING_VALIDATED`, `G13=PASS`).
