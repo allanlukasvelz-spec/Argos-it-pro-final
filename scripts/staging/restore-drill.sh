@@ -55,9 +55,10 @@ echo "[restore-drill] restoring postgres from dump (skip migrate — schema in d
 
 echo "[restore-drill] restoring minio objects..."
 BUCKET="${STAGING_MINIO_BUCKET:-argos-evidence-staging}"
-if [[ -d "$BACKUP_DIR/minio/$BUCKET" ]]; then
+BACKUP_ABS=$(cd "$BACKUP_DIR" && pwd)
+if [[ -d "$BACKUP_ABS/minio/$BUCKET" ]]; then
   "${RESTORE[@]}" run --rm --no-deps \
-    -v "$BACKUP_DIR/minio:/backup:ro" \
+    -v "$BACKUP_ABS/minio:/backup:ro" \
     --entrypoint /bin/sh \
     minio-init -c "
       mc alias set local http://minio:9000 \"\$MINIO_ROOT_USER\" \"\$MINIO_ROOT_PASSWORD\" &&
