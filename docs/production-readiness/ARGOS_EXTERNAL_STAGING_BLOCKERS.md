@@ -22,7 +22,7 @@ Canonical production list: [ARGOS_PRODUCTION_READINESS_BLOCKERS.md](./ARGOS_PROD
 | B7 Dual DDL | PARTIAL | **PARTIAL** | Migrate job + ensure* mount still required |
 | B8 NOTIFICATION_DELIVER | DEFERRED | **NOT_APPLICABLE_TO_STAGING** | Don't enqueue |
 | B9 Socket.IO | RESOLVED env false | **RESOLVED** if env preserved | |
-| B10 No host/provider | DEFERRED | **OPEN** | **This gate** — waiting D1–D10 |
+| B10 No host/provider | DEFERRED | **PARTIAL** | D1–D10 recorded (Hostinger, staging.argos-it.es); VPS/DNS/spend await IMPLEMENTATION gate |
 
 ### Security items
 
