@@ -96,6 +96,13 @@ function createClientReportsRouter(pool) {
   router.get("/:id/content", async (req, res) => {
     try {
       const orgId = req.tenant.id;
+      const owned = await pool.query(
+        `SELECT id FROM reports WHERE id = $1 AND organization_id = $2`,
+        [req.params.id, orgId]
+      );
+      if (!owned.rows[0]) {
+        return res.status(404).json({ error: "Informe no encontrado", code: "NOT_FOUND" });
+      }
       const { rows } = await pool.query(
         `SELECT rr.evidence_object_id, rr.status
          FROM reports r

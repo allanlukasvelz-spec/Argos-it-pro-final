@@ -27,9 +27,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN groupadd --system argos && useradd --system --gid argos --create-home argos
 
+# Shared browser path readable by non-root worker user
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+
 COPY package*.json ./
 RUN npm ci --omit=dev && npm install playwright@1.59.1 --no-save \
-  && npx playwright install chromium
+  && npx playwright install chromium \
+  && mkdir -p /ms-playwright \
+  && chown -R argos:argos /ms-playwright
 
 COPY . .
 
@@ -37,6 +42,7 @@ RUN chown -R argos:argos /app /home/argos
 USER argos
 
 ENV ARGOS_WORKER_HEARTBEAT_PATH=/tmp/argos-worker-heartbeat
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
 
 # No EXPOSE — worker has no inbound port
 HEALTHCHECK --interval=20s --timeout=5s --start-period=60s --retries=5 \
