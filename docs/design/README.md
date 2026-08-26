@@ -33,6 +33,7 @@
 | [tokens.md](./tokens.md) | Token architecture (brand, semantic, legacy, fonts) |
 | [legacy-map.md](./legacy-map.md) | Production hex inventory and migration mapping |
 | [source-hierarchy.md](./source-hierarchy.md) | Source-of-truth hierarchy |
+| [ARGOS_FRONTEND_SOURCE_OF_TRUTH_RECONCILIATION.md](./ARGOS_FRONTEND_SOURCE_OF_TRUTH_RECONCILIATION.md) | Staging Home vs Relume/Framer SoT forensics (2026-08-26; docs-only) |
 
 ## Implementation
 
