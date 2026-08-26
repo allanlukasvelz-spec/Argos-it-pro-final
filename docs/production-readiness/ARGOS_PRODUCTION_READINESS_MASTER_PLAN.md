@@ -57,6 +57,8 @@ It is **architecture + audit + runbooks only**. No staging deploy, no cloud purc
 | [ARGOS_SECURITY_PREPRODUCTION_CHECKLIST.md](./ARGOS_SECURITY_PREPRODUCTION_CHECKLIST.md) | Security gate |
 | [ARGOS_PRODUCTION_READINESS_BLOCKERS.md](./ARGOS_PRODUCTION_READINESS_BLOCKERS.md) | Hard blockers |
 | [ARGOS_PRODUCTION_READINESS_IMPLEMENTATION_MAP.html](./ARGOS_PRODUCTION_READINESS_IMPLEMENTATION_MAP.html) | Visual CURRENT / STAGING / PROD |
+| [ARGOS_STAGING_FINAL_VALIDATION.md](./ARGOS_STAGING_FINAL_VALIDATION.md) | Local staging G13=PASS closure |
+| [ARGOS_EXTERNAL_STAGING_MASTER_PLAN.md](./ARGOS_EXTERNAL_STAGING_MASTER_PLAN.md) | External staging pre-implementation (architecture only) |
 
 ## 3. Non-negotiable product invariants (carry into staging)
 
