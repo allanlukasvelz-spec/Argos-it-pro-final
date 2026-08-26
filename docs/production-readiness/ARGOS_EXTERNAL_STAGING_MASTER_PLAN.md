@@ -8,8 +8,9 @@ HEAD_AT_GATE                  = 5e1bf631f8c3fdb98a8d5fe5a17a20d588f7e031
 LOCAL_STAGING_VALIDATED       = YES
 EXTERNAL_STAGING_VALIDATED    = NO
 PRODUCTION_READY              = NO
+HUMAN_DECISIONS               = RECORDED (D1–D10) — see ARGOS_EXTERNAL_STAGING_HUMAN_DECISIONS.md
 EXTERNAL_DEPLOYMENT_EXECUTED  = NO
-BILLABLE_INFRASTRUCTURE       = NOT AUTHORIZED
+BILLABLE_INFRASTRUCTURE       = AUTHORIZED_FOR_STAGING_ONLY (not yet created)
 DNS_CHANGED                   = NO
 PHASE_9                       = NO
 RUNTIME_CHANGED               = NO
@@ -74,6 +75,6 @@ Until D1–D10 are answered and a **separate** implementation gate is authorized
 
 ## Recommended next step
 
-1. Human completes [ARGOS_EXTERNAL_STAGING_HUMAN_DECISIONS.md](./ARGOS_EXTERNAL_STAGING_HUMAN_DECISIONS.md)
-2. Human authorizes **EXTERNAL_STAGING_IMPLEMENTATION** gate (billable infra)
+1. ~~Human completes [ARGOS_EXTERNAL_STAGING_HUMAN_DECISIONS.md](./ARGOS_EXTERNAL_STAGING_HUMAN_DECISIONS.md)~~ **DONE** (2026-08-26)
+2. Human authorizes **EXTERNAL_STAGING_IMPLEMENTATION** gate (create Hostinger VPS, DNS for `staging.argos-it.es` only, spend within €80)
 3. Execute runbook with recorded Git SHA and release gates

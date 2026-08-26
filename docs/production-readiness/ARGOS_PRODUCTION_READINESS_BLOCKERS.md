@@ -18,7 +18,7 @@ UPDATED = 2026-08-26
 | B7 | Dual DDL (`migrate` + `ensure*`) | MEDIUM | **PARTIAL** | Staging migrate job is boot gate; ensure* still needs `/database` mount |
 | B8 | `NOTIFICATION_DELIVER` allowlisted without handler | LOW | **DEFERRED** | Don't enqueue |
 | B9 | Socket.IO defaults ON in code | LOW | **RESOLVED** | Staging env sets `ENABLE_SOCKET_IO=false` |
-| B10 | No staging host/provider authorized | PROCESS | **DEFERRED** | Local staging foundation only; external staging architecture package exists — see `ARGOS_EXTERNAL_STAGING_*` (billable infra still unauthorized) |
+| B10 | No staging host/provider authorized | PROCESS | **PARTIAL** | Human decisions D1–D10 recorded (Hostinger VPS, `staging.argos-it.es`, staging-only billable auth). Infrastructure **not created** until EXTERNAL_STAGING_IMPLEMENTATION gate. See `ARGOS_EXTERNAL_STAGING_HUMAN_DECISIONS.md` |
 
 ## Security blockers
 
