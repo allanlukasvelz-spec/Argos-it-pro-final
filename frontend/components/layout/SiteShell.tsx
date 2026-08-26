@@ -12,34 +12,14 @@ import SiteFooter from "@/components/layout/SiteFooter";
 import SiteHeader from "@/components/layout/SiteHeader";
 import {
   getChromeOwner,
-  isLegalPublicRoute,
+  shouldHideAssistants,
+  shouldHideCookieBanner,
   shouldShowDiagnosticPromo
 } from "@/lib/chromeOwnership";
 
 type Props = {
   children: ReactNode;
 };
-
-function isLabOrRecordingPath(pathname: string) {
-  return (
-    pathname === "/explainer" ||
-    pathname === "/mascot-motion-lab" ||
-    pathname.startsWith("/mascot-motion-lab/")
-  );
-}
-
-function shouldHideAssistants(pathname: string) {
-  return (
-    pathname.startsWith("/auth") ||
-    pathname.startsWith("/dashboard") ||
-    isLabOrRecordingPath(pathname) ||
-    isLegalPublicRoute(pathname)
-  );
-}
-
-function shouldHideCookieBanner(pathname: string) {
-  return pathname.startsWith("/dashboard") || isLabOrRecordingPath(pathname);
-}
 
 export default function SiteShell({ children }: Props) {
   const pathname = usePathname();
