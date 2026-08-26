@@ -1,5 +1,6 @@
 const rateLimit = require("express-rate-limit");
 const { createRegisteredStore } = require("../lib/rateLimitRegistry");
+const { authRateLimitKey } = require("../lib/ops/stagingE2eRateLimitKey");
 
 const EMAIL_REGEX =
   /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
@@ -25,6 +26,10 @@ const authLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   store: createRegisteredStore(),
+  // Staging E2E behind Traefik: isolate via X-Argos-Staging-E2E-Fwd (TEST-NET only).
+  // Does not raise max; production ignores the header.
+  keyGenerator: authRateLimitKey,
+  validate: { keyGeneratorIpFallback: false },
   message: { error: "Demasiados intentos. Intentalo de nuevo en unos minutos." }
 });
 
