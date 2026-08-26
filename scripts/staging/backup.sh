@@ -54,8 +54,10 @@ cat > "$OUT_DIR/MANIFEST.json" <<EOF
 }
 EOF
 
-# Verify readable
-pg_restore -l "$OUT_DIR/postgres.dump" >/dev/null
+# Verify readable (use pinned postgres image — host may lack pg_restore)
+docker run --rm -v "$OUT_DIR:/dumps:ro" \
+  postgres:16.6-alpine@sha256:1d04b9ba1d4996401f2552b51beda8187f175c0645c091e4781134fc9c9a3eef \
+  pg_restore -l /dumps/postgres.dump >/dev/null
 test -f "$OUT_DIR/MANIFEST.json"
 test -s "$OUT_DIR/postgres.dump.sha256"
 
