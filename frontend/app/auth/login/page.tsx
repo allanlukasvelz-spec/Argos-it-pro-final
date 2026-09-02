@@ -11,17 +11,17 @@ import toast from "react-hot-toast";
 export default function Login() {
   const router = useRouter();
   const login = useAuthStore((state) => state.login);
-  const token = useAuthStore((state) => state.token);
+  const authenticated = useAuthStore((state) => state.authenticated);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (token) {
+    if (authenticated) {
       router.replace("/dashboard");
     }
-  }, [token, router]);
+  }, [authenticated, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,7 +30,7 @@ export default function Login() {
     try {
       const res = await API.post("/api/auth/login", { email, password });
 
-      login(res.data.token, res.data.user, res.data.refreshToken);
+      login(res.data.user);
       toast.success("Sesion iniciada");
       router.push("/dashboard");
     } catch (error: any) {

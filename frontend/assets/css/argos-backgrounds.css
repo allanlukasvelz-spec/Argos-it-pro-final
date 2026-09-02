@@ -1,9 +1,10 @@
 :root {
+  /*
+   * Shell-specific tokens for ArgosPageShell backgrounds.
+   * Shared --argos-navy, --argos-blue, --argos-cyan: see frontend/app/globals.css (v21.1).
+   */
   --argos-ink: #030812;
-  --argos-navy: #071421;
   --argos-navy-2: #0B1F33;
-  --argos-blue: #0D3B66;
-  --argos-cyan: #18D4F7;
   --argos-cyan-2: #39F4FF;
   --argos-aqua: #00A8C8;
   --argos-white: #F4FAFF;

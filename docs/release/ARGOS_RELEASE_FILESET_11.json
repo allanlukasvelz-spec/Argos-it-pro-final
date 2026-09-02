@@ -1,0 +1,516 @@
+{
+  "mission": "GIT_RELEASE_INTEGRATION_11",
+  "timestamp": "2026-08-31T17:50:00Z",
+  "branch": "feature/argos-multitenant-platform",
+  "head": "640adb048a769d3d4dd9a72f3caccd637d3a81ce",
+  "finalAcceptance10": "PASS",
+  "indexFingerprint": {
+    "cachedDiffBytes": 0,
+    "stagedFileCount": 0,
+    "note": "Index empty at Integration 11 start; must remain empty at end"
+  },
+  "includeFull": [
+    "frontend/app/portal/page.tsx",
+    "frontend/components/corporate/ArgosCard.tsx",
+    "frontend/components/corporate/ArgosDetailDialog.tsx",
+    "frontend/components/corporate/ArgosExpandableCard.tsx",
+    "frontend/components/corporate/ArgosPhaseLettersRow.tsx",
+    "frontend/components/corporate/ArgosReveal.tsx",
+    "frontend/components/corporate/CorporateHeaderBanner.tsx",
+    "frontend/components/corporate/CorporateHistoryNav.tsx",
+    "frontend/components/corporate/CorporateNavDrawer.tsx",
+    "frontend/components/corporate/MethodArgosBar.tsx",
+    "frontend/components/corporate/MethodBrandHeader.tsx",
+    "frontend/components/corporate/PublicMovementsGrid.tsx",
+    "frontend/components/home/HomeDiagnosisCard.tsx",
+    "frontend/components/home/HomePerimeterPanel.tsx",
+    "frontend/components/pages/PortalView.tsx",
+    "frontend/hooks/useBrowserHistoryNav.ts",
+    "frontend/lib/contentFreezeV1.test.ts",
+    "frontend/lib/mascotPoseGraph.ts",
+    "frontend/lib/publicMethodMovements.ts",
+    "frontend/public/logo-argos-it-footer.png",
+    "frontend/public/mascots/chico/chico_alert.png",
+    "frontend/public/mascots/chico/chico_jump.jpg",
+    "frontend/public/mascots/chico/chico_lay.jpg",
+    "frontend/public/mascots/chico/chico_sit.png",
+    "frontend/public/mascots/chico/chico_sleep.jpg",
+    "frontend/public/mascots/chico/chico_turn.jpg",
+    "frontend/public/mascots/chico/chico_walk_01.jpg",
+    "frontend/public/mascots/dumbo/dumbo_jump.jpg",
+    "frontend/public/mascots/dumbo/dumbo_lay.jpg",
+    "frontend/public/mascots/dumbo/dumbo_look.jpg",
+    "frontend/public/mascots/dumbo/dumbo_sleep.jpg",
+    "frontend/public/mascots/dumbo/dumbo_walk_01.jpg",
+    "frontend/ai/mascotStates.ts",
+    "frontend/app/globals.css",
+    "frontend/components/ArgosExplainerAnimation.tsx",
+    "frontend/components/ClientAssistants.tsx",
+    "frontend/components/diagnostic/DiagnosticSurvey.tsx",
+    "frontend/components/diagnostic/DiagnosticSurveyModal.tsx",
+    "frontend/components/layout/CorporatePageShell.tsx",
+    "frontend/components/layout/SiteFooter.tsx",
+    "frontend/components/layout/SiteHeader.tsx",
+    "frontend/components/mascots/ChicoDumboSpriteSystem.tsx",
+    "frontend/components/mascots/MascotChatContext.tsx",
+    "frontend/lib/chromeOwnership.ts",
+    "frontend/lib/chromeOwnership.test.ts",
+    "frontend/lib/corporateNav.ts",
+    "frontend/public/logo-argos-it-header.png",
+    "frontend/sprites/spriteManifest.ts",
+    "frontend/styles/mascot-sprites.css",
+    "package.json",
+    "e2e/corporate-chrome.spec.ts",
+    "e2e/smoke.spec.ts",
+    "e2e/static-banner.spec.ts",
+    "e2e/visual-adoption-01.spec.ts",
+    "docs/content/ARGOS_CONTENT_FREEZE_V1.md",
+    "docs/content/ARGOS_CONTENT_OWNERSHIP_MAP.json",
+    "docs/content/ARGOS_CONTENT_DRIFT_REGISTER.md",
+    "docs/content/ARGOS_CONTENT_IMPLEMENTATION_04_REPORT.md",
+    "docs/content/ARGOS_DECISION_RESOLUTION_02.md",
+    "docs/content/ARGOS_HUMAN_DECISION_PACK_01.md",
+    "docs/content/ARGOS_METHOD_MAPPING_4_TO_5.md",
+    "docs/content/ARGOS_SERVICE_ARCHITECTURE_MAPPING.md",
+    "docs/design/ARGOS_VISUAL_REFINEMENT_05_REPORT.md",
+    "docs/design/ARGOS_VISUAL_INTEGRATION_06_REPORT.md",
+    "docs/design/ARGOS_VISUAL_POLISH_07_REPORT.md",
+    "docs/design/ARGOS_OWNER_VISUAL_QA_08_REPORT.md",
+    "docs/design/ARGOS_SURGICAL_VISUAL_FIX_09_REPORT.md",
+    "docs/design/ARGOS_CONTENT_FREEZE_POLICY.md",
+    "docs/audits/ARGOS_B12_CONTAMINATION_AUDIT.md",
+    "docs/audits/ARGOS_CONTENT_BASELINE.md",
+    "docs/audits/ARGOS_CONTENT_BASELINE.json",
+    "docs/release/ARGOS_FINAL_ACCEPTANCE_10_REPORT.md",
+    "docs/release/ARGOS_RELEASE_MANIFEST_10.json",
+    "docs/release/ARGOS_GIT_RELEASE_INTEGRATION_11.md",
+    "docs/release/ARGOS_RELEASE_FILESET_11.json"
+  ],
+  "includePartial": [
+    "frontend/assets/css/argos-corporate.css",
+    "frontend/components/corporate/CorporateFooter.tsx",
+    "frontend/components/corporate/CorporateHeader.tsx",
+    "frontend/components/layout/SiteShell.tsx",
+    "frontend/components/pages/HomeView.tsx",
+    "frontend/components/pages/MethodView.tsx",
+    "frontend/components/pages/ServicesView.tsx",
+    "frontend/components/pages/AboutView.tsx",
+    "frontend/components/pages/ContactView.tsx",
+    "frontend/components/pages/ServiceDetailView.tsx",
+    "frontend/components/pages/MethodStepPageView.tsx",
+    "frontend/i18n/locales/es.json"
+  ],
+  "exclude": [
+    "artifacts/",
+    "frontend/public/logo-argos-it-header.orig.png",
+    "docs/architecture/phase8-validation-artifacts/noc-agents.png",
+    "docs/architecture/phase8-validation-artifacts/noc-command-center-narrow.png",
+    "docs/architecture/phase8-validation-artifacts/noc-command-center.png",
+    "docs/architecture/phase8-validation-artifacts/noc-incidents.png",
+    "docs/architecture/phase8-validation-artifacts/noc-platform-health.png",
+    "docs/architecture/phase8-validation-artifacts/noc-reports.png",
+    "docs/architecture/phase8-validation-artifacts/framer-reconcile-auth-login-1440.png",
+    "docs/architecture/phase8-validation-artifacts/framer-reconcile-contacto-1440.png",
+    "docs/architecture/phase8-validation-artifacts/framer-reconcile-home-1440.png",
+    "docs/architecture/phase8-validation-artifacts/framer-reconcile-home-mobile.png",
+    "docs/architecture/phase8-validation-artifacts/framer-reconcile-home-tablet.png",
+    "docs/architecture/phase8-validation-artifacts/framer-reconcile-metodo-1440.png",
+    "docs/architecture/phase8-validation-artifacts/framer-reconcile-servicios-1440.png",
+    "docs/architecture/phase8-validation-artifacts/quiet-authority-home-desktop.png",
+    "docs/architecture/phase8-validation-artifacts/quiet-authority-home-mobile.png",
+    "docs/architecture/phase8-validation-artifacts/quiet-authority-home-tablet.png",
+    "docs/architecture/phase8-validation-artifacts/surgical-banner-chico-1440.png",
+    "docs/architecture/phase8-validation-artifacts/surgical-banner-dumbo-1440.png",
+    "docs/architecture/phase8-validation-artifacts/surgical-diag-card-1440.png",
+    "docs/architecture/phase8-validation-artifacts/surgical-diagnostic-open-1440.png",
+    "docs/architecture/phase8-validation-artifacts/surgical-header-closed-1440.png",
+    "docs/architecture/phase8-validation-artifacts/surgical-header-mobile-390.png",
+    "docs/architecture/phase8-validation-artifacts/surgical-header-tablet-768.png",
+    "docs/architecture/phase8-validation-artifacts/surgical-menu-open-1440.png",
+    "docs/research/",
+    "frontend/.env.local",
+    "backend/.env",
+    "docker/.env.staging"
+  ],
+  "ownerReview": [
+    "frontend/i18n/locales/en.json",
+    "frontend/i18n/locales/ca.json",
+    "docs/design/ARGOS_FRONTEND_SOURCE_OF_TRUTH_RECONCILIATION.md",
+    "docs/design/ARGOS_FRAMER_NEXTJS_RECONCILIATION.md",
+    "docs/design/ARGOS_PUBLIC_UI_RECONCILIATION_MAP.md",
+    "docs/design/ARGOS_LOCAL_CANONICAL_WIREFRAMES_21_7C.md",
+    "docs/design/ARGOS_WIREFRAMES_21_7C_1.md"
+  ],
+  "mixedFiles": [
+    {
+      "file": "frontend/i18n/locales/es.json",
+      "safeToStageWholeFile": false,
+      "hunksToAccept": [
+        "Frozen home.title/subtitle/ctaHeroSecondary",
+        "method.publicSteps/dualBridge/steps/pillars",
+        "drawer/history/related/portalPage/headerBanner UI keys",
+        "meta.portalTitle/portalDescription new keys"
+      ],
+      "hunksToReject": [
+        "meta.homeTitle rewrite",
+        "meta.homeDescription rewrite"
+      ],
+      "approvedPurpose": "Content Freeze v1.0 + corporate UI strings",
+      "nonApprovedPurpose": "Historical SEO meta slogan mutation (protege→serena)",
+      "postStageCheck": "contentFreezeV1.test.ts PASS; cached diff must not introduce SEO_FIX"
+    },
+    {
+      "file": "frontend/assets/css/argos-corporate.css",
+      "safeToStageWholeFile": false,
+      "hunksToAccept": [
+        "ALL current working-tree hunks (RC lineage: adoption+04+05+06+07+09)"
+      ],
+      "hunksToReject": [
+        "NONE identified as PREEXISTING_UNRELATED",
+        "Do not add opportunistic P3 card-height equalizers"
+      ],
+      "approvedPurpose": "Corporate design system for public RC",
+      "nonApprovedPurpose": "Chronologically interwoven pre-04 Quiet Authority layers",
+      "ownerExceptionNote": "If git add -p impractical, owner may authorize whole-file ONLY after reviewing full diff for unrelated hunks",
+      "postStageCheck": "build + responsive smoke"
+    },
+    {
+      "file": "frontend/components/pages/HomeView.tsx",
+      "safeToStageWholeFile": false,
+      "hunksToAccept": ["ALL RC lineage hunks"],
+      "hunksToReject": ["NONE unrelated identified"],
+      "approvedPurpose": "Home freeze CTAs + dual-layer + visual system + FIX09 P3-03",
+      "nonApprovedPurpose": "Pre-04 layout experiments inseparable",
+      "postStageCheck": "hero freeze strings + diagnostic launcher"
+    },
+    {
+      "file": "frontend/components/pages/MethodView.tsx",
+      "safeToStageWholeFile": false,
+      "hunksToAccept": ["ALL RC lineage hunks"],
+      "hunksToReject": ["NONE unrelated identified"],
+      "approvedPurpose": "Method dual-layer page",
+      "nonApprovedPurpose": "Interwoven adoption",
+      "postStageCheck": "public 4 + operational 5"
+    },
+    {
+      "file": "frontend/components/pages/ServicesView.tsx",
+      "safeToStageWholeFile": false,
+      "hunksToAccept": ["ALL RC lineage hunks"],
+      "hunksToReject": ["NONE unrelated identified"],
+      "approvedPurpose": "Services + pillars presentation",
+      "nonApprovedPurpose": "Interwoven adoption",
+      "postStageCheck": "6 service cards"
+    },
+    {
+      "file": "frontend/components/pages/AboutView.tsx",
+      "safeToStageWholeFile": false,
+      "hunksToAccept": ["ALL chrome/layout hunks"],
+      "hunksToReject": ["Reject only if unauthorized copy rewrite found during -p"],
+      "approvedPurpose": "About corporate chrome",
+      "nonApprovedPurpose": "Possible pre-adoption layout",
+      "postStageCheck": "spot-check about copy"
+    },
+    {
+      "file": "frontend/components/pages/ContactView.tsx",
+      "safeToStageWholeFile": false,
+      "hunksToAccept": ["Section index", "Related links section"],
+      "hunksToReject": [],
+      "approvedPurpose": "Contact layout polish (+15 lines)",
+      "nonApprovedPurpose": "n/a",
+      "note": "Small diff; accepting all hunks ≈ whole-file",
+      "postStageCheck": "form logic unchanged"
+    },
+    {
+      "file": "frontend/components/pages/ServiceDetailView.tsx",
+      "safeToStageWholeFile": false,
+      "hunksToAccept": ["ALL RC lineage hunks"],
+      "hunksToReject": ["NONE unrelated identified"],
+      "approvedPurpose": "Service detail chrome",
+      "nonApprovedPurpose": "Interwoven",
+      "postStageCheck": "slug route intact"
+    },
+    {
+      "file": "frontend/components/pages/MethodStepPageView.tsx",
+      "safeToStageWholeFile": false,
+      "hunksToAccept": ["ALL RC lineage hunks"],
+      "hunksToReject": ["NONE unrelated identified"],
+      "approvedPurpose": "Operational phase pages",
+      "nonApprovedPurpose": "Interwoven",
+      "postStageCheck": "/metodo/analizar"
+    },
+    {
+      "file": "frontend/components/layout/SiteShell.tsx",
+      "safeToStageWholeFile": false,
+      "hunksToAccept": ["ALL RC lineage hunks"],
+      "hunksToReject": ["NONE"],
+      "approvedPurpose": "CorporateHistoryNav + providers + chrome branches",
+      "nonApprovedPurpose": "Legacy SiteHeader branch retained",
+      "postStageCheck": "chromeOwnership tests"
+    },
+    {
+      "file": "frontend/components/corporate/CorporateHeader.tsx",
+      "safeToStageWholeFile": false,
+      "hunksToAccept": ["ALL RC lineage hunks"],
+      "hunksToReject": ["NONE unrelated identified"],
+      "approvedPurpose": "Surgical header + banner + drawer",
+      "nonApprovedPurpose": "Adoption history in same file",
+      "postStageCheck": "header logo + drawer"
+    },
+    {
+      "file": "frontend/components/corporate/CorporateFooter.tsx",
+      "safeToStageWholeFile": false,
+      "hunksToAccept": ["ALL RC lineage hunks"],
+      "hunksToReject": ["NONE"],
+      "approvedPurpose": "Footer logo + seated mascots",
+      "nonApprovedPurpose": "Adoption history",
+      "postStageCheck": "Requires footer.png + chico_sit.png staged first"
+    }
+  ],
+  "atomicGroups": [
+    {
+      "id": "AG-CONTENT",
+      "files": [
+        "frontend/i18n/locales/es.json",
+        "frontend/lib/contentFreezeV1.test.ts",
+        "package.json",
+        "frontend/components/pages/HomeView.tsx",
+        "frontend/components/pages/MethodView.tsx",
+        "frontend/components/pages/ServicesView.tsx",
+        "frontend/lib/publicMethodMovements.ts"
+      ],
+      "why": "Freeze strings + invariant test + verify hook + rendering views"
+    },
+    {
+      "id": "AG-CORP-UI",
+      "files": [
+        "frontend/components/corporate/",
+        "frontend/components/home/",
+        "frontend/components/layout/SiteShell.tsx",
+        "frontend/assets/css/argos-corporate.css",
+        "frontend/lib/corporateNav.ts",
+        "frontend/lib/chromeOwnership.ts",
+        "frontend/app/portal/page.tsx",
+        "frontend/components/pages/PortalView.tsx",
+        "frontend/hooks/useBrowserHistoryNav.ts"
+      ],
+      "why": "Corporate chrome requires components + CSS + nav + portal together"
+    },
+    {
+      "id": "AG-MASCOT",
+      "files": [
+        "frontend/sprites/spriteManifest.ts",
+        "frontend/styles/mascot-sprites.css",
+        "frontend/components/mascots/ChicoDumboSpriteSystem.tsx",
+        "frontend/lib/mascotPoseGraph.ts",
+        "frontend/ai/mascotStates.ts",
+        "frontend/public/mascots/chico/chico_sit.png",
+        "frontend/public/mascots/chico/chico_alert.png",
+        "frontend/public/mascots/chico/chico_jump.jpg",
+        "frontend/public/mascots/chico/chico_lay.jpg",
+        "frontend/public/mascots/chico/chico_sleep.jpg",
+        "frontend/public/mascots/chico/chico_turn.jpg",
+        "frontend/public/mascots/chico/chico_walk_01.jpg",
+        "frontend/public/mascots/dumbo/dumbo_jump.jpg",
+        "frontend/public/mascots/dumbo/dumbo_lay.jpg",
+        "frontend/public/mascots/dumbo/dumbo_look.jpg",
+        "frontend/public/mascots/dumbo/dumbo_sleep.jpg",
+        "frontend/public/mascots/dumbo/dumbo_walk_01.jpg"
+      ],
+      "why": "Manifest references require untracked pose binaries"
+    },
+    {
+      "id": "AG-LOGO",
+      "files": [
+        "frontend/public/logo-argos-it-header.png",
+        "frontend/public/logo-argos-it-footer.png",
+        "frontend/components/corporate/CorporateHeader.tsx",
+        "frontend/components/corporate/CorporateFooter.tsx",
+        "frontend/public/chico-dumbo.png"
+      ],
+      "why": "Chrome references logos; chico-dumbo.png already tracked"
+    },
+    {
+      "id": "AG-DIAG",
+      "files": [
+        "frontend/components/diagnostic/DiagnosticSurveyModal.tsx",
+        "frontend/components/diagnostic/DiagnosticSurvey.tsx"
+      ],
+      "why": "Modal shell + option class styling paired"
+    },
+    {
+      "id": "AG-E2E",
+      "files": [
+        "e2e/corporate-chrome.spec.ts",
+        "e2e/smoke.spec.ts",
+        "e2e/static-banner.spec.ts",
+        "e2e/visual-adoption-01.spec.ts",
+        "frontend/lib/chromeOwnership.test.ts"
+      ],
+      "why": "Tests assert chrome/freeze behavior"
+    },
+    {
+      "id": "AG-DOCS",
+      "files": [
+        "docs/content/",
+        "docs/design/ARGOS_VISUAL_REFINEMENT_05_REPORT.md",
+        "docs/design/ARGOS_VISUAL_INTEGRATION_06_REPORT.md",
+        "docs/design/ARGOS_VISUAL_POLISH_07_REPORT.md",
+        "docs/design/ARGOS_OWNER_VISUAL_QA_08_REPORT.md",
+        "docs/design/ARGOS_SURGICAL_VISUAL_FIX_09_REPORT.md",
+        "docs/release/",
+        "docs/audits/"
+      ],
+      "why": "Governance trail for RC"
+    }
+  ],
+  "proposedCommits": [
+    {
+      "id": "A",
+      "title": "feat(content): implement ARGOS Content Freeze v1.0 runtime wiring",
+      "dependsOn": [],
+      "canBuildIndependently": false,
+      "rollbackRisk": "MEDIUM",
+      "filesPartial": [
+        "frontend/i18n/locales/es.json",
+        "frontend/components/pages/HomeView.tsx",
+        "frontend/components/pages/MethodView.tsx",
+        "frontend/components/pages/ServicesView.tsx"
+      ],
+      "notes": "es.json MUST use git add -p; reject meta.homeTitle/homeDescription"
+    },
+    {
+      "id": "B",
+      "title": "feat(ui): integrate ARGOS Quiet Authority corporate visual system",
+      "dependsOn": ["A"],
+      "canBuildIndependently": false,
+      "rollbackRisk": "HIGH",
+      "notes": "Corporate components + CSS + portal + chrome ownership"
+    },
+    {
+      "id": "C",
+      "title": "feat(mascots): integrate Chico/Dumbo poses and brand logos",
+      "dependsOn": ["B"],
+      "canBuildIndependently": false,
+      "rollbackRisk": "HIGH",
+      "notes": "Stage pose binaries with or before spriteManifest"
+    },
+    {
+      "id": "D",
+      "title": "fix(ui): apply surgical visual QA corrections from FIX 09",
+      "dependsOn": ["B", "C"],
+      "canBuildIndependently": false,
+      "rollbackRisk": "MEDIUM",
+      "notes": "May fold into B/C if CSS/mascot hunks already staged there; avoid double-stage"
+    },
+    {
+      "id": "E",
+      "title": "test(e2e): align corporate chrome and freeze assertions",
+      "dependsOn": ["B", "C"],
+      "canBuildIndependently": true,
+      "rollbackRisk": "LOW"
+    },
+    {
+      "id": "F",
+      "title": "docs(release): record ARGOS acceptance and git integration plan",
+      "dependsOn": [],
+      "canBuildIndependently": true,
+      "rollbackRisk": "LOW"
+    }
+  ],
+  "gates": {
+    "unknownProvenanceReleaseFiles": 0,
+    "sensitiveFilesProposedForRelease": 0,
+    "runtimeReferenceToExcludedRequiredAsset": 0,
+    "releaseImportsLocalOnlyFile": 0,
+    "mixedFilesHaveHunkPlans": true,
+    "atomicGroupsComplete": true,
+    "releaseFilesetExplicit": true,
+    "seoFixIncludedInRelease11": false,
+    "p3ScopeCreep": 0,
+    "readyForControlledStaging12": true
+  },
+  "counts": {
+    "includeFull": 75,
+    "includePartial": 12,
+    "exclude": 30,
+    "ownerReview": 7,
+    "mixedFiles": 12,
+    "proposedCommits": 6
+  },
+  "requiredMascotUntracked": [
+    "frontend/public/mascots/chico/chico_sit.png",
+    "frontend/public/mascots/chico/chico_alert.png",
+    "frontend/public/mascots/chico/chico_jump.jpg",
+    "frontend/public/mascots/chico/chico_lay.jpg",
+    "frontend/public/mascots/chico/chico_sleep.jpg",
+    "frontend/public/mascots/chico/chico_turn.jpg",
+    "frontend/public/mascots/chico/chico_walk_01.jpg",
+    "frontend/public/mascots/dumbo/dumbo_jump.jpg",
+    "frontend/public/mascots/dumbo/dumbo_lay.jpg",
+    "frontend/public/mascots/dumbo/dumbo_look.jpg",
+    "frontend/public/mascots/dumbo/dumbo_sleep.jpg",
+    "frontend/public/mascots/dumbo/dumbo_walk_01.jpg"
+  ],
+  "logos": [
+    {
+      "role": "header_main",
+      "path": "frontend/public/logo-argos-it-header.png",
+      "tracked": true,
+      "dirty": true,
+      "runtimeReferenced": true,
+      "commitRequired": true
+    },
+    {
+      "role": "method_circular",
+      "path": "frontend/public/chico-dumbo.png",
+      "tracked": true,
+      "dirty": false,
+      "runtimeReferenced": true,
+      "commitRequired": false
+    },
+    {
+      "role": "footer_dark_rect",
+      "path": "frontend/public/logo-argos-it-footer.png",
+      "tracked": false,
+      "dirty": true,
+      "runtimeReferenced": true,
+      "commitRequired": true
+    },
+    {
+      "role": "backup_orig",
+      "path": "frontend/public/logo-argos-it-header.orig.png",
+      "tracked": false,
+      "dirty": true,
+      "runtimeReferenced": false,
+      "commitRequired": false
+    }
+  ],
+  "watchItems": [
+    {
+      "id": "DEAD_GUARANTEE_STRING",
+      "path": "frontend/components/method/MethodArgosShowcase.tsx",
+      "dirty": false,
+      "note": "Unmounted 'totalmente garantizada'; do not edit/stage for cleanup"
+    },
+    {
+      "id": "SEO_HISTORICAL_DRIFT",
+      "note": "Reject meta.homeTitle/homeDescription hunks in es.json"
+    },
+    {
+      "id": "P3_CARD_HEIGHTS",
+      "note": "mint/service card height consistency deferred; no opportunistic CSS"
+    }
+  ],
+  "manifest10CrossCheck": {
+    "branchMatch": true,
+    "headMatch": true,
+    "stagedStillZero": true,
+    "modifiedStill42": true,
+    "untrackedPorcelain": 67,
+    "fa10UntrackedPorcelain": 66,
+    "deltaNote": "docs/release/ added by FA10 deliverables",
+    "provenanceConflicts": [
+      "FA10 listed some paths as both approved and mixed; Integration 11 resolves mixed as PARTIAL_ONLY with hunk plans"
+    ]
+  }
+}

@@ -232,7 +232,7 @@ function diagRiskChipTone(level: string) {
 
 export default function Dashboard() {
   const router = useRouter();
-  const { token, user, logout } = useAuthStore();
+  const { authenticated, user, logout } = useAuthStore();
   const [locale, setLocale] = useState<Locale>("es");
   const [portal, setPortal] = useState<ClientPortalPayload | null>(null);
   const [loading, setLoading] = useState(true);
@@ -285,13 +285,13 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => {
-    if (!token) {
+    if (!authenticated) {
       router.push("/auth/login");
       return;
     }
 
     fetchPortal();
-  }, [token]);
+  }, [authenticated]);
 
   const fetchPortal = async () => {
     try {

@@ -1,14 +1,14 @@
 "use client";
 
 import ChicoDumboSpriteSystem from "./mascots/ChicoDumboSpriteSystem";
-import { MascotChatProvider } from "./mascots/MascotChatContext";
 import MascotChatPanel from "./mascots/MascotChatPanel";
 
+/** Dock + chat panel. Provider lives in SiteShell so pages can open Dumbo/Chico. */
 export default function ClientAssistants() {
   return (
-    <MascotChatProvider>
+    <>
       <ChicoDumboSpriteSystem />
       <MascotChatPanel />
-    </MascotChatProvider>
+    </>
   );
 }

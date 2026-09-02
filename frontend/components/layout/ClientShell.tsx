@@ -1,12 +1,7 @@
 "use client";
 
-import { useLayoutEffect, type ReactNode } from "react";
-import { syncAuthSessionCookieFromStorage } from "@/lib/auth-session";
+import { type ReactNode } from "react";
 
 export default function ClientShell({ children }: { children: ReactNode }) {
-  useLayoutEffect(() => {
-    syncAuthSessionCookieFromStorage();
-  }, []);
-
   return <>{children}</>;
 }

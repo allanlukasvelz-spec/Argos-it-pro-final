@@ -66,7 +66,7 @@ cd backend
 npm install
 npm run dev
 
-# Terminal 2 - Frontend  
+# Terminal 2 - Frontend
 cd frontend
 npm install
 npm run dev
@@ -134,15 +134,17 @@ curl -X POST http://localhost:4000/api/ai/public/dumbo-chat \
 
 ### 3. Probar Chico (Seguridad)
 ```bash
-# Obtener token
-TOKEN=$(curl -s -X POST http://localhost:4000/api/auth/login \
+# Login con cookies HttpOnly (REST ya no acepta Bearer)
+curl -s -c /tmp/argos.jar -b /tmp/argos.jar -X POST http://localhost:4000/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"test@argos.com","password":"Argos123!"}' | jq -r '.token')
+  -H "Origin: http://localhost:3000" \
+  -d '{"email":"test@argos.com","password":"Argos123!"}'
 
-# Probar Chico
+# Probar Chico (cookie jar + Origin para mutaciones)
 curl -X POST http://localhost:4000/api/ai/chico \
-  -H "Authorization: Bearer $TOKEN" \
+  -b /tmp/argos.jar \
   -H "Content-Type: application/json" \
+  -H "Origin: http://localhost:3000" \
   -d '{
     "action": "login_attempt",
     "details": {"ip": "192.168.1.1"}
@@ -155,16 +157,17 @@ curl -X POST http://localhost:4000/api/ai/chico \
 
 ## 🔐 Características de Seguridad
 
-✅ **Autenticación JWT** con tokens de 24h  
-✅ **Refresh Tokens** válidos por 7 días  
-✅ **Password Hashing** con bcrypt (salt 10)  
-✅ **Validación fuerte** de contraseñas  
-✅ **Rate Limiting** (100 req/15min, 5 login/15min)  
-✅ **Detección de Bots**  
-✅ **CORS configurado** para producción  
-✅ **Helmet** para headers de seguridad  
-✅ **Logs de seguridad** persistentes en BD  
-✅ **Monitoreo en tiempo real** con WebSockets  
+✅ **Autenticación JWT en cookies HttpOnly** (`argos_access` 24h)
+✅ **Refresh Tokens HttpOnly** (`argos_refresh`, 7 días) + protección CSRF por Origin
+
+✅ **Password Hashing** con bcrypt (salt 10)
+✅ **Validación fuerte** de contraseñas
+✅ **Rate Limiting** (100 req/15min, 5 login/15min)
+✅ **Detección de Bots**
+✅ **CORS configurado** para producción
+✅ **Helmet** para headers de seguridad
+✅ **Logs de seguridad** persistentes en BD
+✅ **Monitoreo en tiempo real** con WebSockets
 
 ---
 
@@ -235,7 +238,7 @@ POST /api/auth/refresh         → Renovar token
 POST /api/ai/public/dumbo-chat → Hablar con Dumbo
 ```
 
-### IA (Protegido - requiere Bearer token)
+### IA (Protegido - cookie `argos_access` HttpOnly)
 ```
 POST /api/ai/dumbo             → Dumbo con contexto usuario
 POST /api/ai/chico             → Análisis de seguridad

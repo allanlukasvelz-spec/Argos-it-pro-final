@@ -3,16 +3,89 @@
 @tailwind utilities;
 
 :root {
-  --argos-navy: #07111f;
+  /*
+   * ARGOS Design Tokens v21.4 — Corporate foundation (pilot /contacto)
+   * Brand tokens CANONICAL. Global semantic tokens still map to LEGACY for non-Corporate routes.
+   * Fonts: next/font sets --font-inter / --font-cormorant on <html>; body stays system until
+   * `.argos-corporate` remaps --font-display/--font-body/--font-ui (Portal/Auth isolation).
+   */
+
+  /* A. Canonical brand tokens (CAB-DS-01 / 21.2) — not applied to components in 21.3 */
+  --argos-brand-primary: #1f3a5f;
+  --argos-brand-secondary: #2f7d6d;
+  --argos-brand-surface: #f7f7f5;
+  --argos-brand-dark: #0b1320;
+
+  /*
+   * Rejected as brand-primary (CAB-DS-01): Brand Book DOCX OOXML artifact only.
+   * Kept as named constant for documentation / grep; do not use as primary.
+   */
+  --argos-brand-primary-rejected-072648: #072648;
+
+  /*
+   * Temporary aliases for any pre-21.3 references to *-candidate names.
+   * Prefer --argos-brand-* going forward. Remove aliases in a later cleanup phase.
+   */
+  --argos-brand-primary-candidate: var(--argos-brand-primary);
+  --argos-brand-secondary-candidate: var(--argos-brand-secondary);
+  --argos-brand-surface-candidate: var(--argos-brand-surface);
+  --argos-brand-dark-candidate: var(--argos-brand-dark);
+  --argos-brand-primary-alt-candidate: var(--argos-brand-primary-rejected-072648);
+
+  /* C. Legacy production palette (preserve current visuals — LEGACY_SHELL_PRESERVED) */
+  --argos-legacy-cyan: #18d4f7;
+  --argos-legacy-blue: #2563eb;
+  --argos-legacy-light-blue: #38bdf8;
+  --argos-legacy-navy: #07111f;
+  --argos-legacy-shell-navy: #071421;
+  --argos-legacy-deep-blue: #0d3b66;
+
+  /*
+   * Authoritative --argos-* (single definition; values match pre-21.1 effective cascade)
+   * Previously --argos-navy|--argos-blue|--argos-cyan were overridden by argos-backgrounds.css.
+   */
+  --argos-navy: var(--argos-legacy-shell-navy);
   --argos-deep-blue: #0b1e33;
-  --argos-blue: #2563eb;
-  --argos-cyan: #38bdf8;
+  --argos-blue: var(--argos-legacy-deep-blue);
+  --argos-cyan: var(--argos-legacy-cyan);
   --argos-silver: #e5e7eb;
   --argos-graphite: #111827;
-  /* Aligned with SiteHeader: lang + barra del logo (sin franja extra) */
+
+  /*
+   * B. Semantic tokens — still map to LEGACY production appearance (21.3 freeze).
+   * Do not retarget to brand tokens until an authorized visual migration phase.
+   */
+  --surface-primary: #ffffff;
+  --surface-elevated: #ffffff;
+  --surface-inverse: var(--argos-legacy-shell-navy);
+  --text-primary: var(--argos-legacy-navy);
+  --text-secondary: #4b5563;
+  --text-muted: #9cb7c9;
+  --text-inverse: #f4faff;
+  --border-default: #e5e7eb;
+  --border-subtle: rgba(255, 255, 255, 0.16);
+  --action-primary: var(--argos-legacy-blue);
+  --action-secondary: var(--argos-legacy-blue);
+  --action-accent: var(--argos-legacy-cyan);
+  --status-success: #16a34a;
+  --status-warning: #d97706;
+  --status-danger: #dc2626;
+  --status-info: var(--argos-legacy-blue);
+
+  /*
+   * Typography role tokens — default = CURRENT_PRODUCTION system stack (Portal/Auth/legacy).
+   * Corporate scope (`.argos-corporate`) remaps to Inter / Cormorant via next/font variables.
+   */
+  --font-system-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, sans-serif;
+  --font-display: var(--font-system-sans);
+  --font-body: var(--font-system-sans);
+  --font-ui: var(--font-system-sans);
+
+  /* Layout tokens */
   --header-h: calc(var(--argos-topbar-lang-h, 44px) + var(--argos-topbar-nav-h, 72px));
   --header-px: 16px;
-  --content-max: 80rem;
+  --content-max: none;
 }
 
 @media (min-width: 480px) {
@@ -48,6 +121,8 @@
 
 html {
   scroll-padding-top: var(--header-h);
+  width: 100%;
+  overflow-x: clip;
 }
 
 @media (max-width: 1279px) {
@@ -63,10 +138,12 @@ html {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, sans-serif;
+  font-family: var(--font-body);
   background: #ffffff;
   color: #07111f;
+  width: 100%;
+  min-width: 0;
+  overflow-x: clip;
 }
 
 a {
@@ -87,7 +164,26 @@ textarea {
 }
 
 ::selection {
-  background: #dbeafe;
+  background: #7dd3fc;
+  color: #07111f;
+  -webkit-text-fill-color: #07111f;
+}
+
+::-moz-selection {
+  background: #7dd3fc;
+  color: #07111f;
+}
+
+.argos-page-shell ::selection,
+.argos-content-layer ::selection {
+  background: #38bdf8;
+  color: #07111f;
+  -webkit-text-fill-color: #07111f;
+}
+
+.argos-page-shell ::-moz-selection,
+.argos-content-layer ::-moz-selection {
+  background: #38bdf8;
   color: #07111f;
 }
 

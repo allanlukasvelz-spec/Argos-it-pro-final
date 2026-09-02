@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { supportedLocales, type Locale } from "@/i18n/config";
 import DiagnosticPromoBanner from "@/components/diagnostic/DiagnosticPromoBanner";
@@ -32,8 +32,13 @@ const pillItems: NavItem[] = [
 
 const quickLocales: Locale[] = ["es", "en", "ca"];
 
-export default function SiteHeader() {
+type Props = {
+  showDiagnosticPromo?: boolean;
+};
+
+export default function SiteHeader({ showDiagnosticPromo = true }: Props) {
   const pathname = usePathname();
+  const router = useRouter();
   const { locale, setLocale, t } = useI18n();
   const { openDiagnostic } = useDiagnosticSurveyLauncher();
   const [open, setOpen] = useState(false);
@@ -43,6 +48,15 @@ export default function SiteHeader() {
     if (href === "/") return pathname === "/";
     if (href.startsWith("/#")) return pathname === "/";
     return pathname.startsWith(href);
+  };
+
+  const goHome = () => {
+    setOpen(false);
+    if (pathname === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    router.push("/");
   };
 
   useEffect(() => {
@@ -97,7 +111,10 @@ export default function SiteHeader() {
             href="/"
             className="relative z-[46] flex h-full min-w-0 shrink-0 items-center self-stretch"
             aria-label="ARGOS-IT home"
-            onClick={() => setOpen(false)}
+            onClick={(event) => {
+              event.preventDefault();
+              goHome();
+            }}
           >
             <Image
               src="/logo-argos-it-header.png"
@@ -125,15 +142,16 @@ export default function SiteHeader() {
             ))}
           </nav>
 
-          {/* Slot Chico/Dumbo: recortado a la altura exacta de la barra del logo */}
-          <div
-            className={`argos-topbar-mascot-slot relative z-[40] hidden min-h-0 min-w-0 flex-1 self-stretch md:block ${
-              open ? "pointer-events-none invisible opacity-0" : "opacity-100"
-            }`}
-            aria-hidden={open}
-          >
-            <DiagnosticPromoBanner embeddedInHeader />
-          </div>
+          {showDiagnosticPromo && (
+            <div
+              className={`argos-topbar-mascot-slot relative z-[40] hidden min-h-0 min-w-0 flex-1 self-stretch md:block ${
+                open ? "pointer-events-none invisible opacity-0" : "opacity-100"
+              }`}
+              aria-hidden={open}
+            >
+              <DiagnosticPromoBanner embeddedInHeader />
+            </div>
+          )}
 
           <button
             type="button"

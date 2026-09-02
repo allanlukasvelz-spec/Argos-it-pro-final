@@ -16,6 +16,13 @@ export default defineConfig({
     trace: "on-first-retry",
   },
 
+  expect: {
+    toHaveScreenshot: {
+      animations: "disabled",
+      maxDiffPixels: 0,
+    },
+  },
+
   projects: [
     {
       name: "chromium",
@@ -23,16 +30,30 @@ export default defineConfig({
     },
   ],
 
-  webServer: {
-    // preview = localhost only; start = 0.0.0.0 for Coolify/Docker (do not append hostname args)
-    command:
-      e2ePort === "3000"
-        ? "npm --prefix frontend run preview"
-        : `npm --prefix frontend exec -- next start --hostname 127.0.0.1 --port ${e2ePort}`,
-    url: e2eOrigin,
-    reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
-    stdout: "pipe",
-    stderr: "pipe",
-  },
+  webServer: [
+    {
+      command: "npm --prefix backend run start",
+      url: "http://127.0.0.1:4000/api/health",
+      reuseExistingServer: !process.env.CI,
+      timeout: 30_000,
+      stdout: "pipe",
+      stderr: "pipe",
+      env: {
+        ...process.env,
+        // e2e auth-flow registers/logins several users; default AUTH_RATE_LIMIT_MAX=8 is too low
+        AUTH_RATE_LIMIT_MAX: process.env.AUTH_RATE_LIMIT_MAX || "40",
+      },
+    },
+    {
+      command:
+        e2ePort === "3000"
+          ? "npm --prefix frontend run preview"
+          : `npm --prefix frontend exec -- next start --hostname 127.0.0.1 --port ${e2ePort}`,
+      url: e2eOrigin,
+      reuseExistingServer: !process.env.CI,
+      timeout: 120_000,
+      stdout: "pipe",
+      stderr: "pipe",
+    },
+  ],
 });

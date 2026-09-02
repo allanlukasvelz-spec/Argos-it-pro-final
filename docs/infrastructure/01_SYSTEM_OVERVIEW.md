@@ -14,8 +14,10 @@ Inventario maestro de la arquitectura ARGOS-IT en producción y staging sobre un
 | Coolify panel | Operativo HTTPS |
 | WordPress apex/www | Operativo (hosting distinto) |
 | Documentación FASE 11 | Generada |
+| Coolify pin 4.2.0 | Completado (13.2B) |
+| Swap 2G | Activo (FASE FINAL) |
 
-**Última verificación UTC:** 2026-08-05T10:00Z
+**Última verificación UTC:** 2026-08-06T16:08Z
 
 ## Inventario — Mapa lógico
 
@@ -108,8 +110,8 @@ Internet
 ## Riesgos
 
 - Un solo VPS sin HA.
-- Sin swap.
-- Coolify image tag `latest` (app efectiva ~4.2.0; pin pendiente).
+- Swap 2G activo (FASE FINAL); OOM residual posible bajo picos extremos.
+- Coolify fijado a `4.2.0` (digest `b8aea35f…`; FASE 13.2B). Job interno `UpdateCoolifyJob` sigue programado — vigilar.
 - Upload nativo Coolify (`mc`) falla por IPv6/AAAA; offsite operativo vía rclone (FASE 8L).
 - MFA SSH no implementado (diseño 10G.2).
 - Restore temporal PG validado; falta drill de recuperación total servicio/VPS.
@@ -122,4 +124,4 @@ N/A (documento). Operación: ver `15_DISASTER_RECOVERY.md` y `docs/PRODUCTION_DR
 
 WordPress y correo **no** corren en este VPS. Cloudflare Access/Tunnel están en **diseño**, no implementados.
 
-**Última verificación UTC:** 2026-08-05T10:00Z
+**Última verificación UTC:** 2026-08-06T16:08Z

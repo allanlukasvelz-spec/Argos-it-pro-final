@@ -8,12 +8,14 @@ Cronología de cambios de infraestructura ARGOS-IT (VPS/Coolify). Fechas UTC apr
 
 Vivo · ampliar en cada cambio futuro.
 
-**Última verificación UTC:** 2026-08-05T10:00Z
+**Última verificación UTC:** 2026-08-06T16:08Z
 
 ## Inventario cronológico
 
 | Fecha UTC | Fase | Qué cambió | Por qué | Resultado | Rollback |
 |---|---|---|---|---|---|
+| 2026-08-06 | **13.2B** | `LATEST_IMAGE=4.2.0`; recreate solo `coolify` `--pull never` | Fijar imagen (mismo digest) | **OK** digest `b8aea35f…` | `/root/argos-fase13-2b-rollback/` |
+| 2026-08-06 | **FASE FINAL** | Auditoría cierre + swap 2G + sysctl + CMDB sync | Cierre v1.0 infra | **OK** | `/root/argos-fase-final-cierre/` |
 | 2026-08-01 | Bootstrap | VPS Ubuntu, UFW, Coolify install | Host staging/prod | Coolify up | N/A |
 | 2026-08-01/02 | DNS staging/coolify | A records Hostinger | Acceso nombres | OK | N/A |
 | 2026-08-02 | Staging deploy | Apps+PG staging | Entorno prueba | 200/200 | Coolify redeploy |

@@ -38,8 +38,7 @@ function emptyAnswers(): undefined[] {
 }
 
 export function DiagnosticSurvey({ ariaTitleId, onRequestClose }: Props) {
-  const token = useAuthStore((s) => s.token);
-  const isLoggedIn = Boolean(token);
+  const isLoggedIn = useAuthStore((s) => s.authenticated);
 
   const [phase, setPhase] = useState<"survey" | "results">("survey");
   const [step, setStep] = useState(0);
@@ -168,13 +167,15 @@ export function DiagnosticSurvey({ ariaTitleId, onRequestClose }: Props) {
                     role="radio"
                     aria-checked={selected}
                     onClick={() => selectAnswer(idx)}
-                    className={`flex w-full min-h-[52px] items-center rounded-xl border px-4 py-3 text-left text-sm font-bold leading-snug transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 md:min-h-14 md:text-[0.9375rem] ${
-                      selected
-                        ? "border-[#0891b2] bg-[#ecfeff] text-[#0B1E33] shadow-md ring-2 ring-[#67e8f9]/95"
-                        : "border-slate-200 bg-white text-slate-900 hover:border-cyan-300/80 hover:bg-slate-50"
+                    className={`argos-diag-option flex w-full min-h-[52px] items-center rounded-xl border px-4 py-3 text-left text-sm font-bold leading-snug transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 md:min-h-14 md:text-[0.9375rem] ${
+                      selected ? "argos-diag-option--selected" : ""
                     }`}
                   >
-                    <span className="mr-3 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 border-slate-300 text-[11px] text-slate-500">
+                    <span
+                      className={`argos-diag-option__mark mr-3 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 text-[11px] ${
+                        selected ? "argos-diag-option__mark--on" : ""
+                      }`}
+                    >
                       {selected ? "\u2713" : ""}
                     </span>
                     <span>{label}</span>

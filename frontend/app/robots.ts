@@ -5,7 +5,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: "/"
+        allow: "/",
+        disallow: ["/mascot-motion-lab", "/mascot-motion-lab/"]
       }
     ],
     sitemap: "https://argos-it.com/sitemap.xml"
