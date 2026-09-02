@@ -3,11 +3,11 @@
 export type ChicoSpriteState =
   | "idle"
   | "stand"
+  | "sit"
   | "walk_01"
   | "walk_02"
   | "jump"
   | "turn"
-  | "sit"
   | "lay"
   | "alert"
   | "sleep"
@@ -48,17 +48,16 @@ export type DumboSpriteState =
 
 export const chicoSprites: Record<ChicoSpriteState, string> = {
   idle: "/mascots/chico/chico_esperando2.png",
-  /** FASE 21.6B.7B — V1 STAND (existing PNG; not a new raster). */
   stand: "/mascots/chico/chico_esperando.png",
-  walk_01: "/mascots/chico/chico_caminando.png",
-  walk_02: "/mascots/chico/chico_corriendo.png",
-  jump: "/mascots/chico/chico_corriendofeliz.png",
-  turn: "/mascots/chico/chico_olfateando.png",
-  sit: "/mascots/chico/chico_esperando2.png",
-  lay: "/mascots/chico/chico_reposo.png",
-  alert: "/mascots/chico/chico_mirandoatento.png",
-  sleep: "/mascots/chico/chico_durmiendo.png",
-  walking: "/mascots/chico/chico_caminando.png",
+  sit: "/mascots/chico/chico_sit.png",
+  walk_01: "/mascots/chico/chico_walk_01.jpg",
+  walk_02: "/mascots/chico/chico_caminando.png",
+  jump: "/mascots/chico/chico_jump.jpg",
+  turn: "/mascots/chico/chico_turn.jpg",
+  lay: "/mascots/chico/chico_lay.jpg",
+  alert: "/mascots/chico/chico_alert.png",
+  sleep: "/mascots/chico/chico_sleep.jpg",
+  walking: "/mascots/chico/chico_walk_01.jpg",
   guarding: "/mascots/chico/chico_mirandoatento.png",
   looking: "/mascots/chico/chico_mirandoatento.png",
   sniffing: "/mascots/chico/chico_olfateando.png",
@@ -71,17 +70,17 @@ export const chicoSprites: Record<ChicoSpriteState, string> = {
 
 export const dumboSprites: Record<DumboSpriteState, string> = {
   idle: "/mascots/dumbo/dumbo_frente.png",
-  walk_01: "/mascots/dumbo/dumbo_caminando.png",
+  walk_01: "/mascots/dumbo/dumbo_walk_01.jpg",
   walk_02: "/mascots/dumbo/dumbo_caminando_2.png",
   walk_03: "/mascots/dumbo/dumbo_caminando_3.png",
-  jump: "/mascots/dumbo/dumbo_corriendofeliz.png",
+  jump: "/mascots/dumbo/dumbo_jump.jpg",
   turn: "/mascots/dumbo/dumbo_turn.png",
   sit: "/mascots/dumbo/dumbo_sentado_atento.png",
-  lay: "/mascots/dumbo/dumbo_relajado.png",
+  lay: "/mascots/dumbo/dumbo_lay.jpg",
   guide: "/mascots/dumbo/dumbo_guide.png",
-  sleep: "/mascots/dumbo/dumbo_durmiendo.png",
-  look: "/mascots/dumbo/dumbo_vistacielo.png",
-  walking: "/mascots/dumbo/dumbo_caminando.png",
+  sleep: "/mascots/dumbo/dumbo_sleep.jpg",
+  look: "/mascots/dumbo/dumbo_look.jpg",
+  walking: "/mascots/dumbo/dumbo_walk_01.jpg",
   guiding: "/mascots/dumbo/dumbo_guide.png",
   looking: "/mascots/dumbo/dumbo_esperando_atento.png",
   waiting: "/mascots/dumbo/dumbo_esperando_atento.png",

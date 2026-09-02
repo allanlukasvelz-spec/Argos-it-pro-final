@@ -1,4 +1,4 @@
-const AI_MESSAGE_MAX_LEN = Number(process.env.AI_MESSAGE_MAX_LEN || 6000);
+const AI_MESSAGE_MAX_LEN = Number(process.env.AI_MESSAGE_MAX_LEN || 2000);
 
 function normalizeChatMessage(raw) {
   if (raw === null || typeof raw === "undefined") {

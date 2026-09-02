@@ -13,7 +13,9 @@
     "aboutTitle": "Sobre ARGOS-IT | Consultoría tecnológica premium",
     "aboutDescription": "Equipo técnico orientado a continuidad operativa, seguridad y crecimiento digital empresarial.",
     "contactTitle": "Contacto ARGOS-IT | Solicitar consulta técnica",
-    "contactDescription": "Cuéntanos tu necesidad y te responderemos con una propuesta clara y accionable."
+    "contactDescription": "Cuéntanos tu necesidad y te responderemos con una propuesta clara y accionable.",
+    "portalTitle": "Portal ARGOS-IT | Acceso clientes",
+    "portalDescription": "Accede al portal de cliente ARGOS-IT o contacta con soporte si necesitas asistencia."
   },
   "language": {
     "label": "Idioma",
@@ -31,11 +33,61 @@
     "method": "Método",
     "methodArgos": "Método ARGOS",
     "plans": "Planes",
-    "portal": "Portal",
+    "portal": "Portal de cliente",
+    "portalShort": "Portal",
     "about": "Sobre ARGOS-IT",
     "contact": "Contacto",
+    "contacts": "Contactos",
     "menu": "Menú",
+    "closeMenu": "Cerrar menú",
     "startDiagnostic": "Iniciar diagnóstico ARGOS"
+  },
+  "assistant": {
+    "open": "Hablar con ARGOS",
+    "title": "Asistente ARGOS",
+    "subtitle": "Orientación técnica clara — sin inventar promesas",
+    "close": "Cerrar",
+    "privacyNote": "No envíes contraseñas, claves API ni credenciales. Para datos sensibles, usa el contacto o el área de cliente.",
+    "inputLabel": "Tu mensaje",
+    "placeholder": "Describe tu situación o duda…",
+    "send": "Enviar",
+    "thinking": "Pensando…",
+    "dismissError": "Entendido",
+    "contactCta": "Ir a contacto"
+  },
+  "drawer": {
+    "whoWeAre": "Quiénes somos",
+    "discoverMethod": "Descubrir el Método ARGOS",
+    "requestConsult": "Solicitar consulta técnica",
+    "supportAssist": "Soporte y asistencia",
+    "clientAccess": "Acceso clientes",
+    "helpNote": "Estamos para ayudarte. Respondemos rápido."
+  },
+  "history": {
+    "navLabel": "Historial de navegación",
+    "back": "Anterior",
+    "forward": "Siguiente"
+  },
+  "related": {
+    "label": "También te puede interesar"
+  },
+  "portalPage": {
+    "title": "Portal de cliente",
+    "lead": "Espacio para acceder a tus servicios ARGOS o solicitar asistencia cuando la necesites.",
+    "accessTitle": "Acceso autenticado",
+    "accessBody": "Inicia sesión para consultar el estado de tus servicios y tu área de cliente.",
+    "supportTitle": "Soporte y asistencia",
+    "supportBody": "Si aún no tienes acceso o necesitas ayuda, contacta con el equipo ARGOS.",
+    "menuOverview": "Ver portal"
+  },
+  "headerBanner": {
+    "dumboTitle": "Consejo ARGOS · Protege tus accesos",
+    "dumboBody": "Activa MFA en tus cuentas críticas y revisa periódicamente los accesos de administrador.",
+    "chicoLabel": "Consejo ARGOS",
+    "methodLead": "Nuestro sistema de acompañamiento tecnológico",
+    "productLabel": "Producto ARGOS",
+    "diagTitle": "¿Quieres saber cómo está tu empresa?",
+    "diagBody": "Realiza el diagnóstico ARGOS: {n} preguntas clave para conocer tu nivel actual."
   },
   "actions": {
     "requestConsultation": "Solicitar consulta",
@@ -43,13 +95,18 @@
     "viewDetail": "Ver detalle",
     "viewService": "Ver servicio",
     "viewMethod": "Ver método",
+    "viewMethodPhase": "Ver fase",
+    "nextMovement": "Ver siguiente movimiento",
+    "firstMovement": "Volver al primer movimiento",
     "backHome": "Volver a inicio",
     "backServices": "Volver a servicios"
   },
   "home": {
+    "brandMark": "ARGOS IT",
     "eyebrow": "Consultoría informática premium para empresas y profesionales",
-    "title": "Tecnología que protege, acompaña y simplifica.",
-    "subtitle": "Ayudamos a empresas, autónomos y profesionales a mantener su infraestructura digital segura, estable y preparada para crecer, combinando soporte IT, ciberseguridad, mantenimiento web, automatización con IA y mejora continua.",
+    "title": "Sistemas que no fallen cuando no deben.",
+    "subtitle": "Primero entendemos cómo trabaja tu empresa y de qué depende su operativa. Después ponemos orden, reducimos riesgos y mantenemos bajo control la tecnología que necesita para funcionar.",
+    "ctaHeroSecondary": "Conocer cómo trabajamos",
     "proofTags": [
       "Telemático · telefónico · presencial",
       "Soporte IT con criterio de negocio",
@@ -64,9 +121,18 @@
       "Automatización con IA"
     ],
     "commandCenterStats": [
-      { "label": "ARGOS", "sub": "Método" },
-      { "label": "WP", "sub": "Hostinger" },
-      { "label": "IA", "sub": "Controlada" }
+      {
+        "label": "ARGOS",
+        "sub": "Método"
+      },
+      {
+        "label": "WP",
+        "sub": "Hostinger"
+      },
+      {
+        "label": "IA",
+        "sub": "Controlada"
+      }
     ],
     "trustTitle": "Acompañamiento tecnológico",
     "trustItems": [
@@ -77,6 +143,49 @@
     ],
     "ctaDiagnostic": "Solicitar diagnóstico ARGOS",
     "ctaMethod": "Ver método completo",
+    "realityIndex": "01 / Realidad del cliente",
+    "problemTitle": "La tecnología no debería ser una carga",
+    "problemLead": "Sin un criterio claro aparecen fricciones silenciosas: tiempo perdido, riesgos sin mapear y decisiones a ciegas.",
+    "realityItems": [
+      "Complejidad que crece sin control",
+      "Incertidumbre ante cada decisión técnica",
+      "Riesgo operativo que frena el negocio"
+    ],
+    "realityExplains": [
+      "Cuando se acumulan herramientas, proveedores y cambios sin un mapa, todo se vuelve difícil de mantener. ARGOS te ayuda a ver qué tienes, qué sobra y qué conviene ordenar primero.",
+      "Si no hay una foto clara del entorno, cada compra o cambio se hace a ciegas. Primero entendemos la situación; después te proponemos el siguiente paso, con calma y criterio.",
+      "Un fallo, un acceso mal controlado o una copia sin probar pueden frenar el día a día. Lo importante es detectar esos puntos a tiempo y reforzarlos, sin dramatizar."
+    ],
+    "realityAskDumbo": "Preguntar a Dumbo",
+    "philosophyIndex": "02 / Filosofía",
+    "philosophyTitle": "Filosofía",
+    "philosophyQuote": "Entender antes de actuar,\nprevenir antes de reaccionar.",
+    "principlesIndex": "03 / Principios",
+    "principlesTitle": "Principios que guían el trabajo",
+    "methodIndex": "04 / Método",
+    "methodIntroLead": "ARGOS es un método cerrado de cinco fases para pasar del problema técnico a la mejora sostenida, sin improvisación.",
+    "publicPhasesIndex": "04a / Cuatro movimientos",
+    "operationalPhasesIndex": "05 / Detalle A.R.G.O.S.",
+    "servicesIndex": "06 / Servicios",
+    "stabilityIndex": "07 / Continuidad",
+    "stabilityTitle": "Continuidad y prevención operativa",
+    "stabilityItems": [
+      "Seguimiento continuo con prioridades claras",
+      "Revisión periódica antes de que el riesgo crezca",
+      "Comunicación entendible para perfiles no técnicos",
+      "Soporte preventivo y propuestas de mejora",
+      "Relación a largo plazo, no parches puntuales"
+    ],
+    "trustIndex": "08 / Confianza",
+    "trustLead": "Trabajamos con criterio humano: claridad, prevención y acompañamiento sin ruido operativo inventado.",
+    "finalCtaTitle": "Hablemos con criterio",
+    "finalCtaSubtitle": "Cuéntanos tu situación actual. Te responderemos con una propuesta clara, priorizada y accionable.",
+    "diagEyebrow": "Diagnóstico ARGOS",
+    "diagTitle": "¿Quieres saber cómo está tu empresa actualmente?",
+    "diagBody": "Descubre en pocos minutos el estado de tu entorno tecnológico y dónde conviene actuar primero.",
+    "diagPointQuestions": "{n} preguntas clave",
+    "diagPointResult": "Resultado claro",
+    "diagPointPriorities": "Prioridades iniciales",
     "servicesEyebrow": "Servicios premium",
     "servicesTitle": "Seis áreas para proteger, gestionar y hacer evolucionar tu entorno digital.",
     "servicesSubtitle": "Diseñados para empresas, autónomos y profesionales de cualquier lugar que necesitan soporte IT, seguridad, presencia web corporativa, IA y mejora continua de forma telemática, telefónica o presencial.",
@@ -113,7 +222,11 @@
         "title": "Entra Chico: seguridad y vigilancia",
         "subtitle": "Seguridad, vigilancia y confianza digital. El entorno pasa a modo protección activa.",
         "tab": "Guardián",
-        "badges": ["Escudo de accesos", "Monitorización", "Políticas claras"]
+        "badges": [
+          "Escudo de accesos",
+          "Monitorización",
+          "Políticas claras"
+        ]
       },
       "s4": {
         "title": "Áreas de protección",
@@ -159,7 +272,13 @@
   },
   "servicesPage": {
     "title": "Servicios ARGOS-IT",
-    "subtitle": "Consultoría IT premium, mantenimiento informático, seguridad informática, presencia web corporativa, automatización con IA y auditoría digital continua."
+    "subtitle": "Consultoría IT premium, mantenimiento informático, seguridad informática, presencia web corporativa, automatización con IA y auditoría digital continua.",
+    "strategicPillars": [
+      "Infraestructura",
+      "Sistemas",
+      "Seguridad",
+      "Continuidad"
+    ]
   },
   "serviceDetail": {
     "includesTitle": "Incluye",
@@ -173,6 +292,32 @@
   "method": {
     "title": "Método Argos",
     "subtitle": "Una metodología propia para pasar del problema técnico a la mejora sostenida.",
+    "dualBridge": "Cuatro movimientos, cinco fases. Resumimos nuestro trabajo en Analizamos, Ordenamos, Protegemos y Acompañamos. El detalle operativo vive en el método ARGOS: Analizar, Reforzar, Guiar, Optimizar y Supervisar. No son dos métodos distintos: es la misma lógica, con distinto nivel de detalle.",
+    "relatedOperationalPhase": "Detalle operativo",
+    "publicPhasesTitle": "Cuatro movimientos",
+    "operationalPhasesTitle": "Las cinco fases A.R.G.O.S.",
+    "publicSteps": [
+      {
+        "order": "01",
+        "title": "Analizamos",
+        "description": "Estudiamos el entorno y mapeamos las dependencias reales del negocio antes de cualquier cambio técnico."
+      },
+      {
+        "order": "02",
+        "title": "Ordenamos",
+        "description": "Limpiamos decisiones inconexas del pasado y aportamos claridad al entorno heredado."
+      },
+      {
+        "order": "03",
+        "title": "Protegemos",
+        "description": "Blindamos la base operativa y verificamos que las copias de seguridad se puedan restaurar."
+      },
+      {
+        "order": "04",
+        "title": "Acompañamos",
+        "description": "Supervisamos servidores, puestos y servicios críticos para evitar volver al modelo reactivo."
+      }
+    ],
     "steps": [
       {
         "id": "A",

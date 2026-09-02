@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import ArgosPageShell from "@/components/layout/ArgosPageShell";
+import CorporatePageShell from "@/components/layout/CorporatePageShell";
 import MethodArgosJourneyNav from "@/components/method/MethodArgosJourneyNav";
 import { useDiagnosticSurveyLauncher } from "@/components/diagnostic/DiagnosticSurveyLauncher";
 import { useLocalizedServiceBySlug } from "@/hooks/useLocalizedServices";
@@ -17,16 +17,11 @@ function RelatedServiceCard({ slug }: { slug: ServiceSlug }) {
   const service = useLocalizedServiceBySlug(slug);
   if (!service) return null;
   return (
-    <Link
-      href={`/servicios/${slug}`}
-      className="argos-method-premium-card argos-hologram-card flex flex-col justify-between p-5 transition hover:-translate-y-0.5 hover:border-[#18D4F7]/45"
-    >
-      <div>
-        <p className="text-xs font-black uppercase text-[#39F4FF]">Servicio relacionado</p>
-        <h3 className="mt-2 text-lg font-black text-white">{service.title}</h3>
-        <p className="mt-2 text-sm leading-6 text-[#C9DDEC]">{service.description}</p>
-      </div>
-      <span className="mt-4 text-sm font-bold text-[#39F4FF]">Ver ficha →</span>
+    <Link href={`/servicios/${slug}`} className="argos-corporate-card argos-corp-service-card">
+      <p className="argos-corp-eyebrow">Servicio relacionado</p>
+      <h3 className="argos-corp-card-title">{service.title}</h3>
+      <p className="argos-corp-card-body">{service.description}</p>
+      <span className="argos-corporate-link">Ver ficha</span>
     </Link>
   );
 }
@@ -40,12 +35,8 @@ function MethodCtaControl({
 }) {
   const { openDiagnostic } = useDiagnosticSurveyLauncher();
 
-  const primaryClass =
-    "argos-method-cta-primary inline-flex justify-center rounded-md bg-[#18D4F7] px-5 py-3 text-center text-sm font-black text-[#030812] transition hover:bg-[#39F4FF]";
-  const secondaryClass =
-    "inline-flex justify-center rounded-md border border-white/20 bg-white/5 px-5 py-3 text-center text-sm font-bold text-white backdrop-blur transition hover:border-[#18D4F7] hover:bg-white/10";
-
-  const className = variant === "primary" ? primaryClass : secondaryClass;
+  const className =
+    variant === "primary" ? "argos-corporate-cta" : "argos-corporate-link-quiet";
 
   if (cta.type === "diagnostic") {
     return (
@@ -77,33 +68,30 @@ export default function MethodStepPageView({ step }: Props) {
   usePageMeta(step.seoTitle, step.description);
 
   return (
-    <ArgosPageShell variant="method-galaxy">
-      <section className="scroll-mt-[calc(var(--header-h)+1rem)] px-5 pb-12 pt-[calc(var(--header-h)+1.5rem)] lg:px-8">
-        <div className="mx-auto max-w-5xl">
+    <CorporatePageShell>
+      <section className="argos-corp-section" aria-labelledby="method-step-title">
+        <div className="argos-corp-container" style={{ maxWidth: "64rem" }}>
           <div className="flex flex-wrap items-center gap-3">
-            <Link href="/metodo" className="text-sm font-bold text-[#39F4FF]">
+            <Link href="/metodo" className="argos-corp-back">
               ← Volver al método ARGOS
             </Link>
-            <span className="hidden text-[#5a7a92] sm:inline" aria-hidden>
-              ·
-            </span>
-            <Link href="/" className="text-sm font-bold text-[#39F4FF]/90">
+            <Link href="/" className="argos-corporate-link-quiet">
               Inicio
             </Link>
           </div>
 
-          <MethodArgosJourneyNav activeSlug={step.slug} className="mt-6" />
+          <MethodArgosJourneyNav activeSlug={step.slug} className="mt-6 argos-corp-journey" />
 
-          <div className="argos-method-hero-panel mt-8 flex scroll-mt-[calc(var(--header-h)+1rem)] flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+          <div className="mt-8 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
             <div className="max-w-3xl">
-              <p className="text-sm font-black uppercase text-[#18D4F7]">
+              <p className="argos-corp-eyebrow">
                 {step.letter} · {step.name}
               </p>
-              <h1 className="argos-method-hero-title mt-2 text-4xl font-black text-white lg:text-5xl">
+              <h1 id="method-step-title" className="argos-font-display argos-corp-page-title">
                 {step.h1}
               </h1>
-              <p className="mt-4 text-lg leading-8 text-[#D7E8F6]">{step.subtitle}</p>
-              <p className="argos-method-value-strip mt-5 rounded-xl p-4 text-sm font-bold leading-7 text-[#EAF7FF]">
+              <p className="argos-corp-lead">{step.subtitle}</p>
+              <p className="argos-corp-body mt-4 font-semibold text-[var(--text-primary)]">
                 {step.valuePhrase}
               </p>
             </div>
@@ -113,23 +101,23 @@ export default function MethodStepPageView({ step }: Props) {
             </div>
           </div>
 
-          <article className="argos-method-premium-card argos-hologram-card mt-8 scroll-mt-[calc(var(--header-h)+1rem)] p-6 md:p-8">
-            <h2 className="text-xl font-black text-white">Qué significa esta fase</h2>
-            <p className="mt-4 text-sm leading-7 text-[#D7E8F6]">{step.meaning}</p>
+          <article className="argos-corporate-card argos-corp-detail-card mt-8">
+            <h2>Qué significa esta fase</h2>
+            <p className="argos-corp-body mt-4">{step.meaning}</p>
           </article>
 
-          <div className="mt-6 grid gap-6 md:grid-cols-2">
-            <article className="argos-method-premium-card argos-hologram-card p-6">
-              <h2 className="text-xl font-black text-white">Problemas que abordamos</h2>
-              <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-7 text-[#C9DDEC]">
+          <div className="argos-corp-detail-grid">
+            <article className="argos-corporate-card argos-corp-detail-card">
+              <h2>Problemas que abordamos</h2>
+              <ul className="argos-corp-detail-list">
                 {step.problems.map((item) => (
                   <li key={item}>{item}</li>
                 ))}
               </ul>
             </article>
-            <article className="argos-method-premium-card argos-hologram-card p-6">
-              <h2 className="text-xl font-black text-white">Señales de alerta</h2>
-              <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-7 text-[#C9DDEC]">
+            <article className="argos-corporate-card argos-corp-detail-card">
+              <h2>Señales de alerta</h2>
+              <ul className="argos-corp-detail-list">
                 {step.warningSigns.map((item) => (
                   <li key={item}>{item}</li>
                 ))}
@@ -137,18 +125,18 @@ export default function MethodStepPageView({ step }: Props) {
             </article>
           </div>
 
-          <div className="mt-6 grid gap-6 md:grid-cols-2">
-            <article className="argos-method-premium-card argos-hologram-card p-6">
-              <h2 className="text-xl font-black text-white">Qué hace ARGOS-IT</h2>
-              <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-7 text-[#C9DDEC]">
+          <div className="argos-corp-detail-grid">
+            <article className="argos-corporate-card argos-corp-detail-card">
+              <h2>Qué hace ARGOS-IT</h2>
+              <ul className="argos-corp-detail-list">
                 {step.argosActions.map((item) => (
                   <li key={item}>{item}</li>
                 ))}
               </ul>
             </article>
-            <article className="argos-method-premium-card argos-hologram-card p-6">
-              <h2 className="text-xl font-black text-white">Resultados esperados</h2>
-              <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-7 text-[#C9DDEC]">
+            <article className="argos-corporate-card argos-corp-detail-card">
+              <h2>Resultados esperados</h2>
+              <ul className="argos-corp-detail-list">
                 {step.results.map((item) => (
                   <li key={item}>{item}</li>
                 ))}
@@ -156,25 +144,25 @@ export default function MethodStepPageView({ step }: Props) {
             </article>
           </div>
 
-          <article className="argos-method-premium-card argos-hologram-card mt-6 p-6">
-            <h2 className="text-xl font-black text-white">Relación con el diagnóstico ARGOS</h2>
-            <p className="mt-4 text-sm leading-7 text-[#D7E8F6]">{step.diagnosticRelation}</p>
+          <article className="argos-corporate-card argos-corp-detail-card mt-4">
+            <h2>Relación con el diagnóstico ARGOS</h2>
+            <p className="argos-corp-body mt-4">{step.diagnosticRelation}</p>
           </article>
 
-          <div className="mt-6 grid gap-5 md:grid-cols-2">
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
             {step.relatedServiceSlugs.map((slug) => (
               <RelatedServiceCard key={slug} slug={slug} />
             ))}
           </div>
 
-          <article className="argos-method-premium-card argos-hologram-card mt-6 p-6">
-            <h2 className="text-xl font-black text-white">{step.portalCopy.title}</h2>
-            <p className="mt-4 text-sm leading-7 text-[#D7E8F6]">{step.portalCopy.body}</p>
+          <article className="argos-corporate-card argos-corp-detail-card mt-4">
+            <h2>{step.portalCopy.title}</h2>
+            <p className="argos-corp-body mt-4">{step.portalCopy.body}</p>
           </article>
 
-          <article className="argos-method-premium-card argos-hologram-card mt-6 p-6">
-            <h2 className="text-xl font-black text-white">Proceso típico en esta fase</h2>
-            <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm leading-7 text-[#D7E8F6]">
+          <article className="argos-corporate-card argos-corp-detail-card mt-4">
+            <h2>Proceso típico en esta fase</h2>
+            <ol className="mt-4 list-decimal space-y-2 pl-5 text-[0.9375rem] leading-6 text-[var(--text-secondary)]">
               {step.processSteps.map((item) => (
                 <li key={item}>{item}</li>
               ))}
@@ -182,75 +170,66 @@ export default function MethodStepPageView({ step }: Props) {
           </article>
 
           <section className="mt-8" aria-label="Preguntas frecuentes">
-            <h2 className="text-2xl font-black text-white">Preguntas frecuentes</h2>
+            <h2 className="argos-font-display argos-corp-h2">Preguntas frecuentes</h2>
             <div className="mt-5 space-y-3">
               {step.faq.map((item) => (
                 <details
                   key={item.question}
-                  className="group argos-hologram-card overflow-hidden border-white/10 [&_summary::-webkit-details-marker]:hidden"
+                  className="group overflow-hidden rounded-lg border border-[var(--border-default)] bg-white [&_summary::-webkit-details-marker]:hidden"
                 >
-                  <summary className="cursor-pointer list-none px-5 py-4 text-sm font-black text-white transition group-open:bg-white/[.08]">
+                  <summary className="cursor-pointer list-none px-5 py-4 text-sm font-bold text-[var(--text-primary)]">
                     <span className="flex items-center justify-between gap-4">
                       {item.question}
-                      <span className="shrink-0 text-[#39F4FF] transition group-open:rotate-45" aria-hidden>
+                      <span className="shrink-0 text-[var(--action-secondary)] transition group-open:rotate-45" aria-hidden>
                         +
                       </span>
                     </span>
                   </summary>
-                  <div className="border-t border-white/10 px-5 pb-4 pt-0">
-                    <p className="pt-4 text-sm leading-7 text-[#C9DDEC]">{item.answer}</p>
+                  <div className="border-t border-[var(--border-default)] px-5 pb-4">
+                    <p className="pt-4 text-sm leading-7 text-[var(--text-secondary)]">{item.answer}</p>
                   </div>
                 </details>
               ))}
             </div>
           </section>
 
-          <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-8">
+          <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-[var(--border-default)] pt-8">
             <div className="flex flex-wrap gap-3">
               {step.prevSlug ? (
-                <Link
-                  href={`/metodo/${step.prevSlug}`}
-                  className="text-sm font-bold text-[#39F4FF] transition hover:text-[#18D4F7]"
-                >
+                <Link href={`/metodo/${step.prevSlug}`} className="argos-corporate-link">
                   ← Fase anterior
                 </Link>
               ) : (
-                <span className="text-sm text-[#5a7a92]">Inicio del método</span>
+                <span className="text-sm text-[var(--text-muted)]">Inicio del método</span>
               )}
               {step.nextSlug ? (
-                <Link
-                  href={`/metodo/${step.nextSlug}`}
-                  className="text-sm font-bold text-[#39F4FF] transition hover:text-[#18D4F7]"
-                >
+                <Link href={`/metodo/${step.nextSlug}`} className="argos-corporate-link">
                   Siguiente fase →
                 </Link>
               ) : (
-                <Link href="/metodo/analizar" className="text-sm font-bold text-[#39F4FF] transition hover:text-[#18D4F7]">
+                <Link href="/metodo/analizar" className="argos-corporate-link">
                   Volver a Analizar →
                 </Link>
               )}
             </div>
-            <Link
-              href="/metodo"
-              className="rounded-md border border-[#18D4F7]/35 bg-white/[.06] px-4 py-2 text-sm font-black text-[#39F4FF] transition hover:bg-white/[.1]"
-            >
+            <Link href="/metodo" className="argos-corporate-link-quiet">
               Ver hub del método
             </Link>
           </div>
 
-          <section className="argos-tech-frame mt-10 p-6 md:p-8">
-            <h2 className="text-2xl font-black text-white">Siguiente paso</h2>
-            <p className="mt-3 max-w-3xl text-sm leading-7 text-[#C9DDEC]">
-              Elige cómo quieres continuar. Si aún no tienes una fotografía clara del estado actual, el diagnóstico ARGOS
-              ordena prioridades sin comprometer recursos a ciegas.
+          <section className="mt-10 rounded-lg border border-[var(--border-default)] bg-white p-6 md:p-8">
+            <h2 className="argos-font-display argos-corp-h2">Siguiente paso</h2>
+            <p className="argos-corp-body mt-3">
+              Elige cómo quieres continuar. Si aún no tienes una fotografía clara del estado actual, el
+              diagnóstico ARGOS ordena prioridades sin comprometer recursos a ciegas.
             </p>
-            <div className="mt-5 flex flex-wrap gap-3">
+            <div className="argos-corp-cta-row">
               <MethodCtaControl cta={step.primaryCta} variant="primary" />
               <MethodCtaControl cta={step.secondaryCta} variant="secondary" />
             </div>
           </section>
         </div>
       </section>
-    </ArgosPageShell>
+    </CorporatePageShell>
   );
 }

@@ -2,116 +2,25 @@
 
 import Link from "next/link";
 import { useEffect } from "react";
-import ArgosPageShell from "@/components/layout/ArgosPageShell";
-import MethodArgosJourneyNav from "@/components/method/MethodArgosJourneyNav";
+import ArgosExpandableCard from "@/components/corporate/ArgosExpandableCard";
+import ArgosReveal from "@/components/corporate/ArgosReveal";
+import MethodArgosBar from "@/components/corporate/MethodArgosBar";
+import PublicMovementsGrid from "@/components/corporate/PublicMovementsGrid";
+import CorporatePageShell from "@/components/layout/CorporatePageShell";
+import { useDiagnosticSurveyLauncher } from "@/components/diagnostic/DiagnosticSurveyLauncher";
 import { useI18n } from "@/i18n/useI18n";
 import { usePageMeta } from "@/components/seo/usePageMeta";
-
-const methodDetails = [
-  {
-    id: "analizar",
-    letter: "A",
-    title: "Analizar",
-    meaning:
-      "Revisamos el estado real del entorno digital del cliente: presencia web, sistemas, seguridad, rendimiento, herramientas, procesos y riesgos.",
-    work: "Inventariamos activos, revisamos accesos, alojamiento, plataforma web, formularios, rendimiento, procesos internos y puntos de riesgo.",
-    clientGets:
-      "Un diagnóstico claro, prioridades ordenadas y una hoja de ruta técnica entendible para tomar decisiones con criterio.",
-    avoids:
-      "Evita invertir a ciegas, repetir incidencias, mantener sistemas sin mapa y tomar decisiones sin saber dónde está el riesgo.",
-    tools: [
-      "Mapa de riesgos",
-      "Revisión de presencia digital",
-      "Auditoría técnica orientada a negocio",
-      "Monitorización",
-      "Inventario de accesos",
-      "Diagnóstico asistido"
-    ]
-  },
-  {
-    id: "reforzar",
-    letter: "R",
-    title: "Reforzar",
-    meaning:
-      "Aplicamos medidas preventivas para fortalecer seguridad, estabilidad, copias de seguridad, accesos, rendimiento y protección de datos.",
-    work: "Endurecemos configuraciones, revisamos permisos, copias, actualizaciones, formularios, alojamiento, dependencias y medidas de protección.",
-    clientGets:
-      "Un entorno más controlado, con mejores prácticas, reducción de riesgos y bases técnicas más sólidas para operar.",
-    avoids:
-      "Evita accesos débiles, pérdidas de información, caídas prevenibles, webs expuestas y dependencias técnicas mal gestionadas.",
-    tools: [
-      "Copias verificadas",
-      "Control de accesos",
-      "Endurecimiento de plataforma",
-      "Protección de datos",
-      "Continuidad operativa",
-      "Seguimiento documentado"
-    ]
-  },
-  {
-    id: "guiar",
-    letter: "G",
-    title: "Guiar",
-    meaning:
-      "Ordenamos incidencias, mantenimiento, solicitudes, prioridades, usuarios, servicios y comunicación para que el cliente tenga control y claridad.",
-    work: "Centralizamos solicitudes, documentamos decisiones, priorizamos tareas, ordenamos estados y dejamos trazabilidad de soporte y mejoras.",
-    clientGets:
-      "Claridad operativa, comunicación más directa y una visión organizada de lo que está pendiente, activo o resuelto.",
-    avoids:
-      "Evita mensajes dispersos, urgencias sin prioridad, tareas repetidas, pérdida de contexto y decisiones sin seguimiento.",
-    tools: [
-      "Área privada para clientes",
-      "Formularios estructurados",
-      "Historial de solicitudes",
-      "Comunicación ordenada",
-      "Priorización compartida",
-      "Seguimiento de mejoras"
-    ]
-  },
-  {
-    id: "optimizar",
-    letter: "O",
-    title: "Optimizar",
-    meaning:
-      "Mejoramos velocidad, procesos, automatizaciones, experiencia web, conversión, rendimiento percibido y eficiencia operativa.",
-    work: "Analizamos oportunidades de mejora, reducimos fricción, optimizamos la experiencia digital y automatizamos flujos repetitivos con control.",
-    clientGets:
-      "Una presencia digital más fluida, procesos más simples, mejores datos de entrada y una operación más eficiente.",
-    avoids:
-      "Evita formularios poco útiles, experiencias lentas, procesos manuales innecesarios y oportunidades de captación desaprovechadas.",
-    tools: [
-      "Rendimiento y velocidad",
-      "Experiencia de usuario",
-      "Automatización con control",
-      "Optimización de conversión",
-      "Procesos internos",
-      "Indicadores para decidir"
-    ]
-  },
-  {
-    id: "supervisar",
-    letter: "S",
-    title: "Supervisar",
-    meaning:
-      "Acompañamos al cliente de forma continua, revisando, previniendo, actualizando y proponiendo mejoras antes de que aparezcan problemas.",
-    work: "Mantenemos revisiones periódicas, seguimiento preventivo, propuestas de mejora, actualización técnica y acompañamiento estratégico.",
-    clientGets:
-      "Continuidad, tranquilidad y una relación tecnológica a largo plazo con decisiones más previsibles y menos improvisación.",
-    avoids:
-      "Evita abandono técnico, deuda digital acumulada, incidencias repetidas y mejoras que llegan demasiado tarde.",
-    tools: [
-      "Revisiones programadas",
-      "Vigilancia preventiva",
-      "Mantenimiento continuo",
-      "Copias y recuperación",
-      "Hoja de ruta viva",
-      "Infraestructura acompañada"
-    ]
-  }
-];
+import { getAllMethodArgosSteps, METHOD_ARGOS_SLUGS } from "@/lib/methodArgosSteps";
 
 export default function MethodView() {
-  const { t } = useI18n();
+  const { t, get } = useI18n();
+  const steps = getAllMethodArgosSteps();
+  const publicMethodSteps = get<Array<{ order: string; title: string; description: string }>>(
+    "method.publicSteps",
+    []
+  );
+  const methodStepsForBar = steps.map((s) => ({ id: s.letter, title: s.name }));
+  const { openDiagnostic } = useDiagnosticSurveyLauncher();
 
   usePageMeta(t("meta.methodTitle"), t("meta.methodDescription"));
 
@@ -120,108 +29,104 @@ export default function MethodView() {
     const raw = window.location.hash.slice(1);
     if (raw === "gestionar") {
       document.getElementById("guiar")?.scrollIntoView({ behavior: "smooth", block: "start" });
-      window.history.replaceState(null, "", `${window.location.pathname}#guiar`);
+      const prev = (window.history.state || {}) as Record<string, unknown>;
+      window.history.replaceState({ ...prev }, "", `${window.location.pathname}#guiar`);
     } else if (raw === "sostener") {
       document.getElementById("supervisar")?.scrollIntoView({ behavior: "smooth", block: "start" });
-      window.history.replaceState(null, "", `${window.location.pathname}#supervisar`);
+      const prev = (window.history.state || {}) as Record<string, unknown>;
+      window.history.replaceState({ ...prev }, "", `${window.location.pathname}#supervisar`);
     }
   }, []);
 
   return (
-    <ArgosPageShell variant="method-galaxy">
-      <section className="scroll-mt-[calc(var(--header-h)+1rem)] px-5 pb-12 pt-[calc(var(--header-h)+1.5rem)] lg:px-8">
-        <div className="mx-auto max-w-6xl">
-          <Link href="/" className="text-sm font-bold text-[#39F4FF]">
-            ← {t("actions.backHome")}
-          </Link>
-          <div className="argos-method-hero-panel mt-6 scroll-mt-[calc(var(--header-h)+1rem)]">
-            <div className="argos-method-title-wrap">
-              <h1 className="argos-method-hero-title argos-method-title-glow argos-method-title-glow--showcase">
-                {t("method.title")}
-              </h1>
+    <CorporatePageShell>
+      <section className="argos-corp-section" aria-labelledby="method-title">
+        <div className="argos-corp-container">
+          <ArgosReveal>
+            <MethodArgosBar
+              as="h1"
+              title={t("nav.methodArgos")}
+              titleId="method-title"
+              steps={methodStepsForBar}
+              slugs={METHOD_ARGOS_SLUGS}
+            />
+            <p className="argos-corp-lead argos-corp-text-justify mt-6">{t("method.subtitle")}</p>
+          </ArgosReveal>
+
+          <ArgosReveal as="div" className="mt-8">
+            <div className="argos-card argos-card--method argos-card--bridge">
+              <p className="argos-corp-body argos-corp-text-justify">{t("method.dualBridge")}</p>
             </div>
-            <p className="mt-4 max-w-3xl text-lg leading-8 text-[#D7E8F6]">{t("method.subtitle")}</p>
-            <p className="argos-method-value-strip mt-4 max-w-3xl rounded-xl p-4 text-sm font-bold leading-7 text-[#EAF7FF]">
-              La tecnología de tu empresa no debería fallar para que alguien la revise.
-            </p>
-          </div>
+          </ArgosReveal>
 
-          <MethodArgosJourneyNav className="mt-8" />
+          <ArgosReveal as="div" className="mt-10">
+            <h2 className="argos-font-display argos-corp-h2">{t("method.publicPhasesTitle")}</h2>
+            <PublicMovementsGrid steps={publicMethodSteps} titleAs="h3" />
+          </ArgosReveal>
 
-          <div className="mt-10 grid grid-cols-2 gap-5 min-[480px]:grid-cols-3 md:grid-cols-3 xl:grid-cols-5">
-            {methodDetails.map((step) => (
-              <Link
-                key={step.id}
-                href={`/metodo/${step.id}`}
-                className="argos-method-step-card min-h-0 p-5"
-              >
-                <p className="text-sm font-black text-[#39F4FF]">{step.letter}</p>
-                <h2 className="mt-2 text-xl font-black text-white">{step.title}</h2>
-                <p className="mt-3 text-sm leading-7 text-[#C9DDEC]">{step.meaning}</p>
-              </Link>
-            ))}
-          </div>
+          <ArgosReveal as="div" className="mt-10">
+            <h2 className="argos-font-display argos-corp-h2">{t("method.operationalPhasesTitle")}</h2>
+          </ArgosReveal>
 
-          <div className="mt-12 grid gap-6">
-            {methodDetails.map((detail) => (
-              <section
-                key={detail.id}
-                id={detail.id}
-                className="argos-hologram-card scroll-mt-[calc(var(--header-h)+1rem)] p-6 md:p-8"
-              >
-                <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-                  <div>
-                    <p className="text-sm font-black uppercase text-[#18D4F7]">
-                      {detail.letter} · {detail.title}
-                    </p>
-                    <h2 className="mt-2 text-3xl font-black text-white">{detail.title}: prevención con método.</h2>
-                    <p className="mt-4 max-w-4xl text-sm leading-7 text-[#D7E8F6]">{detail.meaning}</p>
-                    <Link
-                      href={`/metodo/${detail.id}`}
-                      className="mt-4 inline-flex text-sm font-black text-[#39F4FF] underline-offset-4 hover:underline"
-                    >
-                      Leer fase completa
-                    </Link>
-                  </div>
-                  <Link
-                    href="/contacto"
-                    className="argos-method-cta-primary shrink-0 rounded-md bg-[#18D4F7] px-5 py-3 text-center text-sm font-black text-[#030812] transition hover:bg-[#39F4FF]"
-                  >
-                    Solicitar diagnóstico ARGOS
+          <ol className="argos-corp-phase-system mt-4">
+            {steps.map((step) => (
+              <li key={step.slug} id={step.slug}>
+                <ArgosReveal as="div">
+                  <Link href={step.path} className="argos-corp-phase-card argos-interactive-card">
+                    <span className="argos-corp-phase-letter" aria-hidden="true">
+                      {step.letter}
+                    </span>
+                    <span className="argos-corp-phase-title">{step.name}</span>
+                    <span className="argos-corp-phase-desc">{step.valuePhrase}</span>
                   </Link>
-                </div>
-                <div className="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                  <article className="argos-method-premium-card argos-method-inner-card rounded-xl p-5">
-                    <h3 className="text-sm font-black text-white">Qué hacemos</h3>
-                    <p className="mt-3 text-sm leading-6 text-[#C9DDEC]">{detail.work}</p>
-                  </article>
-                  <article className="argos-method-premium-card argos-method-inner-card rounded-xl p-5">
-                    <h3 className="text-sm font-black text-white">Qué obtiene el cliente</h3>
-                    <p className="mt-3 text-sm leading-6 text-[#C9DDEC]">{detail.clientGets}</p>
-                  </article>
-                  <article className="argos-method-premium-card argos-method-inner-card rounded-xl p-5">
-                    <h3 className="text-sm font-black text-white">Qué problemas evitamos</h3>
-                    <p className="mt-3 text-sm leading-6 text-[#C9DDEC]">{detail.avoids}</p>
-                  </article>
-                  <article className="argos-method-premium-card argos-method-inner-card rounded-xl p-5">
-                    <h3 className="text-sm font-black text-white">Enfoque</h3>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {detail.tools.map((tool) => (
-                        <span
-                          key={tool}
-                          className="rounded-full border border-[#18D4F7]/25 bg-[#18D4F7]/10 px-3 py-1 text-xs font-bold text-[#DDFBFF]"
-                        >
-                          {tool}
-                        </span>
-                      ))}
-                    </div>
-                  </article>
-                </div>
-              </section>
+                </ArgosReveal>
+              </li>
             ))}
+          </ol>
+
+          <ul className="argos-card-grid mt-10">
+            {steps.map((step) => (
+              <li key={`detail-${step.slug}`}>
+                <ArgosExpandableCard
+                  variant="method"
+                  title={`${step.letter} · ${step.name}`}
+                  summary={<p className="argos-corp-card-body">{step.valuePhrase}</p>}
+                  expandLabel={t("actions.viewDetail")}
+                  detail={
+                    <div className="argos-detail-section">
+                      <p className="argos-corp-card-body argos-corp-text-justify">{step.meaning}</p>
+                      <p className="argos-corp-card-body argos-corp-text-justify mt-4">{step.subtitle}</p>
+                      <ul className="argos-corp-detail-list mt-4">
+                        {step.argosActions.slice(0, 6).map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
+                      <Link href={step.path} className="argos-corporate-link mt-6 inline-block argos-cta-arrow">
+                        {t("actions.viewDetail")}
+                      </Link>
+                    </div>
+                  }
+                />
+              </li>
+            ))}
+          </ul>
+
+          <div className="argos-corp-related mt-10">
+            <p className="argos-corp-related__label">{t("related.label")}</p>
+            <div className="argos-corp-related__links">
+              <button type="button" className="argos-corporate-cta" onClick={openDiagnostic}>
+                {t("nav.startDiagnostic")} →
+              </button>
+              <Link href="/servicios" className="argos-corporate-link-quiet">
+                {t("actions.viewServices")}
+              </Link>
+              <Link href="/contacto" className="argos-corporate-link-quiet">
+                {t("nav.contact")}
+              </Link>
+            </div>
           </div>
         </div>
       </section>
-    </ArgosPageShell>
+    </CorporatePageShell>
   );
 }

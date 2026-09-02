@@ -1,0 +1,96 @@
+{
+  "mission": "AI_SECURITY_PRODUCTION_REVIEW_14",
+  "timestamp": "2026-08-31T18:50:00Z",
+  "branch": "feature/argos-multitenant-platform",
+  "head": "640adb048a769d3d4dd9a72f3caccd637d3a81ce",
+  "provider": {
+    "name": "OpenAI",
+    "configured": false,
+    "model": "gpt-4o-mini",
+    "modelConfiguredDefault": true,
+    "liveTest": "BLOCKED_MISSING_SECRET",
+    "envVars": [
+      "OPENAI_API_KEY",
+      "AI_PROVIDER",
+      "AI_MODEL",
+      "OPENAI_MODEL",
+      "OPENAI_TIMEOUT_MS",
+      "AI_MAX_OUTPUT_TOKENS",
+      "AI_MESSAGE_MAX_LEN",
+      "AI_CONVERSATION_MAX_MESSAGES",
+      "AI_CONVERSATION_TTL_MS",
+      "AI_CONVERSATION_MAX_TOTAL",
+      "AI_RATE_LIMIT_WINDOW_MS",
+      "AI_RATE_LIMIT_MAX"
+    ]
+  },
+  "security": {
+    "p0": 0,
+    "p1": 0,
+    "p1FixedDuringReview": [
+      "Global conversation store cap (AI_CONVERSATION_MAX_TOTAL=500 LRU)",
+      "Provider 401/429/5xx error code mapping",
+      "Accented Spanish system-prompt extraction patterns"
+    ],
+    "p2": 3,
+    "p3": 1,
+    "promptInjection": "BLOCKED",
+    "secretExtraction": "BLOCKED",
+    "systemPromptExtraction": "BLOCKED",
+    "crossConversationLeakage": false,
+    "xss": "BLOCKED",
+    "actionAllowlist": "PASS",
+    "secretsDisclosed": 0
+  },
+  "runtime": {
+    "rateLimit": "PASS",
+    "rateLimitConfig": { "windowMs": 900000, "max": 30 },
+    "contextBounded": true,
+    "globalMemoryBounded": true,
+    "maxMessagesPerConversation": 12,
+    "maxConversations": 500,
+    "ttlMs": 1800000,
+    "messageMaxLen": 2000,
+    "maxOutputTokens": 700,
+    "timeoutMs": 45000,
+    "timeout": "PASS",
+    "fallback": "PASS",
+    "multiInstanceContextLimitation": true,
+    "killSwitch": "PASS",
+    "healthEndpointSafe": "PASS",
+    "costObservability": "PARTIAL"
+  },
+  "quality": {
+    "knowledgeAccuracy": "BLOCKED",
+    "hallucinationAcceptanceRate": null,
+    "humanTone": "BLOCKED",
+    "realChatE2E": "BLOCKED",
+    "note": "OPENAI_API_KEY absent in review environment; fail-safe and unit/adversarial offline tests executed"
+  },
+  "validation": {
+    "assistantTests": "PASS",
+    "securityTests": "PASS",
+    "assistantTestCount": 31,
+    "contentFreeze": "PASS",
+    "lint": "PASS",
+    "typecheck": "PASS",
+    "build": "PASS"
+  },
+  "git": {
+    "initialStaged": 0,
+    "finalStaged": 0,
+    "indexChanged": false,
+    "runtimeFilesModifiedByReview14": 5,
+    "commits": 0,
+    "pushes": 0,
+    "deploys": 0
+  },
+  "release": {
+    "aiProductionReady": false,
+    "readyForReleaseReintegration15": false,
+    "blockers": [
+      "OPENAI_API_KEY not configured in backend environment",
+      "REAL_CHAT_E2E / live knowledge & hallucination suites BLOCKED_MISSING_SECRET"
+    ]
+  }
+}

@@ -85,7 +85,7 @@
   /* Layout tokens */
   --header-h: calc(var(--argos-topbar-lang-h, 44px) + var(--argos-topbar-nav-h, 72px));
   --header-px: 16px;
-  --content-max: 80rem;
+  --content-max: none;
 }
 
 @media (min-width: 480px) {
@@ -121,6 +121,8 @@
 
 html {
   scroll-padding-top: var(--header-h);
+  width: 100%;
+  overflow-x: clip;
 }
 
 @media (max-width: 1279px) {
@@ -139,6 +141,9 @@ body {
   font-family: var(--font-body);
   background: #ffffff;
   color: #07111f;
+  width: 100%;
+  min-width: 0;
+  overflow-x: clip;
 }
 
 a {
