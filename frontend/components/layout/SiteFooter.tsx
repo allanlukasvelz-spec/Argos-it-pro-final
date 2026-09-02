@@ -13,7 +13,7 @@ export default function SiteFooter() {
     <footer className="border-t border-[#E5E7EB] bg-white">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-8 md:grid-cols-[2fr_1fr_1fr] md:px-5 md:py-10 lg:px-8">
         <div>
-          <div className="flex items-center">
+          <Link href="/" className="inline-flex items-center" aria-label="ARGOS-IT home">
             <Image
               src="/logo-argos-it.png"
               alt="Logo ARGOS-IT"
@@ -22,7 +22,7 @@ export default function SiteFooter() {
               className="h-10 w-auto object-contain"
               loading="lazy"
             />
-          </div>
+          </Link>
           <p className="mt-3 max-w-2xl text-sm leading-7 text-[#4B5563]">{t("footer.tagline")}</p>
         </div>
 

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { supportedLocales, type Locale } from "@/i18n/config";
 import DiagnosticPromoBanner from "@/components/diagnostic/DiagnosticPromoBanner";
@@ -38,6 +38,7 @@ type Props = {
 
 export default function SiteHeader({ showDiagnosticPromo = true }: Props) {
   const pathname = usePathname();
+  const router = useRouter();
   const { locale, setLocale, t } = useI18n();
   const { openDiagnostic } = useDiagnosticSurveyLauncher();
   const [open, setOpen] = useState(false);
@@ -47,6 +48,15 @@ export default function SiteHeader({ showDiagnosticPromo = true }: Props) {
     if (href === "/") return pathname === "/";
     if (href.startsWith("/#")) return pathname === "/";
     return pathname.startsWith(href);
+  };
+
+  const goHome = () => {
+    setOpen(false);
+    if (pathname === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    router.push("/");
   };
 
   useEffect(() => {
@@ -101,7 +111,10 @@ export default function SiteHeader({ showDiagnosticPromo = true }: Props) {
             href="/"
             className="relative z-[46] flex h-full min-w-0 shrink-0 items-center self-stretch"
             aria-label="ARGOS-IT home"
-            onClick={() => setOpen(false)}
+            onClick={(event) => {
+              event.preventDefault();
+              goHome();
+            }}
           >
             <Image
               src="/logo-argos-it-header.png"

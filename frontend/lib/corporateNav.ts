@@ -3,21 +3,24 @@ export type CorporateNavItem = {
   key: string;
 };
 
-/** Primary IA — same destinations as legacy SiteHeader `menuItems`. */
+/**
+ * Primary IA for Quiet Authority chrome — Framer Corporate Visual Lab composition.
+ * Logo = home. Contacto lives as header CTA (outline), not a nav duplicate.
+ */
 export const corporatePrimaryNav: CorporateNavItem[] = [
-  { href: "/", key: "nav.home" },
   { href: "/servicios", key: "nav.services" },
   { href: "/metodo", key: "nav.method" },
-  { href: "/sobre-argos-it", key: "nav.about" },
-  { href: "/contacto", key: "nav.contact" }
+  { href: "/sobre-argos-it", key: "nav.about" }
 ];
 
-/** Footer site links — same as SiteFooter, without invented items. */
+/** Footer site links — sistema cerrado de páginas públicas. */
 export const corporateFooterNav: CorporateNavItem[] = [
+  { href: "/", key: "nav.home" },
   { href: "/servicios", key: "nav.services" },
-  { href: "/metodo", key: "nav.method" },
+  { href: "/metodo", key: "nav.methodArgos" },
   { href: "/sobre-argos-it", key: "nav.about" },
-  { href: "/contacto", key: "nav.contact" }
+  { href: "/contacto", key: "nav.contact" },
+  { href: "/portal", key: "nav.portalShort" }
 ];
 
 export const corporateLegalNav: CorporateNavItem[] = [

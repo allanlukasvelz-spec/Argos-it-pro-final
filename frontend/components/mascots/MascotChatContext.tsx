@@ -27,6 +27,8 @@ type MascotChatContextValue = {
   panelId: string;
   headingId: string;
   openChat: (persona: MascotPersona) => void;
+  /** Open Dumbo/Chico with a curated topic + clear reply (no API round-trip). */
+  openGuidedReply: (persona: MascotPersona, topic: string, reply: string) => void;
   closeChat: () => void;
   sendMessage: (text: string) => Promise<void>;
   isOpenFor: (persona: MascotPersona) => boolean;
@@ -95,6 +97,20 @@ export function MascotChatProvider({ children }: { children: ReactNode }) {
     [t, open, persona, closeChat]
   );
 
+  const openGuidedReply = useCallback((p: MascotPersona, topic: string, reply: string) => {
+    const cleanTopic = topic.trim();
+    const cleanReply = reply.trim();
+    if (!cleanTopic || !cleanReply) return;
+    setPersona(p);
+    setOpen(true);
+    setError(null);
+    setIsLoading(false);
+    setMessages([
+      { id: newId(), role: "user", content: cleanTopic },
+      { id: newId(), role: "assistant", content: cleanReply }
+    ]);
+  }, []);
+
   const sendMessage = useCallback(
     async (text: string) => {
       const trimmed = text.trim();
@@ -127,11 +143,25 @@ export function MascotChatProvider({ children }: { children: ReactNode }) {
       panelId,
       headingId,
       openChat,
+      openGuidedReply,
       closeChat,
       sendMessage,
       isOpenFor
     }),
-    [open, persona, messages, isLoading, error, panelId, headingId, openChat, closeChat, sendMessage, isOpenFor]
+    [
+      open,
+      persona,
+      messages,
+      isLoading,
+      error,
+      panelId,
+      headingId,
+      openChat,
+      openGuidedReply,
+      closeChat,
+      sendMessage,
+      isOpenFor
+    ]
   );
 
   return <MascotChatContext.Provider value={value}>{children}</MascotChatContext.Provider>;

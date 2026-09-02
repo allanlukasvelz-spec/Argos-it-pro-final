@@ -19,9 +19,9 @@ export type MascotBrainState = {
   dumboMessageKey: string;
 };
 
-/** Production-selectable V1 states only (controller must not pick others). */
-export const CHICO_V1_STATES = ["idle", "looking", "stand", "lay", "sleep", "resting"] as const;
-export const DUMBO_V1_STATES = ["idle", "looking", "sit", "lay", "sleep", "resting"] as const;
+/** Production-selectable VI-06 states (approved owner poses). */
+export const CHICO_V1_STATES = ["idle", "stand", "sit", "looking", "alert", "lay", "sleep", "resting", "walk_01", "turn"] as const;
+export const DUMBO_V1_STATES = ["idle", "looking", "sit", "lay", "sleep", "resting", "walk_01", "guide", "look", "turn", "waiting"] as const;
 
 const baseState: MascotBrainState = {
   chico: "idle",

@@ -157,6 +157,7 @@ app.use(csrfOriginGuard(allowedOrigins));
 // Rutas públicas
 app.use("/api/auth", authRoutes);
 app.use("/api/ai/public", aiLimiter, require("./routes/ai-public"));
+app.use("/api/assistant", aiLimiter, require("./routes/assistant"));
 app.use("/api/contact", contactRoutes);
 
 // Rutas protegidas

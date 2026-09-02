@@ -65,7 +65,7 @@ export function DiagnosticSurveyModal({ open, onClose }: Props) {
           aria-modal="true"
           aria-labelledby={titleId}
           tabIndex={-1}
-          className="relative w-full max-w-2xl overflow-hidden rounded-[1.25rem] border-2 border-[#22d3ee]/90 bg-[#f8fafc] shadow-[0_36px_100px_-32px_rgba(11,30,51,0.65)] outline-none lg:max-w-3xl"
+          className="relative w-full max-w-2xl overflow-hidden rounded-[1.25rem] border-2 border-[#1f3a5f]/45 bg-[#f8fafc] shadow-[0_28px_64px_-28px_rgba(11,30,51,0.5)] outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2f7d6d] lg:max-w-3xl"
         >
           <DiagnosticSurvey ariaTitleId={titleId} onRequestClose={onClose} />
         </div>

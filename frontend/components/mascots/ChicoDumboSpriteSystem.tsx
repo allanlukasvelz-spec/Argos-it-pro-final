@@ -2,10 +2,19 @@
 
 import Image from "next/image";
 import type { CSSProperties, KeyboardEvent } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMascotChat } from "@/components/mascots/MascotChatContext";
 import { useMascotPauseControl } from "@/components/mascots/MascotPauseControlContext";
 import { useMascotController } from "@/hooks/useMascotController";
 import { useI18n } from "@/i18n/useI18n";
+import {
+  CHICO_WALK_CYCLE,
+  DUMBO_WALK_CYCLE,
+  getChicoPosePath,
+  getDumboPosePath,
+  type ChicoPoseNode,
+  type DumboPoseNode
+} from "@/lib/mascotPoseGraph";
 import { chicoSprites, dumboSprites } from "@/sprites/spriteManifest";
 
 /**
@@ -16,6 +25,51 @@ function activateLauncherKey(event: KeyboardEvent, action: () => void) {
   if (event.key !== "Enter" && event.key !== " ") return;
   event.preventDefault();
   action();
+}
+
+const POSE_STEP_MS = 160;
+
+function usePoseSequence<T extends string>(
+  target: T,
+  resolvePath: (from: T, to: T) => T[],
+  reduced: boolean
+): T {
+  const [display, setDisplay] = useState(target);
+  const displayRef = useRef(target);
+
+  useEffect(() => {
+    if (target === displayRef.current) return;
+    if (reduced) {
+      displayRef.current = target;
+      setDisplay(target);
+      return;
+    }
+    const path = resolvePath(displayRef.current, target);
+    if (path.length <= 1) {
+      displayRef.current = target;
+      setDisplay(target);
+      return;
+    }
+    let i = 1;
+    let cancelled = false;
+    const tick = () => {
+      if (cancelled) return;
+      const next = path[i];
+      if (!next) return;
+      displayRef.current = next;
+      setDisplay(next);
+      i += 1;
+      if (i < path.length) {
+        window.setTimeout(tick, POSE_STEP_MS);
+      }
+    };
+    window.setTimeout(tick, POSE_STEP_MS);
+    return () => {
+      cancelled = true;
+    };
+  }, [target, resolvePath, reduced]);
+
+  return display;
 }
 
 export default function ChicoDumboSpriteSystem() {
@@ -42,6 +96,29 @@ export default function ChicoDumboSpriteSystem() {
   const chicoBubble = t(chicoMessageKey);
   const dumboBubble = t(dumboMessageKey);
 
+  const [reducedMotion, setReducedMotion] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setReducedMotion(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  const chicoActive = activeMascot === "chico";
+  const dumboActive = activeMascot === "dumbo";
+
+  const chicoDisplay = usePoseSequence(
+    chico as ChicoPoseNode,
+    getChicoPosePath,
+    reducedMotion || paused || chicoActive
+  );
+  const dumboDisplay = usePoseSequence(
+    dumbo as DumboPoseNode,
+    getDumboPosePath,
+    reducedMotion || paused || dumboActive
+  );
+
   const openChico = () => {
     showPauseFor("chico");
     openChat("chico");
@@ -60,8 +137,43 @@ export default function ChicoDumboSpriteSystem() {
     ["--mascot-dumbo-ty" as string]: `${dumboTy}px`
   };
 
-  const chicoActive = activeMascot === "chico";
-  const dumboActive = activeMascot === "dumbo";
+  useEffect(() => {
+    const preload = [
+      chicoSprites.idle,
+      chicoSprites.stand,
+      chicoSprites.alert,
+      chicoSprites.sit,
+      ...CHICO_WALK_CYCLE.map((k) => chicoSprites[k]),
+      dumboSprites.idle,
+      dumboSprites.sit,
+      dumboSprites.guide,
+      dumboSprites.look,
+      ...DUMBO_WALK_CYCLE.map((k) => dumboSprites[k])
+    ];
+    for (const src of preload) {
+      const img = new window.Image();
+      img.src = src;
+    }
+  }, []);
+
+  /* QA08-P1-01/P1-03 — hide floating dock while corporate footer occupies viewport */
+  useEffect(() => {
+    const footer = document.querySelector(".argos-corporate-footer");
+    if (!footer) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        const hit = entries.some((e) => e.isIntersecting);
+        if (hit) document.body.dataset.footerInView = "true";
+        else delete document.body.dataset.footerInView;
+      },
+      { root: null, threshold: 0, rootMargin: "0px 0px -8% 0px" }
+    );
+    io.observe(footer);
+    return () => {
+      io.disconnect();
+      delete document.body.dataset.footerInView;
+    };
+  }, []);
 
   return (
     <section
@@ -102,10 +214,10 @@ export default function ChicoDumboSpriteSystem() {
           data-mascot-active={chicoActive ? "true" : "false"}
         >
           <Image
-            src={chicoSprites[chico]}
+            src={chicoSprites[chicoDisplay]}
             alt=""
             aria-hidden="true"
-            className={`mascot__img mascot__img--chico mascot__state--${chico}`}
+            className={`mascot__img mascot__img--chico mascot__state--${chicoDisplay}`}
             width={232}
             height={232}
             sizes="(max-width: 480px) 112px, (max-width: 860px) 140px, 232px"
@@ -136,10 +248,10 @@ export default function ChicoDumboSpriteSystem() {
           data-mascot-active={dumboActive ? "true" : "false"}
         >
           <Image
-            src={dumboSprites[dumbo]}
+            src={dumboSprites[dumboDisplay]}
             alt=""
             aria-hidden="true"
-            className={`mascot__img mascot__img--dumbo mascot__state--${dumbo}`}
+            className={`mascot__img mascot__img--dumbo mascot__state--${dumboDisplay}`}
             width={208}
             height={208}
             sizes="(max-width: 480px) 100px, (max-width: 860px) 124px, 208px"

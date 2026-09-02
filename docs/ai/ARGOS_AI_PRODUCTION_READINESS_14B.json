@@ -1,0 +1,105 @@
+{
+  "mission": "AI_LIVE_PROVIDER_ACTIVATION_14B",
+  "timestamp": "2026-08-31T19:35:00Z",
+  "branch": "feature/argos-multitenant-platform",
+  "head": "640adb048a769d3d4dd9a72f3caccd637d3a81ce",
+  "result": "BLOCKED",
+  "blocker": "BLOCKED_MISSING_SECRET",
+  "provider": {
+    "name": "OpenAI",
+    "keySet": false,
+    "keyStoredInGit": false,
+    "keyClientExposure": 0,
+    "keyLogExposure": 0,
+    "model": "gpt-4o-mini",
+    "modelConfigured": true,
+    "providerConfigured": false,
+    "liveTest": "BLOCKED_MISSING_SECRET"
+  },
+  "deployment": {
+    "coolifyCli": false,
+    "hostingerMcp": "UNAUTHENTICATED",
+    "backendRestartRequired": false,
+    "backendRestartResult": "NOT_REQUIRED",
+    "deploysPerformed": 0,
+    "configurationTarget": {
+      "local": "backend/.env (gitignored) OPENAI_API_KEY",
+      "productionPreferred": "Coolify backend service env only; restart backend container",
+      "frontend": "FORBIDDEN for OPENAI_API_KEY / NEXT_PUBLIC_*"
+    }
+  },
+  "live": {
+    "openaiAuth": "BLOCKED",
+    "openaiNetwork": "BLOCKED",
+    "openaiModelAccess": "BLOCKED",
+    "openaiResponseParse": "BLOCKED",
+    "realArgosAiPath": "BLOCKED",
+    "verifiedKnowledgeAccuracy": "BLOCKED",
+    "methodHallucination": null,
+    "fabricatedArgosFacts": null,
+    "humanTone": "BLOCKED",
+    "liveShortTermContext": "BLOCKED",
+    "liveCrossConversationLeakage": null,
+    "promptInjectionLive": "NOT_RUN",
+    "systemPromptExtractionLive": "NOT_RUN",
+    "secretExtractionLive": "NOT_RUN",
+    "secretsDisclosed": 0,
+    "hallucinationChallengeCount": 0,
+    "liveUnsupportedFactAcceptanceRate": null,
+    "realDiagnosticHandoff": "BLOCKED",
+    "realContactHandoff": "BLOCKED",
+    "uiLiveQa": "BLOCKED",
+    "mobileChat390": "BLOCKED",
+    "aiAccessibilitySmoke": "BLOCKED"
+  },
+  "falsePremise": {
+    "acronisFalseConfirmation": null,
+    "support247FalseConfirmation": null,
+    "slaInvention": null,
+    "rpoInvention": null,
+    "rtoInvention": null,
+    "unsupportedGuarantees": null,
+    "inventedPrice": null
+  },
+  "offlineCarryForward": {
+    "assistantSecurityTests": "31/31 PASS",
+    "contentFreeze": "12/12 PASS",
+    "globalMemoryCap": "PASS",
+    "lru": "PASS",
+    "contextBound": "PASS",
+    "aiRateLimit": "PASS",
+    "costControls": "PASS",
+    "costObservability": "PARTIAL",
+    "provider401Handling": "PASS",
+    "provider429Handling": "PASS",
+    "provider5xxHandling": "PASS",
+    "providerTimeoutHandling": "PASS",
+    "providerErrorHandling": "PASS",
+    "killSwitch": "PASS"
+  },
+  "security": {
+    "p0": 0,
+    "p1": 0,
+    "p2": 3,
+    "p3": 1
+  },
+  "git": {
+    "indexChangedBy14b": false,
+    "runtimeFilesModifiedBy14b": 0,
+    "commits": 0,
+    "pushes": 0,
+    "prs": 0,
+    "deploys": 0,
+    "docsCreated": [
+      "docs/ai/ARGOS_AI_LIVE_PROVIDER_VALIDATION_14B.md",
+      "docs/ai/ARGOS_AI_PRODUCTION_READINESS_14B.json"
+    ]
+  },
+  "release": {
+    "aiCodeReady": true,
+    "offlineSecurity": "PASS",
+    "liveProvider": "BLOCKED_MISSING_SECRET",
+    "aiProductionReady": false,
+    "readyForReleaseReintegration15": false
+  }
+}

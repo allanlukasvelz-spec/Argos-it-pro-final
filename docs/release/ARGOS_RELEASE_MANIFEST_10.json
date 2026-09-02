@@ -1,0 +1,180 @@
+{
+  "acceptance": {
+    "mission": "FINAL_ACCEPTANCE_10",
+    "status": "PASS",
+    "branch": "feature/argos-multitenant-platform",
+    "head": "640adb048a769d3d4dd9a72f3caccd637d3a81ce",
+    "headShort": "640adb0",
+    "mergeBaseMain": "aa8ce1a38280f12bff86ab6395b0af930e09d805",
+    "timestamp": "2026-08-31T13:29:26Z",
+    "worktreeDirty": true,
+    "stagedFilesCount": 0,
+    "unstagedModifiedCount": 42,
+    "untrackedTopLevelCount": 66,
+    "remote": "origin=https://github.com/allanlukasvelz-spec/Argos-it-pro-final.git"
+  },
+  "validation": {
+    "contentFreeze": "PASS",
+    "contentFreezeCases": "12/12 (+7 ancillary = 19/19 node:test)",
+    "lint": "PASS",
+    "typecheck": "PASS",
+    "build": "PASS",
+    "tests": "PASS",
+    "e2e": "ENVIRONMENT_BLOCKED",
+    "e2eNote": "CLI Playwright chromium_headless_shell missing in sandbox cache; MCP browser smoke PASS",
+    "browserSmokeMcp": "PASS"
+  },
+  "defects": {
+    "p0": 0,
+    "p1": 0,
+    "p2": 0,
+    "p3Deferred": 2,
+    "p3DeferredItems": [
+      "mint card height consistency",
+      "service card height consistency"
+    ]
+  },
+  "runtime": {
+    "horizontalOverflow": 0,
+    "clippedText": 0,
+    "interactiveCollisions": 0,
+    "mascotOcclusions": 0,
+    "footerCollisions": 0,
+    "brokenImages": 0,
+    "viewports": {
+      "1440": "PASS",
+      "1024": "PASS",
+      "768": "PASS",
+      "390": "PASS"
+    }
+  },
+  "security": {
+    "secretExposure": false,
+    "sensitiveFilesProposedForCommit": 0,
+    "blockedPublicClaimsRendered": 0,
+    "blockedPublicClaimsSourceHitsUnmounted": 1,
+    "blockedPublicClaimsNote": "MethodArgosShowcase.tsx contains 'totalmente garantizada' but is not imported/mounted",
+    "newB12DistinctiveCopyHits": 0
+  },
+  "content": {
+    "contentFreeze1212": "PASS",
+    "contentDiffUnauthorized": 0,
+    "functionalDiffUnauthorized": 0,
+    "seoDiffFromVisualMissions": 0,
+    "seoHistoricalDrift": "KNOWN — meta.homeTitle still 'Tecnología serena…'; document title premium; intentional non-fix in 04–09",
+    "publicPhaseCount": 4,
+    "operationalPhaseCount": 5,
+    "publicServiceCount": 6,
+    "diagnosticEnginePresent": true,
+    "diagnosticFunctionalDrift": 0,
+    "diagnosticCompletedEventPresent": false,
+    "diagnosticCompletedNote": "Freeze allows 'if introduced'; baseline audit: not present; not a regression",
+    "captchaStates": "NOT_PRESENT",
+    "captchaNote": "Contact form has no CAPTCHA; prior preflight documented sin CAPTCHA"
+  },
+  "mascots": {
+    "dumboRole": "PASS",
+    "chicoRole": "PASS",
+    "heroMascot": 0,
+    "teleports": 0,
+    "poseFlashes": 0,
+    "baselineJumps": 0,
+    "contentOcclusions": 0,
+    "spriteRefsPresent": 39,
+    "spriteRefsMissing": 0
+  },
+  "footer": {
+    "dockTaglineOverlap": 0,
+    "dockLegalOverlap": 0,
+    "chicoLegalOverlap": 0,
+    "dumboLegalOverlap": 0,
+    "footerInViewHidesDock": true,
+    "darkRectangularLogoPresent": true
+  },
+  "git": {
+    "approvedFiles": [
+      "frontend/assets/css/argos-corporate.css",
+      "frontend/components/corporate/* (new + CorporateHeader/Footer)",
+      "frontend/components/home/*",
+      "frontend/components/pages/HomeView.tsx",
+      "frontend/components/pages/MethodView.tsx",
+      "frontend/components/pages/ServicesView.tsx",
+      "frontend/components/pages/PortalView.tsx",
+      "frontend/components/mascots/ChicoDumboSpriteSystem.tsx",
+      "frontend/components/diagnostic/DiagnosticSurveyModal.tsx",
+      "frontend/i18n/locales/es.json",
+      "frontend/lib/contentFreezeV1.test.ts",
+      "frontend/lib/publicMethodMovements.ts",
+      "frontend/lib/mascotPoseGraph.ts",
+      "frontend/public/logo-argos-it-footer.png",
+      "frontend/public/mascots/** (new poses)",
+      "frontend/styles/mascot-sprites.css",
+      "frontend/sprites/spriteManifest.ts",
+      "package.json",
+      "e2e/corporate-chrome.spec.ts",
+      "e2e/visual-adoption-01.spec.ts",
+      "docs/content/*",
+      "docs/design/ARGOS_VISUAL_*_REPORT.md",
+      "docs/design/ARGOS_OWNER_VISUAL_QA_08_REPORT.md",
+      "docs/design/ARGOS_SURGICAL_VISUAL_FIX_09_REPORT.md"
+    ],
+    "mixedProvenanceFiles": [
+      "frontend/assets/css/argos-corporate.css",
+      "frontend/components/pages/HomeView.tsx",
+      "frontend/components/pages/MethodView.tsx",
+      "frontend/components/pages/ServicesView.tsx",
+      "frontend/components/pages/AboutView.tsx",
+      "frontend/components/pages/ContactView.tsx",
+      "frontend/components/pages/ServiceDetailView.tsx",
+      "frontend/components/pages/MethodStepPageView.tsx",
+      "frontend/components/layout/SiteShell.tsx",
+      "frontend/components/corporate/CorporateHeader.tsx",
+      "frontend/components/corporate/CorporateFooter.tsx",
+      "frontend/i18n/locales/es.json",
+      "frontend/i18n/locales/en.json",
+      "frontend/i18n/locales/ca.json",
+      "frontend/components/diagnostic/DiagnosticSurvey.tsx"
+    ],
+    "preexistingFiles": [
+      "docs/architecture/phase8-validation-artifacts/noc-agents.png",
+      "docs/architecture/phase8-validation-artifacts/noc-command-center-narrow.png",
+      "docs/architecture/phase8-validation-artifacts/noc-command-center.png",
+      "docs/architecture/phase8-validation-artifacts/noc-incidents.png",
+      "docs/architecture/phase8-validation-artifacts/noc-platform-health.png",
+      "docs/architecture/phase8-validation-artifacts/noc-reports.png",
+      "docs/design/ARGOS_FRONTEND_SOURCE_OF_TRUTH_RECONCILIATION.md"
+    ],
+    "localOnlyFiles": [
+      "artifacts/",
+      "frontend/public/logo-argos-it-header.orig.png",
+      "frontend/.env.local (gitignored)",
+      "backend/.env (gitignored)",
+      "docker/.env.staging (gitignored)"
+    ],
+    "unknownFiles": [
+      "docs/research/notebook-audit/*",
+      "docs/architecture/phase8-validation-artifacts/framer-reconcile-*.png",
+      "docs/architecture/phase8-validation-artifacts/quiet-authority-*.png",
+      "docs/architecture/phase8-validation-artifacts/surgical-*.png"
+    ]
+  },
+  "release": {
+    "readyForProductionBuild": true,
+    "readyForReleaseIntegration": true,
+    "readyForPR": true,
+    "readyForDeploy": false,
+    "readyForDeployReason": "CLI E2E ENVIRONMENT_BLOCKED in acceptance host; require CI Playwright browsers green before deploy authorization",
+    "authorizedToDeploy": false,
+    "acceptanceIntegrity": "PASS",
+    "runtimeFilesModifiedByAcceptance10": 0,
+    "commitsCreated": 0,
+    "pushesPerformed": 0,
+    "deploysPerformed": 0
+  },
+  "evidence": {
+    "report": "docs/release/ARGOS_FINAL_ACCEPTANCE_10_REPORT.md",
+    "manifest": "docs/release/ARGOS_RELEASE_MANIFEST_10.json",
+    "smokeArtifacts": "artifacts/final-acceptance-10/",
+    "priorQa": ["artifacts/visual-qa-08/", "artifacts/visual-fix-09/"]
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "mission": "PRODUCTION_VERSION_FORENSICS_15A",
+  "timestamp": "2026-08-31T20:25:00Z",
+  "result": "PASS",
+  "production": {
+    "domain": "portal.argos-it.com",
+    "httpStatus": 200,
+    "status": "STALE_VERSION",
+    "vps": "91.108.121.181",
+    "frontendContainer": "rpp5o3j1lvbbq1wjleaqyu91-160455635362",
+    "frontendContainerId": "7a0829886986ce4e944c84c7abe861d7da3dcf520a53f2983a3ca0c43580aff3",
+    "frontendImageId": "sha256:9e06a7281fcc0f9e8060305e469a8ff3c2820321d23a87143d8b8d521b308c1f",
+    "frontendImageRef": "rpp5o3j1lvbbq1wjleaqyu91:651deb54e543748e990ca28f427cbfe2ca6fbccc",
+    "containerCreated": "2026-08-02T16:06:05.490265214Z",
+    "containerStarted": "2026-08-25T14:56:52.916980556Z",
+    "gitRevision": "651deb54e543748e990ca28f427cbfe2ca6fbccc",
+    "gitRevisionTag": "dr-runbook-v1.0",
+    "branch": "deploy/production-v1",
+    "repository": "allanlukasvelz-spec/Argos-it-pro-final",
+    "baseDirectoryWeb": "/frontend",
+    "baseDirectoryApi": "/backend",
+    "buildPack": "dockerfile",
+    "nextBuildId": "zUG7MLf8H0pqIGNduQpC5",
+    "coolify": {
+      "applicationIdWeb": 4,
+      "applicationIdApi": 3,
+      "projectName": "argos-it-production",
+      "resourceNameWeb": "argos-it-production-web",
+      "resourceNameApi": "argos-it-production-api",
+      "environmentName": "production",
+      "autoDeploy": false,
+      "lastDeploymentUuidWeb": "i14iy1x8w4c9bjvpswb49j2n",
+      "lastDeploymentCommit": "651deb54e543748e990ca28f427cbfe2ca6fbccc",
+      "composePath": "/data/coolify/applications/rpp5o3j1lvbbq1wjleaqyu91/docker-compose.yaml"
+    },
+    "content": {
+      "oldHeroPresent": true,
+      "oldCommandCenterPresent": true,
+      "oldDiagnosticCtaPresent": true,
+      "rcHeroPresent": false,
+      "rcSupportPresent": false,
+      "rcPrimaryCtaPresent": true,
+      "rcSecondaryCtaPresent": false,
+      "hablarConArgosPresent": true,
+      "hablarConArgosMeaning": "legacy_mascot_copy_not_mission13"
+    }
+  },
+  "backend": {
+    "container": "ufcwdojnv5wajhllw0df7olg-160904406591",
+    "imageId": "sha256:2bda1de997385ffce57927cca7e75f1b8f66519066977ef64057bfac022f1ea2",
+    "imageRef": "ufcwdojnv5wajhllw0df7olg:651deb54e543748e990ca28f427cbfe2ca6fbccc",
+    "health": "healthy",
+    "apiHealthHttp": 200,
+    "sourceCommitMatchFrontend": true
+  },
+  "local": {
+    "branch": "feature/argos-multitenant-platform",
+    "head": "640adb048a769d3d4dd9a72f3caccd637d3a81ce",
+    "originMain": "aa8ce1a38280f12bff86ab6395b0af930e09d805",
+    "originDeployProductionV1": "0f3b1c373ef5254dc1ca6f989d88bda60ccbc0db",
+    "indexEmpty": true,
+    "worktreeDirty": true,
+    "trackedModifiedCount": 45,
+    "untrackedCount": 218,
+    "stagedCount": 0,
+    "rcFullyCommittedAtHead": false,
+    "aiFullyCommittedAtHead": false,
+    "worktreeRcPresent": true,
+    "worktreeAiPresent": true,
+    "featureAheadOfMain": 43
+  },
+  "comparison": {
+    "productionMatchesMain": "PARTIAL",
+    "productionMatchesFeatureHead": "PARTIAL",
+    "productionMatchesDirtyWorktree": false,
+    "matchConfidence": "HIGH",
+    "deployBranchCommitsAheadOfRunning": 6,
+    "deployBranchAheadAreDocsOnly": true
+  },
+  "deployment": {
+    "autoDeploy": "DISABLED",
+    "publicDomain": "UNKNOWN",
+    "portalDomainRole": "MIXED",
+    "coolifyPanelDns": "FAIL",
+    "rollbackReferenceAvailable": true,
+    "productionReproducible": "PARTIAL",
+    "restoreStackPresentOnVps": true
+  },
+  "ai": {
+    "productionRoutePresent": false,
+    "productionImplementationVersion": "NONE",
+    "assistantChatHttp": 404,
+    "assistantHealthHttp": 404,
+    "productionReadyLocally": false,
+    "openaiApiKeyNamePresentOnApi": true,
+    "missingEnvNamesForMission13": [
+      "AI_PROVIDER",
+      "AI_MODEL",
+      "AI_MAX_OUTPUT_TOKENS",
+      "AI_CONVERSATION_MAX_MESSAGES",
+      "AI_CONVERSATION_TTL_MS",
+      "AI_CONVERSATION_MAX_TOTAL"
+    ]
+  },
+  "database": {
+    "migrationsAtProductionSha": 0,
+    "migrationsAtFeatureHead": 13,
+    "pendingIfDeployFeatureHead": 13,
+    "dbMigrationRequiredForRc": false,
+    "dbMigrationRequiredForAi": false
+  },
+  "risk": {
+    "p0": 0,
+    "p1": 1,
+    "p2": 4
+  },
+  "release": {
+    "safeToDeployNow": false,
+    "aiProductionReady": false,
+    "readyForReintegration15": false
+  },
+  "gitIntegrity": {
+    "runtimeFilesModifiedBy15a": 0,
+    "indexChangedBy15a": false,
+    "commits": 0,
+    "pushes": 0,
+    "prs": 0,
+    "deploys": 0,
+    "docs": [
+      "docs/release/ARGOS_PRODUCTION_VERSION_FORENSICS_15A.md",
+      "docs/release/ARGOS_PRODUCTION_VERSION_FORENSICS_15A.json"
+    ]
+  }
+}

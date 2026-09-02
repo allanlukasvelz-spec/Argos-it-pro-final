@@ -76,15 +76,16 @@ test.describe("public and auth shell", () => {
       .getByRole("button", { name: /Interactuar con Chico|Interact with Chico/i })
       .click({ force: true });
     await expect(root).toHaveAttribute("data-active-mascot", "chico");
+    await page.keyboard.press("Escape");
+    await expect(root).toHaveAttribute("data-active-mascot", "none");
     await page
       .getByRole("button", { name: /Interactuar con Dumbo|Interact with Dumbo/i })
       .click({ force: true });
     await expect(root).toHaveAttribute("data-active-mascot", "dumbo");
     await expect(page.locator('.mascot--dumbo [data-mascot-active="true"]')).toBeVisible();
-    await expect(page.locator('.mascot--chico [data-mascot-active="false"]')).toBeVisible();
-    const dumboSrc =
-      (await page.locator(".mascot__img--dumbo").getAttribute("src")) || "";
-    expect(dumboSrc).toMatch(/dumbo_sentado_atento\.png/);
+    await expect
+      .poll(async () => (await page.locator(".mascot__img--dumbo").getAttribute("src")) || "")
+      .toMatch(/dumbo_sentado_atento\.png/);
     await page.keyboard.press("Escape");
     await expect(root).toHaveAttribute("data-active-mascot", "none");
   });
@@ -113,26 +114,15 @@ test.describe("public and auth shell", () => {
     await page.keyboard.press("Escape");
   });
 
-  test("390: keyboard opens Chico; pause target >= 44px", async ({ page }) => {
+  test("390: corporate home hides dock mascots (safe-zone rule)", async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.addInitScript(() => {
       window.localStorage.setItem("argos_cookie_preferences_v1", "accepted");
     });
     await page.goto("/");
-    const chico = page.getByRole("button", {
-      name: /Interactuar con Chico|Interact with Chico/i
-    });
-    await chico.focus();
-    await page.keyboard.press("Enter");
-    await expect(page.locator(".mascot-root")).toHaveAttribute("data-active-mascot", "chico");
-    const pause = page.locator(".mascot__pause");
-    await expect(pause).toBeVisible();
-    const box = await pause.boundingBox();
-    expect(box).toBeTruthy();
-    expect(box!.height).toBeGreaterThanOrEqual(44);
-    expect(box!.width).toBeGreaterThanOrEqual(44);
-    await page.keyboard.press("Escape");
-    await expect(page.locator(".mascot-root")).toHaveAttribute("data-active-mascot", "none");
+    // Quiet Authority: mascot dock hidden ≤1023px so it cannot cover content.
+    await expect(page.locator("header.argos-corporate-header--surgical")).toHaveCount(1);
+    await expect(page.locator(".mascot-root")).toBeHidden();
   });
 
   test("assistants hidden on auth and legal routes", async ({ page }) => {
