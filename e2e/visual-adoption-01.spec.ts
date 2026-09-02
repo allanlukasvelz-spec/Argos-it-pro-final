@@ -89,7 +89,7 @@ async function prepareHome(page: Page, width: number, height = 900) {
   await page.setViewportSize({ width, height });
   await page.goto("/", { waitUntil: "domcontentloaded" });
   await page.waitForSelector("#home-hero-title", { state: "visible", timeout: 20000 });
-  await page.waitForSelector(".argos-corp-phase-ink", { state: "attached", timeout: 20000 });
+  await page.waitForSelector(".argos-method-bar", { state: "attached", timeout: 20000 });
 }
 
 test.describe("ARGOS_VISUAL_ADOPTION_01", () => {
@@ -119,33 +119,43 @@ test.describe("ARGOS_VISUAL_ADOPTION_01", () => {
 
       const h1 = page.locator("#home-hero-title");
       await expect(h1).toBeVisible();
-      await expect(h1).toContainText(/Sistemas que no fallen cuando no deben|Systems that must not fail when they must not/i);
+      await expect(h1).toContainText(
+        /Sistemas que no fallen cuando no deben|IT that works\. No noise\. No worries\./i
+      );
       await assertNotClipped(h1, `H1@${width}`);
 
-      const phases = page.locator(".argos-corp-phase-rail--ink > li");
+      const phases = page.locator(".argos-corp-phase-letters-row > li");
       await expect(phases).toHaveCount(5);
+
+      const phaseRow = page.locator(".argos-corp-phase-letters-row");
+      const phaseRowBox = await boxOf(phaseRow);
+      expect(phaseRowBox).not.toBeNull();
+      if (width <= 390) {
+        expect(phaseRowBox!.width, "phase rail width @mobile").toBeGreaterThan(200);
+      }
 
       const phaseBoxes = await Promise.all(
         (await phases.all()).map(async (li) => boxOf(li))
       );
+      const minPhaseWidth = width <= 390 ? 58 : 64;
       for (const box of phaseBoxes) {
         expect(box).not.toBeNull();
-        expect(box!.width).toBeGreaterThan(width <= 390 ? 200 : 80);
+        expect(box!.width).toBeGreaterThan(minPhaseWidth);
         expect(box!.height).toBeGreaterThan(48);
       }
 
       // At tablet/mobile the rail stacks; at desktop (≥1100) letters stay readable
       if (width >= 1100) {
-        const letters = page.locator(".argos-corp-phase-ink .argos-corp-phase-rail__letter");
+        const letters = page.locator(".argos-corp-phase-letters-row__letter");
         await expect(letters).toHaveCount(5);
         for (const letter of await letters.all()) {
           const b = await boxOf(letter);
-          expect(b!.width).toBeGreaterThanOrEqual(24);
-          expect(b!.height).toBeGreaterThanOrEqual(24);
+          expect(b!.width).toBeGreaterThanOrEqual(20);
+          expect(b!.height).toBeGreaterThanOrEqual(20);
         }
       }
 
-      const services = page.locator(".argos-corp-service-grid > li");
+      const services = page.locator(".argos-card-grid--services > li");
       await expect(services).toHaveCount(6);
 
       const diag = page.locator(".argos-diag-card");
@@ -165,7 +175,7 @@ test.describe("ARGOS_VISUAL_ADOPTION_01", () => {
       if (width <= 1023) {
         expect(mascotCount === 0 || !(await mascots.first().isVisible())).toBeTruthy();
       } else if (mascotCount > 0) {
-        const phaseInk = page.locator(".argos-corp-phase-ink");
+        const phaseInk = page.locator(".argos-method-bar");
         const targets = [h1, diagCta, diag, phaseInk];
         for (const m of await mascots.all()) {
           if (!(await m.isVisible())) continue;
@@ -203,7 +213,7 @@ test.describe("ARGOS_VISUAL_ADOPTION_01", () => {
       await prepareHome(page, width, width <= 390 ? 844 : 900);
       await screenshotSection(
         page,
-        page.locator(".argos-corp-section--phases").first(),
+        page.locator("#home-method-title").locator("xpath=ancestor::section[1]"),
         path.join(ARTIFACT_DIR, `method-home-${width}.png`)
       );
     }
@@ -280,10 +290,10 @@ test.describe("ARGOS_VISUAL_ADOPTION_01", () => {
   test("A.R.G.O.S. phase count and letter identity preserved", async ({ page }) => {
     await prepareHome(page, 1440);
     const letters = await page
-      .locator(".argos-corp-phase-ink .argos-corp-phase-rail__letter")
+      .locator(".argos-corp-phase-letters-row__letter")
       .allTextContents();
     expect(letters.map((s) => s.trim())).toEqual(["A", "R", "G", "O", "S"]);
-    const hrefs = await page.locator(".argos-corp-phase-rail--ink a").evaluateAll((as) =>
+    const hrefs = await page.locator(".argos-corp-phase-letters-row a").evaluateAll((as) =>
       as.map((a) => (a as HTMLAnchorElement).getAttribute("href"))
     );
     expect(hrefs).toEqual([

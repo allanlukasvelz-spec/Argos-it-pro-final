@@ -51,9 +51,9 @@ export function chatActiveSprites(
   persona: "chico" | "dumbo"
 ): Pick<MascotBrainState, "chico" | "dumbo"> {
   if (persona === "dumbo") {
-    return { chico: "idle", dumbo: "guide" };
+    return { chico: "idle", dumbo: "sit" };
   }
-  return { chico: "alert", dumbo: "idle" };
+  return { chico: "stand", dumbo: "idle" };
 }
 
 /**
