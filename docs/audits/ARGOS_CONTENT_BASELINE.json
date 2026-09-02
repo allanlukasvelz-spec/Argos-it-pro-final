@@ -1,0 +1,376 @@
+{
+  "baseline": {
+    "snapshotDate": "2026-08-31",
+    "scope": "frontend/ working tree (includes uncommitted i18n)",
+    "defaultLocale": "es",
+    "locales": ["es", "en", "ca", "fr", "de", "it", "pt"],
+    "websiteCodeModified": 0,
+    "b12ContentContamination": "CLEAN"
+  },
+  "contentSourceMap": [
+    {
+      "source": "i18n JSON",
+      "path": "frontend/i18n/locales/es.json",
+      "purpose": "Primary public marketing copy (default locale)",
+      "authorityLevel": "HIGH"
+    },
+    {
+      "source": "i18n JSON (translations)",
+      "path": "frontend/i18n/locales/{en,ca,fr,de,it,pt}.json",
+      "purpose": "Localized marketing copy",
+      "authorityLevel": "MEDIUM"
+    },
+    {
+      "source": "TypeScript",
+      "path": "frontend/lib/methodArgosSteps.ts",
+      "purpose": "Method phase detail pages: H1, meaning, FAQ, CTAs, SEO",
+      "authorityLevel": "HIGH"
+    },
+    {
+      "source": "TypeScript",
+      "path": "frontend/lib/services.ts",
+      "purpose": "Service slug registry (structural only)",
+      "authorityLevel": "STRUCTURAL"
+    },
+    {
+      "source": "TypeScript",
+      "path": "frontend/components/diagnostic/diagnosticQuestions.ts",
+      "purpose": "12 diagnostic questions and option labels",
+      "authorityLevel": "HIGH"
+    },
+    {
+      "source": "TypeScript",
+      "path": "frontend/components/diagnostic/diagnosticScoring.ts",
+      "purpose": "Risk tiers, summaries, recommendations",
+      "authorityLevel": "HIGH"
+    },
+    {
+      "source": "TypeScript",
+      "path": "frontend/components/diagnostic/diagnosticPersistPayload.ts",
+      "purpose": "API payload for diagnostic submission",
+      "authorityLevel": "HIGH"
+    },
+    {
+      "source": "TypeScript",
+      "path": "frontend/components/diagnostic/chicoTips.ts",
+      "purpose": "12 rotating Chico header tips",
+      "authorityLevel": "HIGH"
+    },
+    {
+      "source": "TypeScript",
+      "path": "frontend/sprites/spriteManifest.ts",
+      "purpose": "Chico/Dumbo sprite path registry",
+      "authorityLevel": "STRUCTURAL"
+    },
+    {
+      "source": "TSX hardcoded",
+      "path": "frontend/components/diagnostic/DiagnosticPromoBanner.tsx",
+      "purpose": "Legacy diagnostic promo banner Spanish strings",
+      "authorityLevel": "MEDIUM"
+    },
+    {
+      "source": "TSX hardcoded",
+      "path": "frontend/app/layout.tsx",
+      "purpose": "Root metadata, OpenGraph, Twitter, JSON-LD",
+      "authorityLevel": "HIGH"
+    },
+    {
+      "source": "TSX",
+      "path": "frontend/components/pages/ContactView.tsx",
+      "purpose": "Contact email, form endpoint",
+      "authorityLevel": "HIGH"
+    },
+    {
+      "source": "Config",
+      "path": "frontend/lib/corporateNav.ts",
+      "purpose": "Navigation href + i18n key mapping",
+      "authorityLevel": "STRUCTURAL"
+    },
+    {
+      "source": "API",
+      "path": "POST /api/client/diagnostics",
+      "purpose": "Diagnostic persistence (backend)",
+      "authorityLevel": "RUNTIME"
+    },
+    {
+      "source": "WordPress export",
+      "path": "wordpress-export/",
+      "purpose": "Historical content lineage reference (not runtime)",
+      "authorityLevel": "REFERENCE"
+    }
+  ],
+  "internalDrift": [
+    {
+      "id": "A",
+      "issue": "layout.tsx OpenGraph retains historical slogan while es.json hero uses new slogan",
+      "heroSloganDrift": true,
+      "status": "INTERNAL_DRIFT"
+    },
+    {
+      "id": "B",
+      "issue": "es.json meta.homeTitle updated but layout.tsx metadata not aligned",
+      "status": "INTERNAL_DRIFT"
+    },
+    {
+      "id": "C",
+      "issue": "method.steps uses Guiar/Supervisar; services.*.process uses Gestionar/Sostener verbs",
+      "argosPhaseNamingDrift": true,
+      "status": "INTERNAL_DRIFT"
+    },
+    {
+      "id": "D",
+      "issue": "logo-argos-it.png and logo-argos-it-header.png referenced but not found in repo",
+      "logoAssetMissing": true,
+      "status": "MISSING_ASSET"
+    }
+  ],
+  "mascotsAndDiagnostic": {
+    "chicoSourceFound": true,
+    "dumboSourceFound": true,
+    "diagnosticEngineFound": true,
+    "diagnosticBannersFound": 3,
+    "diagnosticQuestionCount": 12,
+    "chicoTipsCount": 12,
+    "mascotAssetPaths": {
+      "registry": "frontend/sprites/spriteManifest.ts",
+      "publicPathPrefix": "/mascots/",
+      "pngFilesInRepo": false,
+      "status": "MISSING_ASSET"
+    },
+    "clientAssistants": "frontend/components/ClientAssistants.tsx",
+    "diagnosticComponents": [
+      "frontend/components/diagnostic/DiagnosticSurvey.tsx",
+      "frontend/components/diagnostic/DiagnosticSurveyModal.tsx",
+      "frontend/components/diagnostic/DiagnosticSurveyLauncher.tsx",
+      "frontend/components/diagnostic/DiagnosticPromoBanner.tsx",
+      "frontend/components/home/HomeDiagnosisCard.tsx",
+      "frontend/components/corporate/CorporateHeaderBanner.tsx"
+    ],
+    "diagnosticTriggers": [
+      "DiagnosticSurveyLauncher.openDiagnostic()",
+      "HomeDiagnosisCard CTA",
+      "CorporateHeaderBanner (indirect via tips)",
+      "DiagnosticPromoBanner",
+      "MethodView / MethodStepPageView CTAs",
+      "SiteFooter diagnostic link (legacy chrome)"
+    ]
+  },
+  "inventory": {
+    "navigation": {
+      "sourceFile": "frontend/lib/corporateNav.ts",
+      "i18nPrefix": "nav",
+      "items": [
+        { "key": "nav.services", "href": "/servicios", "currentValue": "Servicios", "status": "CONSISTENT" },
+        { "key": "nav.method", "href": "/metodo", "currentValue": "Método", "status": "CONSISTENT" },
+        { "key": "nav.about", "href": "/sobre-argos-it", "currentValue": "Sobre ARGOS-IT", "status": "CONSISTENT" },
+        { "key": "nav.contact", "href": "/contacto", "currentValue": "Contacto", "status": "CONSISTENT" },
+        { "key": "nav.portal", "href": "/portal", "currentValue": "Portal de cliente", "status": "CONSISTENT" },
+        { "key": "nav.startDiagnostic", "currentValue": "Iniciar diagnóstico ARGOS", "status": "CONSISTENT" }
+      ]
+    },
+    "hero": {
+      "sourceFile": "frontend/i18n/locales/es.json",
+      "items": [
+        {
+          "key": "home.brandMark",
+          "currentValue": "ARGOS IT",
+          "historicalSource": "uncommitted Quiet Authority",
+          "status": "CONSISTENT"
+        },
+        {
+          "key": "home.title",
+          "currentValue": "Tecnología serena para empresas que avanzan",
+          "historicalSource": "wordpress-export: Tecnología que protege, acompaña y simplifica",
+          "status": "INTERNAL_DRIFT"
+        },
+        {
+          "key": "home.subtitle",
+          "currentValue": "ARGOS elimina la complejidad y la incertidumbre de tu operación tecnológica. Protegemos lo que funciona y simplificamos lo que frena.",
+          "historicalSource": "wordpress-export lead paragraph",
+          "status": "INTERNAL_DRIFT"
+        }
+      ]
+    },
+    "ctas": {
+      "sourceFile": "frontend/i18n/locales/es.json",
+      "items": [
+        { "key": "actions.requestConsultation", "currentValue": "Solicitar consulta", "status": "CONSISTENT" },
+        { "key": "home.ctaDiagnostic", "currentValue": "Solicitar diagnóstico ARGOS", "status": "CONSISTENT" },
+        { "key": "home.finalCtaTitle", "currentValue": "Hablemos con criterio", "status": "CONSISTENT" }
+      ]
+    },
+    "services": {
+      "sourceFile": "frontend/i18n/locales/es.json",
+      "slugRegistry": "frontend/lib/services.ts",
+      "slugs": [
+        "consultoria-it",
+        "mantenimiento-informatico",
+        "seguridad-informatica",
+        "web-wordpress",
+        "automatizacion-ia",
+        "auditoria-digital"
+      ],
+      "items": [
+        {
+          "slug": "consultoria-it",
+          "key": "services.consultoria-it.title",
+          "currentValue": "Consultoría IT premium",
+          "historicalSource": "wordpress-export/servicios/consultoria-it.html",
+          "status": "CONSISTENT"
+        },
+        {
+          "slug": "consultoria-it",
+          "key": "services.consultoria-it.description",
+          "currentValue": "Criterio tecnológico externo para ordenar infraestructura, riesgos, soporte, web, herramientas y prioridades antes de invertir en soluciones aisladas.",
+          "historicalSource": "wordpress-export",
+          "status": "CONSISTENT"
+        },
+        {
+          "slug": "mantenimiento-informatico",
+          "key": "services.mantenimiento-informatico.title",
+          "currentValue": "Mantenimiento informático para empresas",
+          "historicalSource": "wordpress-export",
+          "status": "CONSISTENT"
+        },
+        {
+          "slug": "seguridad-informatica",
+          "key": "services.seguridad-informatica.title",
+          "currentValue": "Seguridad informática y protección digital",
+          "historicalSource": "wordpress-export",
+          "status": "CONSISTENT"
+        },
+        {
+          "slug": "web-wordpress",
+          "key": "services.web-wordpress.title",
+          "currentValue": "Web y presencia digital",
+          "historicalSource": "wordpress-export",
+          "status": "CONSISTENT"
+        },
+        {
+          "slug": "automatizacion-ia",
+          "key": "services.automatizacion-ia.title",
+          "currentValue": "Automatización con IA",
+          "historicalSource": "wordpress-export",
+          "status": "CONSISTENT"
+        },
+        {
+          "slug": "auditoria-digital",
+          "key": "services.auditoria-digital.title",
+          "currentValue": "Auditoría digital continua",
+          "historicalSource": "wordpress-export",
+          "status": "CONSISTENT"
+        }
+      ],
+      "processVerbDrift": {
+        "methodSteps": ["Guiar", "Supervisar"],
+        "servicesProcessVerbs": ["Gestionar", "Sostener"],
+        "status": "INTERNAL_DRIFT"
+      }
+    },
+    "method": {
+      "overviewSource": "frontend/i18n/locales/es.json",
+      "detailSource": "frontend/lib/methodArgosSteps.ts",
+      "phases": [
+        { "slug": "analizar", "letter": "A", "name": "Analizar", "status": "CONSISTENT" },
+        { "slug": "reforzar", "letter": "R", "name": "Reforzar", "status": "CONSISTENT" },
+        { "slug": "guiar", "letter": "G", "name": "Guiar", "status": "CONSISTENT" },
+        { "slug": "optimizar", "letter": "O", "name": "Optimizar", "status": "CONSISTENT" },
+        { "slug": "supervisar", "letter": "S", "name": "Supervisar", "status": "CONSISTENT" }
+      ]
+    },
+    "diagnostic": {
+      "questionsSource": "frontend/components/diagnostic/diagnosticQuestions.ts",
+      "scoringSource": "frontend/components/diagnostic/diagnosticScoring.ts",
+      "optionLabels": ["Sí, está controlado", "Parcialmente / No estoy seguro", "No / No lo tenemos"],
+      "questionCount": 12,
+      "riskTiers": ["bajo", "medio", "alto", "critico"],
+      "sourceConstant": "diagnostico-argos",
+      "status": "CONSISTENT"
+    },
+    "about": {
+      "sourceFile": "frontend/i18n/locales/es.json",
+      "key": "about.title",
+      "currentValue": "Sobre ARGOS-IT",
+      "status": "CONSISTENT"
+    },
+    "contact": {
+      "sourceFile": "frontend/i18n/locales/es.json",
+      "email": {
+        "currentValue": "info@argos-it.com",
+        "sourceFile": "frontend/components/pages/ContactView.tsx",
+        "status": "CONSISTENT"
+      },
+      "formEndpoint": {
+        "currentValue": "https://formspree.io/f/xpqooedl",
+        "sourceFile": "frontend/components/pages/ContactView.tsx",
+        "historicalSource": "wordpress-export forms",
+        "status": "CONSISTENT"
+      }
+    },
+    "portal": {
+      "sourceFile": "frontend/i18n/locales/es.json",
+      "key": "portalPage.title",
+      "currentValue": "Portal de cliente",
+      "status": "CONSISTENT"
+    },
+    "footer": {
+      "sourceFile": "frontend/i18n/locales/es.json",
+      "key": "footer.tagline",
+      "currentValue": "Consultoría tecnológica premium para empresas, autónomos y profesionales que necesitan estabilidad, seguridad y evolución digital.",
+      "logoPath": "/logo-argos-it.png",
+      "logoStatus": "MISSING_ASSET",
+      "status": "CONSISTENT"
+    },
+    "seo": {
+      "items": [
+        {
+          "key": "meta.homeTitle",
+          "sourceFile": "frontend/i18n/locales/es.json",
+          "currentValue": "ARGOS-IT | Tecnología serena para empresas que avanzan",
+          "status": "INTERNAL_DRIFT"
+        },
+        {
+          "field": "openGraph.title",
+          "sourceFile": "frontend/app/layout.tsx",
+          "currentValue": "ARGOS-IT | Tecnología que protege, acompaña y simplifica",
+          "historicalSource": "git 61f1df5 / wordpress-export",
+          "status": "INTERNAL_DRIFT"
+        },
+        {
+          "field": "canonical",
+          "sourceFile": "frontend/app/layout.tsx",
+          "currentValue": "https://argos-it.com",
+          "status": "CONSISTENT"
+        }
+      ]
+    },
+    "legal": {
+      "sourceFile": "frontend/i18n/locales/es.json",
+      "pages": ["legal.aviso", "legal.privacy", "legal.cookies", "cookiesBanner"],
+      "status": "CONSISTENT"
+    },
+    "translations": {
+      "config": "frontend/i18n/config.ts",
+      "locales": ["es", "en", "ca", "fr", "de", "it", "pt"],
+      "baselineLocale": "es",
+      "parityStatus": "UNVERIFIED"
+    }
+  },
+  "stopGate": {
+    "auditPersisted": true,
+    "contentBaselineCreated": true,
+    "contentSourceMapCreated": true,
+    "contentFreezePolicyCreated": true,
+    "internalDriftItems": 4,
+    "heroSloganDrift": true,
+    "argosPhaseNamingDrift": true,
+    "logoAssetMissing": true,
+    "chicoSourceFound": true,
+    "dumboSourceFound": true,
+    "diagnosticEngineFound": true,
+    "diagnosticBannersFound": 3,
+    "websiteCodeModified": 0,
+    "readyForContentReconciliation": true,
+    "readyForVisualRefactor": false
+  }
+}

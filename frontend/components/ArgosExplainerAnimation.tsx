@@ -279,7 +279,11 @@ function ExplainerSceneBody({
     <>
       <div className="flex flex-1 flex-col justify-center gap-4">
         {def.showLogo ? (
-          <div className="relative h-12 w-44 shrink-0 md:h-14 md:w-52">
+          <Link
+            href="/"
+            className="relative h-12 w-44 shrink-0 md:h-14 md:w-52"
+            aria-label="ARGOS-IT home"
+          >
             <Image
               src="/logo-argos-it-header.png"
               alt="ARGOS-IT"
@@ -288,7 +292,7 @@ function ExplainerSceneBody({
               sizes="(max-width: 768px) 176px, 208px"
               priority
             />
-          </div>
+          </Link>
         ) : null}
         <h2 id={headingId} className="text-2xl font-black leading-tight text-slate-50 md:text-3xl">
           {t(def.titleKey)}

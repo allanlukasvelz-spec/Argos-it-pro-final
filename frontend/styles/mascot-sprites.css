@@ -20,15 +20,17 @@
   position:fixed;
   bottom:var(--mascot-dock-bottom);
   display:flex;
-  align-items:flex-end;
-  gap:12px;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:8px;
   pointer-events:none;
-  transition:transform .22s ease-out;
+  transition:transform var(--motion-base, 200ms) cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .mascot--chico{
   left:clamp(8px,2vw,12px);
   right:auto;
+  align-items:flex-start;
   transform-origin:bottom left;
   transform:translate3d(var(--mascot-chico-tx, 0px), var(--mascot-chico-ty, 0px), 0) scale(var(--mascot-scale, 1));
 }
@@ -36,27 +38,36 @@
 .mascot--dumbo{
   right:clamp(8px,2vw,12px);
   left:auto;
-  flex-direction:row;
   align-items:flex-end;
-  justify-content:flex-end;
-  gap:16px;
   transform-origin:bottom right;
   transform:translate3d(var(--mascot-dumbo-tx, 0px), var(--mascot-dumbo-ty, 0px), 0) scale(var(--mascot-scale, 1));
 }
 
-/* Dumbo dock: [ globo izquierda ] [ mascota derecha ] en flujo normal */
-.mascot--dumbo .mascot__bubble--right{
+/* Globo siempre encima del sprite (no al lado) */
+.mascot .mascot__bubble{
   order:1;
   position:relative;
-  align-self:flex-end;
   flex-shrink:0;
+  align-self:stretch;
+}
+
+.mascot--chico .mascot__bubble--left{
+  align-self:flex-start;
+}
+
+.mascot--dumbo .mascot__bubble--right{
+  align-self:flex-end;
+}
+
+.mascot .mascot__sprite-button{
+  order:2;
+  position:relative;
+  flex-shrink:0;
+  align-self:flex-start;
 }
 
 .mascot--dumbo .mascot__sprite-button{
-  order:2;
-  position:relative;
   align-self:flex-end;
-  flex-shrink:0;
 }
 
 @media(min-width:861px){
@@ -67,16 +78,6 @@
       + env(safe-area-inset-bottom, 0px)
       + 52px
     );
-  }
-
-  .mascot--dumbo{
-    gap:18px;
-  }
-}
-
-@media(min-width:1280px){
-  .mascot--dumbo{
-    gap:20px;
   }
 }
 
@@ -203,10 +204,70 @@
   filter:drop-shadow(0 8px 24px rgba(15,23,42,.18));
   /* FASE 21.6B.7A: no autonomous CSS breath/bob on mount */
   animation: none;
+  transition: opacity var(--motion-base, 200ms) cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+body[data-detail-mode-open] .mascot-root,
+body[data-detail-mode-open] .mascot__pause,
+body[data-footer-in-view] .mascot-root,
+body[data-footer-in-view] .mascot__pause {
+  visibility: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
 }
 
 .mascot__img--chico{width:232px;height:232px}
 .mascot__img--dumbo{width:208px;height:208px}
+
+/* Corporate public pages: smaller dock so dogs stay in side margins and never cover copy */
+body:has(.argos-corporate) .mascot__img {
+  width: 115px;
+  height: 115px;
+}
+
+body:has(.argos-corporate) .mascot__img--chico {
+  width: 123px;
+  height: 123px;
+}
+
+body:has(.argos-corporate) .mascot__img--dumbo {
+  width: 111px;
+  height: 111px;
+}
+
+body:has(.argos-corporate) .mascot__bubble {
+  max-width: 150px;
+  font-size: 12px;
+  padding: 8px 10px;
+  display: block;
+}
+
+body:has(.argos-corporate) .mascot--chico {
+  left: clamp(6px, 1.2vw, 10px);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+body:has(.argos-corporate) .mascot--dumbo {
+  right: clamp(6px, 1.2vw, 10px);
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+@media (max-width: 860px) {
+  body:has(.argos-corporate) .mascot__img--chico {
+    width: 99px;
+    height: 99px;
+  }
+
+  body:has(.argos-corporate) .mascot__img--dumbo {
+    width: 91px;
+    height: 91px;
+  }
+}
 
 .mascot__bubble{
   max-width:220px;
@@ -223,7 +284,9 @@
   box-shadow:0 12px 30px rgba(15,23,42,.12);
 }
 
-.mascot__bubble--left{order:2}
+.mascot__bubble--left{order:1}
+
+.mascot__bubble--right{order:1}
 
 @media(max-width:860px){
   .mascot__pause--near-chico{

@@ -14,6 +14,21 @@ export function isLegalPublicRoute(pathname: string): boolean {
 }
 
 /**
+ * Corporate Quiet Authority public marketing routes (Relume IA + 21.7C.1).
+ */
+export function isCorporatePublicRoute(pathname: string): boolean {
+  if (pathname === "/" || pathname === "") return true;
+  if (pathname === "/contacto" || pathname.startsWith("/contacto/")) return true;
+  if (pathname === "/servicios" || pathname.startsWith("/servicios/")) return true;
+  if (pathname === "/metodo" || pathname.startsWith("/metodo/")) return true;
+  if (pathname === "/sobre-argos-it" || pathname.startsWith("/sobre-argos-it/")) {
+    return true;
+  }
+  if (pathname === "/portal" || pathname.startsWith("/portal/")) return true;
+  return false;
+}
+
+/**
  * Private product apps own their chrome via ClientShell / NocShell.
  * Public marketing chrome must never wrap these routes.
  */
@@ -34,11 +49,16 @@ export function isLabOrRecordingPath(pathname: string): boolean {
 }
 
 /**
- * Diagnostic promo eligibility is intentionally separate from chrome ownership.
- * Legal pages keep the legacy header/navigation but do not mount the promo.
+ * Diagnostic promo is legacy conversion chrome — not on Corporate Quiet Authority,
+ * legal, product apps, or labs.
  */
 export function shouldShowDiagnosticPromo(pathname: string): boolean {
-  return !isLegalPublicRoute(pathname) && !isProductAppRoute(pathname);
+  return (
+    !isLegalPublicRoute(pathname) &&
+    !isProductAppRoute(pathname) &&
+    !isCorporatePublicRoute(pathname) &&
+    !isLabOrRecordingPath(pathname)
+  );
 }
 
 /**
@@ -64,10 +84,8 @@ export function shouldHideCookieBanner(pathname: string): boolean {
 }
 
 /**
- * Single chrome-ownership registry (FASE 21.5 + visual reconciliation).
+ * Single chrome-ownership registry (FASE 21.5 + Quiet Authority public migration).
  * SiteShell is the only consumer — do not scatter pathname checks in Header/Footer.
- *
- * 21.6: add Corporate routes here and swap the page canvas to CorporatePageShell.
  */
 export function getChromeOwner(pathname: string): ChromeOwner {
   if (
@@ -79,9 +97,10 @@ export function getChromeOwner(pathname: string): ChromeOwner {
     return "none";
   }
 
-  if (pathname === "/contacto" || pathname.startsWith("/contacto/")) {
+  if (isCorporatePublicRoute(pathname)) {
     return "corporate";
   }
 
+  // Legal and any residual public routes keep legacy chrome without promo.
   return "legacy";
 }

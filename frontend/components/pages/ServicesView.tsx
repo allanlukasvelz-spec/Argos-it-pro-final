@@ -1,47 +1,101 @@
 "use client";
 
 import Link from "next/link";
-import ArgosPageShell from "@/components/layout/ArgosPageShell";
+import ArgosCard from "@/components/corporate/ArgosCard";
+import ArgosExpandableCard from "@/components/corporate/ArgosExpandableCard";
+import ArgosReveal from "@/components/corporate/ArgosReveal";
+import CorporatePageShell from "@/components/layout/CorporatePageShell";
 import { useI18n } from "@/i18n/useI18n";
 import { useLocalizedServices } from "@/hooks/useLocalizedServices";
 import { usePageMeta } from "@/components/seo/usePageMeta";
 
 export default function ServicesView() {
-  const { t } = useI18n();
+  const { t, get } = useI18n();
   const services = useLocalizedServices();
+  const strategicPillars = get<string[]>("servicesPage.strategicPillars", []);
 
   usePageMeta(t("meta.servicesTitle"), t("meta.servicesDescription"));
 
   return (
-    <ArgosPageShell variant="services">
-      <section className="px-5 py-12 text-left lg:px-8 lg:py-14">
-        <div className="mx-auto max-w-7xl">
-        <Link href="/" className="text-sm font-bold text-[#39F4FF] hover:text-[#67E8F9]">
-          ← {t("actions.backHome")}
-        </Link>
-        <h1 className="mt-6 text-4xl font-black leading-tight text-white">{t("servicesPage.title")}</h1>
-        <p className="mt-5 max-w-3xl text-base leading-7 text-[#BFD7E8]">{t("servicesPage.subtitle")}</p>
+    <CorporatePageShell>
+      <section className="argos-corp-section" aria-labelledby="services-title">
+        <div className="argos-corp-container">
+          <ArgosReveal>
+            <p className="argos-corp-section-index">02 / {t("nav.services")}</p>
+            <h1 id="services-title" className="argos-font-display argos-corp-page-title">
+              {t("servicesPage.title")}
+            </h1>
+            <p className="argos-corp-lead">{t("servicesPage.subtitle")}</p>
+          </ArgosReveal>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {services.map((service) => (
-            <article key={service.slug} className="argos-hologram-card rounded-xl border border-white/[0.08] p-7 text-left transition hover:border-[#67E8F9]/22">
-              <h2 className="text-xl font-black tracking-tight text-white">{service.title}</h2>
-              <p className="mt-3 text-sm leading-7 text-[#D7E8F6]">{service.description}</p>
-              <ul className="mt-5 list-none space-y-2 text-sm leading-7 text-[#C9DDEC]">
-                {service.includes.slice(0, 4).map((item) => (
-                  <li key={item} className="relative pl-5 before:absolute before:left-0 before:top-[0.55em] before:h-1 before:w-1 before:rounded-full before:bg-[#67E8F9]/75">
-                    {item}
+          {strategicPillars.length > 0 ? (
+            <ArgosReveal as="div" className="mt-8">
+              <ul className="argos-card-grid argos-card-grid--pillars" aria-label={strategicPillars.join(", ")}>
+                {strategicPillars.map((pillar) => (
+                  <li key={pillar}>
+                    <ArgosCard variant="pillar">
+                      <p className="argos-corp-card-title">{pillar}</p>
+                    </ArgosCard>
                   </li>
                 ))}
               </ul>
-              <Link href={`/servicios/${service.slug}`} className="mt-6 inline-flex text-sm font-bold text-[#39F4FF] hover:text-[#67E8F9]">
-                {t("actions.viewService")} →
+            </ArgosReveal>
+          ) : null}
+
+          <ul className="argos-card-grid argos-card-grid--services mt-10">
+            {services.map((service) => (
+              <li key={service.slug}>
+                <ArgosReveal as="div">
+                  <ArgosExpandableCard
+                    variant="service"
+                    title={service.title}
+                    summary={<p className="argos-corp-card-body">{service.description}</p>}
+                    expandLabel={t("actions.viewDetail")}
+                    detail={
+                      <div className="argos-detail-section">
+                        <p className="argos-corp-card-body">{service.problem}</p>
+                        <h3 className="argos-corp-card-title mt-6">{t("servicesPage.includesTitle")}</h3>
+                        <ul className="argos-corp-detail-list mt-3">
+                          {service.includes.map((item) => (
+                            <li key={item}>{item}</li>
+                          ))}
+                        </ul>
+                        <h3 className="argos-corp-card-title mt-6">{t("servicesPage.benefitsTitle")}</h3>
+                        <ul className="argos-corp-detail-list mt-3">
+                          {service.benefits.map((item) => (
+                            <li key={item}>{item}</li>
+                          ))}
+                        </ul>
+                        <Link
+                          href={`/servicios/${service.slug}`}
+                          className="argos-corporate-link mt-6 inline-block argos-cta-arrow"
+                        >
+                          {t("actions.viewService")}
+                        </Link>
+                      </div>
+                    }
+                  />
+                </ArgosReveal>
+              </li>
+            ))}
+          </ul>
+
+          <div className="argos-corp-related mt-10">
+            <p className="argos-corp-related__label">{t("related.label")}</p>
+            <div className="argos-corp-related__links">
+              <Link href="/metodo" className="argos-corporate-link-quiet">
+                {t("nav.methodArgos")}
               </Link>
-            </article>
-          ))}
+              <Link href="/contacto" className="argos-corporate-cta">
+                {t("actions.requestConsultation")}
+              </Link>
+              <Link href="/portal" className="argos-corporate-link-quiet">
+                {t("nav.portalShort")}
+              </Link>
+            </div>
+          </div>
         </div>
-      </div>
       </section>
-    </ArgosPageShell>
+    </CorporatePageShell>
   );
 }

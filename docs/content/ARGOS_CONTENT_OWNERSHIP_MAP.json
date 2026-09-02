@@ -1,0 +1,339 @@
+{
+  "schema": "ARGOS_CONTENT_OWNERSHIP_MAP",
+  "version": "1.0",
+  "effectiveDate": "2026-08-31",
+  "governanceMission": "CONTENT_GOVERNANCE_03",
+  "freezeDocument": "docs/content/ARGOS_CONTENT_FREEZE_V1.md",
+  "items": [
+    {
+      "ID": "HERO-H1",
+      "TYPE": "marketing_copy",
+      "SOURCE_OF_TRUTH": "docs/content/ARGOS_CONTENT_FREEZE_V1.md",
+      "CURRENT_RUNTIME_LOCATION": "frontend/i18n/locales/es.json → home.title",
+      "FREEZE_LEVEL": "EXACT",
+      "OWNER_DECISION": "C-002 APPROVED_HYBRID_A_B",
+      "CHANGE_AUTHORITY": "owner_only",
+      "NOTES": "Runtime: Tecnología serena para empresas que avanzan — DRIFT-001"
+    },
+    {
+      "ID": "HERO-SUPPORTING",
+      "TYPE": "marketing_copy",
+      "SOURCE_OF_TRUTH": "docs/content/ARGOS_CONTENT_FREEZE_V1.md",
+      "CURRENT_RUNTIME_LOCATION": "frontend/i18n/locales/es.json → home.subtitle",
+      "FREEZE_LEVEL": "EXACT",
+      "OWNER_DECISION": "C-002 APPROVED_HYBRID_A_B",
+      "CHANGE_AUTHORITY": "owner_only",
+      "NOTES": "Runtime subtitle differs — DRIFT-001"
+    },
+    {
+      "ID": "HERO-CTA-PRIMARY",
+      "TYPE": "marketing_copy",
+      "SOURCE_OF_TRUTH": "docs/content/ARGOS_CONTENT_FREEZE_V1.md",
+      "CURRENT_RUNTIME_LOCATION": "frontend/i18n/locales/es.json → nav.startDiagnostic; HomeView uses nav.contact — DRIFT-003",
+      "FREEZE_LEVEL": "EXACT",
+      "OWNER_DECISION": "C-002 + diagnostic primary entry",
+      "CHANGE_AUTHORITY": "owner_only",
+      "NOTES": "String exists in i18n; Hero UI wiring wrong"
+    },
+    {
+      "ID": "HERO-CTA-SECONDARY",
+      "TYPE": "marketing_copy",
+      "SOURCE_OF_TRUTH": "docs/content/ARGOS_CONTENT_FREEZE_V1.md",
+      "CURRENT_RUNTIME_LOCATION": "frontend/i18n/locales/es.json → home.ctaMethod (Ver método completo); HomeView uses nav.method — DRIFT-004",
+      "FREEZE_LEVEL": "EXACT",
+      "OWNER_DECISION": "C-002 APPROVED_HYBRID_A_B",
+      "CHANGE_AUTHORITY": "owner_only",
+      "NOTES": "New exact string not in runtime"
+    },
+    {
+      "ID": "HERO-OG-META",
+      "TYPE": "seo_metadata",
+      "SOURCE_OF_TRUTH": "UNRESOLVED",
+      "CURRENT_RUNTIME_LOCATION": "frontend/app/layout.tsx openGraph.title, twitter, JSON-LD",
+      "FREEZE_LEVEL": "UNRESOLVED",
+      "OWNER_DECISION": "C-002 partial — hero only",
+      "CHANGE_AUTHORITY": "owner_only",
+      "NOTES": "DRIFT-002 — align in content implementation mission"
+    },
+    {
+      "ID": "METHOD-PUBLIC-4",
+      "TYPE": "method_philosophy",
+      "SOURCE_OF_TRUTH": "docs/content/ARGOS_METHOD_MAPPING_4_TO_5.md",
+      "CURRENT_RUNTIME_LOCATION": "not implemented publicly",
+      "FREEZE_LEVEL": "CONCEPT",
+      "OWNER_DECISION": "C-001 APPROVED",
+      "CHANGE_AUTHORITY": "owner_only",
+      "NOTES": "Analizamos, Ordenamos, Protegemos, Acompañamos"
+    },
+    {
+      "ID": "METHOD-OPERATIONAL-5",
+      "TYPE": "method_operational",
+      "SOURCE_OF_TRUTH": "frontend/lib/methodArgosSteps.ts",
+      "CURRENT_RUNTIME_LOCATION": "frontend/lib/methodArgosSteps.ts; es.json method.steps",
+      "FREEZE_LEVEL": "CONCEPT",
+      "OWNER_DECISION": "C-001 APPROVED",
+      "CHANGE_AUTHORITY": "content_mission_with_owner",
+      "NOTES": "A.R.G.O.S. routes canonical; meaning protected until explicit mission"
+    },
+    {
+      "ID": "METHOD-DUAL-BRIDGE",
+      "TYPE": "method_bridge_copy",
+      "SOURCE_OF_TRUTH": "docs/content/ARGOS_CONTENT_FREEZE_V1.md",
+      "CURRENT_RUNTIME_LOCATION": "not implemented",
+      "FREEZE_LEVEL": "CONCEPT",
+      "OWNER_DECISION": "C-001 APPROVED",
+      "CHANGE_AUTHORITY": "owner_only",
+      "NOTES": "Required before dual-layer public copy; METHOD_FORCED_RELATIONSHIPS=0"
+    },
+    {
+      "ID": "METHOD-MAPPING-4-5",
+      "TYPE": "architectural_evidence",
+      "SOURCE_OF_TRUTH": "docs/content/ARGOS_METHOD_MAPPING_4_TO_5.md",
+      "CURRENT_RUNTIME_LOCATION": "documentation_only",
+      "FREEZE_LEVEL": "CONCEPT",
+      "OWNER_DECISION": "C-001 APPROVED",
+      "CHANGE_AUTHORITY": "owner_only",
+      "NOTES": "Preserve NATURAL/PARTIAL relationships; no forced 1:1"
+    },
+    {
+      "ID": "PILLARS-L1",
+      "TYPE": "service_architecture",
+      "SOURCE_OF_TRUTH": "docs/content/ARGOS_SERVICE_ARCHITECTURE_MAPPING.md",
+      "CURRENT_RUNTIME_LOCATION": "not implemented in UI",
+      "FREEZE_LEVEL": "CONCEPT",
+      "OWNER_DECISION": "C-003 APPROVED",
+      "CHANGE_AUTHORITY": "owner_only",
+      "NOTES": "Infraestructura, Sistemas, Seguridad, Continuidad"
+    },
+    {
+      "ID": "SERVICES-L2-SLUGS",
+      "TYPE": "service_registry",
+      "SOURCE_OF_TRUTH": "frontend/lib/services.ts",
+      "CURRENT_RUNTIME_LOCATION": "frontend/lib/services.ts",
+      "FREEZE_LEVEL": "CONCEPT",
+      "OWNER_DECISION": "C-003 APPROVED — six preserved",
+      "CHANGE_AUTHORITY": "content_mission_with_owner",
+      "NOTES": "Slugs frozen by concept; copy in es.json services.* not reopened in v1"
+    },
+    {
+      "ID": "SVC-PRIMARY-consultoria-it",
+      "TYPE": "architectural_metadata",
+      "SOURCE_OF_TRUTH": "docs/content/ARGOS_CONTENT_FREEZE_V1.md",
+      "CURRENT_RUNTIME_LOCATION": "internal_only",
+      "FREEZE_LEVEL": "ARCHITECTURAL",
+      "OWNER_DECISION": "C-003 APPROVED",
+      "CHANGE_AUTHORITY": "owner_only",
+      "NOTES": "PRIMARY=Infraestructura; CROSS_CUTTING=YES"
+    },
+    {
+      "ID": "SVC-PRIMARY-mantenimiento-informatico",
+      "TYPE": "architectural_metadata",
+      "SOURCE_OF_TRUTH": "docs/content/ARGOS_CONTENT_FREEZE_V1.md",
+      "CURRENT_RUNTIME_LOCATION": "internal_only",
+      "FREEZE_LEVEL": "ARCHITECTURAL",
+      "OWNER_DECISION": "C-003 APPROVED",
+      "CHANGE_AUTHORITY": "owner_only",
+      "NOTES": "PRIMARY=Sistemas"
+    },
+    {
+      "ID": "SVC-PRIMARY-seguridad-informatica",
+      "TYPE": "architectural_metadata",
+      "SOURCE_OF_TRUTH": "docs/content/ARGOS_CONTENT_FREEZE_V1.md",
+      "CURRENT_RUNTIME_LOCATION": "internal_only",
+      "FREEZE_LEVEL": "ARCHITECTURAL",
+      "OWNER_DECISION": "C-003 APPROVED",
+      "CHANGE_AUTHORITY": "owner_only",
+      "NOTES": "PRIMARY=Seguridad"
+    },
+    {
+      "ID": "SVC-PRIMARY-web-wordpress",
+      "TYPE": "architectural_metadata",
+      "SOURCE_OF_TRUTH": "docs/content/ARGOS_CONTENT_FREEZE_V1.md",
+      "CURRENT_RUNTIME_LOCATION": "internal_only",
+      "FREEZE_LEVEL": "ARCHITECTURAL",
+      "OWNER_DECISION": "C-003 APPROVED — owner confirmed",
+      "CHANGE_AUTHORITY": "owner_only",
+      "NOTES": "PRIMARY=Sistemas; CROSS_CUTTING=YES; internal unless UX authorizes"
+    },
+    {
+      "ID": "SVC-PRIMARY-automatizacion-ia",
+      "TYPE": "architectural_metadata",
+      "SOURCE_OF_TRUTH": "docs/content/ARGOS_CONTENT_FREEZE_V1.md",
+      "CURRENT_RUNTIME_LOCATION": "internal_only",
+      "FREEZE_LEVEL": "ARCHITECTURAL",
+      "OWNER_DECISION": "C-003 APPROVED",
+      "CHANGE_AUTHORITY": "owner_only",
+      "NOTES": "PRIMARY=Sistemas; CROSS_CUTTING=YES"
+    },
+    {
+      "ID": "SVC-PRIMARY-auditoria-digital",
+      "TYPE": "architectural_metadata",
+      "SOURCE_OF_TRUTH": "docs/content/ARGOS_CONTENT_FREEZE_V1.md",
+      "CURRENT_RUNTIME_LOCATION": "internal_only",
+      "FREEZE_LEVEL": "ARCHITECTURAL",
+      "OWNER_DECISION": "C-003 APPROVED",
+      "CHANGE_AUTHORITY": "owner_only",
+      "NOTES": "PRIMARY=Continuidad"
+    },
+    {
+      "ID": "DIAG-QUESTIONS",
+      "TYPE": "diagnostic_engine",
+      "SOURCE_OF_TRUTH": "frontend/components/diagnostic/diagnosticQuestions.ts",
+      "CURRENT_RUNTIME_LOCATION": "frontend/components/diagnostic/diagnosticQuestions.ts",
+      "FREEZE_LEVEL": "FUNCTIONAL",
+      "OWNER_DECISION": "FUNCTIONALITY_PROTECTED",
+      "CHANGE_AUTHORITY": "functional_mission_only",
+      "NOTES": "12 questions; no change in visual or content v1 mission"
+    },
+    {
+      "ID": "DIAG-OPTIONS",
+      "TYPE": "diagnostic_engine",
+      "SOURCE_OF_TRUTH": "frontend/components/diagnostic/diagnosticQuestions.ts",
+      "CURRENT_RUNTIME_LOCATION": "DIAGNOSTIC_OPTION_LABELS",
+      "FREEZE_LEVEL": "FUNCTIONAL",
+      "OWNER_DECISION": "FUNCTIONALITY_PROTECTED",
+      "CHANGE_AUTHORITY": "functional_mission_only",
+      "NOTES": "3 option labels"
+    },
+    {
+      "ID": "DIAG-SCORING",
+      "TYPE": "diagnostic_engine",
+      "SOURCE_OF_TRUTH": "frontend/components/diagnostic/diagnosticScoring.ts",
+      "CURRENT_RUNTIME_LOCATION": "frontend/components/diagnostic/diagnosticScoring.ts",
+      "FREEZE_LEVEL": "FUNCTIONAL",
+      "OWNER_DECISION": "FUNCTIONALITY_PROTECTED",
+      "CHANGE_AUTHORITY": "functional_mission_only",
+      "NOTES": "Tiers, summaries, recommendations"
+    },
+    {
+      "ID": "DIAG-PERSIST",
+      "TYPE": "diagnostic_engine",
+      "SOURCE_OF_TRUTH": "frontend/lib/diagnosticPersistPayload.ts",
+      "CURRENT_RUNTIME_LOCATION": "backend POST /api/client/diagnostics",
+      "FREEZE_LEVEL": "FUNCTIONAL",
+      "OWNER_DECISION": "FUNCTIONALITY_PROTECTED",
+      "CHANGE_AUTHORITY": "functional_mission_only",
+      "NOTES": "Source constant diagnostico-argos"
+    },
+    {
+      "ID": "DIAG-PRINCIPLE",
+      "TYPE": "strategic_principle",
+      "SOURCE_OF_TRUTH": "docs/content/ARGOS_CONTENT_FREEZE_V1.md",
+      "CURRENT_RUNTIME_LOCATION": "conceptual",
+      "FREEZE_LEVEL": "CONCEPT",
+      "OWNER_DECISION": "UNDERSTAND_BEFORE_SELLING=YES",
+      "CHANGE_AUTHORITY": "owner_only",
+      "NOTES": "Hero primary entry approved; engine unchanged"
+    },
+    {
+      "ID": "MASCOT-DUMBO-ROLE",
+      "TYPE": "mascot_semantics",
+      "SOURCE_OF_TRUTH": "docs/content/ARGOS_CONTENT_FREEZE_V1.md",
+      "CURRENT_RUNTIME_LOCATION": "frontend/i18n/locales/es.json → home.explainer, mascots.*",
+      "FREEZE_LEVEL": "CONCEPT",
+      "OWNER_DECISION": "C-006 APPROVED_ROLES_ONLY",
+      "CHANGE_AUTHORITY": "owner_only",
+      "NOTES": "DUMBO_ROLE=GUIA; no backstory"
+    },
+    {
+      "ID": "MASCOT-CHICO-ROLE",
+      "TYPE": "mascot_semantics",
+      "SOURCE_OF_TRUTH": "docs/content/ARGOS_CONTENT_FREEZE_V1.md",
+      "CURRENT_RUNTIME_LOCATION": "frontend/i18n/locales/es.json → home.explainer, mascots.*",
+      "FREEZE_LEVEL": "CONCEPT",
+      "OWNER_DECISION": "C-006 APPROVED_ROLES_ONLY",
+      "CHANGE_AUTHORITY": "owner_only",
+      "NOTES": "CHICO_ROLE=PROTEGE; no backstory"
+    },
+    {
+      "ID": "MASCOT-SPRITES",
+      "TYPE": "mascot_runtime",
+      "SOURCE_OF_TRUTH": "frontend/sprites/spriteManifest.ts",
+      "CURRENT_RUNTIME_LOCATION": "frontend/sprites/spriteManifest.ts",
+      "FREEZE_LEVEL": "FUNCTIONAL",
+      "OWNER_DECISION": "FUNCTIONALITY_PROTECTED",
+      "CHANGE_AUTHORITY": "functional_mission_only",
+      "NOTES": "Paths protected; PNG assets missing — DRIFT-007"
+    },
+    {
+      "ID": "MASCOT-TIPS",
+      "TYPE": "mascot_runtime",
+      "SOURCE_OF_TRUTH": "frontend/components/diagnostic/chicoTips.ts",
+      "CURRENT_RUNTIME_LOCATION": "frontend/components/diagnostic/chicoTips.ts",
+      "FREEZE_LEVEL": "FUNCTIONAL",
+      "OWNER_DECISION": "FUNCTIONALITY_PROTECTED",
+      "CHANGE_AUTHORITY": "functional_mission_only",
+      "NOTES": "12 tips"
+    },
+    {
+      "ID": "MASCOT-BANNERS",
+      "TYPE": "mascot_runtime",
+      "SOURCE_OF_TRUTH": "CorporateHeaderBanner.tsx, HomeDiagnosisCard.tsx",
+      "CURRENT_RUNTIME_LOCATION": "frontend/components/corporate/CorporateHeaderBanner.tsx",
+      "FREEZE_LEVEL": "FUNCTIONAL",
+      "OWNER_DECISION": "FUNCTIONALITY_PROTECTED",
+      "CHANGE_AUTHORITY": "functional_mission_only",
+      "NOTES": "Trigger behavior protected; copy in i18n headerBanner.*"
+    },
+    {
+      "ID": "CONTINUITY-COPIAS-CIEGAS",
+      "TYPE": "marketing_concept",
+      "SOURCE_OF_TRUTH": "docs/research/notebook-audit/VERIFIED_KNOWLEDGE.md VK-006",
+      "CURRENT_RUNTIME_LOCATION": "partial — diagnostic Q backups; not hero",
+      "FREEZE_LEVEL": "CONCEPT",
+      "OWNER_DECISION": "verified + vendor-neutral",
+      "CHANGE_AUTHORITY": "owner_only",
+      "NOTES": "No Acronis; no guarantee language"
+    },
+    {
+      "ID": "BLOCKED-ACRONIS",
+      "TYPE": "blocked_claim",
+      "SOURCE_OF_TRUTH": "docs/content/ARGOS_CONTENT_FREEZE_V1.md",
+      "CURRENT_RUNTIME_LOCATION": "not in runtime (verified absent)",
+      "FREEZE_LEVEL": "BLOCKED",
+      "OWNER_DECISION": "C-004 BLOCKED",
+      "CHANGE_AUTHORITY": "owner_only_after_ops_evidence",
+      "NOTES": "ACRONIS_PUBLICATION_STATUS=BLOCKED"
+    },
+    {
+      "ID": "BLOCKED-ABSOLUTES",
+      "TYPE": "blocked_claim",
+      "SOURCE_OF_TRUTH": "docs/content/ARGOS_CONTENT_FREEZE_V1.md",
+      "CURRENT_RUNTIME_LOCATION": "n/a",
+      "FREEZE_LEVEL": "BLOCKED",
+      "OWNER_DECISION": "governance_03",
+      "CHANGE_AUTHORITY": "owner_only",
+      "NOTES": "24/7, guaranteed uptime, zero failure, total protection, unverified SLA/RPO/RTO"
+    },
+    {
+      "ID": "BLOCKED-B12",
+      "TYPE": "blocked_claim",
+      "SOURCE_OF_TRUTH": "docs/audits/ARGOS_B12_CONTAMINATION_AUDIT.md",
+      "CURRENT_RUNTIME_LOCATION": "n/a",
+      "FREEZE_LEVEL": "BLOCKED",
+      "OWNER_DECISION": "B12_COPY_AUTHORITY=NONE",
+      "CHANGE_AUTHORITY": "never_without_audit",
+      "NOTES": "B12-derived business claims forbidden"
+    },
+    {
+      "ID": "LEGACY-PROMO-BANNER",
+      "TYPE": "marketing_copy",
+      "SOURCE_OF_TRUTH": "frontend/components/diagnostic/DiagnosticPromoBanner.tsx",
+      "CURRENT_RUNTIME_LOCATION": "DiagnosticPromoBanner.tsx hardcoded ES",
+      "FREEZE_LEVEL": "UNRESOLVED",
+      "OWNER_DECISION": "not in v1 freeze",
+      "CHANGE_AUTHORITY": "content_mission_with_owner",
+      "NOTES": "DRIFT-006 — separate from Hero freeze"
+    },
+    {
+      "ID": "LOCALE-PARITY",
+      "TYPE": "i18n",
+      "SOURCE_OF_TRUTH": "docs/audits/ARGOS_CONTENT_BASELINE.md",
+      "CURRENT_RUNTIME_LOCATION": "frontend/i18n/locales/{en,ca,fr,de,it,pt}.json",
+      "FREEZE_LEVEL": "UNRESOLVED",
+      "OWNER_DECISION": "ES-only freeze v1",
+      "CHANGE_AUTHORITY": "translation_mission",
+      "NOTES": "DRIFT-008 — parity unverified"
+    }
+  ]
+}

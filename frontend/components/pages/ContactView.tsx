@@ -155,6 +155,7 @@ export default function ContactView() {
           <Link href="/" className="argos-corporate-link mb-6 inline-block text-sm font-semibold no-underline hover:underline">
             ← {t("actions.backHome")}
           </Link>
+          <p className="argos-corp-section-index">05 / {t("nav.contact")}</p>
           <h1 className="argos-font-display text-4xl text-[var(--text-primary)] sm:text-5xl">
             {t("contact.title")}
           </h1>
@@ -355,6 +356,20 @@ export default function ContactView() {
 
             <p className="text-center text-sm text-[var(--text-secondary)]">{t("contact.form.requiredHint")}</p>
           </motion.form>
+        </div>
+      </section>
+
+      <section className="argos-corp-container pb-16">
+        <div className="argos-corp-related">
+          <p className="argos-corp-related__label">{t("related.label")}</p>
+          <div className="argos-corp-related__links">
+            <Link href="/servicios" className="argos-corporate-link-quiet">
+              {t("nav.services")}
+            </Link>
+            <Link href="/metodo" className="argos-corporate-link-quiet">
+              {t("nav.methodArgos")}
+            </Link>
+          </div>
         </div>
       </section>
     </CorporatePageShell>

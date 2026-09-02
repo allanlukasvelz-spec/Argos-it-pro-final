@@ -13,18 +13,33 @@ import {
 } from "./chromeOwnership.ts";
 
 describe("chromeOwnership — PUBLIC / CLIENT / NOC isolation", () => {
-  it("PUBLIC keeps legacy marketing chrome", () => {
-    assert.equal(getChromeOwner("/"), "legacy");
-    assert.equal(getChromeOwner("/servicios"), "legacy");
-    assert.equal(getChromeOwner("/metodo"), "legacy");
+  it("PUBLIC Quiet Authority uses corporate chrome (no diagnostic promo)", () => {
+    assert.equal(getChromeOwner("/"), "corporate");
+    assert.equal(getChromeOwner("/servicios"), "corporate");
+    assert.equal(getChromeOwner("/servicios/soporte-it"), "corporate");
+    assert.equal(getChromeOwner("/metodo"), "corporate");
+    assert.equal(getChromeOwner("/metodo/analizar"), "corporate");
+    assert.equal(getChromeOwner("/sobre-argos-it"), "corporate");
     assert.equal(shouldHideAssistants("/"), false);
     assert.equal(shouldHideCookieBanner("/"), false);
-    assert.equal(shouldShowDiagnosticPromo("/"), true);
+    assert.equal(shouldShowDiagnosticPromo("/"), false);
+    assert.equal(shouldShowDiagnosticPromo("/servicios"), false);
   });
 
   it("CONTACTO keeps corporate chrome", () => {
     assert.equal(getChromeOwner("/contacto"), "corporate");
     assert.equal(getChromeOwner("/contacto/gracias"), "corporate");
+  });
+
+  it("PORTAL public page uses corporate chrome", () => {
+    assert.equal(getChromeOwner("/portal"), "corporate");
+    assert.equal(shouldShowDiagnosticPromo("/portal"), false);
+  });
+
+  it("LEGAL keeps legacy chrome without diagnostic promo", () => {
+    assert.equal(getChromeOwner("/privacidad"), "legacy");
+    assert.equal(shouldShowDiagnosticPromo("/privacidad"), false);
+    assert.equal(shouldHideAssistants("/privacidad"), true);
   });
 
   it("CLIENT owns chrome — no SiteHeader / assistants / cookie banner", () => {
