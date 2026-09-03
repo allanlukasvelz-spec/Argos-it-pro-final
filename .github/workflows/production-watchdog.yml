@@ -38,16 +38,16 @@ jobs:
               if [ "$code" = "200" ]; then
                 if [ "$extra" = "api" ]; then
                   python3 - "$body" <<'PY'
-import json, sys
-p = sys.argv[1]
-with open(p) as f:
-    d = json.load(f)
-status = str(d.get("status", "")).upper()
-db = str(d.get("db", "")).lower()
-if status != "OK" or db != "connected":
-    raise SystemExit(f"API_CONTRACT_FAIL status={status} db={db}")
-print("API_BODY_VALIDATION=PASS")
-PY
+          import json, sys
+          p = sys.argv[1]
+          with open(p) as f:
+              d = json.load(f)
+          status = str(d.get("status", "")).upper()
+          db = str(d.get("db", "")).lower()
+          if status != "OK" or db != "connected":
+              raise SystemExit(f"API_CONTRACT_FAIL status={status} db={db}")
+          print("API_BODY_VALIDATION=PASS")
+          PY
                 fi
                 echo "OK ${name} code=${code}"
                 rm -f "$body"
