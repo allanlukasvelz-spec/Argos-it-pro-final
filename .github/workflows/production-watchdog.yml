@@ -1,0 +1,66 @@
+# ARGOS Mission 22B — off-host public availability watchdog.
+# Runs on GitHub-hosted runners (not the ARGOS VPS).
+# No production secrets. No SSH. No deploy. No OpenAI.
+name: Production Watchdog
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-watchdog
+  cancel-in-progress: false
+
+jobs:
+  watchdog:
+    name: Portal and API health
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check public production endpoints
+        shell: bash
+        env:
+          PORTAL_URL: https://portal.argos-it.com/
+          API_URL: https://api.portal.argos-it.com/api/health
+        run: |
+          set -euo pipefail
+          set +x
+          probe() {
+            local name="$1" url="$2" extra="$3"
+            local attempt=1 code=000 body=""
+            while [ "$attempt" -le 2 ]; do
+              body="$(mktemp)"
+              code="$(curl -sS -L --max-time 20 -o "$body" -w '%{http_code}' "$url" || true)"
+              if [ "$code" = "200" ]; then
+                if [ "$extra" = "api" ]; then
+                  python3 - "$body" <<'PY'
+import json, sys
+p = sys.argv[1]
+with open(p) as f:
+    d = json.load(f)
+status = str(d.get("status", "")).upper()
+db = str(d.get("db", "")).lower()
+if status != "OK" or db != "connected":
+    raise SystemExit(f"API_CONTRACT_FAIL status={status} db={db}")
+print("API_BODY_VALIDATION=PASS")
+PY
+                fi
+                echo "OK ${name} code=${code}"
+                rm -f "$body"
+                return 0
+              fi
+              echo "RETRY ${name} attempt=${attempt} code=${code}"
+              rm -f "$body"
+              attempt=$((attempt + 1))
+              sleep 5
+            done
+            echo "INCIDENT=CORE_DEGRADED SOURCE=EXTERNAL_WATCHDOG TARGET=${name} STATUS=http_${code} ACTION=CHECK_ARGOS_VPS_AND_PUBLIC_ROUTING"
+            return 1
+          }
+          probe portal "$PORTAL_URL" web
+          probe api "$API_URL" api
+          echo "WATCHDOG_OK=YES"
