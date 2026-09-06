@@ -194,7 +194,7 @@ router.post("/diagnostics", async (req, res) => {
         userId,
         source,
         score,
-        max_score,
+        maxScore,
         risk_level,
         risk_label,
         summary,
