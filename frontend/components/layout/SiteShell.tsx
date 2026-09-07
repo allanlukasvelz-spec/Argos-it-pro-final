@@ -27,6 +27,9 @@ type Props = {
 export default function SiteShell({ children }: Props) {
   const pathname = usePathname();
   const chromeOwner = getChromeOwner(pathname);
+  const isContactRoute =
+    pathname === "/contacto" || pathname.startsWith("/contacto/");
+  const showCookies = !shouldHideCookieBanner(pathname);
 
   return (
     <MascotPauseControlProvider>
@@ -37,6 +40,9 @@ export default function SiteShell({ children }: Props) {
           <DiagnosticSurveyLauncherProvider>
             <div className="argos-corporate">
               <CorporateHeader />
+              {isContactRoute && showCookies ? (
+                <CookieBanner placement="contact-inline" />
+              ) : null}
               <div className="argos-corp-container">
                 <CorporateHistoryNav />
               </div>
@@ -53,7 +59,7 @@ export default function SiteShell({ children }: Props) {
           </DiagnosticSurveyLauncherProvider>
         )}
         {!shouldHideAssistants(pathname) && <ClientAssistants />}
-        {!shouldHideCookieBanner(pathname) && <CookieBanner />}
+        {!isContactRoute && showCookies ? <CookieBanner /> : null}
       </MascotChatProvider>
     </MascotPauseControlProvider>
   );
