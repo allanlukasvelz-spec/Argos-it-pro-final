@@ -233,6 +233,16 @@
         "privacy": "You must accept the privacy policy.",
         "service": "Please select a service.",
         "maxLength": "Maximum 2000 characters in this field (technical limit)."
+      },
+      "captcha": {
+        "label": "Security check",
+        "hint": "To prevent automated submissions, solve this sum.",
+        "questionPrefix": "What is",
+        "placeholder": "Answer",
+        "error": "The verification answer is not correct. Please try again.",
+        "loadError": "Could not load the security check. Tap retry.",
+        "loading": "Loading security check…",
+        "retry": "Retry"
       }
     }
   },
@@ -251,6 +261,7 @@
     }
   },
   "cookiesBanner": {
+    "title": "Cookie preferences",
     "message": "We use technical and analytics cookies to improve your experience. You can accept or reject non-essential cookies.",
     "accept": "Accept",
     "reject": "Reject",

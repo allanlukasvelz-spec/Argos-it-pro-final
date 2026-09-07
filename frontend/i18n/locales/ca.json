@@ -225,6 +225,16 @@
         "privacy": "Has d'acceptar la política de privacitat.",
         "service": "Selecciona un servei.",
         "maxLength": "Com a màxim 2000 caràcters en aquest camp (límit tècnic)."
+      },
+      "captcha": {
+        "label": "Verificació de seguretat",
+        "hint": "Per evitar enviaments automàtics, resol aquesta suma.",
+        "questionPrefix": "Quant és",
+        "placeholder": "Resposta",
+        "error": "La resposta de verificació no és correcta. Torna-ho a provar.",
+        "loadError": "No s'ha pogut carregar la verificació. Prem reintentar.",
+        "loading": "Carregant verificació…",
+        "retry": "Reintentar"
       }
     }
   },
@@ -243,6 +253,7 @@
     }
   },
   "cookiesBanner": {
+    "title": "Preferències de cookies",
     "message": "Utilitzem cookies tècniques i analítiques per millorar l'experiència. Pots acceptar o rebutjar les no essencials.",
     "accept": "Acceptar",
     "reject": "Rebutjar",

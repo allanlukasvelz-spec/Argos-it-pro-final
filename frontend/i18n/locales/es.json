@@ -399,6 +399,16 @@
         "privacy": "Debes aceptar la política de privacidad.",
         "service": "Selecciona un servicio.",
         "maxLength": "Como máximo 2000 caracteres en este campo (límite técnico)."
+      },
+      "captcha": {
+        "label": "Verificación de seguridad",
+        "hint": "Para evitar envíos automáticos, resuelve esta suma.",
+        "questionPrefix": "¿Cuánto es",
+        "placeholder": "Respuesta",
+        "error": "La respuesta de verificación no es correcta. Inténtalo de nuevo.",
+        "loadError": "No se pudo cargar la verificación. Pulsa reintentar.",
+        "loading": "Cargando verificación…",
+        "retry": "Reintentar"
       }
     }
   },
@@ -471,6 +481,7 @@
     }
   },
   "cookiesBanner": {
+    "title": "Preferencias de cookies",
     "message": "Usamos cookies técnicas y analíticas para mejorar tu experiencia. Puedes aceptar o rechazar las no esenciales.",
     "accept": "Aceptar",
     "reject": "Rechazar",
