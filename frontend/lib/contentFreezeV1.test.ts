@@ -1,5 +1,6 @@
 /**
  * Content Freeze v1.0 — runtime string and structural invariants.
+ * Hero H1/subtitle canonical strings: Quiet Authority (C-002 option B, 2026-09-09).
  * Run: node --experimental-strip-types --test frontend/lib/contentFreezeV1.test.ts
  */
 import { readFileSync } from "node:fs";
@@ -25,9 +26,9 @@ const es = JSON.parse(readFileSync(new URL("i18n/locales/es.json", ROOT), "utf8"
   servicesPage: { strategicPillars: string[] };
 };
 
-const FROZEN_H1 = "Sistemas que no fallen cuando no deben.";
+const FROZEN_H1 = "Tecnología serena para empresas que avanzan";
 const FROZEN_SUPPORTING =
-  "Primero entendemos cómo trabaja tu empresa y de qué depende su operativa. Después ponemos orden, reducimos riesgos y mantenemos bajo control la tecnología que necesita para funcionar.";
+  "ARGOS elimina la complejidad y la incertidumbre de tu operación tecnológica. Protegemos lo que funciona y simplificamos lo que frena.";
 const FROZEN_PRIMARY_CTA = "Iniciar diagnóstico ARGOS";
 const FROZEN_SECONDARY_CTA = "Conocer cómo trabajamos";
 
