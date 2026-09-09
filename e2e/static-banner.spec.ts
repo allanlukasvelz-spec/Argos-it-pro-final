@@ -63,7 +63,7 @@ test.describe("static diagnostic promo banner (21.6B.8B)", () => {
     await page.goto("/privacidad", { waitUntil: "domcontentloaded" });
 
     await expect(page.getByRole("banner")).toBeVisible();
-    await expect(page.getByLabel("ARGOS-IT home")).toBeVisible();
+    await expect(page.getByRole("banner").getByLabel("ARGOS-IT home")).toBeVisible();
     await expect(page.getByRole("button", { name: /menú|menu/i })).toBeVisible();
   });
 

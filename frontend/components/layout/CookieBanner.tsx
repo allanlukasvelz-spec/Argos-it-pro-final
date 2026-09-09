@@ -45,7 +45,7 @@ export default function CookieBanner({ placement = "fixed" }: Props) {
       className={
         inline
           ? "relative z-[5] w-full border-b border-[#BFDBFE] bg-white px-4 py-3.5 md:flex md:flex-wrap md:items-center md:justify-between md:gap-x-5 md:gap-y-3"
-          : "fixed bottom-4 left-4 right-4 z-[85] rounded-xl border border-[#BFDBFE] bg-white p-4 shadow-xl shadow-[#0B1E33]/10 md:left-auto md:max-w-md"
+          : "fixed bottom-4 left-4 right-4 z-[85] pointer-events-none rounded-xl border border-[#BFDBFE] bg-white p-4 shadow-xl shadow-[#0B1E33]/10 md:left-1/2 md:right-auto md:max-w-md md:-translate-x-1/2"
       }
       role="dialog"
       aria-label={t("cookiesBanner.message")}
@@ -57,7 +57,7 @@ export default function CookieBanner({ placement = "fixed" }: Props) {
         className={
           inline
             ? "text-sm leading-6 text-[#1F2937] md:max-w-2xl md:flex-1"
-            : "text-sm leading-6 text-[#1F2937]"
+            : "pointer-events-auto text-sm leading-6 text-[#1F2937]"
         }
       >
         {t("cookiesBanner.message")}
@@ -66,7 +66,7 @@ export default function CookieBanner({ placement = "fixed" }: Props) {
         className={
           inline
             ? "mt-3 flex flex-wrap items-center gap-2 md:mt-0"
-            : "mt-3 flex flex-wrap items-center gap-2"
+            : "pointer-events-auto mt-3 flex flex-wrap items-center gap-2"
         }
       >
         <button

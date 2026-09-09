@@ -105,15 +105,18 @@ export default function ChicoDumboSpriteSystem() {
     return () => mq.removeEventListener("change", sync);
   }, []);
 
+  const chicoActive = activeMascot === "chico";
+  const dumboActive = activeMascot === "dumbo";
+
   const chicoDisplay = usePoseSequence(
     chico as ChicoPoseNode,
     getChicoPosePath,
-    reducedMotion || paused
+    reducedMotion || paused || chicoActive
   );
   const dumboDisplay = usePoseSequence(
     dumbo as DumboPoseNode,
     getDumboPosePath,
-    reducedMotion || paused
+    reducedMotion || paused || dumboActive
   );
 
   const openChico = () => {
@@ -134,8 +137,43 @@ export default function ChicoDumboSpriteSystem() {
     ["--mascot-dumbo-ty" as string]: `${dumboTy}px`
   };
 
-  const chicoActive = activeMascot === "chico";
-  const dumboActive = activeMascot === "dumbo";
+  useEffect(() => {
+    const preload = [
+      chicoSprites.idle,
+      chicoSprites.stand,
+      chicoSprites.alert,
+      chicoSprites.sit,
+      ...CHICO_WALK_CYCLE.map((k) => chicoSprites[k]),
+      dumboSprites.idle,
+      dumboSprites.sit,
+      dumboSprites.guide,
+      dumboSprites.look,
+      ...DUMBO_WALK_CYCLE.map((k) => dumboSprites[k])
+    ];
+    for (const src of preload) {
+      const img = new window.Image();
+      img.src = src;
+    }
+  }, []);
+
+  /* QA08-P1-01/P1-03 — hide floating dock while corporate footer occupies viewport */
+  useEffect(() => {
+    const footer = document.querySelector(".argos-corporate-footer");
+    if (!footer) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        const hit = entries.some((e) => e.isIntersecting);
+        if (hit) document.body.dataset.footerInView = "true";
+        else delete document.body.dataset.footerInView;
+      },
+      { root: null, threshold: 0, rootMargin: "0px 0px -8% 0px" }
+    );
+    io.observe(footer);
+    return () => {
+      io.disconnect();
+      delete document.body.dataset.footerInView;
+    };
+  }, []);
 
   useEffect(() => {
     const preload = [
