@@ -111,6 +111,23 @@ CREATE TABLE IF NOT EXISTS client_messages (
   created_at TIMESTAMP DEFAULT NOW()
 );
 
+-- Diagnósticos ARGOS guardados por clientes autenticados
+CREATE TABLE IF NOT EXISTS client_diagnostics (
+  id SERIAL PRIMARY KEY,
+  user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  source TEXT NOT NULL DEFAULT 'diagnostico-argos',
+  score INT NOT NULL,
+  max_score INT NOT NULL,
+  risk_level TEXT NOT NULL CHECK (risk_level IN ('low','medium','high','critical')),
+  risk_label TEXT NOT NULL,
+  summary TEXT NOT NULL,
+  strengths JSONB NOT NULL DEFAULT '[]'::jsonb,
+  risks JSONB NOT NULL DEFAULT '[]'::jsonb,
+  priorities JSONB NOT NULL DEFAULT '[]'::jsonb,
+  answers JSONB NOT NULL DEFAULT '[]'::jsonb
+);
+
 -- Índices para optimización
 CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
 CREATE INDEX IF NOT EXISTS idx_ai_memory_user ON ai_memory(user_id);
@@ -121,6 +138,7 @@ CREATE INDEX IF NOT EXISTS idx_client_services_user ON client_services(user_id);
 CREATE INDEX IF NOT EXISTS idx_website_audits_user ON website_audits(user_id);
 CREATE INDEX IF NOT EXISTS idx_client_improvements_user ON client_improvements(user_id);
 CREATE INDEX IF NOT EXISTS idx_client_messages_user ON client_messages(user_id);
+CREATE INDEX IF NOT EXISTS idx_client_diagnostics_user_created ON client_diagnostics(user_id, created_at DESC);
 
 -- Sesiones de refresh token (jti + rotación en POST /api/auth/refresh)
 CREATE TABLE IF NOT EXISTS refresh_sessions (
