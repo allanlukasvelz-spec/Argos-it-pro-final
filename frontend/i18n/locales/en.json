@@ -2,8 +2,8 @@
   "meta": {
     "defaultTitle": "ARGOS-IT | IT consulting for businesses",
     "defaultDescription": "IT consulting, maintenance, technical support, cybersecurity, automation and digital solutions for businesses.",
-    "homeTitle": "ARGOS-IT | IT that simply works",
-    "homeDescription": "Support, maintenance, security, automation and digital consulting for business teams.",
+    "homeTitle": "ARGOS-IT | Serene technology for companies that move forward",
+    "homeDescription": "ARGOS removes complexity and uncertainty from your technology operation. IT support, security, automation and digital consulting with business judgment.",
     "servicesTitle": "IT Services | ARGOS-IT",
     "servicesDescription": "Professional IT services for business continuity, security and growth.",
     "methodTitle": "ARGOS method | Analyze, Reinforce, Guide, Optimize, Supervise",
@@ -11,7 +11,9 @@
     "aboutTitle": "About ARGOS-IT | Premium technology consulting",
     "aboutDescription": "Technical team focused on operational continuity and secure growth.",
     "contactTitle": "Contact ARGOS-IT | Request a technical consultation",
-    "contactDescription": "Tell us your needs and we will reply with a clear, actionable proposal."
+    "contactDescription": "Tell us your needs and we will reply with a clear, actionable proposal.",
+    "portalTitle": "ARGOS-IT Portal | Client access",
+    "portalDescription": "Access the ARGOS-IT client portal or contact support if you need assistance."
   },
   "language": {
     "label": "Language",
@@ -29,8 +31,60 @@
     "method": "Method",
     "about": "About ARGOS-IT",
     "contact": "Contact",
+    "contacts": "Contacts",
+    "portal": "Client portal",
+    "portalShort": "Portal",
     "menu": "Menu",
-    "startDiagnostic": "Start ARGOS diagnostic"
+    "closeMenu": "Close menu",
+    "startDiagnostic": "Start ARGOS diagnostic",
+    "methodArgos": "ARGOS Method"
+  },
+  "assistant": {
+    "open": "Talk with ARGOS",
+    "title": "ARGOS assistant",
+    "subtitle": "Clear technical guidance — no invented promises",
+    "close": "Close",
+    "privacyNote": "Do not send passwords, API keys, or credentials. For sensitive data, use contact or the client area.",
+    "inputLabel": "Your message",
+    "placeholder": "Describe your situation or question…",
+    "send": "Send",
+    "thinking": "Thinking…",
+    "dismissError": "Got it",
+    "contactCta": "Go to contact"
+  },
+  "drawer": {
+    "whoWeAre": "Who we are",
+    "discoverMethod": "Discover the ARGOS Method",
+    "requestConsult": "Request technical consultation",
+    "supportAssist": "Support and assistance",
+    "clientAccess": "Client access",
+    "helpNote": "We're here to help. We respond quickly."
+  },
+  "history": {
+    "navLabel": "Browsing history",
+    "back": "Back",
+    "forward": "Forward"
+  },
+  "related": {
+    "label": "You may also be interested in"
+  },
+  "portalPage": {
+    "title": "Client portal",
+    "lead": "Access your ARGOS services or request assistance when you need it.",
+    "accessTitle": "Authenticated access",
+    "accessBody": "Sign in to review your service status and client area.",
+    "supportTitle": "Support and assistance",
+    "supportBody": "If you do not have access yet or need help, contact the ARGOS team.",
+    "menuOverview": "View portal"
+  },
+  "headerBanner": {
+    "dumboTitle": "ARGOS tip · Protect your access",
+    "dumboBody": "Enable MFA on critical accounts and periodically review administrator access.",
+    "chicoLabel": "ARGOS tip",
+    "methodLead": "Our technology accompaniment system",
+    "productLabel": "ARGOS product",
+    "diagTitle": "Want to know how your company stands?",
+    "diagBody": "Take the ARGOS diagnostic: {n} key questions to understand your current level."
   },
   "actions": {
     "requestConsultation": "Request consultation",
@@ -38,19 +92,70 @@
     "viewDetail": "View details",
     "viewService": "View service",
     "viewMethod": "View method",
+    "viewMethodPhase": "View phase",
+    "nextMovement": "See next movement",
+    "firstMovement": "Back to first movement",
     "backHome": "Back to home",
     "backServices": "Back to services"
   },
   "home": {
     "eyebrow": "Premium IT consulting",
-    "title": "IT that works. No noise. No worries.",
-    "subtitle": "We keep your technology stack stable, secure and predictable. Support, maintenance, security, automation and digital consulting with a business focus.",
+    "title": "Serene technology for companies that move forward",
+    "subtitle": "ARGOS removes complexity and uncertainty from your technology operation. We protect what works and simplify what slows you down.",
     "trustTitle": "Trust pillars",
     "trustItems": [
       "Clear and professional communication",
       "Prevention before improvisation",
       "Technology aligned with business goals",
       "Service designed for companies"
+    ],
+    "brandMark": "ARGOS IT",
+    "ctaMethod": "View full method",
+    "realityIndex": "01 / Client reality",
+    "problemTitle": "Technology should not be a burden",
+    "problemLead": "Without clear criteria, silent friction appears: wasted time, unmapped risk and decisions made in the dark.",
+    "realityItems": [
+      "Complexity that grows without control",
+      "Uncertainty before every technical decision",
+      "Operational risk that slows the business"
+    ],
+    "realityExplains": [
+      "When tools, vendors and changes pile up without a map, everything gets hard to maintain. ARGOS helps you see what you have, what is spare, and what to tidy first.",
+      "Without a clear picture of your setup, every purchase or change is a guess. First we understand the situation; then we suggest the next calm, practical step.",
+      "A failure, a weak access control or an untested backup can stall the day. The point is to spot those weak spots early and reinforce them — without drama."
+    ],
+    "realityAskDumbo": "Ask Dumbo",
+    "philosophyIndex": "02 / Philosophy",
+    "philosophyTitle": "Philosophy",
+    "philosophyQuote": "Understand before acting,\nprevent before reacting.",
+    "principlesIndex": "03 / Principles",
+    "principlesTitle": "Principles that guide the work",
+    "methodIndex": "04 / Method",
+    "methodIntroLead": "ARGOS is a closed five-phase method to move from technical problems to sustained improvement—without improvisation.",
+    "servicesIndex": "06 / Services",
+    "stabilityIndex": "07 / Continuity",
+    "stabilityTitle": "Operational continuity and prevention",
+    "stabilityItems": [
+      "Ongoing follow-up with clear priorities",
+      "Periodic review before risk grows",
+      "Communication that non-technical leaders can use",
+      "Preventive support and improvement proposals",
+      "A long-term relationship, not one-off patches"
+    ],
+    "trustIndex": "08 / Trust",
+    "trustLead": "We work with human judgment: clarity, prevention and accompaniment—without invented operational theatre.",
+    "finalCtaTitle": "Let’s talk with judgment",
+    "finalCtaSubtitle": "Tell us your current situation. We will reply with a clear, prioritised and actionable proposal.",
+    "diagEyebrow": "ARGOS diagnostic",
+    "diagTitle": "Want to know how your company stands today?",
+    "diagBody": "Discover in a few minutes the state of your technology environment and where to act first.",
+    "diagPointQuestions": "{n} key questions",
+    "diagPointResult": "Clear result",
+    "diagPointPriorities": "Initial priorities",
+    "proofTags": [
+      "Remote · phone · on-site",
+      "IT support with business judgment",
+      "Security, web and AI under one roadmap"
     ],
     "servicesEyebrow": "ARGOS-IT services",
     "servicesTitle": "Professional services for continuity, security and growth.",
@@ -134,7 +239,9 @@
         "Threat prevention",
         "Business continuity"
       ]
-    }
+    },
+    "ctaHeroSecondary": "Learn how we work",
+    "publicPhasesIndex": "04a / Four movements"
   },
   "servicesPage": {
     "title": "ARGOS-IT Services",
@@ -152,6 +259,7 @@
   "method": {
     "title": "ARGOS-IT Method",
     "subtitle": "A clear framework so every technical improvement has real and sustainable impact.",
+    "relatedOperationalPhase": "Operational detail",
     "steps": [
       {
         "id": "A",

@@ -3,7 +3,11 @@
     "defaultTitle": "ARGOS-IT | Consultoria informàtica per a empreses",
     "defaultDescription": "Consultoria informàtica, manteniment, suport tècnic, ciberseguretat, automatització i solucions digitals per a empreses.",
     "methodTitle": "Mètode ARGOS | Analitzar, Reforçar, Guiar, Optimitzar i Supervisar",
-    "methodDescription": "Cinc fases A-R-G-O-S: entendre, reforçar, guiar l’operació, optimitzar resultats i supervisar després de millorar."
+    "methodDescription": "Cinc fases A-R-G-O-S: entendre, reforçar, guiar l’operació, optimitzar resultats i supervisar després de millorar.",
+    "portalTitle": "Portal ARGOS-IT | Accés clients",
+    "portalDescription": "Accedeix al portal de client ARGOS-IT o contacta amb suport si necessites assistència.",
+    "homeTitle": "ARGOS-IT | Tecnologia serena per a empreses que avancen",
+    "homeDescription": "ARGOS elimina la complexitat i la incertesa de la teva operació tecnològica: suport IT, seguretat, automatització i consultoria digital amb criteri."
   },
   "language": {
     "label": "Idioma",
@@ -21,8 +25,60 @@
     "method": "Mètode",
     "about": "Sobre ARGOS-IT",
     "contact": "Contacte",
+    "contacts": "Contactes",
+    "portal": "Portal de client",
+    "portalShort": "Portal",
     "menu": "Menú",
-    "startDiagnostic": "Iniciar diagnòstic ARGOS"
+    "closeMenu": "Tancar menú",
+    "startDiagnostic": "Iniciar diagnòstic ARGOS",
+    "methodArgos": "Mètode ARGOS"
+  },
+  "assistant": {
+    "open": "Parlar amb ARGOS",
+    "title": "Assistent ARGOS",
+    "subtitle": "Orientació tècnica clara — sense promeses inventades",
+    "close": "Tancar",
+    "privacyNote": "No enviïs contrasenyes, claus API ni credencials. Per a dades sensibles, usa el contacte o l'àrea de client.",
+    "inputLabel": "El teu missatge",
+    "placeholder": "Descriu la teva situació o dubte…",
+    "send": "Enviar",
+    "thinking": "Pensant…",
+    "dismissError": "Entesos",
+    "contactCta": "Anar a contacte"
+  },
+  "drawer": {
+    "whoWeAre": "Qui som",
+    "discoverMethod": "Descobrir el Mètode ARGOS",
+    "requestConsult": "Sol·licitar consulta tècnica",
+    "supportAssist": "Suport i assistència",
+    "clientAccess": "Accés clients",
+    "helpNote": "Som aquí per ajudar-te. Responem ràpid."
+  },
+  "history": {
+    "navLabel": "Historial de navegació",
+    "back": "Anterior",
+    "forward": "Següent"
+  },
+  "related": {
+    "label": "També et pot interessar"
+  },
+  "portalPage": {
+    "title": "Portal de client",
+    "lead": "Espai per accedir als teus serveis ARGOS o sol·licitar assistència quan la necessitis.",
+    "accessTitle": "Accés autenticat",
+    "accessBody": "Inicia sessió per consultar l'estat dels teus serveis i la teva àrea de client.",
+    "supportTitle": "Suport i assistència",
+    "supportBody": "Si encara no tens accés o necessites ajuda, contacta amb l'equip ARGOS.",
+    "menuOverview": "Veure portal"
+  },
+  "headerBanner": {
+    "dumboTitle": "Consell ARGOS · Protegeix els teus accessos",
+    "dumboBody": "Activa MFA als comptes crítics i revisa periòdicament els accessos d'administrador.",
+    "chicoLabel": "Consell ARGOS",
+    "methodLead": "El nostre sistema d'acompanyament tecnològic",
+    "productLabel": "Producte ARGOS",
+    "diagTitle": "Vols saber com està la teva empresa?",
+    "diagBody": "Fes el diagnòstic ARGOS: {n} preguntes clau per conèixer el teu nivell actual."
   },
   "actions": {
     "requestConsultation": "Sol·licitar consulta",
@@ -30,19 +86,70 @@
     "viewDetail": "Veure detall",
     "viewService": "Veure servei",
     "viewMethod": "Veure mètode",
+    "viewMethodPhase": "Veure fase",
+    "nextMovement": "Veure el següent moviment",
+    "firstMovement": "Tornar al primer moviment",
     "backHome": "Tornar a inici",
     "backServices": "Tornar a serveis"
   },
   "home": {
     "eyebrow": "Consultoria informàtica premium",
-    "title": "La informàtica que funciona. Sense soroll. Sense preocupacions.",
-    "subtitle": "Cuidem l'entorn tecnològic de la teva empresa perquè sigui estable, segur i previsible.",
+    "title": "Tecnologia serena per a empreses que avancen",
+    "subtitle": "ARGOS elimina la complexitat i la incertesa de la teva operació tecnològica. Protegim el que funciona i simplifiquem el que frena.",
     "trustTitle": "Pilars de confiança",
     "trustItems": [
       "Resposta clara i professional",
       "Prevenció abans que improvisació",
       "Tecnologia alineada amb el negoci",
       "Servei orientat a empreses"
+    ],
+    "brandMark": "ARGOS IT",
+    "ctaMethod": "Veure el mètode complet",
+    "realityIndex": "01 / Realitat del client",
+    "problemTitle": "La tecnologia no hauria de ser una càrrega",
+    "problemLead": "Sense un criteri clar apareixen friccions silencioses: temps perdut, riscos sense mapa i decisions a cegues.",
+    "realityItems": [
+      "Complexitat que creix sense control",
+      "Incertesa davant de cada decisió tècnica",
+      "Risc operatiu que frena el negoci"
+    ],
+    "realityExplains": [
+      "Quan s'acumulen eines, proveïdors i canvis sense un mapa, tot es fa difícil de mantenir. ARGOS t'ajuda a veure què tens, què sobra i què convé ordenar primer.",
+      "Si no hi ha una foto clara de l'entorn, cada compra o canvi es fa a cegues. Primer entenem la situació; després et proposem el següent pas, amb calma i criteri.",
+      "Una fallada, un accés mal controlat o una còpia sense provar poden frenar el dia a dia. El important és detectar aquests punts a temps i reforçar-los, sense dramatitzar."
+    ],
+    "realityAskDumbo": "Preguntar a Dumbo",
+    "philosophyIndex": "02 / Filosofia",
+    "philosophyTitle": "Filosofia",
+    "philosophyQuote": "Entendre abans d'actuar,\nprevenir abans de reaccionar.",
+    "principlesIndex": "03 / Principis",
+    "principlesTitle": "Principis que guien la feina",
+    "methodIndex": "04 / Mètode",
+    "methodIntroLead": "ARGOS és un mètode tancat de cinc fases per passar del problema tècnic a la millora sostinguda, sense improvisació.",
+    "servicesIndex": "06 / Serveis",
+    "stabilityIndex": "07 / Continuïtat",
+    "stabilityTitle": "Continuïtat i prevenció operativa",
+    "stabilityItems": [
+      "Seguiment continu amb prioritats clares",
+      "Revisió periòdica abans que el risc creixi",
+      "Comunicació entenedora per a perfils no tècnics",
+      "Suport preventiu i propostes de millora",
+      "Relació a llarg termini, no pedaços puntuals"
+    ],
+    "trustIndex": "08 / Confiança",
+    "trustLead": "Treballem amb criteri humà: claredat, prevenció i acompanyament sense soroll operatiu inventat.",
+    "finalCtaTitle": "Parlem amb criteri",
+    "finalCtaSubtitle": "Explica'ns la teva situació actual. Et respondrem amb una proposta clara, prioritzada i accionable.",
+    "diagEyebrow": "Diagnòstic ARGOS",
+    "diagTitle": "Vols saber com està la teva empresa actualment?",
+    "diagBody": "Descobreix en pocs minuts l'estat del teu entorn tecnològic i on convé actuar primer.",
+    "diagPointQuestions": "{n} preguntes clau",
+    "diagPointResult": "Resultat clar",
+    "diagPointPriorities": "Prioritats inicials",
+    "proofTags": [
+      "Telemàtic · telefònic · presencial",
+      "Suport IT amb criteri de negoci",
+      "Seguretat, web i IA sota una mateixa fulla de ruta"
     ],
     "servicesEyebrow": "Serveis ARGOS-IT",
     "servicesTitle": "Serveis professionals per a continuïtat, seguretat i creixement.",
@@ -126,7 +233,9 @@
         "Prevenció d'amenaces",
         "Continuïtat del negoci"
       ]
-    }
+    },
+    "ctaHeroSecondary": "Coneixer com treballem",
+    "publicPhasesIndex": "04a / Quatre moviments"
   },
   "servicesPage": {
     "title": "Serveis ARGOS-IT",
@@ -144,6 +253,7 @@
   "method": {
     "title": "Mètode ARGOS-IT",
     "subtitle": "Un marc clar perquè cada millora tecnològica tingui impacte real.",
+    "relatedOperationalPhase": "Detall operatiu",
     "steps": [
       {
         "id": "A",
