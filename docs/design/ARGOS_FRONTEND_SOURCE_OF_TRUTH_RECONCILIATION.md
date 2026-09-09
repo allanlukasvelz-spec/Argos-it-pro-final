@@ -1,23 +1,24 @@
 # ARGOS — Frontend Source-of-Truth Reconciliation
 
 ```
-STATUS                              = DOCS_ONLY / READ_ONLY FORENSICS COMPLETE
+STATUS                              = PUBLIC_UI_RECONCILED (local implementation)
 DATE                                = 2026-08-26
 BRANCH                              = feature/argos-multitenant-platform
 RELATED_DESIGN_BRANCH               = design/21-7c-relume-framer-freeze
-RUNTIME_CHANGED                     = NO
-STAGING_CHANGED                     = NO
+RUNTIME_CHANGED                     = LOCAL FRONTEND ONLY
+STAGING_CHANGED                     = NO (deploy not authorized)
 PRODUCTION_CHANGED                  = NO
 DEPLOY                              = NO
 PUSH                                = NO
-G13_VISUAL_DESIGN_ALIGNMENT         = BLOCKED_SOURCE_OF_TRUTH_RECONCILIATION
+G13_VISUAL_DESIGN_ALIGNMENT         = LOCAL_FRAMER_ALIGNED_PENDING_HUMAN_REVIEW
+STAGING_FRONTEND_REDEPLOY           = BLOCKED_UNTIL_HUMAN_APPROVES
 ```
 
 ## 0. Mission answer
 
-`https://staging.argos-it.es` currently serves the **Next.js application frontend** built from `frontend/` via `Dockerfile.staging`. The **public Home** is the **legacy marketing shell** (nocturnal cyan/`#18D4F7` Command Center hero, floating side-nav, invented testimonials, diagnostic CTA). That presentation is **not** the Relume/Framer-approved Corporate direction (`LIGHT_PREMIUM_INSTITUTIONAL` / Quiet Authority, freeze 21.6B). Relume is documented as **IA/UX only**; Framer as **visual lab / composition reference**, never production SoT. Corporate chrome migration exists only for `/contacto`. Client Portal and NOC are **functional product shells** aligned to Relume IA routes, not Framer pixel ports.
+Local `frontend/` now implements the **Quiet Authority** corporate public surface (Relume IA + 21.7C.1 hierarchy + Corporate chrome). Legacy nocturnal Home (Command Center, floating side-nav, invented testimonials) is **removed from public marketing routes**. Staging (`https://staging.argos-it.es`) still serves the previous build until an authorized frontend redeploy. Client Portal and NOC remain product-owned (`chromeOwner=none`). Relume = IA/UX; Framer = composition reference only.
 
-Infrastructure (TLS, Traefik, API, PG, MinIO, worker) is **independent** and must remain frozen for this gate.
+Infrastructure (TLS, Traefik, API, PG, MinIO, worker) was **not** changed in this gate.
 
 ---
 
@@ -313,25 +314,33 @@ Do **not** roll back Compose/Traefik/TLS/API because Home chrome is legacy.
 
 | Axis | Status |
 |------|--------|
-| Functional / security E2E | May remain valid independently of design SoT |
-| Visual design alignment | **BLOCKED_SOURCE_OF_TRUTH_RECONCILIATION** |
+| Functional / security E2E | Independiente; no tocado en esta misión |
+| Visual design alignment (local) | **PASS** — Quiet Authority Home + corporate chrome |
+| Corporate / static-banner E2E (local :3015) | **9 passed** |
+| chromeOwnership unit tests | **6 passed** |
+| frontend `tsc --noEmit` | **PASS** |
+| Staging visual G13 rerun | **PENDING** — requiere redeploy FE autorizado |
 
-Do not claim visual G13 complete until an authorized Corporate Home migration (or explicit human acceptance of legacy Home on staging) is recorded.
+Capturas locales: `docs/architecture/phase8-validation-artifacts/quiet-authority-home-{desktop,tablet,mobile}.png`
+
+No declarar G13 visual de staging cerrado hasta desplegar este build en `staging.argos-it.es` bajo autorización aparte.
 
 ---
 
-## 10. Recommended next human decision (not executed)
+## 10. Siguiente paso humano (no ejecutado)
 
-1. Confirm SoT: Relume IA + local 21.7C.1 wireframes + Quiet Authority freeze as Corporate target; Framer optional lab.
-2. Authorize a **Corporate Home visual migration** phase (expand `getChromeOwner` + replace `HomeView` paint) **or** accept temporary legacy Home on staging with labeled disclaimer.
-3. Keep Client/NOC functional shells; Framer hierarchy polish = separate optional phase.
-4. Cherry-pick or merge docs from `design/21-7c-relume-framer-freeze` into working branch for discoverability (docs-only).
-5. Only after freeze authorization: implement UI; then re-run visual G13.
+1. Revisar capturas Quiet Authority y aceptar el paint.
+2. Autorizar **redeploy FE** de staging (sin Phase 9 / sin producción).
+3. Re-ejecutar G13 visual contra `https://staging.argos-it.es`.
+4. Mantener Client/NOC sin cambios funcionales.
 
 ---
 
 ## Related authority docs
 
+- `docs/design/ARGOS_PUBLIC_UI_RECONCILIATION_MAP.md`
+- `docs/design/ARGOS_LOCAL_CANONICAL_WIREFRAMES_21_7C.md`
+- `docs/design/ARGOS_WIREFRAMES_21_7C_1.md`
 - `docs/blueprint/handoff/ARGOS_RELUME_HANDOFF.md`
 - `docs/blueprint/handoff/ARGOS_FRAMER_HANDOFF.md`
 - `docs/design/ARGOS_DESIGN_CONTRACT.md`
@@ -339,4 +348,4 @@ Do not claim visual G13 complete until an authorized Corporate Home migration (o
 - `docs/design/ARGOS_VISUAL_FREEZE_21_6B.md`
 - `docs/design/corporate-chrome-21-5.md`
 - `docs/design/source-hierarchy.md`
-- Branch `design/21-7c-relume-framer-freeze` (21.7C Relume/Framer reviews + local wireframes)
+- Branch `design/21-7c-relume-framer-freeze` (reviews Relume/Framer + wireframes)
