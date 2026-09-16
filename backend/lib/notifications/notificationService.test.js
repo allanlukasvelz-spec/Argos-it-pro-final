@@ -22,6 +22,9 @@ function createMemoryPool() {
         });
         return { rows: [] };
       }
+      if (s.includes("FROM users") && s.includes("role IN")) {
+        return { rows: [{ user_id: 2, role: "admin" }] };
+      }
       if (s.includes("FROM organization_members")) {
         return { rows: [{ user_id: 10, org_role: "org_owner" }] };
       }
@@ -72,5 +75,47 @@ describe("notificationService dedupe", () => {
     assert.equal(r1.skipped, false);
     assert.equal(r2.skipped, true);
     assert.equal(r2.reason, "dedupe");
+  });
+
+  it("emits a web project correction without breaking report ready", async () => {
+    const { pool, notifications } = createMemoryPool();
+    const svc = createNotificationService(pool);
+    const { WEB_PROJECT_NOTIFICATION_EVENTS } = require("../webProjects/notificationCopy");
+    const wp = await svc.emitWebProject({
+      organizationId: 1,
+      kind: WEB_PROJECT_NOTIFICATION_EVENTS.CORRECTION_REQUESTED,
+      actorUserId: 99,
+      project: { id: 3, title: "Acme site", organizationId: 1 },
+      reviewId: 8,
+      correctionMessage: "Sustituye el archivo.",
+      target: { targetType: "DOCUMENT", targetId: "d1" }
+    });
+    assert.equal(wp.skipped, false);
+    assert.equal(wp.created, 1);
+    assert.equal(notifications.length, 1);
+  });
+
+  it("self-service staff notify fans out to admins and dedupes", async () => {
+    const { pool, notifications } = createMemoryPool();
+    const svc = createNotificationService(pool);
+    const { WEB_PROJECT_NOTIFICATION_EVENTS } = require("../webProjects/notificationCopy");
+    const first = await svc.emitWebProject({
+      organizationId: 4,
+      kind: WEB_PROJECT_NOTIFICATION_EVENTS.SELF_SERVICE_STARTED,
+      audience: "staff",
+      actorUserId: 7,
+      project: { id: 9, title: "Web de Example Studio", organizationId: 4 }
+    });
+    const second = await svc.emitWebProject({
+      organizationId: 4,
+      kind: WEB_PROJECT_NOTIFICATION_EVENTS.SELF_SERVICE_STARTED,
+      audience: "staff",
+      actorUserId: 7,
+      project: { id: 9, title: "Web de Example Studio", organizationId: 4 }
+    });
+    assert.equal(first.skipped, false);
+    assert.equal(first.created, 1);
+    assert.equal(notifications[0].user_id, 2);
+    assert.equal(second.skipped, true);
   });
 });

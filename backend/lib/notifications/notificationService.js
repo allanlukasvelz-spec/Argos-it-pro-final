@@ -3,8 +3,17 @@
  */
 const { randomUUID } = require("crypto");
 const { sanitizeEvidence } = require("../monitoring/sanitizeEvidence");
-const { resolveOrgMemberRecipients } = require("./recipientResolver");
+const { resolveOrgMemberRecipients, resolveStaffRecipients } = require("./recipientResolver");
 const { NOTIFICATION_EVENT_REPORT_READY } = require("../reports/reportConstants");
+const {
+  WEB_PROJECT_NOTIFICATION_EVENTS,
+  buildWebProjectNotification
+} = require("../webProjects/notificationCopy");
+
+const IN_APP_EVENT_TYPES = Object.freeze([
+  NOTIFICATION_EVENT_REPORT_READY,
+  ...Object.values(WEB_PROJECT_NOTIFICATION_EVENTS)
+]);
 
 function createNotificationService(pool) {
   async function auditNotification(userId, organizationId, actionType, details) {
@@ -15,8 +24,21 @@ function createNotificationService(pool) {
     );
   }
 
-  async function emitReportReady({ organizationId, reportId, reportRunId, requestedBy }) {
-    const dedupeKey = `REPORT_READY:run:${reportRunId}`;
+  async function fanoutInApp({
+    organizationId,
+    eventType,
+    severity,
+    scopeType,
+    scopeId,
+    payload,
+    dedupeKey,
+    title,
+    body,
+    linkTarget,
+    excludeUserId = null,
+    extraAudit = null,
+    recipientSource = "org"
+  }) {
     let eventId;
     try {
       eventId = randomUUID();
@@ -27,27 +49,28 @@ function createNotificationService(pool) {
         [
           eventId,
           organizationId,
-          NOTIFICATION_EVENT_REPORT_READY,
-          "INFO",
-          "report_run",
-          reportRunId,
-          JSON.stringify(sanitizeEvidence({ reportId, reportRunId })),
+          eventType,
+          severity,
+          scopeType,
+          scopeId,
+          JSON.stringify(sanitizeEvidence(payload || {})),
           dedupeKey
         ]
       );
     } catch (err) {
       if (err.code === "23505") {
-        return { skipped: true, reason: "dedupe" };
+        return { skipped: true, reason: "dedupe", created: 0 };
       }
       throw err;
     }
 
-    const recipients = await resolveOrgMemberRecipients(pool, organizationId, {
-      eventType: NOTIFICATION_EVENT_REPORT_READY
-    });
-
+    const recipients =
+      recipientSource === "staff"
+        ? await resolveStaffRecipients(pool)
+        : await resolveOrgMemberRecipients(pool, organizationId, { eventType });
     let created = 0;
     for (const recipient of recipients) {
+      if (excludeUserId && Number(recipient.userId) === Number(excludeUserId)) continue;
       const notifId = randomUUID();
       try {
         const ins = await pool.query(
@@ -62,21 +85,20 @@ function createNotificationService(pool) {
             organizationId,
             recipient.userId,
             eventId,
-            NOTIFICATION_EVENT_REPORT_READY,
-            "INFO",
-            "Informe listo",
-            "Tu informe de incidente está disponible en Informes.",
-            `/dashboard/informes?report=${reportId}`
+            eventType,
+            severity,
+            title,
+            body,
+            linkTarget
           ]
         );
-        if (!ins.rows[0]) {
-          continue;
-        }
+        if (!ins.rows[0]) continue;
         created += 1;
         await auditNotification(recipient.userId, organizationId, "notification_created", {
-          eventType: NOTIFICATION_EVENT_REPORT_READY,
+          eventType,
           notificationId: ins.rows[0].id,
-          reportRunId
+          scopeType,
+          scopeId
         });
       } catch (err) {
         if (err.code !== "23505") {
@@ -85,14 +107,54 @@ function createNotificationService(pool) {
       }
     }
 
-    if (requestedBy) {
-      await auditNotification(requestedBy, organizationId, "report_ready_notified", {
-        reportRunId,
-        recipientCount: created
-      });
+    if (extraAudit) {
+      await auditNotification(extraAudit.userId, organizationId, extraAudit.actionType, extraAudit.details);
     }
 
     return { eventId, created, skipped: false };
+  }
+
+  async function emitReportReady({ organizationId, reportId, reportRunId, requestedBy }) {
+    return fanoutInApp({
+      organizationId,
+      eventType: NOTIFICATION_EVENT_REPORT_READY,
+      severity: "INFO",
+      scopeType: "report_run",
+      scopeId: reportRunId,
+      payload: { reportId, reportRunId },
+      dedupeKey: `REPORT_READY:run:${reportRunId}`,
+      title: "Informe listo",
+      body: "Tu informe de incidente está disponible en Informes.",
+      linkTarget: `/dashboard/informes?report=${reportId}`,
+      extraAudit: requestedBy
+        ? {
+            userId: requestedBy,
+            actionType: "report_ready_notified",
+            details: { reportRunId }
+          }
+        : null
+    });
+  }
+
+  async function emitWebProject({ organizationId, kind, actorUserId = null, audience = "org", ...input }) {
+    const copy = buildWebProjectNotification(kind, { ...input, organizationId });
+    if (!copy) {
+      return { skipped: true, reason: "unknown_kind", created: 0 };
+    }
+    return fanoutInApp({
+      organizationId,
+      eventType: copy.eventType,
+      severity: copy.severity,
+      scopeType: copy.scopeType,
+      scopeId: copy.scopeId,
+      payload: copy.payload,
+      dedupeKey: copy.dedupeKey,
+      title: copy.title,
+      body: copy.body,
+      linkTarget: copy.linkTarget,
+      excludeUserId: actorUserId,
+      recipientSource: audience === "staff" ? "staff" : "org"
+    });
   }
 
   async function listForUser(userId, organizationId, { unreadOnly = false, limit = 50, offset = 0 } = {}) {
@@ -148,6 +210,7 @@ function createNotificationService(pool) {
 
   return {
     emitReportReady,
+    emitWebProject,
     listForUser,
     markRead,
     getPreferences,
@@ -155,4 +218,8 @@ function createNotificationService(pool) {
   };
 }
 
-module.exports = { createNotificationService };
+module.exports = {
+  createNotificationService,
+  IN_APP_EVENT_TYPES,
+  WEB_PROJECT_NOTIFICATION_EVENTS
+};

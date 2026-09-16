@@ -17,6 +17,7 @@ export type NavItem = {
 
 export const CLIENT_NAV: NavItem[] = [
   { id: "resumen", label: "Resumen", href: "/dashboard" },
+  { id: "proyectos", label: "Proyectos", href: "/dashboard/proyectos" },
   {
     id: "activos",
     label: "Mis activos",

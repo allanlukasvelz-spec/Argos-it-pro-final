@@ -111,7 +111,7 @@
     ],
     "brandMark": "ARGOS IT",
     "ctaMethod": "View full method",
-    "realityIndex": "01 / Client reality",
+    "realityIndex": "07 / Client reality",
     "problemTitle": "Technology should not be a burden",
     "problemLead": "Without clear criteria, silent friction appears: wasted time, unmapped risk and decisions made in the dark.",
     "realityItems": [
@@ -133,7 +133,7 @@
     "methodIndex": "04 / Method",
     "methodIntroLead": "ARGOS is a closed five-phase method to move from technical problems to sustained improvement—without improvisation.",
     "servicesIndex": "06 / Services",
-    "stabilityIndex": "07 / Continuity",
+    "stabilityIndex": "08 / Continuity",
     "stabilityTitle": "Operational continuity and prevention",
     "stabilityItems": [
       "Ongoing follow-up with clear priorities",
@@ -142,7 +142,7 @@
       "Preventive support and improvement proposals",
       "A long-term relationship, not one-off patches"
     ],
-    "trustIndex": "08 / Trust",
+    "trustIndex": "09 / Trust",
     "trustLead": "We work with human judgment: clarity, prevention and accompaniment—without invented operational theatre.",
     "finalCtaTitle": "Let’s talk with judgment",
     "finalCtaSubtitle": "Tell us your current situation. We will reply with a clear, prioritised and actionable proposal.",
@@ -160,6 +160,7 @@
     "servicesEyebrow": "ARGOS-IT services",
     "servicesTitle": "Professional services for continuity, security and growth.",
     "servicesSubtitle": "Built for companies and teams that need reliable technology and real support.",
+    "webProjectIndex": "01 / Web project",
     "explainer": {
       "eyebrow": "ARGOS-IT in motion",
       "stagesAria": "Interactive story stages",

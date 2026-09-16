@@ -15,6 +15,7 @@ export const NOC_NAV: NavSection[] = [
     items: [
       { href: "/noc", label: "Command Center" },
       { href: "/noc/organizations", label: "Organizations" },
+      { href: "/noc/projects", label: "Web Projects" },
       { href: "/noc/assets", label: "Assets" },
       { href: "/noc/health", label: "Global Health" },
       { href: "/noc/monitoring", label: "Monitoring" },

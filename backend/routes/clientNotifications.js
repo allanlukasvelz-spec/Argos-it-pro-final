@@ -2,7 +2,10 @@
  * Client in-app notifications — MVP channel only.
  */
 const express = require("express");
-const { createNotificationService } = require("../lib/notifications/notificationService");
+const {
+  createNotificationService,
+  IN_APP_EVENT_TYPES
+} = require("../lib/notifications/notificationService");
 const { NOTIFICATION_EVENT_REPORT_READY } = require("../lib/reports/reportConstants");
 
 function createClientNotificationsRouter(pool) {
@@ -59,7 +62,7 @@ function createClientNotificationsRouter(pool) {
   router.patch("/preferences", async (req, res) => {
     try {
       const eventType = String(req.body?.eventType || NOTIFICATION_EVENT_REPORT_READY);
-      if (eventType !== NOTIFICATION_EVENT_REPORT_READY) {
+      if (!IN_APP_EVENT_TYPES.includes(eventType)) {
         return res.status(400).json({ error: "eventType no soportado en MVP", code: "INVALID_EVENT" });
       }
       await notifications.setPreference(

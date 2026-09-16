@@ -145,6 +145,18 @@ export type ClientNotification = {
   createdAt: string;
 };
 
+export type {
+  WebProject,
+  WebProjectProgress,
+  WebProjectForm,
+  WebProjectItem,
+  WebProjectDocument,
+  WebProjectComment,
+  WebProjectReview,
+  WebProjectCredentialStatus,
+  WebProjectFormDefinition
+} from "./webProjects/types";
+
 export type MonitoringSummary = {
   organizationId: number;
   overall: HealthOverall;

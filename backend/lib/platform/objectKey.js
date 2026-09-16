@@ -1,5 +1,9 @@
 /**
- * Shared object store errors and opaque evidence object keys.
+ * Shared object store errors and opaque object keys.
+ * Namespaces on the same store:
+ *   ev = evidence_objects
+ *   wp = web_project_documents
+ * buildObjectKey() remains evidence-only (ev).
  */
 class ObjectStoreError extends Error {
   constructor(code, message) {
@@ -9,7 +13,7 @@ class ObjectStoreError extends Error {
 }
 
 const OBJECT_KEY_PATTERN =
-  /^org\/\d+\/ev\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+  /^org\/\d+\/(?:ev|wp)\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
 function assertValidObjectKey(objectKey) {
   const normalized = String(objectKey || "").replace(/\\/g, "/").trim();

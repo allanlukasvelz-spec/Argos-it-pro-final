@@ -33,13 +33,8 @@ export async function loginViaUi(page: Page, email: string, password: string) {
   await passwordInput.fill(password);
   await expect(passwordInput).toHaveValue(password, { timeout: 5000 });
 
-  const [res] = await Promise.all([
-    page.waitForResponse(
-      (r) => r.url().includes("/api/auth/login") && r.request().method() === "POST"
-    ),
-    page.getByRole("button", { name: /Iniciar sesion/i }).click()
+  await Promise.all([
+    page.waitForURL(/dashboard|noc|proyecto-web/, { timeout: 30000 }),
+    page.getByRole("button", { name: /Iniciar sesi/i }).click()
   ]);
-  expect(res.status(), `login ${email} → ${res.status()}`).toBe(200);
-  await page.waitForURL(/dashboard|noc/, { timeout: 30000 });
-  return res;
 }

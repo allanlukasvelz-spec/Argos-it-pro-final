@@ -73,6 +73,8 @@ export default function NocOrganizationDetailPage() {
         {" · "}
         <Link href={`/noc/assets?organization_id=${id}`}>Assets</Link>
         {" · "}
+        <Link href={`/noc/projects?organization_id=${id}`}>Web Projects</Link>
+        {" · "}
         <Link href={`/noc/alerts?organization_id=${id}`}>Alerts</Link>
       </p>
       <div className="noc-kpis">

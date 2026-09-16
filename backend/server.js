@@ -30,6 +30,12 @@ const { generalLimiter, detectBot, aiLimiter } = require("./middleware/security"
 const authMiddleware = require("./middleware/auth");
 const csrfOriginGuard = require("./middleware/csrfOrigin");
 const { resolveTenantContext, requireTenant } = require("./middleware/tenantContext");
+const createClientWebProjectsRouter = require("./routes/clientWebProjects");
+const createClientWebProjectSelfServiceRouter = require("./routes/clientWebProjectSelfService");
+const createNocWebProjectsRouter = require("./routes/nocWebProjects");
+const createNocWebProjectInvitationsRouter = require("./routes/nocWebProjectInvitations");
+const createPublicWebProjectInvitationsRouter = require("./routes/publicWebProjectInvitations");
+const { ensureWebProjects } = require("./lib/ensureWebProjects");
 
 const app = express();
 // Trust the single Traefik hop so rate limits use the real client IP.
@@ -161,16 +167,8 @@ app.use(cookieParser());
 app.use(express.json({ limit: "512kb" }));
 app.use(morgan("combined"));
 app.use(detectBot);
-app.use(generalLimiter);
-app.use(csrfOriginGuard(allowedOrigins));
 
-// Rutas públicas
-app.use("/api/auth", authRoutes);
-app.use("/api/ai/public", aiLimiter, require("./routes/ai-public"));
-app.use("/api/assistant", aiLimiter, require("./routes/assistant"));
-app.use("/api/contact", contactRoutes);
-
-// Local/test only: rate-limit counter reset (never staging/production — fail closed)
+// Local/test only: reset must bypass generalLimiter so serial E2E can recover between tests.
 const { isRateLimitResetAllowed } = require("./lib/ops/testSurfacePolicy");
 if (isRateLimitResetAllowed()) {
   app.use("/api/test", require("./routes/testOnly")());
@@ -179,6 +177,16 @@ if (isRateLimitResetAllowed()) {
     "[SECURITY] ARGOS_ALLOW_RATE_LIMIT_RESET ignored (staging/production or NODE_ENV not test|development)"
   );
 }
+
+app.use(generalLimiter);
+app.use(csrfOriginGuard(allowedOrigins));
+
+// Rutas públicas
+app.use("/api/auth", authRoutes);
+app.use("/api/web-project-invitations", createPublicWebProjectInvitationsRouter(pool));
+app.use("/api/ai/public", aiLimiter, require("./routes/ai-public"));
+app.use("/api/assistant", aiLimiter, require("./routes/assistant"));
+app.use("/api/contact", contactRoutes);
 
 // Staging harness ONLY — synthetic fixture provision; never production
 const {
@@ -194,11 +202,23 @@ if (isStagingHarnessAllowed()) {
 app.use("/api/ai", aiLimiter, authMiddleware, aiRoutes);
 app.use("/api/security", authMiddleware, securityRoutes);
 app.use(
+  "/api/client/web-projects/self-service",
+  authMiddleware,
+  createClientWebProjectSelfServiceRouter(pool)
+);
+app.use(
   "/api/client",
   authMiddleware,
   resolveTenantContext(pool),
   requireTenant(),
   createClientRouter(pool)
+);
+app.use(
+  "/api/client",
+  authMiddleware,
+  resolveTenantContext(pool),
+  requireTenant(),
+  createClientWebProjectsRouter(pool)
 );
 
 // Phase 5 — Internal NOC (global staff only; never weaken /api/client)
@@ -217,6 +237,8 @@ app.use("/api/noc", authMiddleware, requireNocAccess, createNocRemediationRouter
 app.use("/api/noc", authMiddleware, requireNocAccess, createNocAgentsRouter(pool));
 app.use("/api/noc/evidence", authMiddleware, requireNocAccess, createNocEvidenceRouter(pool));
 app.use("/api/noc", authMiddleware, requireNocAccess, createNocReportsRouter(pool));
+app.use("/api/noc", authMiddleware, requireNocAccess, createNocWebProjectsRouter(pool));
+app.use("/api/noc", authMiddleware, requireNocAccess, createNocWebProjectInvitationsRouter(pool));
 // Phase 7 — technical agent ingest (credential auth; no cookie CSRF path)
 app.use("/api/agent/v1", createAgentV1Router(pool));
 
@@ -379,6 +401,7 @@ async function start() {
     await ensureAgentsTables(pool);
     await ensureEvidenceObjectsTable(pool);
     await ensurePhase8Tables(pool);
+    await ensureWebProjects(pool);
   } catch (err) {
     console.error("❌ No se pudo asegurar tablas de arranque (sessions/diagnostics/orgs/assets/monitors/remediation/agents/evidence):", err.message);
     process.exit(1);

@@ -16,6 +16,7 @@ import type { ClientPortalPayload, MonitoringSummary } from "@/lib/clientTypes";
 import { coverageLabelEs, healthLabelEs, relativeTimeEs } from "@/lib/clientCopy";
 import { deriveProtectionSummary } from "@/lib/clientHealthSemantics";
 import { ChicoGuardian } from "@/components/client/ChicoGuardian";
+import { WebProjectHomeCard } from "@/components/web-projects/WebProjectHomeCard";
 
 export default function ResumenPage() {
   const [loading, setLoading] = useState(true);
@@ -144,6 +145,10 @@ export default function ResumenPage() {
         )}
       </section>
 
+      <section style={{ marginBottom: "1.25rem" }}>
+        <WebProjectHomeCard />
+      </section>
+
       <section className="cp-grid cp-grid--2" style={{ marginBottom: "1.25rem" }}>
         <div className="cp-card">
           <h2 style={{ fontSize: "1.05rem", marginTop: 0 }}>Atajos</h2>
@@ -165,6 +170,9 @@ export default function ResumenPage() {
             </Link>
             <Link className="cp-btn cp-btn--secondary" href="/dashboard/informes">
               Informes
+            </Link>
+            <Link className="cp-btn cp-btn--secondary" href="/dashboard/proyectos">
+              Proyectos
             </Link>
           </div>
         </div>

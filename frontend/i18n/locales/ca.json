@@ -105,7 +105,7 @@
     ],
     "brandMark": "ARGOS IT",
     "ctaMethod": "Veure el mètode complet",
-    "realityIndex": "01 / Realitat del client",
+    "realityIndex": "07 / Realitat del client",
     "problemTitle": "La tecnologia no hauria de ser una càrrega",
     "problemLead": "Sense un criteri clar apareixen friccions silencioses: temps perdut, riscos sense mapa i decisions a cegues.",
     "realityItems": [
@@ -127,7 +127,7 @@
     "methodIndex": "04 / Mètode",
     "methodIntroLead": "ARGOS és un mètode tancat de cinc fases per passar del problema tècnic a la millora sostinguda, sense improvisació.",
     "servicesIndex": "06 / Serveis",
-    "stabilityIndex": "07 / Continuïtat",
+    "stabilityIndex": "08 / Continuïtat",
     "stabilityTitle": "Continuïtat i prevenció operativa",
     "stabilityItems": [
       "Seguiment continu amb prioritats clares",
@@ -136,7 +136,7 @@
       "Suport preventiu i propostes de millora",
       "Relació a llarg termini, no pedaços puntuals"
     ],
-    "trustIndex": "08 / Confiança",
+    "trustIndex": "09 / Confiança",
     "trustLead": "Treballem amb criteri humà: claredat, prevenció i acompanyament sense soroll operatiu inventat.",
     "finalCtaTitle": "Parlem amb criteri",
     "finalCtaSubtitle": "Explica'ns la teva situació actual. Et respondrem amb una proposta clara, prioritzada i accionable.",
@@ -154,6 +154,7 @@
     "servicesEyebrow": "Serveis ARGOS-IT",
     "servicesTitle": "Serveis professionals per a continuïtat, seguretat i creixement.",
     "servicesSubtitle": "Pensats per a equips que necessiten tecnologia fiable i suport real.",
+    "webProjectIndex": "01 / Projecte web",
     "explainer": {
       "eyebrow": "ARGOS-IT en marxa",
       "stagesAria": "Etapes de la història interactiva",

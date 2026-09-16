@@ -51,6 +51,24 @@ const contactLimiter = rateLimit({
   message: { error: "Demasiadas consultas enviadas desde esta IP." }
 });
 
+const inviteLimiter = rateLimit({
+  windowMs: Number(process.env.INVITE_RATE_LIMIT_WINDOW_MS || 15 * 60 * 1000),
+  max: Number(process.env.INVITE_RATE_LIMIT_MAX || 20),
+  standardHeaders: true,
+  legacyHeaders: false,
+  store: createRegisteredStore(),
+  message: { error: "Demasiados intentos. Inténtalo de nuevo en unos minutos." }
+});
+
+const selfServiceLimiter = rateLimit({
+  windowMs: Number(process.env.SELF_SERVICE_RATE_LIMIT_WINDOW_MS || 15 * 60 * 1000),
+  max: Number(process.env.SELF_SERVICE_RATE_LIMIT_MAX || 8),
+  standardHeaders: true,
+  legacyHeaders: false,
+  store: createRegisteredStore(),
+  message: { error: "Demasiados intentos. Inténtalo de nuevo en unos minutos." }
+});
+
 function detectBot(req, _res, next) {
   const userAgent = String(req.headers["user-agent"] || "");
   const botKeywords = ["bot", "crawler", "spider", "curl", "wget"];
@@ -89,6 +107,8 @@ module.exports = {
   authLimiter,
   aiLimiter,
   contactLimiter,
+  inviteLimiter,
+  selfServiceLimiter,
   detectBot,
   validatePassword,
   validateEmailFormat

@@ -28,4 +28,17 @@ async function resolveOrgMemberRecipients(pool, organizationId, { eventType } = 
   return recipients;
 }
 
-module.exports = { resolveOrgMemberRecipients };
+async function resolveStaffRecipients(pool) {
+  const { rows } = await pool.query(
+    `SELECT id AS user_id, role
+     FROM users
+     WHERE role IN ('admin', 'super_admin')
+       AND COALESCE(is_active, TRUE) = TRUE`
+  );
+  return rows.map((row) => ({
+    userId: row.user_id,
+    orgRole: row.role
+  }));
+}
+
+module.exports = { resolveOrgMemberRecipients, resolveStaffRecipients };

@@ -3796,3 +3796,116 @@ a.argos-card:active {
     --reveal-delay: 0ms;
   }
 }
+
+.argos-wp-form {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1.75rem;
+}
+
+.argos-wp-field {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.argos-wp-field label,
+.argos-wp-choice legend {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.argos-wp-form__hint {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.argos-wp-form__error {
+  margin: 0;
+  color: var(--status-danger, #b42318);
+  font-weight: 600;
+}
+
+.argos-wp-choice {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-inline-size: 0;
+}
+
+.argos-wp-choice__grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .argos-wp-choice__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.argos-wp-choice__card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  min-height: 44px;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--border-default);
+  border-radius: 0.75rem;
+  background: #fff;
+  cursor: pointer;
+}
+
+.argos-wp-choice__card.is-selected,
+.argos-wp-choice__card:focus-within {
+  border-color: var(--action-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--action-secondary) 35%, transparent);
+}
+
+.argos-wp-choice__card input {
+  margin-top: 0.2rem;
+}
+
+.argos-wp-steps {
+  list-style: none;
+  padding: 0;
+}
+
+.argos-wp-steps li {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  margin: 0.75rem 0;
+}
+
+.argos-wp-steps__index {
+  flex: 0 0 auto;
+  color: var(--action-secondary);
+  font-weight: 700;
+}
+
+.argos-wp-resume {
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+  border: 1px solid var(--border-default);
+  border-radius: 0.75rem;
+  background: #fff;
+}
+
+.argos-wp-resume__list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 1rem 0;
+  padding: 0;
+  list-style: none;
+}
+
+.argos-wp-public .argos-corp-cta-row {
+  flex-wrap: wrap;
+}
+
+@media (max-width: 390px) {
+  .argos-wp-public .argos-corp-cta-row .argos-corporate-cta {
+    width: 100%;
+  }
+}
