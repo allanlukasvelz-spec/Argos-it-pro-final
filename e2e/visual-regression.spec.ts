@@ -100,7 +100,7 @@ test.describe("visual regression baseline (21.1)", () => {
     await stabilizePage(page);
     await page.waitForTimeout(800);
 
-    const content = page.locator(".argos-content-layer");
+    const content = page.locator("main.cp-main");
     await expect(content).toHaveScreenshot("dashboard.png", screenshotOptions);
   });
 });
