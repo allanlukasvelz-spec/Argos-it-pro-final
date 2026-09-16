@@ -42,14 +42,19 @@ npm ci
 npm ci --prefix backend
 npm ci --prefix frontend
 
+echo "[visual-baseline] clearing host .next cache (avoids cross-platform type conflicts)..."
+rm -rf frontend/.next
+
 echo "[visual-baseline] building frontend (verify)..."
 npm run verify
 
-echo "[visual-baseline] updating Linux chromium snapshots..."
-npx playwright test e2e/visual-regression.spec.ts --update-snapshots
+PUBLIC_VISUAL_GREP='home /|metodo /metodo|servicios /servicios|contacto /contacto'
 
-echo "[visual-baseline] verifying snapshots (maxDiffPixels=0)..."
-npx playwright test e2e/visual-regression.spec.ts
+echo "[visual-baseline] updating approved public Linux chromium snapshots..."
+npx playwright test e2e/visual-regression.spec.ts --grep "$PUBLIC_VISUAL_GREP" --update-snapshots
+
+echo "[visual-baseline] verifying approved public snapshots (maxDiffPixels=0)..."
+npx playwright test e2e/visual-regression.spec.ts --grep "$PUBLIC_VISUAL_GREP"
 
 ls -la e2e/visual-regression.spec.ts-snapshots/*-chromium-linux.png
 echo "[visual-baseline] done."
