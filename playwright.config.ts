@@ -33,7 +33,14 @@ export default defineConfig({
 
   projects: [
     {
+      name: "visual-regression",
+      testMatch: /visual-regression\.spec\.ts/,
+      use: { ...devices["Desktop Chrome"] },
+    },
+    {
       name: "chromium",
+      testIgnore: /visual-regression\.spec\.ts/,
+      dependencies: ["visual-regression"],
       use: { ...devices["Desktop Chrome"] },
     },
   ],
