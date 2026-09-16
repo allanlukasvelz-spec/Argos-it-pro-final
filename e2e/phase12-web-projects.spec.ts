@@ -77,13 +77,32 @@ async function addNocBriefNote(page: Page, type: string, content: string) {
   }
   if (type === "DECISION_REQUIRED") {
     await expect(form.getByText("Bloquea arquitectura")).toBeVisible();
+    await form.getByRole("checkbox").check();
   }
   const contentBox = page.locator("#noc-brief-note-content");
   await contentBox.click();
   await contentBox.fill(content);
   await expect(contentBox).toHaveValue(content);
+
+  const noteCreated = page.waitForResponse(
+    (r) =>
+      r.request().method() === "POST" &&
+      /\/api\/noc\/web-projects\/\d+\/brief\/notes/.test(r.url()) &&
+      r.status() === 201,
+    { timeout: 15000 }
+  );
+  const briefReloaded = page.waitForResponse(
+    (r) =>
+      r.request().method() === "GET" &&
+      /\/api\/noc\/web-projects\/\d+\/brief\?/.test(r.url()) &&
+      r.status() === 200,
+    { timeout: 15000 }
+  );
   await page.locator("#noc-brief-note-submit").click();
-  await expect(page.locator("#noc-brief-notes").getByText(content)).toBeVisible({ timeout: 15000 });
+  const postRes = await noteCreated;
+  await briefReloaded;
+  const { note } = (await postRes.json()) as { note: { id: number } };
+  await expect(page.locator(`#noc-note-${note.id}`)).toContainText(content, { timeout: 15000 });
 }
 
 test.describe("PHASE 12 project brief + architecture handoff", () => {
