@@ -15,6 +15,9 @@ export NODE_ENV=test
 export FRONTEND_URL=http://127.0.0.1:3000
 export CORS_ORIGINS=http://127.0.0.1:3000,http://localhost:3000
 export NEXT_PUBLIC_BACKEND_URL=http://127.0.0.1:4000
+export E2E_ORIGIN=http://127.0.0.1:3000
+export E2E_BACKEND_URL=http://127.0.0.1:4000
+export ARGOS_COOKIE_SECURE=0
 export ENABLE_SOCKET_IO=false
 export AUTH_RATE_LIMIT_MAX=40
 
@@ -34,6 +37,9 @@ for i in $(seq 1 60); do
 done
 psql "$DATABASE_URL" -c "SELECT 1" >/dev/null
 
+echo "[visual-baseline] resetting database (CI-fresh parity)..."
+psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -c "DROP SCHEMA IF EXISTS public CASCADE; CREATE SCHEMA public;"
+
 echo "[visual-baseline] applying schema..."
 psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f database/schema.sql
 
@@ -45,16 +51,15 @@ npm ci --prefix frontend
 echo "[visual-baseline] clearing host .next cache (avoids cross-platform type conflicts)..."
 rm -rf frontend/.next
 
-echo "[visual-baseline] building frontend (verify)..."
-npm run verify
+echo "[visual-baseline] building (CI E2E parity: production build after verify step)..."
+npm run build
 
-PUBLIC_VISUAL_GREP='home /|metodo /metodo|servicios /servicios|contacto /contacto'
+UPDATE_GREP="${VISUAL_UPDATE_GREP:-dashboard /dashboard}"
+echo "[visual-baseline] updating Linux chromium snapshots for: ${UPDATE_GREP}"
+npx playwright test e2e/visual-regression.spec.ts --grep "$UPDATE_GREP" --update-snapshots
 
-echo "[visual-baseline] updating approved public Linux chromium snapshots..."
-npx playwright test e2e/visual-regression.spec.ts --grep "$PUBLIC_VISUAL_GREP" --update-snapshots
-
-echo "[visual-baseline] verifying approved public snapshots (maxDiffPixels=0)..."
-npx playwright test e2e/visual-regression.spec.ts --grep "$PUBLIC_VISUAL_GREP"
+echo "[visual-baseline] verifying full visual-regression suite (maxDiffPixels=0)..."
+npx playwright test e2e/visual-regression.spec.ts
 
 ls -la e2e/visual-regression.spec.ts-snapshots/*-chromium-linux.png
 echo "[visual-baseline] done."
