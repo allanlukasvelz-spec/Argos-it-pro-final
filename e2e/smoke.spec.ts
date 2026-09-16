@@ -72,7 +72,7 @@ test.describe("public and auth shell", () => {
     await expect(page.locator('.mascot--dumbo [data-mascot-active="false"]')).toBeVisible();
     const chicoSrc =
       (await page.locator(".mascot__img--chico").getAttribute("src")) || "";
-    expect(chicoSrc).toMatch(/chico_esperando\.png/);
+    expect(chicoSrc).toMatch(/chico_alert\.png/);
     expect(chicoSrc).not.toMatch(/caminando/i);
     await page.keyboard.press("Escape");
     await expect(root).toHaveAttribute("data-active-mascot", "none");
@@ -94,7 +94,7 @@ test.describe("public and auth shell", () => {
     await expect(page.locator('.mascot--dumbo [data-mascot-active="true"]')).toBeVisible();
     await expect
       .poll(async () => (await page.locator(".mascot__img--dumbo").getAttribute("src")) || "")
-      .toMatch(/dumbo_sentado_atento\.png/);
+      .toMatch(/dumbo_guide\.png/);
     await page.keyboard.press("Escape");
     await expect(root).toHaveAttribute("data-active-mascot", "none");
   });

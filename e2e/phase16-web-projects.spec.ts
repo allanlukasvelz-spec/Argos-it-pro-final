@@ -456,15 +456,15 @@ test.describe("PHASE 16 validation closure", () => {
     await nocPage.getByTestId("start-publication-btn").click();
     await nocPage.screenshot({ path: path.join(SHOT_DIR, "15-start-publication.png"), fullPage: true });
     await nocPage.getByRole("button", { name: "Confirmar" }).click();
-    const pubRes = await nocPage.request.post(
-      `${BACKEND}/api/noc/web-projects/${projectId}/start-publication?organization_id=${organizationId}`,
-      { data: { acknowledgeWarnings: true }, headers: { Origin: origin, "Content-Type": "application/json" } }
-    );
-    expect(pubRes.ok(), `start-publication → ${pubRes.status()}`).toBeTruthy();
+    await expect(nocPage.locator("#noc-validacion").getByTestId("publication-handoff")).toBeVisible({
+      timeout: 15000
+    });
     await resetAuthRateLimits();
     await nocPage.reload();
     await nocPage.locator('a[href="#noc-validacion"]').click();
-    await expect(nocPage.getByTestId("publication-handoff")).toBeVisible({ timeout: 15000 });
+    await expect(nocPage.locator("#noc-validacion").getByTestId("publication-handoff")).toBeVisible({
+      timeout: 15000
+    });
     await nocPage.screenshot({ path: path.join(SHOT_DIR, "16-publication-state.png"), fullPage: true });
     await nocContext.close();
   });
