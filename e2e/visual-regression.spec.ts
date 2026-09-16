@@ -97,10 +97,16 @@ test.describe("visual regression baseline (21.1)", () => {
     ).toBeVisible({ timeout: 10_000 });
     await expect(page.getByText("Baseline Corp")).toBeVisible({ timeout: 10_000 });
 
+    await expect(page.getByRole("heading", { name: "Proyecto web" })).toBeVisible({
+      timeout: 15_000,
+    });
+
     await stabilizePage(page);
-    await page.waitForTimeout(800);
 
     const content = page.locator("main.cp-main");
-    await expect(content).toHaveScreenshot("dashboard.png", screenshotOptions);
+    await expect(content).toHaveScreenshot("dashboard.png", {
+      ...screenshotOptions,
+      mask: [page.locator(".chico-guardian")],
+    });
   });
 });

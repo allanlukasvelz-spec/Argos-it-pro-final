@@ -49,6 +49,9 @@ export default defineConfig({
       env: {
         ...process.env,
         PORT: e2eBackendPort,
+        DATABASE_URL: process.env.DATABASE_URL,
+        JWT_SECRET: process.env.JWT_SECRET,
+        JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET,
         CORS_ORIGINS: `${e2eOrigin},http://localhost:${e2ePort},http://127.0.0.1:3000,http://localhost:3000`,
         FRONTEND_URL: e2eOrigin,
         AUTH_RATE_LIMIT_MAX: process.env.AUTH_RATE_LIMIT_MAX || "128",

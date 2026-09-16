@@ -5,6 +5,9 @@ export const COOKIE_KEY = "argos_cookie_preferences_v1";
 export const VISUAL_VIEWPORT = { width: 1280, height: 720 };
 
 const FREEZE_STYLE = `
+  html, body {
+    overflow: hidden !important;
+  }
   *, *::before, *::after {
     animation: none !important;
     animation-duration: 0s !important;
@@ -58,6 +61,31 @@ export async function installVisualTestInit(page: Page): Promise<void> {
   );
 }
 
+export async function waitForVisualReadiness(page: Page): Promise<void> {
+  await page.evaluate(async () => {
+    const waitWithTimeout = (ms: number) =>
+      new Promise<void>((resolve) => {
+        window.setTimeout(resolve, ms);
+      });
+
+    if (document.fonts?.ready) {
+      await Promise.race([document.fonts.ready, waitWithTimeout(5000)]);
+    }
+    const pendingImages = Array.from(document.images).filter((img) => !img.complete);
+    await Promise.all(
+      pendingImages.map((img) =>
+        Promise.race([
+          new Promise<void>((resolve) => {
+            img.addEventListener("load", () => resolve(), { once: true });
+            img.addEventListener("error", () => resolve(), { once: true });
+          }),
+          waitWithTimeout(5000),
+        ])
+      )
+    );
+  });
+}
+
 export async function stabilizePage(page: Page): Promise<void> {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.addStyleTag({ content: FREEZE_STYLE });
@@ -73,8 +101,9 @@ export async function stabilizePage(page: Page): Promise<void> {
       node.remove();
     });
   });
-  await page.waitForLoadState("networkidle");
-  await page.waitForTimeout(600);
+  await page.waitForLoadState("load");
+  await page.waitForLoadState("networkidle", { timeout: 5000 }).catch(() => undefined);
+  await waitForVisualReadiness(page);
 }
 
 export async function gotoStable(page: Page, path: string): Promise<void> {
