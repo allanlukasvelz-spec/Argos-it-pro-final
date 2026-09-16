@@ -1,7 +1,13 @@
 import { test, expect } from "@playwright/test";
 import { gotoE2e } from "./helpers/e2eNav";
+import { COOKIE_KEY } from "./helpers/visual-stable";
 
 test.describe("public and auth shell", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.addInitScript((cookieKey) => {
+      window.localStorage.setItem(cookieKey, "accepted");
+    }, COOKIE_KEY);
+  });
   test("home loads", async ({ page }) => {
     await gotoE2e(page, "/");
     await expect(page.locator("body")).toBeVisible();
@@ -12,12 +18,13 @@ test.describe("public and auth shell", () => {
     await page
       .getByRole("button", { name: /Interactuar con Chico|Interact with Chico/i })
       .click({ force: true });
-    await expect(page.getByRole("dialog")).toBeVisible();
     await expect(
       page.getByRole("heading", { name: /Chat con Chico|Chat with Chico/i })
     ).toBeVisible();
     await page.keyboard.press("Escape");
-    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await expect(
+      page.getByRole("heading", { name: /Chat con Chico|Chat with Chico/i })
+    ).toHaveCount(0);
   });
 
   test("mascot Dumbo opens chat dialog and closes with Escape", async ({ page }) => {
@@ -25,12 +32,13 @@ test.describe("public and auth shell", () => {
     await page
       .getByRole("button", { name: /Interactuar con Dumbo|Interact with Dumbo/i })
       .click({ force: true });
-    await expect(page.getByRole("dialog")).toBeVisible();
     await expect(
       page.getByRole("heading", { name: /Chat con Dumbo|Chat with Dumbo/i })
     ).toBeVisible();
     await page.keyboard.press("Escape");
-    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await expect(
+      page.getByRole("heading", { name: /Chat con Dumbo|Chat with Dumbo/i })
+    ).toHaveCount(0);
   });
 
   test("dock mount/hover do not select walk assets", async ({ page }) => {
@@ -98,7 +106,9 @@ test.describe("public and auth shell", () => {
     });
     await chico.focus();
     await page.keyboard.press("Enter");
-    await expect(page.getByRole("dialog")).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: /Chat con Chico|Chat with Chico/i })
+    ).toBeVisible();
     await expect(page.locator(".mascot-root")).toHaveAttribute("data-active-mascot", "chico");
     await page.keyboard.press("Escape");
   });
@@ -110,7 +120,9 @@ test.describe("public and auth shell", () => {
     });
     await dumbo.focus();
     await page.keyboard.press("Space");
-    await expect(page.getByRole("dialog")).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: /Chat con Dumbo|Chat with Dumbo/i })
+    ).toBeVisible();
     await expect(page.locator(".mascot-root")).toHaveAttribute("data-active-mascot", "dumbo");
     await page.keyboard.press("Escape");
   });

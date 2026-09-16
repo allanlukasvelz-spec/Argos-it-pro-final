@@ -204,7 +204,9 @@ test.describe("PHASE 12 project brief + architecture handoff", () => {
     await fieldRow.getByLabel("Motivo de corrección").fill("Usa el nombre comercial público.");
     await fieldRow.getByRole("button", { name: "Solicitar corrección" }).click();
     await nocPage.reload();
-    await expect(nocPage.getByText("No listo")).toBeVisible({ timeout: 20000 });
+    await expect(nocPage.locator("#noc-brief .noc-brief__ready--not_ready")).toBeVisible({
+      timeout: 20000
+    });
     await expect(nocPage.getByRole("button", { name: "Preparar arquitectura" })).toBeDisabled();
     const blockedStart = await nocPage.request.post(
       `${BACKEND}/api/noc/web-projects/${id}/start-architecture?organization_id=${organizationId}`,
@@ -220,14 +222,14 @@ test.describe("PHASE 12 project brief + architecture handoff", () => {
     await saveField(page, "company_trade_name", "Demo Activities Public");
 
     await nocPage.reload();
-    await expect(nocPage.getByText("No listo")).toHaveCount(0);
+    await expect(nocPage.locator("#noc-brief .noc-brief__ready--not_ready")).toHaveCount(0);
     await expect(nocPage.getByText(/Listo para arquitectura|Listo con avisos/)).toBeVisible();
     await nocPage.locator("#noc-brief").screenshot({ path: path.join(SHOT_DIR, "08-noc-brief-ready.png") });
 
     await addNocBriefNote(nocPage, "ASSUMPTION", "El cliente entregará las traducciones.");
     await addNocBriefNote(nocPage, "RISK", "Dependencia de un calendario externo.");
     await addNocBriefNote(nocPage, "DECISION_REQUIRED", "Motor de reservas pendiente de decidir.");
-    await expect(nocPage.getByText("No listo")).toBeVisible();
+    await expect(nocPage.locator("#noc-brief .noc-brief__ready--not_ready")).toBeVisible();
     await nocPage.locator("#noc-brief-notes").screenshot({ path: path.join(SHOT_DIR, "07-noc-brief-notes-decisions.png") });
     await nocPage
       .locator("#noc-brief-notes li")

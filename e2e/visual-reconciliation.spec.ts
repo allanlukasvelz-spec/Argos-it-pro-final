@@ -5,6 +5,7 @@
 import { test, expect } from "@playwright/test";
 import { gotoE2e } from "./helpers/e2eNav";
 import { BACKEND, e2eAuthHeaders, isStagingE2e } from "./helpers/e2eEnv";
+import { ensurePhase81FixtureUsers, loadPhase81Fixtures } from "./helpers/ensurePhase81FixtureUsers";
 import { loginViaUi } from "./helpers/loginUi";
 import fs from "fs";
 import path from "path";
@@ -12,19 +13,10 @@ import path from "path";
 const ARTIFACT_DIR = path.join("docs", "architecture", "phase8-validation-artifacts");
 const password = process.env.PHASE81_PASSWORD || "Phase81TestPass1";
 
-function loadFixtures() {
-  const files = fs
-    .readdirSync(ARTIFACT_DIR)
-    .filter((f) => f.startsWith("phase81-results-") && f.endsWith(".json"))
-    .sort();
-  const latest = files[files.length - 1];
-  if (!latest) throw new Error("Missing phase81 fixtures JSON");
-  return JSON.parse(fs.readFileSync(path.join(ARTIFACT_DIR, latest), "utf8")).fixtures as {
-    emails: { userA: string; noc: string };
-  };
-}
-
 test.describe("Visual reconciliation isolation", () => {
+  test.beforeAll(async ({ request }) => {
+    await ensurePhase81FixtureUsers(request, password);
+  });
   test("PUBLIC page keeps marketing chrome", async ({ page }) => {
     fs.mkdirSync(ARTIFACT_DIR, { recursive: true });
     if (isStagingE2e) {
@@ -56,7 +48,7 @@ test.describe("Visual reconciliation isolation", () => {
       });
       expect([201, 409]).toContain(reg.status());
     } else {
-      email = loadFixtures().emails.userA;
+      email = loadPhase81Fixtures().emails.userA;
     }
     await loginViaUi(page, email, pwd);
 
@@ -79,7 +71,7 @@ test.describe("Visual reconciliation isolation", () => {
       email = harness.admin.email;
       pwd = harness.admin.password;
     } else {
-      email = loadFixtures().emails.noc;
+      email = loadPhase81Fixtures().emails.noc;
     }
     await loginViaUi(page, email, pwd);
 

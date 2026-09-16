@@ -6,26 +6,18 @@
 import { test, expect } from "@playwright/test";
 import fs from "fs";
 import path from "path";
+import { ensurePhase81FixtureUsers, loadPhase81Fixtures } from "./helpers/ensurePhase81FixtureUsers";
 
 const ARTIFACT_DIR = path.join("docs", "architecture", "phase8-validation-artifacts");
-const FIXTURE_FILE = process.env.PHASE81_FIXTURES_JSON;
 const password = process.env.PHASE81_PASSWORD || "Phase81TestPass1";
 
-function loadFixtures() {
-  const glob = fs.readdirSync(ARTIFACT_DIR).filter((f) => f.startsWith("phase81-results-"));
-  const latest = glob.sort().pop();
-  const file = FIXTURE_FILE || path.join(ARTIFACT_DIR, latest || "");
-  if (!file || !fs.existsSync(file)) {
-    throw new Error("Run backend/scripts/phase81-validation.js first");
-  }
-  return JSON.parse(fs.readFileSync(file, "utf8")).fixtures as {
-    emails: { userA: string; noc: string };
-  };
-}
-
 test.describe("Phase 8.1 reports UI", () => {
+  test.beforeAll(async ({ request }) => {
+    await ensurePhase81FixtureUsers(request, password);
+  });
+
   test("Client informes READY + mobile", async ({ page }) => {
-    const fx = loadFixtures();
+    const fx = loadPhase81Fixtures();
     fs.mkdirSync(ARTIFACT_DIR, { recursive: true });
 
     await page.goto("/auth/login");
@@ -48,7 +40,7 @@ test.describe("Phase 8.1 reports UI", () => {
   });
 
   test("NOC reports list", async ({ page }) => {
-    const fx = loadFixtures();
+    const fx = loadPhase81Fixtures();
     await page.goto("/auth/login");
     await page.getByLabel(/correo|email/i).fill(fx.emails.noc);
     await page.getByLabel(/contraseña|password/i).fill(password);

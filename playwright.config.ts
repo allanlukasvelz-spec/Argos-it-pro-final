@@ -6,6 +6,10 @@ const e2eBackendPort = process.env.E2E_BACKEND_PORT || "4000";
 const e2eBackendUrl = process.env.E2E_BACKEND_URL || `http://127.0.0.1:${e2eBackendPort}`;
 const e2eDedicated = process.env.E2E_DEDICATED === "1" || Boolean(process.env.CI);
 
+// Phase 15–18 API helpers default to :3020 when unset; align with Playwright webServer ports (CI uses :3000/:4000).
+if (!process.env.E2E_ORIGIN) process.env.E2E_ORIGIN = e2eOrigin;
+if (!process.env.E2E_BACKEND_URL) process.env.E2E_BACKEND_URL = e2eBackendUrl;
+
 export default defineConfig({
   testDir: "e2e",
   fullyParallel: true,
