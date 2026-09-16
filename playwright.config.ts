@@ -12,6 +12,7 @@ if (!process.env.E2E_BACKEND_URL) process.env.E2E_BACKEND_URL = e2eBackendUrl;
 
 export default defineConfig({
   testDir: "e2e",
+  snapshotPathTemplate: "{testDir}/{testFilePath}-snapshots/{arg}-{platform}{ext}",
   fullyParallel: true,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 1 : 0,
