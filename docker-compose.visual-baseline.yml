@@ -14,7 +14,7 @@ services:
       retries: 10
 
   visual-baseline:
-    image: mcr.microsoft.com/playwright:v1.59.1-noble
+    image: node:22-bookworm
     working_dir: /work
     volumes:
       - .:/work
@@ -24,4 +24,7 @@ services:
     environment:
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/argos_it
       CI: "1"
+      E2E_ORIGIN: http://127.0.0.1:3000
+      E2E_BACKEND_URL: http://127.0.0.1:4000
+      ARGOS_COOKIE_SECURE: "0"
     command: ["bash", "scripts/generate-visual-baselines-linux.sh"]

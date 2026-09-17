@@ -1,4 +1,6 @@
 const rateLimit = require("express-rate-limit");
+const { createRegisteredStore } = require("../lib/rateLimitRegistry");
+const { authRateLimitKey } = require("../lib/ops/stagingE2eRateLimitKey");
 
 const EMAIL_REGEX =
   /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
@@ -14,6 +16,7 @@ const generalLimiter = rateLimit({
   max: Number(process.env.RATE_LIMIT_MAX || 120),
   standardHeaders: true,
   legacyHeaders: false,
+  store: createRegisteredStore(),
   message: { error: "Demasiadas solicitudes. Intentalo de nuevo mas tarde." }
 });
 
@@ -22,6 +25,11 @@ const authLimiter = rateLimit({
   max: Number(process.env.AUTH_RATE_LIMIT_MAX || 8),
   standardHeaders: true,
   legacyHeaders: false,
+  store: createRegisteredStore(),
+  // Staging E2E behind Traefik: isolate via X-Argos-Staging-E2E-Fwd (TEST-NET only).
+  // Does not raise max; production ignores the header.
+  keyGenerator: authRateLimitKey,
+  validate: { keyGeneratorIpFallback: false },
   message: { error: "Demasiados intentos. Intentalo de nuevo en unos minutos." }
 });
 
@@ -30,6 +38,7 @@ const aiLimiter = rateLimit({
   max: Number(process.env.AI_RATE_LIMIT_MAX || 30),
   standardHeaders: true,
   legacyHeaders: false,
+  store: createRegisteredStore(),
   message: { error: "Demasiadas solicitudes a la IA. Intentalo de nuevo en unos minutos." }
 });
 
@@ -38,7 +47,26 @@ const contactLimiter = rateLimit({
   max: Number(process.env.CONTACT_RATE_LIMIT_MAX || 5),
   standardHeaders: true,
   legacyHeaders: false,
+  store: createRegisteredStore(),
   message: { error: "Demasiadas consultas enviadas desde esta IP." }
+});
+
+const inviteLimiter = rateLimit({
+  windowMs: Number(process.env.INVITE_RATE_LIMIT_WINDOW_MS || 15 * 60 * 1000),
+  max: Number(process.env.INVITE_RATE_LIMIT_MAX || 20),
+  standardHeaders: true,
+  legacyHeaders: false,
+  store: createRegisteredStore(),
+  message: { error: "Demasiados intentos. Inténtalo de nuevo en unos minutos." }
+});
+
+const selfServiceLimiter = rateLimit({
+  windowMs: Number(process.env.SELF_SERVICE_RATE_LIMIT_WINDOW_MS || 15 * 60 * 1000),
+  max: Number(process.env.SELF_SERVICE_RATE_LIMIT_MAX || 8),
+  standardHeaders: true,
+  legacyHeaders: false,
+  store: createRegisteredStore(),
+  message: { error: "Demasiados intentos. Inténtalo de nuevo en unos minutos." }
 });
 
 function detectBot(req, _res, next) {
@@ -79,6 +107,8 @@ module.exports = {
   authLimiter,
   aiLimiter,
   contactLimiter,
+  inviteLimiter,
+  selfServiceLimiter,
   detectBot,
   validatePassword,
   validateEmailFormat

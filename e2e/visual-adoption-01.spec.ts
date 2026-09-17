@@ -120,7 +120,7 @@ test.describe("ARGOS_VISUAL_ADOPTION_01", () => {
       const h1 = page.locator("#home-hero-title");
       await expect(h1).toBeVisible();
       await expect(h1).toContainText(
-        /Sistemas que no fallen cuando no deben|IT that works\. No noise\. No worries\./i
+        /Tecnología serena para empresas que avanzan|Serene technology for companies that move forward|Tecnologia serena per a empreses que avancen/i
       );
       await assertNotClipped(h1, `H1@${width}`);
 

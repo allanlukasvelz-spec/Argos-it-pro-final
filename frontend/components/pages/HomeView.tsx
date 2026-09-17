@@ -13,6 +13,11 @@ import { usePageMeta } from "@/components/seo/usePageMeta";
 import { useLocalizedServices } from "@/hooks/useLocalizedServices";
 import { useI18n } from "@/i18n/useI18n";
 import { METHOD_ARGOS_SLUGS } from "@/lib/methodArgosSteps";
+import {
+  SELF_SERVICE_HOME_CTA,
+  SELF_SERVICE_HOME_LEAD,
+  SELF_SERVICE_HOME_TITLE
+} from "@/lib/webProjects/selfServiceUi";
 
 type MethodStepCopy = {
   id: string;
@@ -76,30 +81,20 @@ export default function HomeView() {
         </div>
       </section>
 
-      {/* 2. Client reality — cream container + mint problem cards */}
-      <section className="argos-corp-section argos-corp-section--ivory" aria-labelledby="home-problem-title">
+      {/* 2. Public web project entry */}
+      <section className="argos-corp-section argos-corp-section--ivory" aria-labelledby="home-web-project-title">
         <ArgosReveal className="argos-corp-container">
           <article className="argos-surface-card argos-surface-card--01">
-            <p className="argos-corp-section-index">{t("home.realityIndex")}</p>
-            <h2 id="home-problem-title" className="argos-font-display argos-corp-h2">
-              {t("home.problemTitle")}
+            <p className="argos-corp-section-index">{t("home.webProjectIndex")}</p>
+            <h2 id="home-web-project-title" className="argos-font-display argos-corp-h2">
+              {SELF_SERVICE_HOME_TITLE}
             </h2>
-            <p className="argos-corp-body argos-corp-text-justify">{t("home.problemLead")}</p>
-            <ul className="argos-mint-card-grid">
-              {realityItems.map((item, index) => (
-                <li key={item}>
-                  <button
-                    type="button"
-                    className="argos-mint-card argos-mint-card--interactive"
-                    onClick={() => askDumboAboutReality(index)}
-                    aria-label={`${t("home.realityAskDumbo")}: ${item}`}
-                  >
-                    <p className="argos-mint-card__title">{item}</p>
-                    <span className="argos-mint-card__hint">{t("home.realityAskDumbo")}</span>
-                  </button>
-                </li>
-              ))}
-            </ul>
+            <p className="argos-corp-body argos-corp-text-justify">{SELF_SERVICE_HOME_LEAD}</p>
+            <div className="argos-corp-cta-row">
+              <Link href="/proyecto-web" className="argos-corporate-cta">
+                {SELF_SERVICE_HOME_CTA}
+              </Link>
+            </div>
           </article>
         </ArgosReveal>
       </section>
@@ -193,6 +188,34 @@ export default function HomeView() {
               </li>
             ))}
           </ul>
+        </ArgosReveal>
+      </section>
+
+      {/* 6b. Client reality — cream container + mint problem cards */}
+      <section className="argos-corp-section argos-corp-section--sand" aria-labelledby="home-problem-title">
+        <ArgosReveal className="argos-corp-container">
+          <article className="argos-surface-card argos-surface-card--01">
+            <p className="argos-corp-section-index">{t("home.realityIndex")}</p>
+            <h2 id="home-problem-title" className="argos-font-display argos-corp-h2">
+              {t("home.problemTitle")}
+            </h2>
+            <p className="argos-corp-body argos-corp-text-justify">{t("home.problemLead")}</p>
+            <ul className="argos-mint-card-grid">
+              {realityItems.map((item, index) => (
+                <li key={item}>
+                  <button
+                    type="button"
+                    className="argos-mint-card argos-mint-card--interactive"
+                    onClick={() => askDumboAboutReality(index)}
+                    aria-label={`${t("home.realityAskDumbo")}: ${item}`}
+                  >
+                    <p className="argos-mint-card__title">{item}</p>
+                    <span className="argos-mint-card__hint">{t("home.realityAskDumbo")}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </article>
         </ArgosReveal>
       </section>
 

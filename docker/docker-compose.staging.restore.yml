@@ -1,0 +1,33 @@
+# Overlay for isolated restore drill — NEVER points at primary staging volumes.
+# Usage: see scripts/staging/restore-drill.sh
+# Publish ports via STAGING_API_PORT / STAGING_FRONTEND_PORT (set to 4011/3011 in drill).
+name: argos-staging-restore
+
+volumes:
+  staging_pg_data:
+    name: argos_staging_restore_pg_data
+  staging_minio_data:
+    name: argos_staging_restore_minio_data
+  staging_evidence_local:
+    name: argos_staging_restore_evidence_local
+  staging_backups:
+    name: argos_staging_restore_backups
+
+services:
+  postgres:
+    container_name: argos-restore-postgres
+  migrate:
+    container_name: argos-restore-migrate
+  minio:
+    container_name: argos-restore-minio
+  minio-init:
+    container_name: argos-restore-minio-init
+  api:
+    container_name: argos-restore-api
+  worker:
+    container_name: argos-restore-worker
+  frontend:
+    container_name: argos-restore-frontend
+    environment:
+      NEXT_PUBLIC_BACKEND_URL: http://127.0.0.1:${STAGING_API_PORT:-4011}
+      BACKEND_URL: http://api:4000

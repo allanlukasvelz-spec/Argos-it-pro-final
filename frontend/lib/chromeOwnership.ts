@@ -25,6 +25,7 @@ export function isCorporatePublicRoute(pathname: string): boolean {
     return true;
   }
   if (pathname === "/portal" || pathname.startsWith("/portal/")) return true;
+  if (pathname === "/proyecto-web" || pathname.startsWith("/proyecto-web/")) return true;
   return false;
 }
 
@@ -49,6 +50,14 @@ export function isLabOrRecordingPath(pathname: string): boolean {
 }
 
 /**
+ * Isolated visual platform map. Owns its chrome. Must never inherit
+ * Corporate/legacy headers or wrap production routes.
+ */
+export function isPlatformMapRoute(pathname: string): boolean {
+  return pathname === "/platform-map" || pathname.startsWith("/platform-map/");
+}
+
+/**
  * Diagnostic promo is legacy conversion chrome — not on Corporate Quiet Authority,
  * legal, product apps, or labs.
  */
@@ -57,7 +66,8 @@ export function shouldShowDiagnosticPromo(pathname: string): boolean {
     !isLegalPublicRoute(pathname) &&
     !isProductAppRoute(pathname) &&
     !isCorporatePublicRoute(pathname) &&
-    !isLabOrRecordingPath(pathname)
+    !isLabOrRecordingPath(pathname) &&
+    !isPlatformMapRoute(pathname)
   );
 }
 
@@ -68,7 +78,10 @@ export function shouldHideAssistants(pathname: string): boolean {
   return (
     isProductAppRoute(pathname) ||
     isLabOrRecordingPath(pathname) ||
-    isLegalPublicRoute(pathname)
+    isLegalPublicRoute(pathname) ||
+    isPlatformMapRoute(pathname) ||
+    pathname === "/proyecto-web/comenzar" ||
+    pathname.startsWith("/proyecto-web/comenzar/")
   );
 }
 
@@ -79,7 +92,8 @@ export function shouldHideCookieBanner(pathname: string): boolean {
   return (
     pathname.startsWith("/dashboard") ||
     pathname.startsWith("/noc") ||
-    isLabOrRecordingPath(pathname)
+    isLabOrRecordingPath(pathname) ||
+    isPlatformMapRoute(pathname)
   );
 }
 
@@ -92,7 +106,8 @@ export function getChromeOwner(pathname: string): ChromeOwner {
     pathname.startsWith("/auth") ||
     pathname.startsWith("/dashboard") ||
     pathname.startsWith("/noc") ||
-    isLabOrRecordingPath(pathname)
+    isLabOrRecordingPath(pathname) ||
+    isPlatformMapRoute(pathname)
   ) {
     return "none";
   }

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ARGOS Platform Mental Map</title>
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "strict" });
+  </script>
+  <style>
+    :root {
+      --bg: #f3f1ec;
+      --ink: #1a2332;
+      --panel: #fffdf8;
+      --accent: #0f5c4c;
+      --muted: #5c6570;
+      --line: #d7d2c8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, #d9ebe4 0%, transparent 55%),
+        radial-gradient(900px 500px at 100% 0%, #e7dfd2 0%, transparent 50%),
+        var(--bg);
+      line-height: 1.45;
+    }
+    header {
+      padding: 2.5rem 1.5rem 1rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      margin: 0 0 0.4rem;
+      letter-spacing: -0.02em;
+      color: var(--accent);
+    }
+    .sub { color: var(--muted); max-width: 42rem; font-size: 1.05rem; }
+    .meta {
+      margin-top: 1rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem 3rem;
+      display: grid;
+      gap: 1.25rem;
+    }
+    section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 1.25rem 1.35rem;
+    }
+    h2 {
+      margin: 0 0 0.75rem;
+      font-size: 1.15rem;
+      color: var(--accent);
+    }
+    ul { margin: 0; padding-left: 1.2rem; }
+    li { margin: 0.25rem 0; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.75rem;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 0.85rem;
+      background: #fff;
+    }
+    .card strong { display: block; margin-bottom: 0.35rem; }
+    .tag {
+      display: inline-block;
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: 0.72rem;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      background: #e6f2ee;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+    }
+    .tag.warn { background: #f3e7d8; color: #7a4b12; }
+    .tag.bad { background: #f1e0e0; color: #7a1f1f; }
+    .mermaid { overflow-x: auto; }
+    footer {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem 2.5rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>ARGOS Platform Mental Map</h1>
+    <p class="sub">
+      Qué es ARGOS hoy (Phases 0–7), qué puede convertirse (plataforma de consultoría),
+      y qué queda subordinado a la verdad ARGOS — sin inventar métricas de runtime.
+    </p>
+    <p class="meta">HEAD baseline 756b801 · DATE 2026-08-25 · Markdown = fuente de verdad</p>
+  </header>
+
+  <main>
+    <section>
+      <h2>Hoy vs destino</h2>
+      <div class="grid">
+        <div class="card">
+          <span class="tag">CURRENT</span>
+          <strong>Control plane en PostgreSQL</strong>
+          Orgs, assets, monitors, health, alerts, incidents, runbooks, agents, CHICO guardian.
+          Stack: Next + Express + PG. Sin Prometheus/MinIO/Vault.
+        </div>
+        <div class="card">
+          <span class="tag warn">TARGET</span>
+          <strong>Mismos dueños + motores</strong>
+          Object store, OTel/Prometheus, findings, workers.
+          Engines ≠ semántica HEALTHY.
+        </div>
+        <div class="card">
+          <span class="tag bad">BOUNDARY</span>
+          <strong>Remote exec / remediation = NO</strong>
+          CHICO presenta verdad; no la inventa. DUMBO = guía UX.
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Mapa de dependencias</h2>
+      <div class="mermaid">
+flowchart TB
+  subgraph UX
+    Public[Public Web]
+    Client[Client Portal]
+    NOC[NOC]
+  end
+  subgraph Core[ARGOS Core]
+    Tenancy --> Assets
+    Assets --> Monitors
+    Assets --> Agents
+    Monitors --> Obs[Observations]
+    Agents --> Obs
+    Obs --> Health
+    Health --> Alerts --> Incidents
+    Incidents --> Runbooks
+    Health --> CHICO
+    Alerts --> CHICO
+  end
+  subgraph Engines[Engines gated]
+    OTel[OTel]
+    Prom[Prometheus]
+    Obj[Object Store]
+    Scan[Scanners]
+  end
+  Public --> Core
+  Client --> Tenancy
+  Client --> CHICO
+  NOC --> Core
+  OTel -.-> Prom
+  Prom -.-> Obs
+  Scan -.-> Alerts
+  Obj -.-> Incidents
+      </div>
+    </section>
+
+    <section>
+      <h2>Dominios de capacidad</h2>
+      <div class="grid">
+        <div class="card"><strong>Security / CHICO</strong> Guardian UI + findings futuros</div>
+        <div class="card"><strong>Infra / OS / Network</strong> Inventory tipado vía agents</div>
+        <div class="card"><strong>Web / TLS / DNS</strong> Monitors CURRENT</div>
+        <div class="card"><strong>Observability</strong> Hooks ahora · LGTM después</div>
+        <div class="card"><strong>Storage</strong> PG hoy · object store MVP</div>
+        <div class="card"><strong>Workflow</strong> PG jobs antes que Temporal</div>
+        <div class="card"><strong>Compliance</strong> Evidence ≠ certificación</div>
+        <div class="card"><strong>Self-obs</strong> Platform ≠ customer health</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Orden de implementación</h2>
+      <ul>
+        <li><strong>Foundation</strong> — docs, ports, storage classes, telemetry interface, schema 004/005 completeness</li>
+        <li><strong>MVP platform</strong> — evidence metadata + object adapter</li>
+        <li><strong>V1</strong> — OTel + Prometheus privados, workers, findings</li>
+        <li><strong>V1.5+</strong> — Loki/Tempo, scanners con scope, Vault/Temporal/K8s solo con trigger</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    Sin valores de runtime inventados. Ver <code>docs/platform/*.md</code> para detalle y gates.
+  </footer>
+</body>
+</html>

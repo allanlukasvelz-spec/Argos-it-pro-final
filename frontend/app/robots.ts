@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/mascot-motion-lab", "/mascot-motion-lab/"]
+        disallow: ["/mascot-motion-lab", "/mascot-motion-lab/", "/proyecto-web/comenzar"]
       }
     ],
     sitemap: "https://argos-it.com/sitemap.xml"

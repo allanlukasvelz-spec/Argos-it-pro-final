@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const pool = require("../db");
 const { authLimiter, validatePassword, validateEmailFormat } = require("../middleware/security");
 const { setTokenCookies, clearTokenCookies, REFRESH_COOKIE } = require("../lib/authCookies");
+const { ensurePrimaryOrganizationForUser } = require("../lib/ensureOrganizations");
 
 function requireJwtSecret(res) {
   if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
@@ -52,13 +53,25 @@ router.post("/register", authLimiter, validatePassword, async (req, res) => {
     const hash = await bcrypt.hash(password, 10);
 
     const result = await pool.query(
-      "INSERT INTO users(email, password, name, company) VALUES($1, $2, $3, $4) RETURNING id, email, name",
+      "INSERT INTO users(email, password, name, company) VALUES($1, $2, $3, $4) RETURNING id, email, name, company",
       [normalizedEmail, hash, name || normalizedEmail, String(company || "").trim()]
     );
 
+    const created = result.rows[0];
+    try {
+      await ensurePrimaryOrganizationForUser(pool, {
+        id: created.id,
+        company: created.company,
+        name: created.name,
+        email: created.email
+      });
+    } catch (orgErr) {
+      console.error("[AUTH] No se pudo crear organización primaria:", orgErr.message);
+    }
+
     res.status(201).json({
       message: "Usuario creado exitosamente",
-      user: { ...result.rows[0], company: company || "", role: "cliente", clientVerified: false }
+      user: { ...created, company: company || "", role: "cliente", clientVerified: false }
     });
   } catch (error) {
     console.error("Error en registro:", error);

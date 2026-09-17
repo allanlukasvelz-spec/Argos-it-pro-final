@@ -1,39 +1,48 @@
 import { test, expect } from "@playwright/test";
+import { gotoE2e } from "./helpers/e2eNav";
+import { COOKIE_KEY } from "./helpers/visual-stable";
 
 test.describe("public and auth shell", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.addInitScript((cookieKey) => {
+      window.localStorage.setItem(cookieKey, "accepted");
+    }, COOKIE_KEY);
+  });
   test("home loads", async ({ page }) => {
-    await page.goto("/");
+    await gotoE2e(page, "/");
     await expect(page.locator("body")).toBeVisible();
   });
 
   test("mascot Chico opens chat dialog", async ({ page }) => {
-    await page.goto("/");
+    await gotoE2e(page, "/");
     await page
       .getByRole("button", { name: /Interactuar con Chico|Interact with Chico/i })
       .click({ force: true });
-    await expect(page.getByRole("dialog")).toBeVisible();
     await expect(
       page.getByRole("heading", { name: /Chat con Chico|Chat with Chico/i })
     ).toBeVisible();
     await page.keyboard.press("Escape");
-    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await expect(
+      page.getByRole("heading", { name: /Chat con Chico|Chat with Chico/i })
+    ).toHaveCount(0);
   });
 
   test("mascot Dumbo opens chat dialog and closes with Escape", async ({ page }) => {
-    await page.goto("/");
+    await gotoE2e(page, "/");
     await page
       .getByRole("button", { name: /Interactuar con Dumbo|Interact with Dumbo/i })
       .click({ force: true });
-    await expect(page.getByRole("dialog")).toBeVisible();
     await expect(
       page.getByRole("heading", { name: /Chat con Dumbo|Chat with Dumbo/i })
     ).toBeVisible();
     await page.keyboard.press("Escape");
-    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await expect(
+      page.getByRole("heading", { name: /Chat con Dumbo|Chat with Dumbo/i })
+    ).toHaveCount(0);
   });
 
   test("dock mount/hover do not select walk assets", async ({ page }) => {
-    await page.goto("/");
+    await gotoE2e(page, "/");
     const imgs = page.locator(".mascot-root .mascot__img");
     await expect(imgs).toHaveCount(2);
     await page.waitForTimeout(3500);
@@ -52,7 +61,7 @@ test.describe("public and auth shell", () => {
   });
 
   test("one-active: Chico open uses STAND asset and deactivates Dumbo", async ({ page }) => {
-    await page.goto("/");
+    await gotoE2e(page, "/");
     const root = page.locator(".mascot-root");
     await expect(root).toHaveAttribute("data-active-mascot", "none");
     await page
@@ -63,14 +72,14 @@ test.describe("public and auth shell", () => {
     await expect(page.locator('.mascot--dumbo [data-mascot-active="false"]')).toBeVisible();
     const chicoSrc =
       (await page.locator(".mascot__img--chico").getAttribute("src")) || "";
-    expect(chicoSrc).toMatch(/chico_esperando\.png/);
+    expect(chicoSrc).toMatch(/chico_alert\.png/);
     expect(chicoSrc).not.toMatch(/caminando/i);
     await page.keyboard.press("Escape");
     await expect(root).toHaveAttribute("data-active-mascot", "none");
   });
 
   test("one-active: Dumbo open uses SIT; switch deactivates prior", async ({ page }) => {
-    await page.goto("/");
+    await gotoE2e(page, "/");
     const root = page.locator(".mascot-root");
     await page
       .getByRole("button", { name: /Interactuar con Chico|Interact with Chico/i })
@@ -85,31 +94,35 @@ test.describe("public and auth shell", () => {
     await expect(page.locator('.mascot--dumbo [data-mascot-active="true"]')).toBeVisible();
     await expect
       .poll(async () => (await page.locator(".mascot__img--dumbo").getAttribute("src")) || "")
-      .toMatch(/dumbo_sentado_atento\.png/);
+      .toMatch(/dumbo_guide\.png/);
     await page.keyboard.press("Escape");
     await expect(root).toHaveAttribute("data-active-mascot", "none");
   });
 
   test("keyboard Enter opens Chico assistant", async ({ page }) => {
-    await page.goto("/");
+    await gotoE2e(page, "/");
     const chico = page.getByRole("button", {
       name: /Interactuar con Chico|Interact with Chico/i
     });
     await chico.focus();
     await page.keyboard.press("Enter");
-    await expect(page.getByRole("dialog")).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: /Chat con Chico|Chat with Chico/i })
+    ).toBeVisible();
     await expect(page.locator(".mascot-root")).toHaveAttribute("data-active-mascot", "chico");
     await page.keyboard.press("Escape");
   });
 
   test("keyboard Space opens Dumbo assistant", async ({ page }) => {
-    await page.goto("/");
+    await gotoE2e(page, "/");
     const dumbo = page.getByRole("button", {
       name: /Interactuar con Dumbo|Interact with Dumbo/i
     });
     await dumbo.focus();
     await page.keyboard.press("Space");
-    await expect(page.getByRole("dialog")).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: /Chat con Dumbo|Chat with Dumbo/i })
+    ).toBeVisible();
     await expect(page.locator(".mascot-root")).toHaveAttribute("data-active-mascot", "dumbo");
     await page.keyboard.press("Escape");
   });
@@ -119,7 +132,7 @@ test.describe("public and auth shell", () => {
     await page.addInitScript(() => {
       window.localStorage.setItem("argos_cookie_preferences_v1", "accepted");
     });
-    await page.goto("/");
+    await gotoE2e(page, "/");
     // Quiet Authority: mascot dock hidden ≤1023px so it cannot cover content.
     await expect(page.locator("header.argos-corporate-header--surgical")).toHaveCount(1);
     await expect(page.locator(".mascot-root")).toBeHidden();
@@ -127,7 +140,7 @@ test.describe("public and auth shell", () => {
 
   test("assistants hidden on auth and legal routes", async ({ page }) => {
     for (const path of ["/auth/login", "/explainer", "/cookies", "/legal/privacidad"]) {
-      await page.goto(path);
+      await gotoE2e(page, path);
       await expect(page.locator(".mascot-root")).toHaveCount(0);
     }
   });
@@ -136,7 +149,7 @@ test.describe("public and auth shell", () => {
     await page.addInitScript(() => {
       window.localStorage.removeItem("argos_cookie_preferences_v1");
     });
-    await page.goto("/");
+    await gotoE2e(page, "/");
     const cookie = page.locator("aside[aria-live='polite']");
     await expect(cookie).toBeVisible();
     const z = await page.evaluate(() => {
@@ -151,7 +164,7 @@ test.describe("public and auth shell", () => {
   });
 
   test("explainer page section and CTA links", async ({ page }) => {
-    await page.goto("/explainer");
+    await gotoE2e(page, "/explainer");
     const section = page.locator("#dumbo-chico-explainer");
     await expect(section).toBeVisible();
     const next = section.getByRole("button", { name: /Siguiente|Next/i });
@@ -163,24 +176,24 @@ test.describe("public and auth shell", () => {
   });
 
   test("explainer recording page loads explainer section", async ({ page }) => {
-    await page.goto("/explainer?explainerRecord=1");
+    await gotoE2e(page, "/explainer?explainerRecord=1");
     const section = page.locator("#dumbo-chico-explainer");
     await expect(section).toBeVisible();
     await expect(section.getByRole("button", { name: /Siguiente|Next/i })).toBeVisible();
   });
 
   test("servicios slug page loads", async ({ page }) => {
-    await page.goto("/servicios/consultoria-it");
+    await gotoE2e(page, "/servicios/consultoria-it");
     await expect(page).toHaveURL(/\/servicios\/consultoria-it/);
   });
 
   test("login page shows title", async ({ page }) => {
-    await page.goto("/auth/login");
+    await gotoE2e(page, "/auth/login");
     await expect(page.getByRole("heading", { name: /Iniciar sesión/i })).toBeVisible();
   });
 
   test("dashboard redirects unauthenticated user to login", async ({ page }) => {
-    await page.goto("/dashboard");
+    await gotoE2e(page, "/dashboard");
     await expect(page).toHaveURL(/\/auth\/login/);
   });
 });

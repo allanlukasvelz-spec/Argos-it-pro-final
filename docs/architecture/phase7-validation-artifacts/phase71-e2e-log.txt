@@ -1,0 +1,35 @@
+npm warn Unknown env config "devdir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+[e2e] rate-limit stores reset: 6
+
+Running 24 tests using 1 worker
+
+(node:28166) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:28166) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [chromium] › e2e/auth-flow.spec.ts:51:7 › authenticated flow (HttpOnly cookies) › register a new user via UI (679ms)
+  ✓   2 [chromium] › e2e/auth-flow.spec.ts:76:7 › authenticated flow (HttpOnly cookies) › login sets HttpOnly cookies and reaches dashboard (552ms)
+  ✓   3 [chromium] › e2e/auth-flow.spec.ts:109:7 › authenticated flow (HttpOnly cookies) › logout clears cookies and revokes refresh (788ms)
+  ✓   4 [chromium] › e2e/auth-flow.spec.ts:140:7 › authenticated flow (HttpOnly cookies) › dashboard redirects unauthenticated visitor to login (132ms)
+  ✓   5 [chromium] › e2e/auth-flow.spec.ts:145:7 › authenticated flow (HttpOnly cookies) › Bearer-only REST access is rejected with 401 (540ms)
+  ✓   6 [chromium] › e2e/auth-flow.spec.ts:165:7 › authenticated flow (HttpOnly cookies) › cookie auth works and CSRF Origin blocks refresh without Origin (553ms)
+  ✓   7 [chromium] › e2e/client-portal.spec.ts:34:7 › Phase 4 client portal › shell navigation reaches real sections (1.3s)
+  ✓   8 [chromium] › e2e/phase7-agents.spec.ts:96:7 › Phase 7 agents lifecycle (local) › enrollment → heartbeat → NOC visible → guardian → revoke (1.4s)
+  ✓   9 [chromium] › e2e/smoke.spec.ts:4:7 › public and auth shell › home loads (1.2s)
+  ✓  10 [chromium] › e2e/smoke.spec.ts:9:7 › public and auth shell › mascot Chico opens chat dialog (430ms)
+  ✓  11 [chromium] › e2e/smoke.spec.ts:22:7 › public and auth shell › mascot Dumbo opens chat dialog and closes with Escape (443ms)
+  ✓  12 [chromium] › e2e/smoke.spec.ts:35:7 › public and auth shell › dock mount/hover do not select walk assets (4.2s)
+  ✓  13 [chromium] › e2e/smoke.spec.ts:54:7 › public and auth shell › one-active: Chico open uses STAND asset and deactivates Dumbo (543ms)
+  ✓  14 [chromium] › e2e/smoke.spec.ts:72:7 › public and auth shell › one-active: Dumbo open uses SIT; switch deactivates prior (480ms)
+  ✓  15 [chromium] › e2e/smoke.spec.ts:92:7 › public and auth shell › keyboard Enter opens Chico assistant (255ms)
+  ✓  16 [chromium] › e2e/smoke.spec.ts:104:7 › public and auth shell › keyboard Space opens Dumbo assistant (282ms)
+  ✓  17 [chromium] › e2e/smoke.spec.ts:116:7 › public and auth shell › 390: keyboard opens Chico; pause target >= 44px (228ms)
+  ✓  18 [chromium] › e2e/smoke.spec.ts:138:7 › public and auth shell › assistants hidden on auth and legal routes (330ms)
+  ✓  19 [chromium] › e2e/smoke.spec.ts:145:7 › public and auth shell › cookie banner stacks above dock when visible (378ms)
+  ✓  20 [chromium] › e2e/smoke.spec.ts:163:7 › public and auth shell › explainer page section and CTA links (1.6s)
+  ✓  21 [chromium] › e2e/smoke.spec.ts:175:7 › public and auth shell › explainer recording page loads explainer section (151ms)
+  ✓  22 [chromium] › e2e/smoke.spec.ts:182:7 › public and auth shell › servicios slug page loads (164ms)
+  ✓  23 [chromium] › e2e/smoke.spec.ts:187:7 › public and auth shell › login page shows title (128ms)
+  ✓  24 [chromium] › e2e/smoke.spec.ts:192:7 › public and auth shell › dashboard redirects unauthenticated user to login (123ms)
+
+  24 passed (17.6s)

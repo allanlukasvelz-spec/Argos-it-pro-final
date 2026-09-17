@@ -1,0 +1,21 @@
+# Staging API image — pinned bookworm-slim, non-root.
+ARG NODE_IMAGE=node:22.14.0-bookworm-slim@sha256:1c18d9ab3af4585870b92e4dbc5cac5a0dc77dd13df1a5905cea89fc720eb05b
+FROM ${NODE_IMAGE}
+
+WORKDIR /app
+
+RUN groupadd --system argos && useradd --system --gid argos --create-home argos
+
+COPY package*.json ./
+RUN npm ci --omit=dev
+
+COPY . .
+RUN chown -R argos:argos /app
+USER argos
+
+EXPOSE 4000
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=25s --retries=3 \
+  CMD node -e "fetch('http://127.0.0.1:4000/api/ready').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"
+
+CMD ["npm", "start"]
