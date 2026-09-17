@@ -54,12 +54,16 @@ rm -rf frontend/.next
 echo "[visual-baseline] building (CI E2E parity: production build after verify step)..."
 npm run build
 
-UPDATE_GREP="${VISUAL_UPDATE_GREP:-dashboard /dashboard}"
-echo "[visual-baseline] updating Linux chromium snapshots for: ${UPDATE_GREP}"
-npx playwright test e2e/visual-regression.spec.ts --grep "$UPDATE_GREP" --update-snapshots
+if [ -n "${VISUAL_UPDATE_GREP:-}" ]; then
+  echo "[visual-baseline] updating Linux chromium snapshots for: ${VISUAL_UPDATE_GREP}"
+  npx playwright test e2e/00-visual-regression.spec.ts --grep "$VISUAL_UPDATE_GREP" --update-snapshots
+else
+  echo "[visual-baseline] updating all Linux chromium visual snapshots..."
+  npx playwright test e2e/00-visual-regression.spec.ts --update-snapshots
+fi
 
 echo "[visual-baseline] verifying full visual-regression suite (maxDiffPixels=0)..."
-npx playwright test e2e/visual-regression.spec.ts
+npx playwright test e2e/00-visual-regression.spec.ts
 
 ls -la e2e/visual-regression.spec.ts-snapshots/*-chromium-linux.png
 echo "[visual-baseline] done."

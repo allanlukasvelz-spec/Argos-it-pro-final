@@ -12,7 +12,8 @@ if (!process.env.E2E_BACKEND_URL) process.env.E2E_BACKEND_URL = e2eBackendUrl;
 
 export default defineConfig({
   testDir: "e2e",
-  snapshotPathTemplate: "{testDir}/{testFilePath}-snapshots/{arg}-chromium-{platform}{ext}",
+  snapshotPathTemplate:
+    "{testDir}/visual-regression.spec.ts-snapshots/{arg}-chromium-{platform}{ext}",
   fullyParallel: true,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 1 : 0,
@@ -34,14 +35,7 @@ export default defineConfig({
 
   projects: [
     {
-      name: "visual-regression",
-      testMatch: /visual-regression\.spec\.ts/,
-      use: { ...devices["Desktop Chrome"] },
-    },
-    {
       name: "chromium",
-      testIgnore: /visual-regression\.spec\.ts/,
-      dependencies: ["visual-regression"],
       use: { ...devices["Desktop Chrome"] },
     },
   ],
