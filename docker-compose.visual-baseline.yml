@@ -14,7 +14,7 @@ services:
       retries: 10
 
   visual-baseline:
-    image: mcr.microsoft.com/playwright:v1.59.1-noble
+    image: node:22-bookworm
     working_dir: /work
     volumes:
       - .:/work

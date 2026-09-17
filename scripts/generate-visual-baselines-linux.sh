@@ -21,12 +21,16 @@ export ARGOS_COOKIE_SECURE=0
 export ENABLE_SOCKET_IO=false
 export AUTH_RATE_LIMIT_MAX=40
 
-echo "[visual-baseline] platform=$(uname -s) node=$(node -v) playwright=$(npx playwright --version)"
+echo "[visual-baseline] platform=$(uname -s) node=$(node -v)"
 
-if ! command -v psql >/dev/null 2>&1; then
-  echo "[visual-baseline] installing postgresql-client (Playwright image omits psql)..."
-  apt-get update -qq && apt-get install -y -qq postgresql-client >/dev/null
+if ! command -v psql >/dev/null 2>&1 || ! command -v npx >/dev/null 2>&1; then
+  echo "[visual-baseline] installing CI-parity deps (psql + Playwright Chromium)..."
+  apt-get update -qq
+  apt-get install -y -qq postgresql-client >/dev/null
+  npx playwright install --with-deps chromium
 fi
+
+echo "[visual-baseline] playwright=$(npx playwright --version)"
 
 echo "[visual-baseline] waiting for PostgreSQL..."
 for i in $(seq 1 60); do
