@@ -1,99 +1,66 @@
 # La Bòbila — modelo de datos
 
-Fecha: 2026-09-22. Fuente ejecutable: `la-bobila/catalog/catalog.json`. El validador vive en `la-bobila/print/render.mjs` y rechaza el HTML si el catálogo miente.
+Fecha: 2026-09-22. Versión de catálogo: 0.2.0. Fuente ejecutable: `la-bobila/catalog/catalog.json`. El validador está en `la-bobila/catalog/validate.mjs`. Lo usan la A3 y `/carta`.
 
-## Fuente única
+## Una sola fuente
 
-El renderer no copia nombres a mano. Toda cadena de cliente sale del JSON: marca, secciones, grupos, interfaz, alérgenos, QR, contacto y aviso. El HTML generado es salida. No se edita.
+Impresión, carta móvil y QR salen de este JSON. No hay `catalog-mobile.json`, `catalog-print.json` ni `menu-data.json`. El HTML generado no se edita.
 
 ## Estados
 
 | Estado | Significado |
 | --- | --- |
-| `CONFIRMADO` | Dato real, con fuente. Solo entonces se pinta como hecho. |
-| `POR_CONFIRMAR` | Hueco. En la lámina se lee «Per confirmar». El precio se pinta como «—». |
-| `HISTORICO` | Carta o precio antiguo, etiquetado como histórico. Hoy no hay filas. |
-| `PROPUESTA_ARGOS` | Texto nuestro, no un dato del negocio. Hoy: el aviso de la lámina. |
+| `CONFIRMADO` | Dato contrastado. Solo entonces se pinta como hecho. |
+| `POR_CONFIRMAR` | El cliente no lo ha confirmado. |
+| `SOURCE_MISSING` | Existe fuera del repositorio. El documento fuente no está ingerido. No significa que no exista. |
+| `HISTORICO` | Referencia antigua. No se da por vigente. |
+| `PROPUESTA_ARGOS` | Texto nuestro, no un dato del negocio. |
 | `DESCARTADO` | Se conserva la traza y no se muestra. Hoy no hay filas. |
 
-`null` no significa «no lleva» (por ejemplo, alérgenos vacíos). Significa desconocido. Una lista de alérgenos vacía con estado `CONFIRMADO` sería una afirmación legal y esta versión no la usa.
+`null` en precio, ingredientes, alérgenos, descripción o foto significa que ese valor no está en el catálogo. No sustituye al estado de la fila.
 
-## Marca
+## Qué hay ahora
 
-`marca.nombre`, `marca.tipo`, `marca.desde` están `CONFIRMADO` con fuente `encargo-2026-09-22`. No salen de un logo del repositorio. `moneda` está `POR_CONFIRMAR`: no se imprime símbolo.
+No es el catálogo definitivo.
 
-## Secciones
+| Grupo | Filas | Estado | Nombre |
+| --- | --- | --- | --- |
+| Pizzes `LB-PIZ-001` … `017` | 17 | `SOURCE_MISSING` | El de la extracción textual |
+| Smash `LB-BUR-001` … `004` | 4 | `SOURCE_MISSING` | null. El recuento se conoce; el nombre no |
+| Complements `LB-COM-001` … `011` | 11 | `SOURCE_MISSING` | null. Igual |
+| Amanides `LB-AMA-001` … `003` | 3 | `SOURCE_MISSING` | null. Igual |
+| Crea la teva | 0 | etiquetas solo | Base pizza, Carn, Vegetals, Formatges |
+| Postres | 0 | sección `HISTORICO` | Nota de postres y gelats. No se asume vigencia |
+| Begudes | 0 | sección `POR_CONFIRMAR` | El cliente no ha confirmado el catálogo |
+| Combos | 0 | — | No confirmados. No se añaden |
 
-Orden fijo en `secciones`:
+Fuente de las filas `SOURCE_MISSING`: `extraccion-textual-2026-09-22-sin-documento`. Precio, ingredientes, alérgenos, descripción y foto en `null`. `destacado` es `false`. Esas pizzas no están marcadas `CONFIRMADO`.
 
-| id | Título de cliente | Peso | Etiqueta | Contenido |
-| --- | --- | --- | --- | --- |
-| pizzes | Pizzes artesanes | protagonista | CONFIRMADO | POR_CONFIRMAR |
-| crea | Crea la teva pizza | protagonista | CONFIRMADO | POR_CONFIRMAR |
-| smash | Smash burgers | secundario | CONFIRMADO | POR_CONFIRMAR |
-| complements | Per compartir / complements | terciario | CONFIRMADO | POR_CONFIRMAR |
-| amanides | Amanides | terciario | CONFIRMADO | POR_CONFIRMAR |
-| postres | Postres | pendiente | POR_CONFIRMAR | POR_CONFIRMAR |
-| begudes | Begudes | pendiente | POR_CONFIRMAR | POR_CONFIRMAR |
+## Marca y QR
 
-La etiqueta confirmada es arquitectura del encargo, no un plato.
+`marca.nombre`, tipo y «Des de 2005» siguen `CONFIRMADO` por el encargo. `marca.wordmark` es `PLACEHOLDER`. `logo_archivo` es `null`: el logo visual no está ingerido.
 
-## Grupos de «Crea la teva pizza»
+`qr.ruta_estable` es `/carta`. `QR_PRODUCTION` está `BLOQUEADO` y su destino es `null`. `QR_DEV` solo puede ser `http://127.0.0.1:<puerto>/carta`. El validador rechaza cualquier otra URL.
 
-El id interno sigue el encargo. La etiqueta de cliente es catalán.
+## Contacto, legal, analítica
 
-| id | Etiqueta |
-| --- | --- |
-| base | Base |
-| carnes | Carns |
-| vegetales | Vegetals |
-| quesos | Formatges |
-| extras | Extres |
-
-Dos huecos por grupo. No son toppings reales.
-
-## Producto
-
-Campos obligatorios: `id`, `categoria`, `nombre`, `nombre_corto`, `descripcion`, `ingredientes`, `precio`, `precio_historico`, `alergenos`, `tipo`, `subcategoria`, `disponible`, `destacado`, `orden`, `foto`, `fuente`, `estado`, `observaciones`, `ultima_revision`.
-
-En un hueco `POR_CONFIRMAR` estos campos factuales son `null`: nombre, nombre corto, descripción, ingredientes, precio, precio histórico, alérgenos, foto. `disponible` es `null`. `destacado` es `false`. `fuente` es `estructura-inicial`. `ultima_revision` es `2026-09-22`. `observaciones` explica que espera la carta real.
-
-`tipo`: `slot` en las categorías de comida aún vacías; `esquema` en postres y begudes; `producto` solo cuando el estado pase a `CONFIRMADO`.
-
-## Identificadores
-
-| Categoría | Prefijo |
-| --- | --- |
-| pizzes | LB-PIZ |
-| smash | LB-BUR |
-| complements | LB-COM |
-| amanides | LB-AMA |
-| postres | LB-POS |
-| begudes | LB-BEG |
-| crea | LB-EXT |
-
-Forma: `LB-XXX-000`. Únicos. El id se ve en la lámina mientras el estado no sea `CONFIRMADO`, para que equipo y datos hablen de la misma pieza. Cuando el producto se confirme, el id sale de la carta impresa y se queda en el dato.
-
-Conteo actual: 6 pizzas, 10 toppings de esquema, 3 smash, 3 complements, 3 amanides, 2 postres de esquema, 2 begudes de esquema. Total 29. Cero filas `CONFIRMADO`, `HISTORICO` o `DESCARTADO`.
-
-## Contacto, QR, alérgenos
-
-- Contacto: `adreca`, `horari`, `telefon` en `null`. Etiquetas de interfaz en catalán.
-- QR: `destino` en `null`. Sin URL y sin código de barras falso.
-- Alérgenos: `items` en `null`. No hay iconos de gluten, lácteos ni nada parecido.
+Dirección, horario, teléfono, redes, privacidad y texto legal de publicación están vacíos. La analítica está inactiva, sin cookies. Los revisores previstos son CLO, CDAO y Growth. No hay tracker.
 
 ## Reglas del validador
 
-- Rechaza un hecho relleno si el estado es `POR_CONFIRMAR`.
-- Rechaza precio histórico fuera de `HISTORICO`.
-- Rechaza `destacado: true` sin producto confirmado.
-- Rechaza destino de QR, dirección, horario, teléfono o lista de alérgenos si su bloque no está `CONFIRMADO`.
-- El renderer, además, no pinta un hecho si el estado no es `CONFIRMADO`, aunque alguien saltara el validador.
+- Un `POR_CONFIRMAR` no lleva nombre ni valores.
+- Un `SOURCE_MISSING` puede llevar el nombre extraído en pizzas, y debe llevarlo en null en smash, complements y amanides.
+- Precio, ingredientes, alérgenos, descripción y foto siguen en null fuera de `CONFIRMADO`.
+- Cero productos en crea, postres y begudes.
+- Postres de sección en `HISTORICO`.
+- `QR_PRODUCTION` sin destino. `QR_DEV` solo local hacia `/carta`.
 
-## Fuera del modelo, a propósito
+## Fuera, a propósito
 
-No hay helados, combos, promociones, fotos, horario, dirección ni carta histórica. Si el helado existe, entrará bajo postres cuando la carta lo diga, con un id nuevo. No se abre una categoría por si acaso.
+No hay combos, helados como productos, bebidas inventadas ni toppings inventados. Los prefijos `LB-POS`, `LB-BEG` y `LB-EXT` siguen reservados en el validador para cuando entre un documento real.
 
-## Preguntas abiertas
+## Dos listas distintas
 
-Logo, carta vigente, carta histórica, dirección, horario, teléfono, bebidas, postres, helados, alérgenos, fotografías reales, combos, promociones, moneda, destino del QR, texto legal de publicación.
+Disponible fuera y todavía no ingerido como documento: logo visual, carta vigente, carta histórica, precios visibles, ingredientes visibles, concepto visual aprobado, formato A3 vertical aprobado.
+
+Ausente de verdad en el cliente: dominio público definitivo, catálogo de bebidas confirmado, confirmación de que postres y gelats históricos siguen vigentes, combos, matriz de alérgenos, autorización de impresión.

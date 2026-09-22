@@ -10,10 +10,6 @@ export function esc(value) {
     .replaceAll('"', "&quot;");
 }
 
-function pending(ui) {
-  return `<span class="is-pending">${esc(ui.pendiente)}</span>`;
-}
-
 export function BrandHeader(marca, olive) {
   return `<header class="lb-brand" data-component="BrandHeader">
     <div class="lb-brand__olive">${olive}</div>
@@ -27,9 +23,19 @@ export function BrandHeader(marca, olive) {
   </header>`;
 }
 
+export function sectionBadge(section, ui) {
+  if (section.estado_contenido === "HISTORICO") return ui.historic;
+  if (section.estado_contenido === "SOURCE_MISSING") return ui.sense_contrastar;
+  if (section.estado_etiqueta !== "CONFIRMADO" || section.estado_contenido === "POR_CONFIRMAR") {
+    return ui.pendiente;
+  }
+  return "";
+}
+
 export function CategoryHeader(section, ui, opts = {}) {
-  const badge = opts.pending
-    ? `<span class="lb-cat__badge">${pending(ui)}</span>`
+  const badgeText = opts.badge ?? "";
+  const badge = badgeText
+    ? `<span class="lb-cat__badge">${esc(badgeText)}</span>`
     : "";
   const icon = opts.icon ?? "";
   return `<header class="lb-cat lb-cat--${esc(section.peso)}" data-component="CategoryHeader">
@@ -69,13 +75,19 @@ export function IngredientList(product, ui) {
   return `<p class="lb-ingredients" data-component="IngredientList">${esc(text)}</p>`;
 }
 
+function visibleName(product, ui) {
+  if (product.estado === "CONFIRMADO" && product.nombre) return esc(product.nombre);
+  if (product.estado === "SOURCE_MISSING" && product.nombre) {
+    return `<span class="is-uncontrasted">${esc(product.nombre)}</span>`;
+  }
+  return `<span class="is-pending">${esc(ui.pendiente)}</span>`;
+}
+
 export function MenuItem(product, ui, opts = {}) {
-  const featured = opts.featured === true;
+  const featured = opts.featured === true && product.destacado === true && product.estado === "CONFIRMADO";
   const component = featured ? "MenuItemFeatured" : "MenuItem";
-  const pendingName = product.estado !== "CONFIRMADO" || product.nombre == null;
-  const name = pendingName
-    ? `<span class="is-pending">${esc(ui.pendiente)}</span>`
-    : esc(product.nombre);
+  const pendingName = !(product.nombre && (product.estado === "CONFIRMADO" || product.estado === "SOURCE_MISSING"));
+  const name = visibleName(product, ui);
   const id = product.estado === "CONFIRMADO"
     ? ""
     : `<span class="lb-id">${esc(product.id)}</span>`;
@@ -96,23 +108,36 @@ export function MenuItemFeatured(product, ui, opts = {}) {
   return MenuItem(product, ui, { ...opts, featured: true });
 }
 
+export function MenuRow(product, ui) {
+  const pendingName = !(product.nombre && (product.estado === "CONFIRMADO" || product.estado === "SOURCE_MISSING"));
+  const id = product.nombre ? "" : `<span class="lb-id">${esc(product.id)}</span>`;
+  return `<article class="lb-row" data-component="MenuItem" data-id="${esc(product.id)}" data-estado="${esc(product.estado)}">
+    <h3 class="lb-name${pendingName ? " is-pending" : " is-uncontrasted"}">${product.nombre && !pendingName ? esc(product.nombre) : esc(ui.pendiente)}</h3>
+    <span class="lb-row__meta">${id}${Price(product, ui)}</span>
+  </article>`;
+}
+
 export function CreateYourPizzaModule(section, grupos, productos, ui) {
   const columns = grupos.map((group) => {
     const slots = productos
       .filter((item) => item.subcategoria === group.id)
       .sort((a, b) => a.orden - b.orden);
-    const rows = slots.map((slot) => `<li class="lb-crea__slot">
+    const rows = slots.length
+      ? slots.map((slot) => `<li class="lb-crea__slot">
       <span class="lb-id">${esc(slot.id)}</span>
       <span class="lb-crea__pending is-pending">${esc(ui.pendiente)}</span>
-    </li>`).join("");
+    </li>`).join("")
+      : `<li class="lb-crea__slot"><span class="lb-crea__pending is-pending">${esc(ui.pendiente)}</span></li>`;
     return `<div class="lb-crea__group" data-grupo="${esc(group.id)}">
       <h3 class="lb-crea__label">${esc(group.etiqueta)}</h3>
       <ul class="lb-crea__list">${rows}</ul>
     </div>`;
   }).join("");
 
+  const note = section.nota ? `<p class="lb-note">${esc(section.nota)}</p>` : "";
   return `<section class="lb-crea" data-component="CreateYourPizzaModule" data-zone="crea">
-    ${CategoryHeader(section, ui)}
+    ${CategoryHeader(section, ui, { badge: sectionBadge(section, ui) })}
+    ${note}
     <div class="lb-crea__grid">${columns}</div>
   </section>`;
 }
@@ -132,19 +157,23 @@ export function SectionDivider() {
   return `<div class="lb-divider" data-component="SectionDivider" aria-hidden="true"><span></span></div>`;
 }
 
-export function QRBlock(qr, ui) {
-  const dest = qr.estado === "CONFIRMADO" && qr.destino
-    ? `<p class="lb-qr__dest">${esc(qr.destino)}</p>`
-    : `<p class="lb-qr__dest is-pending">${esc(ui.pendiente)}</p>`;
-  return `<section class="lb-qr" data-component="QRBlock">
-    <h2 class="lb-foot__title">${esc(qr.titulo)}</h2>
-    <div class="lb-qr__frame" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-    ${dest}
+export function QRBlock(qr, svg) {
+  if (qr?.produccion?.destino != null || qr?.desarrollo?.id !== "QR_DEV") {
+    throw new Error("QRBlock solo admite el módulo QR_DEV.");
+  }
+  return `<section class="lb-qrmod" data-component="QRBlock" data-qr="QR_DEV" data-estado="${esc(qr.modulo.estado_texto)}">
+    <div class="lb-qrmod__copy">
+      <h2 class="lb-qrmod__title">${esc(qr.modulo.titulo)}</h2>
+      <p class="lb-qrmod__text">${esc(qr.modulo.texto)}</p>
+      <p class="lb-qrmod__dev">${esc(qr.desarrollo.aviso)}</p>
+      <p class="lb-qrmod__url">${esc(qr.desarrollo.destino)}</p>
+    </div>
+    <div class="lb-qrmod__mark">${svg}</div>
   </section>`;
 }
 
 export function LegalInfo(aviso) {
-  return `<p class="lb-legal" data-component="LegalInfo" data-estado="${esc(aviso.estado)}">${esc(aviso.texto)}</p>`;
+  return `<p class="lb-study" data-component="LegalInfo" data-estado="${esc(aviso.estado)}" role="note">${esc(aviso.texto)}</p>`;
 }
 
 export function ContactBlock(contacto, ui) {
@@ -167,10 +196,8 @@ export function FooterInfo(catalog, ui) {
   return `<footer class="lb-footer" data-component="FooterInfo" data-zone="footer">
     <div class="lb-footer__grid">
       ${AllergenBadge(catalog.alergenos, ui)}
-      ${QRBlock(catalog.qr, ui)}
       ${ContactBlock(catalog.contacto, ui)}
     </div>
-    ${LegalInfo(catalog.aviso_lamina)}
     <p class="lb-footer__brand">${esc(marca)}</p>
   </footer>`;
 }

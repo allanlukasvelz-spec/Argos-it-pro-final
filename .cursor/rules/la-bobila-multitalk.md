@@ -58,9 +58,32 @@ Solo cuando el asunto lo exija: SRE, Security Operations, Backup & Recovery, Obs
 
 ## Estados de dato
 
-`CONFIRMADO`, `POR_CONFIRMAR`, `HISTORICO`, `PROPUESTA_ARGOS`, `DESCARTADO`.
+`CONFIRMADO`, `POR_CONFIRMAR`, `SOURCE_MISSING`, `HISTORICO`, `PROPUESTA_ARGOS`, `DESCARTADO`.
 
-Un dato no confirmado no se presenta como real. El hueco visible dice «Per confirmar». El precio desconocido es una raya (—) o un precio vacío, nunca un número inventado.
+- `POR_CONFIRMAR`: el cliente no lo ha confirmado.
+- `SOURCE_MISSING`: existe fuera del repositorio y el documento fuente aún no está ingerido. No es lo mismo que «no existe».
+- `null` en un campo de valor (precio, ingredientes, alérgenos, foto) significa que ese valor no está en el catálogo. No borra la diferencia entre los dos estados anteriores.
+
+Un dato no confirmado no se presenta como real. Si no hay nombre, el hueco dice «Per confirmar». Un nombre `SOURCE_MISSING` puede mostrarse como no contrastado. El precio desconocido es una raya (—), nunca un número inventado.
+
+## P0: QR y carta móvil
+
+QR + `/carta` es producto central, no un accesorio, no un PDF ni una foto de la lámina, no un shrink de escritorio, no un iframe, no una descarga, no un login y no una app.
+
+```
+catalog.json
+  ├── print → A3
+  ├── mobile → /carta
+  ├── QR_DEV ahora, QR_PRODUCTION bloqueado
+  └── web futura
+```
+
+- Prohibido un segundo catálogo (`catalog-mobile.json`, `catalog-print.json`, `menu-data.json` o equivalente).
+- `QR_PRODUCTION` bloqueado hasta un dominio y una ruta confirmados. No se genera. No se codifica una URL temporal o de proveedor como destino definitivo.
+- `QR_DEV` solo puede codificar `http://127.0.0.1:<puerto>/carta`. La lámina debe decir que no es el QR de producción y que no se imprime como carta final. Corrección de error mínima Q, zona muda, alto contraste, sin deformar.
+- La ruta estable es `/carta`. El QR físico futuro se conserva con una redirección controlada si cambia la implementación. No se inventa un dominio.
+- El wordmark actual es `PLACEHOLDER`. La paleta hex sigue `POR_CONFIRMAR` hasta muestrear el logo real, sin modificar el máster. Fraunces + Source Sans 3 son tipografía candidata, no una decisión irreversible.
+- QR no puede declararse PASS sin las pruebas de dispositivo de `docs/LA-BOBILA-QR-QA.md` y sin dominio. `/carta` no puede declararse PASS sin esas pruebas y sin los documentos fuente contrastados.
 
 ## Idioma
 
@@ -74,7 +97,7 @@ No es válido si parece una plantilla, podría ser de cualquier pizzería, el ne
 
 Es válido cuando se reconoce La Bòbila de inmediato, hay sentimiento mediterráneo real, oficio, actualidad, elegancia cálida, claridad, legibilidad, personalidad, escalabilidad y coherencia entre papel y digital.
 
-Sin el logo real no hay reconocimiento inmediato. Esa ausencia mantiene el sistema en estado parcial, aunque la estructura sea sólida. No se fabrica un logo y se hace pasar por el suyo. El wordmark tipográfico «La Bòbila» es un bloqueo provisional, no la marca definitiva.
+Hay un logo visual fuera del repositorio. No está ingerido. Hasta entonces el wordmark tipográfico es `PLACEHOLDER`: no se diseña como si fuera el logo final y no se fabrica un símbolo para ocupar su lugar. Sin ese archivo colocado, no hay reconocimiento inmediato y el conjunto sigue parcial aunque la infraestructura sea sólida.
 
 ## Cierre de fase
 

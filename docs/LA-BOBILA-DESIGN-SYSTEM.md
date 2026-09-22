@@ -6,7 +6,7 @@ Fecha: 2026-09-22. Tokens: `la-bobila/tokens/tokens.json` y `tokens.css`.
 
 Cálida, viva, sobria, actual. Marfil de fondo, verde profundo para la estructura, terracota solo en la marca («Des de 2005», el tick y el centro del filete), oliva para meta y precio, carbón cálido para ingredientes. El negro no manda. El dorado no se usa. No hay pergamino, bandera, script ni foto.
 
-El wordmark es Fraunces, «La Bòbila», provisional. No hay un símbolo inventado haciéndose pasar por el logo. Cuando llegue el archivo real, sustituye este bloqueo; no se le pega encima.
+El wordmark es Fraunces, «La Bòbila», estado `PLACEHOLDER`. No hay un símbolo inventado. Cuando llegue el archivo de logo: se conserva el máster, se trabaja sobre una copia optimizada, se muestrean los colores, se documenta el muestreo y se compara con esta paleta. Hasta entonces los hex siguen `POR_CONFIRMAR`.
 
 ## Color
 
@@ -26,7 +26,7 @@ Un velo radial muy bajo (terracota al 5 %, oliva al 7 %) evita el marfil plano. 
 
 ## Tipo
 
-Dos familias, ambas SIL Open Font License, archivos en `la-bobila/tokens/fonts/`. La impresión no llama a la red. El PDF incrusta subconjuntos (Fraunces Medium, Medium Italic, SemiBold; Source Sans 3 Regular, Medium, Italic).
+Dos familias candidatas, no una decisión irreversible. Ambas SIL Open Font License, archivos en `la-bobila/tokens/fonts/`. La impresión no llama a la red. El PDF incrusta subconjuntos (Fraunces Medium, Medium Italic, SemiBold; Source Sans 3 Regular, Medium, Italic). Se evaluarán más adelante sobre una A3 real: carácter, catalán, números, precios, ingredientes, impresión y móvil. No se cambian en este pase.
 
 | Uso | Familia | Fallback |
 | --- | --- | --- |
@@ -69,12 +69,13 @@ Espaciado: 1 / 2 / 3,2 / 4,5 / 6 mm. Filete fino 0,15 mm, regla 0,25 mm, regla f
 
 La retícula admite 2 columnas, 3 columnas, 1 bloque, 4+2 y 3+3. En esta lámina:
 
-- Bloque entero: cabecera, módulo de crear pizza, pie.
-- 4+2: pizza protagonista (un hueco ancho y dos apilados).
-- 3 columnas: resto de pizzas y la fila de smash.
-- 3+3, que es también la variante de 2 columnas: complements junto a amanides; postres junto a begudes.
+- Bloque entero: cabecera, módulo de crear pizza, módulo QR, pie.
+- 3 columnas: los 17 nombres de pizza.
+- 2 columnas: las cuatro smash.
+- 3+3: complements junto a amanides; postres junto a begudes.
+- 4+2 sigue definido en el CSS para un destacado confirmado. Esta lámina no lo usa: no hay destacado.
 
-El módulo de crear pizza es un bloque con cinco columnas internas. Son cinco grupos aprobados; no se fuerzan a seis.
+El módulo de crear pizza es un bloque con cuatro etiquetas. No hay toppings.
 
 Marco: línea verde a 4,2 mm del borde del archivo y un filete interior de oliva. El contenido no invade la sangre.
 
@@ -86,14 +87,14 @@ Altura de las zonas de producto, sin cabecera de marca ni pie. Medición sobre l
 
 | Zona | Alto | Parte |
 | --- | --- | --- |
-| Pizzes artesanes | 131,3 mm | |
-| Crea la teva pizza | 42,5 mm | |
-| Pizza, suma | 173,8 mm | 57,0 % |
-| Smash burgers | 38,1 mm | 12,5 % |
-| Per compartir + amanides | 57,2 mm | 18,7 % |
-| Postres + begudes | 36,0 mm | 11,8 % |
+| Pizzes artesanes | 125,6 mm | |
+| Crea la teva pizza | 37,9 mm | |
+| Pizza, suma | 163,5 mm | 58,2 % |
+| Smash burgers | 29,3 mm | 10,4 % |
+| Per compartir + amanides | 64,9 mm | 23,1 % |
+| Postres + begudes | 23,0 mm | 8,2 % |
 
-La smash no comparte peso de marca: menos alto, sin tomate, sin hueco protagonista, título más pequeño y en oliva profundo. No hay destacado comercial (`destacado: false` en todo el catálogo). El hueco ancho de la pizza es compositivo, para juzgar `MenuItemFeatured`, no una promo.
+La smash no comparte peso de marca. No hay destacado comercial. `MenuItemFeatured` existe y no se usa: ningún producto está confirmado como destacado. El módulo QR queda fuera de ese reparto y no se agranda hasta dominar la lámina.
 
 ## Componentes
 
@@ -111,8 +112,8 @@ Nombres estables, implementados en `la-bobila/print/components.mjs`, para carta 
 | CreateYourPizzaModule | Cinco grupos, huecos sin SKU. |
 | AllergenBadge | Un badge pendiente. Cero iconos inventados. |
 | SectionDivider | Un filete con tick de terracota, bajo la marca. |
-| FooterInfo | Cierra alérgenos, QR, contacto y la línea de marca. |
-| QRBlock | Marco de esquinas. Sin código y sin enlace. |
+| FooterInfo | Alérgenos, contacto y línea de marca. |
+| QRBlock | Módulo «La carta al teu mòbil» con QR_DEV. No es el código de producción. |
 | LegalInfo | Aviso de prueba, estado `PROPUESTA_ARGOS`. |
 | ContactBlock | Adreça, horari, telèfon en pendiente. |
 
@@ -122,6 +123,18 @@ El id visible desaparece cuando el producto pase a `CONFIRMADO`.
 
 Dibujo de línea original, en SVG. Vocabulario: olivo, tomate, trigo, contorno de pizza. En la lámina hay tres piezas: rama de olivo en la marca, tomate junto a las pizzas, contorno en el hueco protagonista. El trigo existe en el módulo y no se coloca: una cuarta pieza empezaría a decorar. Cero fotografías. No hay material real; la regla es de cero a dos fotos fuertes, así que son cero.
 
+## Carta móvil
+
+`/carta` no es la A3 encogida. Misma identidad y los mismos datos. Componentes: MobileMenuHeader, MobileCategoryNav, MobileCategorySection, MobileMenuItem, MobilePrice, MobileDescription, MobileIngredientList, MobileAllergenInfo, MobileFeaturedItem, MobileCreateYourPizza, MobileFooter, MobileContactActions.
+
+Cabecera con hueco de logo en `PLACEHOLDER`, tipo y «Des de 2005». Navegación vertical, objetivos táctiles de 44 px, precio visible, ingredientes legibles, alérgenos alcanzables aunque estén bloqueados. Sin foto: no hay ninguna real. Sin JavaScript de interfaz. La analítica es un JSON inerte (`activo: false`); revisores previstos: CLO, CDAO y Growth. Sin cookies.
+
+Banner visible: los datos no están contrastados y esto no es la carta publicada. Contacto, dirección, horario, redes, privacidad y legal salen vacíos o bloqueados. No hay enlaces rotos: si no hay teléfono, no hay `tel:`.
+
+## QR
+
+Módulo editorial, no un cuadrado suelto. Título y texto orientativo en estado `PROPUESTA_ARGOS`. El código es negro sobre blanco, corrección Q, zona muda de 4 módulos, sin deformar y fuera del velo de color. Lleva la etiqueta QR_DEV y la URL local. `QR_PRODUCTION` no se dibuja.
+
 ## Lo provisional
 
-Hex, wordmark, todos los productos, precios, alérgenos, QR, contacto y el aviso de la lámina (propuesta, no texto legal cerrado). La jerarquía y los nombres de sección del encargo no lo son.
+Hex, wordmark, tipografía candidata, precios, ingredientes, alérgenos, contacto y el aviso de la lámina. Los nombres de pizza de la extracción no son una carta confirmada. La jerarquía de secciones del encargo se mantiene.

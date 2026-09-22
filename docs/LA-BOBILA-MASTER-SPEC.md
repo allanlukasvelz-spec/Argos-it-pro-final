@@ -31,7 +31,7 @@ Sin el logo y sin la carta vigente, el reconocimiento inmediato no se puede decl
 - Sin pergamino falso, sin negro dominante, sin abuso de dorado, sin clichés italianos, sin fotos genéricas, sin datos inventados.
 - Orden: verdad de producto, arquitectura, jerarquía, diseño, implementación.
 - Una sola fuente: `la-bobila/catalog/catalog.json`.
-- Estados: `CONFIRMADO`, `POR_CONFIRMAR`, `HISTORICO`, `PROPUESTA_ARGOS`, `DESCARTADO`.
+- Estados: `CONFIRMADO`, `POR_CONFIRMAR`, `SOURCE_MISSING`, `HISTORICO`, `PROPUESTA_ARGOS`, `DESCARTADO`.
 
 ## Roles
 
@@ -41,24 +41,23 @@ En esta entrega intervinieron, de verdad: CEO, CPO, COO, CSO, CRO, CDAO, Head of
 
 ## Diseño
 
-Dirección cálida: marfil, verde profundo, terracota contenida, oliva, carbón cálido. Dos familias: Fraunces (marca y categorías) y Source Sans 3 (producto, ingredientes, precios). Archivos de fuente dentro del repo. Hex provisional, no extraído de un logo.
+Dirección cálida: marfil, verde profundo, terracota contenida, oliva, carbón cálido. Dos familias candidatas, no finales: Fraunces (marca y categorías) y Source Sans 3 (producto, ingredientes, precios). Archivos de fuente dentro del repo. Hex provisional, no extraído de un logo.
 
 La lámina es DIN A3 vertical con sangre. La pizza, incluido «Crea la teva pizza», ocupa el 57 % del área de producto. La smash queda en el 12,5 %. Detalle, componentes y medición en `docs/LA-BOBILA-DESIGN-SYSTEM.md`.
 
-El wordmark «La Bòbila» es tipográfico y provisional. El logo real no está colocado.
+El wordmark es `PLACEHOLDER`. El logo visual existe fuera del repositorio y no está ingerido.
 
 ## Arquitectura
 
 ```
-la-bobila/catalog/catalog.json     fuente única
-la-bobila/tokens/                  color, tipo, espacio, impresión
-la-bobila/print/components.mjs     componentes con nombre estable
-la-bobila/print/render.mjs         valida y genera carta-a3.html
-la-bobila/print/export.mjs         PDF y PNG con Chrome del sistema
-la-bobila/print/renders/           salida de imprenta y previsualización
+catalog.json
+  ├── print/render.mjs  → A3
+  ├── mobile/render.mjs → /carta
+  ├── QR_DEV local, QR_PRODUCTION bloqueado
+  └── web futura
 ```
 
-No hay dependencia npm nueva en el `package.json` de Argos. No hay CMS, web pública ni QR real: el destino del QR es `POR_CONFIRMAR` y el marco no es un código escaneable.
+No hay un segundo catálogo. No hay dependencia npm nueva en Argos. `/carta` se sirve en local con `node la-bobila/mobile/server.mjs` (`127.0.0.1:4173`). `GET /` responde 302 a `/carta`, que es el ensayo de la redirección futura. No hay dominio público.
 
 Regenerar:
 
@@ -71,19 +70,20 @@ node la-bobila/print/export.mjs
 
 ## Catálogo
 
-29 huecos, todos `POR_CONFIRMAR`, fuente `estructura-inicial`, revisión 2026-09-22. Cero precios, cero alérgenos, cero fotos. Los prefijos `LB-POS` y `LB-BEG` son esquema, no productos. Los toppings de «Crea la teva pizza» usan `LB-EXT` y no son SKU inventados. Modelo en `docs/LA-BOBILA-DATA-MODEL.md`.
+Versión 0.2.0. No es el catálogo definitivo. 17 pizzas con nombre `SOURCE_MISSING` (extracción textual, sin documento ingerido). 4 smash, 11 complements y 3 amanides sin nombre, mismo estado: el recuento se conoce y el nombre no. Crea la teva: solo cuatro etiquetas, cero toppings. Postres y gelats: nota `HISTORICO`, cero productos. Begudes: cero productos, catálogo no confirmado por el cliente. Cero precios, ingredientes, alérgenos y fotos. Modelo en `docs/LA-BOBILA-DATA-MODEL.md`.
 
-Confirmado por el encargo, no por un archivo del repo: el nombre, «Pizzeria artesana», «Des de 2005» y las etiquetas de arquitectura (pizzes, crea, smash, per compartir, amanides, y los cinco grupos del módulo). Postres y begudes se muestran como secciones pendientes.
+No confundir «no está en el repo» con «no existe». El logo, la carta vigente, la carta histórica, los precios y los ingredientes visibles existen fuera y aún no se han ingerido.
 
 ## Hoja de ruta
 
-1. Hecho: reglas, tokens, catálogo estructural, componentes, lámina A3, PDF y PNG.
-2. Siguiente: recibir logo original y carta vigente (productos, precios, alérgenos) y volcarlos solo en el JSON.
-3. Después: destino real del QR, dirección, horario y teléfono; texto legal revisado en lugar del aviso de prueba.
-4. Después: carta digital y web leyendo el mismo catálogo. Misma jerarquía, mismos IDs.
-5. Imprenta: marcas de corte solo si el impresor las pide. El PDF actual ya es la caja de sangre.
+1. Hecho: infraestructura provisional (reglas, tokens, renderer A3).
+2. Hecho en este pase: `/carta`, módulo QR_DEV, estado `SOURCE_MISSING`, nombres de pizza de la extracción textual.
+3. Siguiente: ingerir en el repo el logo y la carta vigente que ya existen fuera, muestrear el logo sobre una copia y rellenar solo hechos contrastados.
+4. Bloqueado: `QR_PRODUCTION` hasta un dominio. Luego la URL estable redirige a `/carta`.
+5. Después: web pública sobre el mismo catálogo. PWA solo cuando la carta contrastada exista (ADR-016).
+6. Imprenta: la A3 sigue siendo un estudio. La tolerancia final espera una prueba de máquina. El redondeo de Chrome por debajo de 0,15 mm no bloquea.
 
-Fuera de alcance: funciones de IA, cambios en Argos IT, publicación a producción, combos o precios sin datos.
+Fuera de alcance: IA, cambios en Argos IT, publicar, imprimir la carta definitiva, combos sin confirmación.
 
 ## Criterios de aceptación
 
@@ -95,4 +95,4 @@ Esta entrega cumple la estructura, la fuente única, la jerarquía y la impresi�
 
 ## Veredicto
 
-Parcial. La síntesis está en `docs/LA-BOBILA-STATUS.md`.
+La infraestructura de base aguanta. QR y `/carta` están construidos y no pueden declararse PASS: faltan pruebas de dispositivo, dominio y documentos contrastados. Síntesis en `docs/LA-BOBILA-STATUS.md`. Criterios de QR en `docs/LA-BOBILA-QR-QA.md`.

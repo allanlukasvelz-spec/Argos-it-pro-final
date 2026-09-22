@@ -1,0 +1,204 @@
+/* /carta — mobile first. Identity tokens come from tokens.css. Not a shrunk A3. */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  background: var(--lb-ivory);
+  color: var(--lb-charcoal);
+  font-family: var(--lb-font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.4;
+}
+
+.m-header,
+.m-nav,
+.m-main,
+.m-footer {
+  width: min(40rem, 100%);
+  margin: 0 auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.m-banner {
+  margin: 0 -1rem 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--lb-green);
+  color: var(--lb-ivory);
+  font-size: 0.95rem;
+}
+
+.m-logo { margin: 0.25rem 0 0; }
+
+.m-logo__slot {
+  display: inline-block;
+  margin-bottom: 0.35rem;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid var(--lb-olive);
+  color: var(--lb-olive-deep);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.m-logo__name {
+  margin: 0;
+  font-family: var(--lb-font-serif);
+  font-weight: 500;
+  font-size: 2.6rem;
+  line-height: 0.95;
+  color: var(--lb-green);
+}
+
+.m-logo__tipo {
+  margin: 0.4rem 0 0;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 0.82rem;
+}
+
+.m-logo__desde {
+  margin: 0.2rem 0 0;
+  font-family: var(--lb-font-serif);
+  font-style: italic;
+  color: var(--lb-terracotta);
+}
+
+.m-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding-top: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+.m-nav a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.4rem 0.2rem;
+  color: var(--lb-green);
+  font-family: var(--lb-font-serif);
+  font-size: 1.2rem;
+  text-decoration: none;
+  border-bottom: 1px solid var(--lb-line);
+}
+
+.m-nav a:focus-visible,
+.m-action:focus-visible {
+  outline: 2px solid var(--lb-terracotta);
+  outline-offset: 2px;
+}
+
+.m-section { padding: 1.25rem 0 0.4rem; }
+
+.m-section h2,
+.m-footer h2 {
+  margin: 0 0 0.45rem;
+  font-family: var(--lb-font-serif);
+  font-weight: 600;
+  font-size: 1.55rem;
+  letter-spacing: 0.04em;
+  color: var(--lb-green);
+}
+
+.m-badge {
+  font-family: var(--lb-font-sans);
+  font-size: 0.78rem;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--lb-olive-deep);
+}
+
+.m-note,
+.m-ingredients,
+.m-allergens,
+.m-desc {
+  margin: 0.2rem 0 0.55rem;
+  color: var(--lb-charcoal);
+}
+
+.m-ingredients span,
+.m-price__label,
+.m-allergens {
+  font-size: 1rem;
+}
+
+.m-item {
+  min-height: 44px;
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--lb-line);
+}
+
+.m-item__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.m-item h3,
+.m-group h3 {
+  margin: 0;
+  font-family: var(--lb-font-serif);
+  font-weight: 500;
+  font-size: 1.35rem;
+  line-height: 1.2;
+  color: var(--lb-green);
+}
+
+.m-price {
+  margin: 0;
+  flex: 0 0 auto;
+  color: var(--lb-olive-deep);
+  font-size: 1rem;
+}
+
+.m-crea { background: var(--lb-wash); padding: 1rem; margin-top: 0.5rem; }
+
+.m-groups { display: flex; flex-direction: column; gap: 0.35rem; }
+
+.m-group {
+  min-height: 44px;
+  padding: 0.45rem 0;
+  border-top: 1px solid var(--lb-line);
+}
+
+.m-footer {
+  padding-top: 1.5rem;
+  padding-bottom: 2rem;
+  margin-top: 1rem;
+  border-top: 2px solid var(--lb-green);
+}
+
+.m-action {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 44px;
+  margin: 0;
+  border-bottom: 1px solid var(--lb-line);
+}
+
+.is-pending { font-style: italic; color: var(--lb-olive-deep); }
+.is-uncontrasted { font-style: normal; }
+.is-empty { letter-spacing: 0.04em; }
+
+.m-footer__brand {
+  margin: 1.2rem 0 0;
+  text-align: center;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lb-green);
+  font-size: 0.82rem;
+}
+
+img { max-width: 100%; height: auto; }

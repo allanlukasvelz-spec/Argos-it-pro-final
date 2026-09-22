@@ -87,6 +87,10 @@ async function main() {
     await cdp.send("Page.enable");
     await cdp.send("Runtime.enable");
     await cdp.send("Emulation.setEmulatedMedia", { media: "print" });
+    await cdp.send("Runtime.evaluate", {
+      expression: "document.fonts.ready.then(() => document.querySelector('.lb-brand__name') !== null)",
+      awaitPromise: true,
+    });
     const fonts = await cdp.send("Runtime.evaluate", {
       expression: `document.fonts.ready.then(async () => {
         const name = getComputedStyle(document.querySelector(".lb-brand__name")).fontFamily;
