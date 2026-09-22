@@ -101,15 +101,15 @@ ADRs breves. Fecha de todas: 2026-09-22.
 ## ADR-013 — El wordmark es placeholder
 
 - Decisión: `marca.wordmark` es `PLACEHOLDER`. No se diseña como logo final. El archivo real, cuando se ingiera, se conserva intacto; se trabaja sobre una copia.
-- Motivo: el logo visual existe fuera del repositorio y todavía no está ingerido.
+- Motivo: aunque el PNG ya está ingerido, pegarlo en la cabecera sería un cambio de diseño. El wordmark tipográfico sigue en su sitio hasta una decisión aparte.
 - Roles: CEO, CSO, Head of Product Design.
 - Impacto: la cabecera móvil marca el hueco. La A3 sigue con el nombre en Fraunces, no con un símbolo inventado.
 - Estado: aceptada.
 
 ## ADR-014 — La paleta sigue provisional hasta muestrear el logo
 
-- Decisión: los hex no cambian hasta tener el archivo de logo, muestrear la copia optimizada, documentar el muestreo y comparar con esta paleta. El máster no se modifica.
-- Motivo: muestrear un archivo que no está en el repo sería inventar el color.
+- Decisión: los hex no se sustituyen solos después del muestreo. El máster no se modifica. La comparación queda en `docs/LA-BOBILA-BRAND-AUDIT.md`.
+- Motivo: el tomate muestreado (`#8E4A30`) y la tinta (`#202B17`) no son los hex provisionales. Cambiarlos sin cierre de CSO y diseño movería toda la lámina.
 - Roles: CSO, Head of Product Design, CDAO.
 - Impacto: `tokens.json` mantiene `estado_hex: POR_CONFIRMAR`.
 - Estado: aceptada.
@@ -136,4 +136,12 @@ ADRs breves. Fecha de todas: 2026-09-22.
 - Motivo: el andamiaje no sustituye al logo ni a las cartas. Inventar su contenido o descargar un logo parecido falsificaría la fuente.
 - Roles: CDAO, CEO, CPO, CLO, CTO, Chief of Staff.
 - Impacto: manifiesto `assets.json` con `FILE_NOT_INGESTED` y `sha256` null. Los 17 nombres de pizza pasan a `CANDIDATE_MATCH`. No hay `CONFIRMADO_SOURCE`. No se reexporta el PDF.
-- Estado: aceptada. La ingesta de esta fase queda `ASSET_INGESTION_BLOCKED`.
+- Estado: aceptada. La ingesta que esta ADR dejaba bloqueada se cierra en ADR-018. El orden y la inmutabilidad siguen vigentes.
+
+## ADR-018 — Ingesta del 2026-09-22, sin rediseño y sin QR de producción
+
+- Decisión: se copian byte a byte el logo, la carta vigente y la carta histórica desde el zip de Downloads. El catálogo 0.4.0 sale de la foto vigente tras dos pases de OCR. Lo histórico queda en `catalog.historico` y no se pinta. Los hex no se sustituyen. El wordmark sigue en `PLACEHOLDER`. `QR_PRODUCTION` sigue bloqueado y sin destino. Si la retícula no cabe, se informa y no se baja el tipo.
+- Motivo: ya hay archivo. Seguir con huecos vacíos sería ignorar la fuente. Sustituir la paleta o pegar el PNG sería diseñar antes de cerrar el contraste de marca.
+- Roles: CEO, CPO, COO, CFO, CSO, CRO, CDAO, CLO, Head of Product Design, CTO, Chief of Staff.
+- Impacto: 17 pizzas, 4 smash, 11 complements y 3 amanides en `CONFIRMADO`. Doce líneas de Crea la teva en `REVIEW_REQUIRED`, incluida cansalada en la columna de verdura. A3 en OVERFLOW por ese módulo. No hay alérgenos legales. No hay segunda carta ni segundo PR.
+- Estado: aceptada.

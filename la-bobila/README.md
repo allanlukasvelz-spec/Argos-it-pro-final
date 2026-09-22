@@ -18,4 +18,4 @@ node la-bobila/mobile/check.mjs     # comprobaciones automáticas, no sustituyen
 
 Documentos: `docs/LA-BOBILA-MASTER-SPEC.md`, `docs/LA-BOBILA-DATA-MODEL.md`, `docs/LA-BOBILA-DESIGN-SYSTEM.md`, `docs/LA-BOBILA-DECISIONS.md`, `docs/LA-BOBILA-STATUS.md`.
 
-No hay logo ni carta real en este repositorio. Los huecos dicen «Per confirmar». No rellenar precios, alérgenos, horario ni dirección sin pasarlos a `CONFIRMADO` con fuente.
+El logo y las dos cartas están en `source/` y no se editan. Los precios e ingredientes vigentes salen de la foto de la carta vigente tras doble contraste. Los huecos que la foto no cierra siguen en «Per confirmar». No hay alérgenos, horario ni dirección. `QR_PRODUCTION` sigue bloqueado.

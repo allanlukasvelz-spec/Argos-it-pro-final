@@ -93,8 +93,10 @@ async function main() {
     });
     const fonts = await cdp.send("Runtime.evaluate", {
       expression: `document.fonts.ready.then(async () => {
-        const name = getComputedStyle(document.querySelector(".lb-brand__name")).fontFamily;
-        const ingredients = getComputedStyle(document.querySelector(".lb-ingredients")).fontFamily;
+        const nameEl = document.querySelector(".lb-brand__name");
+        const ingredientEl = document.querySelector(".lb-ingredients");
+        const name = nameEl ? getComputedStyle(nameEl).fontFamily : null;
+        const ingredients = ingredientEl ? getComputedStyle(ingredientEl).fontFamily : null;
         return { name, ingredients, fraunces: document.fonts.check("500 16px Fraunces"), sans: document.fonts.check("400 16px 'Source Sans 3'") };
       })`,
       awaitPromise: true,
@@ -108,13 +110,20 @@ async function main() {
           const rect = node.getBoundingClientRect();
           return { zone: node.dataset.zone, h: rect.height };
         });
-        return { width: sheet.width, height: sheet.height, zones };
+        const overflow = [...document.querySelectorAll("[data-zone], .lb-crea__list, .pizza-names, .lb-rows")].map((node) => ({
+          zone: node.dataset.zone || node.className,
+          client: node.clientHeight,
+          scroll: node.scrollHeight,
+          clipped: node.scrollHeight > node.clientHeight + 1,
+        }));
+        return { width: sheet.width, height: sheet.height, zones, overflow };
       })()`,
       returnByValue: true,
     });
     const metrics = box.result.value;
     console.log("sheet_px", metrics.width, metrics.height);
     console.log("zones", JSON.stringify(metrics.zones));
+    console.log("overflow", JSON.stringify(metrics.overflow));
     await cdp.send("Emulation.setDeviceMetricsOverride", {
       width: Math.ceil(metrics.width),
       height: Math.ceil(metrics.height),

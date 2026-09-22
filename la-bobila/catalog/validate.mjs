@@ -55,15 +55,24 @@ export function validate(catalog) {
       errors.push(`${product.id}: prefijo incorrecto.`);
     }
     if (!sectionIds.has(product.categoria)) errors.push(`${product.id}: categoría fuera de secciones.`);
-    if (product.destacado !== false && product.estado !== "CONFIRMADO") {
+    if (product.destacado !== false && product.estado !== "CONFIRMADO" && product.estado !== "CONFIRMADO_SOURCE") {
       errors.push(`${product.id}: destacado comercial solo con producto confirmado.`);
     }
-    if (product.estado !== "CONFIRMADO" && product.disponible != null) {
+    if (product.estado !== "CONFIRMADO" && product.estado !== "CONFIRMADO_SOURCE" && product.disponible != null) {
       errors.push(`${product.id}: disponible debe ser null hasta confirmar.`);
     }
     for (const key of VALUE_FIELDS) {
-      if (product.estado !== "CONFIRMADO" && product.estado !== "HISTORICO" && product[key] != null) {
+      if (product.estado !== "CONFIRMADO" && product.estado !== "CONFIRMADO_SOURCE" && product.estado !== "HISTORICO" && product[key] != null) {
         errors.push(`${product.id}: ${key} tiene valor sin confirmación.`);
+      }
+    }
+    if ((product.estado === "CONFIRMADO" || product.estado === "CONFIRMADO_SOURCE") && product.precio != null) {
+      const price = product.precio;
+      if (typeof price !== "object" || typeof price.value !== "number" || price.status !== "CONFIRMADO_SOURCE") {
+        errors.push(`${product.id}: el precio contrastado es { value, status: CONFIRMADO_SOURCE }.`);
+      }
+      if (price && price.currency != null) {
+        errors.push(`${product.id}: la moneda global sigue sin confirmar. currency null.`);
       }
     }
     if (product.estado === "HISTORICO" && product.precio != null) {
@@ -72,8 +81,8 @@ export function validate(catalog) {
     if (product.estado === "POR_CONFIRMAR" && product.nombre != null) {
       errors.push(`${product.id}: POR_CONFIRMAR no puede llevar nombre.`);
     }
-    if (product.estado === "CONFIRMADO_SOURCE") {
-      errors.push(`${product.id}: CONFIRMADO_SOURCE exige carta vigente ingerida y doble contraste. Hoy no hay archivo.`);
+    if (product.estado === "CONFIRMADO_SOURCE" && product.fuente !== "LB-ASSET-MENU-CURRENT-001") {
+      errors.push(`${product.id}: CONFIRMADO_SOURCE exige la carta vigente ingerida LB-ASSET-MENU-CURRENT-001.`);
     }
     if (product.estado === "CANDIDATE_MATCH") {
       if (product.categoria !== "pizzes") {
@@ -101,7 +110,7 @@ export function validate(catalog) {
         errors.push(`${product.id}: no hay SKU de topping confirmado ni extraído.`);
       }
     }
-    if (product.estado === "CONFIRMADO" && product.tipo !== "producto") {
+    if ((product.estado === "CONFIRMADO" || product.estado === "CONFIRMADO_SOURCE") && product.tipo !== "producto") {
       errors.push(`${product.id}: un confirmado es tipo producto.`);
     }
     if (!product.observaciones) errors.push(`${product.id}: observaciones vacías.`);
@@ -114,9 +123,16 @@ export function validate(catalog) {
   }
 
   const count = (categoria) => (catalog.productos ?? []).filter((product) => product.categoria === categoria).length;
-  if (count("postres") !== 0) errors.push("Postres: no fabricar productos. Solo nota de sección histórica.");
+  if (count("postres") !== 0) errors.push("Postres: no fabricar productos vigentes. Solo nota de sección histórica.");
   if (count("begudes") !== 0) errors.push("Begudes: no inventar bebidas.");
-  if (count("crea") !== 0) errors.push("Crea la teva: solo etiquetas de arquitectura, sin toppings.");
+  for (const product of (catalog.productos ?? []).filter((item) => item.categoria === "crea")) {
+    if (product.fuente !== "LB-ASSET-MENU-CURRENT-001") {
+      errors.push(`${product.id}: un topping solo entra desde la carta vigente ingerida.`);
+    }
+    if (product.estado !== "CONFIRMADO" && product.estado !== "CONFIRMADO_SOURCE" && product.estado !== "REVIEW_REQUIRED") {
+      errors.push(`${product.id}: topping sin estado de ingesta.`);
+    }
+  }
 
   const postres = (catalog.secciones ?? []).find((section) => section.id === "postres");
   if (postres?.estado_contenido !== "HISTORICO") {

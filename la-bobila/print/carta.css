@@ -396,7 +396,8 @@ body {
   gap: 0.3mm;
 }
 
-.lb-crea__pending {
+.lb-crea__pending,
+.lb-crea__name {
   font-family: var(--lb-font-sans);
   font-size: 3.2mm;
   line-height: 1.2;

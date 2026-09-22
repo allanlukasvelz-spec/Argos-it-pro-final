@@ -48,27 +48,35 @@ export function CategoryHeader(section, ui, opts = {}) {
   </header>`;
 }
 
+function amountFrom(product) {
+  const price = product.precio;
+  if (price == null) return null;
+  const value = typeof price === "number" ? price : price.value;
+  if (typeof value !== "number" || Number.isNaN(value)) return null;
+  return value.toFixed(2).replace(".", ",");
+}
+
+function isPriced(product) {
+  return (product.estado === "CONFIRMADO" || product.estado === "CONFIRMADO_SOURCE") && amountFrom(product) != null;
+}
+
 export function Price(product, ui) {
-  const show = product.estado === "CONFIRMADO" && product.precio != null;
-  if (!show) {
+  if (!isPriced(product)) {
     return `<span class="lb-price is-empty" data-component="Price"><span class="lb-sr">${esc(ui.pendiente)}</span>${esc(ui.precio_vacio)}</span>`;
   }
-  const amount = typeof product.precio === "number"
-    ? String(product.precio).replace(".", ",")
-    : String(product.precio);
   const symbol = ui.moneda_confirmada ? ` ${esc(ui.moneda_confirmada)}` : "";
-  return `<span class="lb-price" data-component="Price">${esc(amount)}${symbol}</span>`;
+  return `<span class="lb-price" data-component="Price">${esc(amountFrom(product))}${symbol}</span>`;
 }
 
 export function Description(product) {
-  if (product.estado !== "CONFIRMADO" || product.descripcion == null || product.descripcion === "") {
+  if ((product.estado !== "CONFIRMADO" && product.estado !== "CONFIRMADO_SOURCE") || product.descripcion == null || product.descripcion === "") {
     return "";
   }
   return `<p class="lb-desc" data-component="Description">${esc(product.descripcion)}</p>`;
 }
 
 export function IngredientList(product, ui) {
-  if (product.estado !== "CONFIRMADO" || product.ingredientes == null) {
+  if ((product.estado !== "CONFIRMADO" && product.estado !== "CONFIRMADO_SOURCE") || product.ingredientes == null) {
     return `<p class="lb-ingredients is-pending" data-component="IngredientList">${esc(ui.pendiente)}</p>`;
   }
   const text = Array.isArray(product.ingredientes)
@@ -77,20 +85,30 @@ export function IngredientList(product, ui) {
   return `<p class="lb-ingredients" data-component="IngredientList">${esc(text)}</p>`;
 }
 
+function showsName(product) {
+  return Boolean(product.nombre) && (
+    product.estado === "CONFIRMADO"
+    || product.estado === "CONFIRMADO_SOURCE"
+    || product.estado === "SOURCE_MISSING"
+    || product.estado === "CANDIDATE_MATCH"
+    || product.estado === "REVIEW_REQUIRED"
+  );
+}
+
 function visibleName(product, ui) {
-  if (product.estado === "CONFIRMADO" && product.nombre) return esc(product.nombre);
-  if ((product.estado === "SOURCE_MISSING" || product.estado === "CANDIDATE_MATCH") && product.nombre) {
-    return `<span class="is-uncontrasted">${esc(product.nombre)}</span>`;
+  if ((product.estado === "CONFIRMADO" || product.estado === "CONFIRMADO_SOURCE") && product.nombre) {
+    return esc(product.nombre);
   }
+  if (showsName(product)) return `<span class="is-uncontrasted">${esc(product.nombre)}</span>`;
   return `<span class="is-pending">${esc(ui.pendiente)}</span>`;
 }
 
 export function MenuItem(product, ui, opts = {}) {
   const featured = opts.featured === true && product.destacado === true && product.estado === "CONFIRMADO";
   const component = featured ? "MenuItemFeatured" : "MenuItem";
-  const pendingName = !(product.nombre && (product.estado === "CONFIRMADO" || product.estado === "SOURCE_MISSING" || product.estado === "CANDIDATE_MATCH"));
+  const pendingName = !showsName(product);
   const name = visibleName(product, ui);
-  const id = product.estado === "CONFIRMADO"
+  const id = product.estado === "CONFIRMADO" || product.estado === "CONFIRMADO_SOURCE"
     ? ""
     : `<span class="lb-id">${esc(product.id)}</span>`;
   const contour = featured ? (opts.contour ?? "") : "";
@@ -111,10 +129,12 @@ export function MenuItemFeatured(product, ui, opts = {}) {
 }
 
 export function MenuRow(product, ui) {
-  const pendingName = !(product.nombre && (product.estado === "CONFIRMADO" || product.estado === "SOURCE_MISSING" || product.estado === "CANDIDATE_MATCH"));
+  const pendingName = !showsName(product);
+  const confirmed = product.estado === "CONFIRMADO" || product.estado === "CONFIRMADO_SOURCE";
   const id = product.nombre ? "" : `<span class="lb-id">${esc(product.id)}</span>`;
+  const name = !pendingName ? esc(product.nombre) : esc(ui.pendiente);
   return `<article class="lb-row" data-component="MenuItem" data-id="${esc(product.id)}" data-estado="${esc(product.estado)}">
-    <h3 class="lb-name${pendingName ? " is-pending" : " is-uncontrasted"}">${product.nombre && !pendingName ? esc(product.nombre) : esc(ui.pendiente)}</h3>
+    <h3 class="lb-name${pendingName ? " is-pending" : confirmed ? "" : " is-uncontrasted"}">${name}</h3>
     <span class="lb-row__meta">${id}${Price(product, ui)}</span>
   </article>`;
 }
@@ -125,13 +145,19 @@ export function CreateYourPizzaModule(section, grupos, productos, ui) {
       .filter((item) => item.subcategoria === group.id)
       .sort((a, b) => a.orden - b.orden);
     const rows = slots.length
-      ? slots.map((slot) => `<li class="lb-crea__slot">
-      <span class="lb-id">${esc(slot.id)}</span>
-      <span class="lb-crea__pending is-pending">${esc(ui.pendiente)}</span>
-    </li>`).join("")
+      ? slots.map((slot) => {
+        const confirmed = (slot.estado === "CONFIRMADO" || slot.estado === "CONFIRMADO_SOURCE") && slot.nombre;
+        const label = slot.nombre && (confirmed || slot.estado === "REVIEW_REQUIRED")
+          ? esc(slot.nombre)
+          : esc(ui.pendiente);
+        const klass = confirmed ? "lb-crea__name" : "lb-crea__pending is-pending";
+        return `<li class="lb-crea__slot">
+      <span class="${klass}">${label}</span>
+    </li>`;
+      }).join("")
       : `<li class="lb-crea__slot"><span class="lb-crea__pending is-pending">${esc(ui.pendiente)}</span></li>`;
     return `<div class="lb-crea__group" data-grupo="${esc(group.id)}">
-      <h3 class="lb-crea__label">${esc(group.etiqueta)}</h3>
+      <h3 class="lb-crea__label">${esc(group.etiqueta)}${group.extra && group.extra.status === "CONFIRMADO_SOURCE" && typeof group.extra.value === "number" ? ` ${esc(group.extra.value.toFixed(2).replace(".", ","))}` : ""}</h3>
       <ul class="lb-crea__list">${rows}</ul>
     </div>`;
   }).join("");

@@ -3,8 +3,10 @@
 import { esc, sectionBadge } from "../print/components.mjs";
 
 function blockedName(product, ui) {
-  if (product.estado === "CONFIRMADO" && product.nombre) return esc(product.nombre);
-  if ((product.estado === "SOURCE_MISSING" || product.estado === "CANDIDATE_MATCH") && product.nombre) {
+  if ((product.estado === "CONFIRMADO" || product.estado === "CONFIRMADO_SOURCE") && product.nombre) {
+    return esc(product.nombre);
+  }
+  if ((product.estado === "SOURCE_MISSING" || product.estado === "CANDIDATE_MATCH" || product.estado === "REVIEW_REQUIRED") && product.nombre) {
     return `<span class="is-uncontrasted">${esc(product.nombre)}</span>`;
   }
   return `<span class="is-pending">${esc(ui.pendiente)}</span>`;
@@ -28,21 +30,27 @@ export function MobileCategoryNav(secciones) {
   return `<nav class="m-nav" data-component="MobileCategoryNav" aria-label="Categories">${links}</nav>`;
 }
 
+function amountFrom(product) {
+  const price = product.precio;
+  if (price == null) return null;
+  const value = typeof price === "number" ? price : price.value;
+  if (typeof value !== "number" || Number.isNaN(value)) return null;
+  return value.toFixed(2).replace(".", ",");
+}
+
 export function MobilePrice(product, ui) {
-  const show = product.estado === "CONFIRMADO" && product.precio != null;
-  const value = show
-    ? esc(typeof product.precio === "number" ? String(product.precio).replace(".", ",") : product.precio)
-    : esc(ui.precio_vacio);
+  const show = (product.estado === "CONFIRMADO" || product.estado === "CONFIRMADO_SOURCE") && amountFrom(product) != null;
+  const value = show ? esc(amountFrom(product)) : esc(ui.precio_vacio);
   return `<p class="m-price" data-component="MobilePrice"><span class="m-price__label">${esc(ui.preu)}</span> <span class="${show ? "" : "is-empty"}">${value}</span></p>`;
 }
 
 export function MobileDescription(product) {
-  if (product.estado !== "CONFIRMADO" || product.descripcion == null || product.descripcion === "") return "";
+  if ((product.estado !== "CONFIRMADO" && product.estado !== "CONFIRMADO_SOURCE") || product.descripcion == null || product.descripcion === "") return "";
   return `<p class="m-desc" data-component="MobileDescription">${esc(product.descripcion)}</p>`;
 }
 
 export function MobileIngredientList(product, ui) {
-  if (product.estado === "CONFIRMADO" && product.ingredientes != null) {
+  if ((product.estado === "CONFIRMADO" || product.estado === "CONFIRMADO_SOURCE") && product.ingredientes != null) {
     const text = Array.isArray(product.ingredientes) ? product.ingredientes.join(" · ") : String(product.ingredientes);
     return `<p class="m-ingredients" data-component="MobileIngredientList"><span>${esc(ui.ingredients)}</span> ${esc(text)}</p>`;
   }
@@ -105,11 +113,26 @@ export function MobileCategorySection(section, products, ui, alergenos) {
   </section>`;
 }
 
-export function MobileCreateYourPizza(section, grupos, ui) {
-  const columns = grupos.map((group) => `<div class="m-group">
-    <h3>${esc(group.etiqueta)}</h3>
-    <p class="is-pending">${esc(ui.pendiente)}</p>
-  </div>`).join("");
+export function MobileCreateYourPizza(section, grupos, productos, ui) {
+  const columns = grupos.map((group) => {
+    const slots = (productos ?? [])
+      .filter((item) => item.subcategoria === group.id)
+      .sort((a, b) => a.orden - b.orden);
+    const extra = group.extra && group.extra.status === "CONFIRMADO_SOURCE" && typeof group.extra.value === "number"
+      ? ` ${esc(group.extra.value.toFixed(2).replace(".", ","))}`
+      : "";
+    const rows = slots.length
+      ? slots.map((slot) => {
+        const confirmed = (slot.estado === "CONFIRMADO" || slot.estado === "CONFIRMADO_SOURCE") && slot.nombre;
+        const label = slot.nombre && (confirmed || slot.estado === "REVIEW_REQUIRED") ? esc(slot.nombre) : esc(ui.pendiente);
+        return `<p class="${confirmed ? "" : "is-pending"}">${label}</p>`;
+      }).join("")
+      : `<p class="is-pending">${esc(ui.pendiente)}</p>`;
+    return `<div class="m-group">
+    <h3>${esc(group.etiqueta)}${extra}</h3>
+    ${rows}
+  </div>`;
+  }).join("");
   const badge = sectionBadge(section, ui);
   return `<section class="m-section m-crea" id="${esc(section.id)}" data-component="MobileCreateYourPizza" data-estado="${esc(section.estado_contenido)}">
     <h2>${esc(section.titulo)}${badge ? ` <span class="m-badge">${esc(badge)}</span>` : ""}</h2>

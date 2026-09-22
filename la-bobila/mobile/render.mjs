@@ -35,7 +35,7 @@ export function renderMobileHtml(catalog) {
     moneda_confirmada: catalog.moneda?.estado === "CONFIRMADO" ? catalog.moneda.simbolo : null,
   };
   const sections = catalog.secciones.map((section) => {
-    if (section.id === "crea") return MobileCreateYourPizza(section, catalog.grupos_crea, ui);
+    if (section.id === "crea") return MobileCreateYourPizza(section, catalog.grupos_crea, byCategory(catalog, "crea"), ui);
     return MobileCategorySection(section, byCategory(catalog, section.id), ui, catalog.alergenos);
   }).join("\n");
 

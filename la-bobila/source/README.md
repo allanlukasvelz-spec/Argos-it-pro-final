@@ -1,14 +1,12 @@
 # Originales de La Bòbila
 
-Los archivos que se dejan aquí son inmutables. No se editan, no se recomprimen y no se sustituyen. Las copias de trabajo van solo a `la-bobila/processed/`.
+Los archivos de esta carpeta son inmutables. No se editan, no se recomprimen y no se sustituyen. Las copias de trabajo, el muestreo de color y la lectura OCR van solo a `la-bobila/processed/`.
 
-Hoy no hay ningún original. El manifiesto está en `manifest/assets.json` con estado `FILE_NOT_INGESTED` y `sha256` null.
+Ingeridos el 2026-09-22 desde `/Users/allanlukasvelz/Downloads/web pizeria/LA-BOBILA_SOURCE_ASSETS.zip`. El zip no se ha modificado. El manifiesto y los sha256 están en `manifest/assets.json`. Estado `INGESTED` solo si la copia del repositorio coincide byte a byte.
 
-Dejar el archivo real, sin renombrar el máster a un nombre inventado:
+- Logo: `la-bobila/source/logo/la-bobila-logo-reference.png`
+- Carta vigente: `la-bobila/source/menu-current/la-bobila-carta-vigente.jpeg`
+- Carta histórica: `la-bobila/source/menu-historical/la-bobila-carta-historica.jpeg`
+- Fotos: `la-bobila/source/photos/` sigue vacío. El zip no traía ninguna.
 
-- Logo: `la-bobila/source/logo/`
-- Carta vigente: `la-bobila/source/menu-current/`
-- Carta histórica: `la-bobila/source/menu-historical/`
-- Fotos o gráficos reales, si llegan aparte: `la-bobila/source/photos/`
-
-No colocar aquí el render de estudio `print/renders/carta-a3.png`. No es la carta del local. No descargar un logo parecido.
+No colocar aquí el render `print/renders/carta-a3.png`. No es la carta del local.

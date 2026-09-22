@@ -83,7 +83,7 @@ Orden único: archivos fuente → extracción → normalización → `catalog.js
 
 `la-bobila/source/` es inmutable. El máster no se edita. Las copias van a `la-bobila/processed/`. Sin el archivo físico no hay auditoría de marca, ni transcripción, ni diff histórico. El andamiaje no es una ingesta terminada.
 
-Los 17 nombres de pizza ya anotados permanecen en `CANDIDATE_MATCH` hasta cruzarlos con la carta vigente. No pasan a `CONFIRMADO` por estar escritos en el JSON.
+Los 17 nombres de pizza ya se cruzaron con la carta vigente ingerida el 2026-09-22 y pasaron a `CONFIRMADO` solo donde el segundo pase coincidió. Un nombre nuevo no pasa a `CONFIRMADO` por estar escrito en el JSON. `CONFIRMADO_SOURCE` exige el archivo en `la-bobila/source/` y el doble contraste. El precio no se rellena por patrón. Un ingrediente no es un alérgeno legal. Lo histórico no entra en la carta vigente.
 
 ## P0: QR y carta móvil
 
@@ -116,7 +116,7 @@ No es válido si parece una plantilla, podría ser de cualquier pizzería, el ne
 
 Es válido cuando se reconoce La Bòbila de inmediato, hay sentimiento mediterráneo real, oficio, actualidad, elegancia cálida, claridad, legibilidad, personalidad, escalabilidad y coherencia entre papel y digital.
 
-Hay un logo visual fuera del repositorio. No está ingerido. Hasta entonces el wordmark tipográfico es `PLACEHOLDER`: no se diseña como si fuera el logo final y no se fabrica un símbolo para ocupar su lugar. Sin ese archivo colocado, no hay reconocimiento inmediato y el conjunto sigue parcial aunque la infraestructura sea sólida.
+El logo visual está ingerido en `la-bobila/source/logo/` y no se edita. El wordmark de la lámina sigue en `PLACEHOLDER`: el PNG no se pega solo y los hex provisionales no se sustituyen solos. El OCR del archivo lee «DESDE 2005» y «PIZZERIA ARTIGIANALE», distinto del encargo. Sin ese cierre, el reconocimiento de marca de la lámina sigue parcial.
 
 ## Cierre de fase
 
