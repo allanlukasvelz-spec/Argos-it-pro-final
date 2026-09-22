@@ -1,6 +1,9 @@
 STATUS:
 EDITORIAL V4. Corrección visual sobre V3. Prototipo. No es carta final, ni imprenta, ni producción. EDITORIAL_ARCHITECTURE_GATE PASS. BRAND_GATE PARTIAL. PALETTE_GATE PARTIAL. COPY_GATE PARTIAL. ALLERGEN_GATE BLOCKED. QR_PRODUCTION_GATE BLOCKED. PRINT_GATE BLOCKED. PUBLICATION_GATE BLOCKED.
 
+INK:
+Los alimentos y las ramas usan la misma tinta del logo, `#202B17`, a una sola mano: contorno irregular, detalle fino, sin relleno y sin segundo color. Van con opacidad (pizza 0,14; hamburguesa y patatas 0,16; ensalada 0,15; helado y copa 0,18; ramas 0,22) para que el texto siga leyéndose. El archivo del logo no se ha tocado.
+
 ILLUSTRATION RECOGNIZABILITY:
 IR01 PIZZA PASS. Pizza completa, vista desde arriba, con corteza irregular, superficie interior, tomate, albahaca, queso y otros ingredientes. 150 mm, opacidad 0,17, centrada en Pizzes y Crea la teva. Se lee sin el título de sección y el texto sigue delante.
 IR02 BURGER PASS. Smash burger de frente: pan superior, hoja, tomate, queso, carne y pan inferior. 58 × 48 mm, opacidad 0,20, detrás de Smash burgers.
