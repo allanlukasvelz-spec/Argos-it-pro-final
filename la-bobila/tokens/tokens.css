@@ -1,0 +1,116 @@
+/* La Bòbila — design tokens.
+   Hex values are provisional approximations (estado POR_CONFIRMAR).
+   They are not sampled from a logo file. See tokens.json. */
+
+@font-face {
+  font-family: "Fraunces";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("./fonts/fraunces-400-normal.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Fraunces";
+  font-style: normal;
+  font-weight: 500;
+  font-display: block;
+  src: url("./fonts/fraunces-500-normal.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Fraunces";
+  font-style: normal;
+  font-weight: 600;
+  font-display: block;
+  src: url("./fonts/fraunces-600-normal.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Fraunces";
+  font-style: italic;
+  font-weight: 500;
+  font-display: block;
+  src: url("./fonts/fraunces-500-italic.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("./fonts/source-sans-3-400-normal.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: normal;
+  font-weight: 500;
+  font-display: block;
+  src: url("./fonts/source-sans-3-500-normal.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: normal;
+  font-weight: 600;
+  font-display: block;
+  src: url("./fonts/source-sans-3-600-normal.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: italic;
+  font-weight: 400;
+  font-display: block;
+  src: url("./fonts/source-sans-3-400-italic.ttf") format("truetype");
+}
+
+:root {
+  /* Color — provisional hex, directional names approved */
+  --lb-ivory: #f3eee4;
+  --lb-ivory-deep: #e7dfd1;
+  --lb-wash: #e9e2d4;
+  --lb-green: #1e3a32;
+  --lb-green-soft: #31584c;
+  --lb-terracotta: #c15b3a;
+  --lb-olive: #6e7a45;
+  --lb-olive-deep: #4c562f;
+  --lb-charcoal: #2c2825;
+  --lb-charcoal-soft: #5c564e;
+  --lb-line: #d4cbbc;
+
+  /* Type — two families only */
+  --lb-font-serif: "Fraunces", "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+  --lb-font-sans: "Source Sans 3", "Source Sans Pro", "Segoe UI", sans-serif;
+  --lb-type-brand: 15.2mm;
+  --lb-type-category: 7mm;
+  --lb-type-category-secondary: 5.1mm;
+  --lb-type-product: 5.4mm;
+  --lb-type-product-featured: 7.6mm;
+  --lb-type-product-secondary: 4.5mm;
+  --lb-type-ingredients: 3.85mm;
+  --lb-type-price: 3.05mm;
+  --lb-type-meta: 2.45mm;
+  --lb-type-small: 3.15mm;
+
+  /* Space, line, radius */
+  --lb-space-1: 1mm;
+  --lb-space-2: 2mm;
+  --lb-space-3: 3.2mm;
+  --lb-space-4: 4.5mm;
+  --lb-space-5: 6mm;
+  --lb-hairline: 0.15mm;
+  --lb-rule: 0.25mm;
+  --lb-rule-strong: 0.4mm;
+  --lb-radius: 1.6mm;
+
+  /* Grid and print */
+  --lb-columns: 6;
+  --lb-gutter: 4.2mm;
+  --lb-page-w: 303mm;
+  --lb-page-h: 426mm;
+  --lb-bleed: 3mm;
+  --lb-margin-trim: 13mm;
+  --lb-inset: 16mm;
+}

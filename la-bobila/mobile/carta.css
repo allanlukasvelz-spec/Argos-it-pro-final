@@ -1,0 +1,301 @@
+/* /carta — mobile first. Identity tokens come from tokens.css. Not a shrunk A3. */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  /* Candidata B de trabajo. No sustituye tokens.css. */
+  --lb-ivory: #faf0e7;
+  --lb-ivory-deep: #f0e4d6;
+  --lb-wash: #f4e7da;
+  --lb-green: #202b17;
+  --lb-green-soft: #3c4a2c;
+  --lb-terracotta: #8e4a30;
+  --lb-olive: #6c7153;
+  --lb-olive-deep: #4e5340;
+  --lb-charcoal: #202b17;
+  --lb-charcoal-soft: #3c4a2c;
+  --lb-line: #e3d5c6;
+  margin: 0;
+  overflow-x: hidden;
+  background: var(--lb-ivory);
+  color: var(--lb-charcoal);
+  font-family: var(--lb-font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.45;
+}
+
+.m-header,
+.m-nav,
+.m-editorial,
+.m-main,
+.m-footer {
+  width: min(40rem, 100%);
+  margin: 0 auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.m-banner {
+  margin: 0 -1rem 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--lb-green);
+  color: var(--lb-ivory);
+  font-size: 0.95rem;
+}
+
+.m-header { padding-top: 0.85rem; }
+
+.m-logo { margin: 0.65rem 0 0.9rem; }
+
+.m-logo img {
+  display: block;
+  width: min(100%, 18.5rem);
+  height: auto;
+  margin: 0 auto;
+}
+
+.m-editorial {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.45rem 0.7rem;
+  margin: 0 auto;
+  padding-top: 0.7rem;
+  padding-bottom: 0.85rem;
+  border-top: 1px solid var(--lb-olive);
+  color: var(--lb-green);
+}
+
+.m-editorial__mark {
+  padding: 0.15rem 0.4rem;
+  border: 1px solid var(--lb-terracotta);
+  color: var(--lb-green);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.m-editorial__desde {
+  font-family: var(--lb-font-serif);
+  font-style: italic;
+  font-weight: 500;
+  color: var(--lb-green);
+}
+
+.m-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.m-nav {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+  background: var(--lb-ivory);
+}
+
+.m-nav a {
+  display: flex;
+  align-items: center;
+  flex: 1 1 calc(50% - 0.35rem);
+  min-width: 0;
+  min-height: 44px;
+  padding: 0.35rem 0.45rem;
+  color: var(--lb-green);
+  font-family: var(--lb-font-serif);
+  font-size: 1.05rem;
+  line-height: 1.2;
+  text-decoration: none;
+  border-bottom: 1px solid var(--lb-line);
+  overflow-wrap: anywhere;
+}
+
+.m-nav a:focus-visible,
+.m-action:focus-visible {
+  outline: 2px solid var(--lb-terracotta);
+  outline-offset: 2px;
+}
+
+.m-section { padding: 1.25rem 0 0.4rem; }
+
+.m-section h2,
+.m-footer h2 {
+  margin: 0 0 0.45rem;
+  font-family: var(--lb-font-serif);
+  font-weight: 600;
+  font-size: 1.55rem;
+  letter-spacing: 0.04em;
+  color: var(--lb-green);
+}
+
+#pizzes > h2 { font-size: 1.85rem; letter-spacing: 0.03em; }
+
+#smash > h2,
+#complements > h2,
+#amanides > h2 { font-size: 1.28rem; }
+
+.m-badge {
+  font-family: var(--lb-font-sans);
+  font-size: 0.78rem;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--lb-charcoal);
+}
+
+.m-note,
+.m-ingredients,
+.m-allergens,
+.m-desc {
+  margin: 0.2rem 0 0.55rem;
+  color: var(--lb-charcoal);
+}
+
+.m-ingredients,
+.m-note,
+.m-desc {
+  overflow-wrap: anywhere;
+}
+
+.m-ingredients span,
+.m-price__label,
+.m-allergens {
+  font-size: 1rem;
+}
+
+.m-ph-row {
+  display: flex;
+  gap: 0.45rem;
+  margin: 0.35rem 0 0.8rem;
+}
+
+.m-ph-row i {
+  width: 0.85rem;
+  height: 0.85rem;
+  border: 1px solid var(--lb-olive);
+  border-radius: 50%;
+}
+
+.m-item {
+  min-height: 44px;
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--lb-line);
+}
+
+.m-item__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.m-item h3 {
+  margin: 0;
+  min-width: 0;
+  font-family: var(--lb-font-sans);
+  font-weight: 600;
+  font-size: 1.2rem;
+  line-height: 1.25;
+  letter-spacing: 0;
+  color: var(--lb-green);
+  overflow-wrap: anywhere;
+}
+
+#pizzes .m-item h3 { font-size: 1.28rem; }
+
+#smash .m-item h3 {
+  font-size: 1.12rem;
+  font-weight: 500;
+}
+
+.m-group h3 {
+  margin: 0;
+  min-width: 0;
+  font-family: var(--lb-font-serif);
+  font-weight: 600;
+  font-size: 1.2rem;
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+  color: var(--lb-green);
+  overflow-wrap: anywhere;
+}
+
+.m-extra {
+  font-family: var(--lb-font-sans);
+  font-weight: 600;
+  font-size: 1rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  color: var(--lb-green);
+}
+
+.m-price {
+  margin: 0;
+  flex: 0 0 auto;
+  color: var(--lb-green);
+  font-weight: 500;
+  font-size: 1rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+}
+
+.m-crea { background: var(--lb-wash); padding: 1rem; margin-top: 0.5rem; }
+
+.m-groups { display: flex; flex-direction: column; gap: 0.35rem; }
+
+.m-group {
+  min-height: 44px;
+  padding: 0.45rem 0;
+  border-top: 1px solid var(--lb-line);
+}
+
+.m-footer {
+  padding-top: 1.5rem;
+  padding-bottom: 2rem;
+  margin-top: 1rem;
+  border-top: 2px solid var(--lb-green);
+}
+
+.m-action {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 44px;
+  margin: 0;
+  border-bottom: 1px solid var(--lb-line);
+}
+
+.is-pending { font-style: italic; color: var(--lb-charcoal); }
+.is-uncontrasted { font-style: normal; }
+.is-empty { letter-spacing: 0.04em; }
+
+.m-footer__brand {
+  margin: 1.2rem 0 0;
+  text-align: center;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lb-green);
+  font-size: 0.82rem;
+}
+
+img { max-width: 100%; height: auto; }
