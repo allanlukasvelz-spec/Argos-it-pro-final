@@ -22,7 +22,7 @@ export function MobileMenuHeader(catalog) {
     <h1 class="m-sr">${esc(catalog.marca.nombre)}</h1>
   </header>
   <p class="m-editorial" data-copy="EDITORIAL_COPY" data-status="EDITORIAL_COPY_PENDING" data-decision="${esc(editorial.decision ?? "ADR-019")}">
-    <span class="m-editorial__mark">Pendent de client</span>
+    <span class="m-editorial__mark">Pendent del client</span>
     <span>${esc(editorial.tipo)}</span>
     <span class="m-editorial__desde">${esc(editorial.desde)}</span>
   </p>`;

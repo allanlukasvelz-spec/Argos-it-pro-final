@@ -44,3 +44,18 @@ En 320, 360, 390 y 430 px no hay scroll horizontal. El precio se lee en tinta so
 ## Veredicto
 
 Se mantiene el par. No hay fallo de nombre largo ni de precio que justifique cambiar de familia.
+
+## V3 — un punto más
+
+La lectura de la A3 sube exactamente 1 pt. La familia, el peso y el tracking no cambian. La interlínea sigue en la misma proporción (no se comprime).
+
+| Uso | Antes | Ahora |
+| --- | --- | --- |
+| Nombre de pizza | 4,2 mm | 4,55 mm |
+| Nombre de smash | 3,6 mm | 3,95 mm |
+| Resto de nombres | 3,7 mm | 4,05 mm |
+| Topping de Crea la teva | 3,6 mm | 3,95 mm |
+| Precio de fila | 3,35 mm | 3,70 mm |
+| Precio de suplemento | 3,6 mm | 3,95 mm |
+
+Medido en la lámina. Ningún nombre parte en dos líneas. El par Fraunces + Source Sans 3 se queda.

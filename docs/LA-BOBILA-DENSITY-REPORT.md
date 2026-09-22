@@ -36,4 +36,24 @@ La pizza sigue por delante: zona 60,9 mm frente a 32,8 mm de smash, cuerpo mayor
 
 A3 de conjunto: PASS. 0 OVERFLOW.
 
+## V3
+
+Medido el 2026-09-22 después de subir 1 pt la tipografía de lectura, sin bajar el cuerpo y sin cambiar la arquitectura C. Lámina `carta-a3-editorial-v3`. Pie a 16 mm del borde. 0 OVERFLOW.
+
+1 pt = 0,353 mm. El nombre de pizza pasa de 4,2 mm a 4,55 mm. El topping de Crea la teva pasa de 3,6 mm a 3,95 mm, con interlínea 5,34 mm. El precio de fila pasa de 3,35 mm a 3,70 mm.
+
+| Zona | Ítems | Alto disponible | Alto usado | Ocupación | Cuerpo | Interlínea | Líneas máx. | Desborde | Resultado |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Pizzes | 17 | 56,3 mm | 44,9 mm | 80 % | 4,55 mm | 5,46 mm | 1 | no | PASS |
+| Crea la teva | 27 | 77,2 mm | 77,2 mm el módulo; la lista usa 46,0 mm | el módulo es su contenido | 3,95 mm | 5,34 mm | 2 | no | PASS |
+| Smash | 4 | 33,3 mm | 26,4 mm | 79 % | 3,95 mm | 4,74 mm | 1 | no | PASS |
+| Complements | 11 | 80,9 mm | 74,0 mm | 92 % | 4,05 mm | 4,86 mm | 1 | no | PASS |
+| Amanides | 3 | 80,9 mm | 19,6 mm | 24 % | 4,05 mm | 4,86 mm | 1 | no | PASS |
+| Postres | 0 | 12,3 mm | nota de sección | cabecera | 3,50 mm | 4,55 mm | 1 | no | PASS |
+| Begudes | 0 | 12,3 mm | cabecera pendiente | cabecera | título de categoría | — | 1 | no | PASS |
+| QR | módulo | 32,0 mm | 32,0 mm | el módulo | título 5,15 mm | 1 | 1 | no | PASS |
+| Footer | contacto y alérgenos | 29,0 mm | 29,0 mm | 100 % | aviso 3,50 mm | 1,3 | 1 | no | PASS |
+
+Carn sigue en 1 línea, vegetals en 2, formatges en 1. Ningún nombre de fila parte. El aire que faltaba tras el punto extra se recuperó en gaps y paddings, no en el interlineado ni en el margen de 16 mm. Complements sigue lleno y sin recorte.
+
 `/carta` no es una lámina fija. En 320, 360, 390 y 430 px no hay scroll horizontal. La página crece en vertical. El pase físico del QR no está hecho.

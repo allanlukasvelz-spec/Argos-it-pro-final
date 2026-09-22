@@ -232,5 +232,13 @@ ADRs breves. Fecha de todas: 2026-09-22.
 - Motivo: el tomate marca la categoría protagonista y sale del vocabulario ya derivado del logo. Poner más dibujos sería decoración.
 - Roles: Head of Product Design, CSO.
 - Impacto: no se declara ganadora entre V1, V2 clean y V2 illustrated.
-- Estado: estudio.
+- Estado: estudio. V3, en ADR-030, usa el contorno de pizza ya dibujado como marca de agua, no como icono de cabecera.
+
+## ADR-030 — La lectura sube un punto y el dibujo queda detrás
+
+- Decisión: en la A3 de V3 cada tamaño de lectura suma 1 pt. No cambia la familia, el peso ni el tracking. La interlínea no se aprieta. Si el punto no cabe, se ajustan gaps y paddings. La pizza de línea ya estudiada (`pizzaContour`) marca el territorio de pizzas y Crea la teva. Hamburguesa, patatas, bol, helado y copa usan el mismo trazo y van detrás de su sección, en rama, con un acento de tomate solo donde la forma lo pide. Cuatro ramas de esquina, dibujadas aparte, no recortadas del logo. El copy editorial se centra en el eje de la hoja. «Pendent de client» pasa a «Pendent del client». No se reescriben las lecturas `REVIEW_REQUIRED` ni los datos confirmados.
+- Motivo: el punto mejora la lectura. El dibujo identifica la zona sin convertirse en dato ni en foto.
+- Roles: Head of Product Design, CPO, CDAO, CLO.
+- Impacto: V2 no se sobrescribe. `/carta` no hereda las marcas de agua grandes. `PRINT_GATE` sigue cerrado.
+- Estado: prototipo V3. Sin impresión.
 

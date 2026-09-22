@@ -11,10 +11,18 @@ export function esc(value) {
 }
 
 function editorialBlock(editorial, placement) {
+  const mark = `<span class="lb-editorial__mark">Pendent del client</span>`;
+  const lines = `<span class="lb-editorial__line">${esc(editorial.tipo)}</span>
+      <span class="lb-editorial__line">${esc(editorial.desde)}</span>`;
+  if (placement === "separate") {
+    return `<p class="lb-editorial lb-editorial--separate" data-copy="EDITORIAL_COPY" data-status="EDITORIAL_COPY_PENDING" data-decision="${esc(editorial.decision ?? "ADR-019")}">
+      ${mark}
+      <span class="lb-editorial__copy">${lines}</span>
+    </p>`;
+  }
   return `<p class="lb-editorial lb-editorial--${placement}" data-copy="EDITORIAL_COPY" data-status="EDITORIAL_COPY_PENDING" data-decision="${esc(editorial.decision ?? "ADR-019")}">
-      <span class="lb-editorial__mark">Pendent de client</span>
-      <span class="lb-editorial__line">${esc(editorial.tipo)}</span>
-      <span class="lb-editorial__line">${esc(editorial.desde)}</span>
+      ${mark}
+      ${lines}
     </p>`;
 }
 

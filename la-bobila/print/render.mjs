@@ -18,7 +18,19 @@ import {
   esc,
   sectionBadge,
 } from "./components.mjs";
-import { tomato } from "./illustrations.mjs";
+import {
+  burger,
+  fries,
+  iceCream,
+  laurelBl,
+  laurelBr,
+  laurelTl,
+  laurelTr,
+  pizzaContour,
+  saladBowl,
+  tomato,
+  wineGlass,
+} from "./illustrations.mjs";
 import { devQrSvg } from "./qr-svg.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -48,10 +60,21 @@ function uiFrom(catalog) {
   };
 }
 
+const zoneWatermark = {
+  complements: fries,
+  amanides: saladBowl,
+  postres: iceCream,
+  begudes: wineGlass,
+};
+
 function column(catalog, section, ui) {
   const items = byCategory(catalog, section.id).map((product) => MenuRow(product, ui)).join("");
   const note = section.nota ? `<p class="lb-note">${esc(section.nota)}</p>` : "";
+  const mark = zoneWatermark[section.id]
+    ? `<div class="lb-watermark lb-watermark--${section.id}" aria-hidden="true">${zoneWatermark[section.id]}</div>`
+    : "";
   return `<section class="lb-col" data-zone="${section.id}">
+    ${mark}
     ${CategoryHeader(section, ui, { badge: sectionBadge(section, ui) })}
     ${note}
     <div class="lb-rows">${items}</div>
@@ -65,7 +88,7 @@ export function renderHtml(catalog, options = {}) {
   const copy = options.copy === "a" || options.copy === "b" ? options.copy : "c";
   const illustration = options.illustration === "tomato" ? "tomato" : "clean";
   const caption = options.caption
-    ?? "PROTOTIP / NO IMPRIMIR · Candidata B, pendent";
+    ?? "PROTOTIP EDITORIAL V3 · PROVA / NO IMPRIMIR";
   const ui = uiFrom(catalog);
   const pizzes = sectionById(catalog, "pizzes");
   const crea = sectionById(catalog, "crea");
@@ -80,15 +103,19 @@ export function renderHtml(catalog, options = {}) {
     BrandHeader(catalog.marca, copy),
     LegalInfo(catalog.aviso_lamina),
     SectionDivider(),
-    `<section class="zone-pizza" data-zone="pizzes">
-      ${CategoryHeader(pizzes, ui, { icon: illustration === "tomato" ? tomato : "", badge: sectionBadge(pizzes, ui) })}
-      ${pizzaNote}
-      <div class="pizza-names">
-        ${pizzaItems.map((product) => MenuRow(product, ui)).join("")}
-      </div>
-    </section>`,
-    CreateYourPizzaModule(crea, catalog.grupos_crea, byCategory(catalog, "crea"), ui, architecture),
+    `<div class="zone-hero">
+      <div class="lb-watermark lb-watermark--pizza" aria-hidden="true">${pizzaContour}</div>
+      <section class="zone-pizza" data-zone="pizzes">
+        ${CategoryHeader(pizzes, ui, { icon: illustration === "tomato" ? tomato : "", badge: sectionBadge(pizzes, ui) })}
+        ${pizzaNote}
+        <div class="pizza-names">
+          ${pizzaItems.map((product) => MenuRow(product, ui)).join("")}
+        </div>
+      </section>
+      ${CreateYourPizzaModule(crea, catalog.grupos_crea, byCategory(catalog, "crea"), ui, architecture)}
+    </div>`,
     `<section class="zone-smash" data-zone="smash">
+      <div class="lb-watermark lb-watermark--burger" aria-hidden="true">${burger}</div>
       ${CategoryHeader(smash, ui, { badge: sectionBadge(smash, ui) })}
       ${smashNote}
       <div class="lb-rows lb-rows--2">
@@ -111,8 +138,9 @@ export function renderHtml(catalog, options = {}) {
 </head>
 <body>
   <!-- Generado por print/render.mjs desde catalog/catalog.json. No editar el texto de producto aquí. -->
-  <article class="sheet palette-${palette}" data-palette="${palette}" data-architecture="${architecture}" data-copy="${copy}" data-illustration="${illustration}" data-revision="${catalog.revision}" data-version="${catalog.version}">
+  <article class="sheet palette-${palette}" data-palette="${palette}" data-architecture="${architecture}" data-copy="${copy}" data-illustration="${illustration}" data-edition="v3" data-revision="${catalog.revision}" data-version="${catalog.version}">
     <div class="sheet__frame" aria-hidden="true"></div>
+    <div class="lb-corners" aria-hidden="true">${laurelTl}${laurelTr}${laurelBl}${laurelBr}</div>
     <div class="sheet__inner">
       ${body}
     </div>

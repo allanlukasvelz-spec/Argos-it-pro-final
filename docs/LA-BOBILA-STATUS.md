@@ -1,83 +1,74 @@
 STATUS:
-EDITORIAL V2. Prototipo. No es carta final, ni imprenta, ni producción. EDITORIAL_ARCHITECTURE_GATE PASS. BRAND_GATE PARTIAL. PALETTE_GATE PARTIAL. COPY_GATE PARTIAL. ALLERGEN_GATE BLOCKED. QR_PRODUCTION_GATE BLOCKED. PRINT_GATE BLOCKED. PUBLICATION_GATE BLOCKED.
+EDITORIAL V3. Prototipo. No es carta final, ni imprenta, ni producción. EDITORIAL_ARCHITECTURE_GATE PASS. BRAND_GATE PARTIAL. PALETTE_GATE PARTIAL. COPY_GATE PARTIAL. ALLERGEN_GATE BLOCKED. QR_PRODUCTION_GATE BLOCKED. PRINT_GATE BLOCKED. PUBLICATION_GATE BLOCKED.
 
-EDITORIAL V2 CLEAN:
-PARTIAL. Arquitectura C, candidata B, 0 desborde, logo a 36 mm, copy separado y marcado pendiente. La marca no se cierra hasta la revisión del cliente.
+TYPOGRAPHY +1PT:
+PASS. La lectura de la A3 sube exactamente 1 pt. Nombre de pizza 4,55 mm (antes 4,2). Precio de fila 3,70 mm (antes 3,35). Topping de Crea la teva 3,95 mm, interlínea 5,34 mm (antes 3,6 / 4,86). Fraunces y Source Sans 3 no cambian. El peso y el tracking no cambian. La interlínea no se comprime. Ningún nombre de fila parte.
 
-EDITORIAL V2 ILLUSTRATED:
-PARTIAL. El mismo contenido, la misma retícula y el mismo color. Un solo tomate en la cabecera de pizzas. No se declara mejor que clean.
+ORTHOGRAPHY REVIEW:
+PASS. Auditoría del catalán visible. No hay error seguro dentro de `catalog.json`. Se conserva como lectura incierta, sin corregir: flor di latte en Prosciutto, fior di latte donde la foto no cierra, parmesa, butifarra, Classica, briox, cogombree, Santlucar, bacon, Cansalada en vegetals y Mozzarella fior di latte. La única corrección es de interfaz: «Pendent de client» pasa a «Pendent del client».
 
-LOGO:
-Integrado en la cabecera. Alto 36 mm, ancho 66,7 mm, sin deformar. Aire superior hasta el logo: 27,2 mm. El máster no se ha tocado: sha256 `6b82915752bd3bd3b0f9a698feb36b7b4897357555bd462af7c89164b49bc9fc`. La copia con alfa es técnica y no sustituye al máster. El texto interno del archivo no se ha reescrito.
+BACKGROUND PIZZA:
+PASS. Es el mismo contorno lineal ya estudiado. Atraviesa Pizzes y Crea la teva, centrado en ese territorio y algo recortado por el bloque. Opacidad baja, más suave en el centro. El texto medido sigue en tinta pura `rgb(32, 43, 23)`.
 
-TYPOGRAPHY:
-CANDIDATA MANTENIDA. Fraunces y Source Sans 3. Informe: `docs/LA-BOBILA-TYPOGRAPHY.md`. Los nombres largos de la A3 caben en una línea. El precio va en tinta, más pequeño que el nombre, tabular. No hay motivo para una tercera familia.
+BURGER:
+PASS. Línea fina detrás de Smash burgers. No protagoniza.
 
-PALETTE:
-CANDIDATE B / PENDING CLIENT. `#FAF0E7`, `#202B17`, `#8E4A30`, `#6C7153`. Los tokens globales no cambian. La rama (4,53:1) no pinta precios, cuerpo, ingredientes ni avisos. Eso va en tinta (13,16:1). `/carta` aplica la candidata en el cuerpo de la página, no en `:root`.
+FRIES:
+PASS. Detrás de Per compartir / complements.
 
-COPY:
-EDITORIAL_COPY_PENDING. Tratamientos medidos: A solo logo (hueco a Pizzes 10,6 mm), B frases en el eje del logo (18,0 mm), C descriptor separado (19,5 mm). Los tres sin desborde. Las láminas V2 usan C porque A esconde el texto que hay que validar y B lo presenta como pie del archivo. No es una elección de gusto. «Des de 2005» y «Pizzeria artesana» no se atribuyen al logo.
+SALAD:
+PASS. Detrás de Amanides.
 
-A3:
-PASS. 0 OVERFLOW. El pie cierra a 16 mm del borde en clean y en illustrated. Crea la teva sigue a 3,6 mm e interlínea 4,86 mm: carn 1 línea, vegetals 2, formatges 1. Pizza 55,7 / 46,1 mm, por encima de smash 32,8 / 25,7 mm. La zona de pizza está más llena que en V1 porque el descriptor ocupa aire que antes quedaba dentro de esa zona. No hay fotos. No hay €. Sello: PROTOTIP / NO IMPRIMIR.
+DESSERT:
+PASS. Detrás de Postres. No añade productos, sabores ni precios. El estado histórico se mantiene.
 
-MOBILE:
-PASS en 320, 360, 390 y 430. Sin scroll horizontal. Nav sticky. 50 objetivos, mínimo 44 px. Misma crema, misma tinta, Fraunces en categorías, Source Sans 3 en producto, ingrediente y precio. El logo va en la cabecera y el copy en un descriptor aparte. No copia la retícula A3. Precio en tinta, sin €, con los mismos dos decimales y coma.
+DRINK:
+PASS. Detrás de Begudes. No añade bebidas ni precios. Sigue pendiente.
 
-CLIENT REVIEW PACKAGE:
-PASS. `docs/LA-BOBILA-CLIENT-REVIEW.md`. Quince cierres, en lenguaje llano. No vuelve a pedir las pizzas, los precios ni los ingredientes ya contrastados.
+CORNER LAURELS:
+PASS. Cuatro ramas distintas, no cuatro giros del mismo archivo y no un recorte del logo. Nacen de la esquina y no cierran un marco.
+
+CENTERED HEADER COPY:
+PASS. El descriptor editorial y la línea de estudio quedan a 0,00 mm del eje de la hoja. El logo no se ha movido ni editado.
+
+DENSITY V3:
+PASS. 0 OVERFLOW. El pie cierra a 16 mm. Informe: `docs/LA-BOBILA-DENSITY-REPORT.md`.
+
+LOGO INTEGRITY:
+PASS. sha256 `6b82915752bd3bd3b0f9a698feb36b7b4897357555bd462af7c89164b49bc9fc`. Una sola imagen en la lámina.
+
+DATA INTEGRITY:
+PASS. `catalog.json` no cambia. Arquitectura C intacta: carn 1 línea, vegetals 2, formatges 1, 27 nombres, cuerpo 3,95 mm. Sin €. Sin fotos. Sin productos nuevos.
+
+MOBILE REGRESSION:
+PASS en 320, 390 y 430. Sin scroll horizontal, nav sticky, 50 objetivos de al menos 44 px, cero marcas de agua grandes.
 
 MULTITALK REVIEW:
-CEO: se reconoce el logo y la pizza manda. Sigue pareciendo un prototipo hasta que el cliente cierre copy y color. No se publica.
-CSO: la marca es más fiel que en V1 porque el copy no se hace pasar por el archivo. La paleta sigue en candidata. No hay ganadora entre clean e illustrated.
-CPO: producto primero, precio localizable y menor, ingrediente en `/carta`. La jerarquía pizza sobre smash se mantiene. Crea la teva no ha cambiado de estructura.
-COO: la lámina sigue sirviendo para tomar el pedido de lo confirmado. Lo que va en revisión o en «Per confirmar» no se puede vender como cerrado. Los alérgenos siguen vacíos.
-CRO: el precio se encuentra y no protagoniza. No hay destacados ni fotos que empujen un plato. La banda de suplemento sigue en la A3.
-CDAO: el catálogo no se ha reescrito. Los confirmados siguen confirmados. El único cambio de estado es el copy editorial, que pasa a EDITORIAL_COPY_PENDING. Una sola fuente.
-CLO: nada pendiente se presenta como hecho legal. No hay iconos de alérgeno en los platos, no hay €, no hay dominio y el sello dice que no se imprime. El QR de producción sigue prohibido.
-Head of Product Design: V2 mejora el aire del logo, la tinta del precio y la separación del copy. Illustrated no decora de más: es un tomate. No se corona.
-Customer Success: en el móvil la lectura sigue siendo nombre, precio e ingrediente, con salto de categoría sticky. Falta el pase en un teléfono real.
-CTO: `/carta` sale del mismo `catalog.json`. Los tokens globales no se han sustituido. El guard de producción sigue rechazando localhost.
-Chief of Staff: se puede enseñar al cliente el paquete de revisión y las dos láminas. No se imprime, no se publica, no se genera QR de producción y no se hace merge final. La siguiente acción es el cierre del cliente, no otro rediseño.
+CEO: la hoja se reconoce más como La Bòbila. Sigue siendo un prototipo.
+CSO: el dibujo es de línea y mediterráneo, no una trattoria genérica ni comida rápida. La paleta sigue en candidata.
+CPO: el texto va delante. La pizza sigue por encima de la smash. Crea la teva no cambia de estructura.
+COO: los nombres y los precios se leen de un vistazo. Lo pendiente sigue marcado como pendiente.
+CRO: cada dibujo señala su zona y no compite con el precio. El precio sigue en tinta y más pequeño que el nombre.
+CDAO: la única fuente sigue siendo `catalog.json`. El prompt no ha reordenado ni repreciado nada.
+CLO: el helado y la copa no confirman postres, bebidas ni alérgenos. El sello dice que no se imprime. El QR de producción sigue prohibido.
+Head of Product Design: hay más vida y la lámina sigue limpia. El punto extra cabe sin encoger la letra.
+Customer Success: el punto se nota en el nombre y en el precio. En el móvil la lectura no se ha cargado de fondos.
+CTO: V2 no se ha sobrescrito. El guard de producción sigue rechazando localhost. `/carta` no arrastra las marcas de agua.
+Chief of Staff: V3 se puede enseñar junto a V2. No se imprime, no se publica, no se genera QR de producción y no se hace merge.
 
-CLIENT DECISIONS REQUIRED:
-1. Si se mantiene el copy editorial junto al logo, y con qué palabras.
-2. Si se muestra el símbolo €.
-3. Si la candidata B se aprueba al verla.
-4. Grafía de Pernil ibèric, Tonyina, Pebrot vermell, Carxofa, Xampinyons, cogombree/cogombret y Santlucar.
-5. Si Cansalada se queda en la columna de verdura.
-6. Foto legible de la columna Formatges.
-7. Bebidas.
-8. Postres y gelats.
-9. Salsas.
-10. Dirección.
-11. Teléfono.
-12. Horario.
-13. Matriz de alérgenos.
-14. Dominio o ruta pública de la carta.
-15. Autorización de imprenta.
-
-P0 BLOCKERS:
-- QR_PRODUCTION sin destino. No generar, no imprimir, no publicar.
+REMAINING BLOCKERS:
+- QR_PRODUCTION sin destino.
 - Matriz de alérgenos ausente.
-- PRINT_GATE y PUBLICATION_GATE cerradas. La lámina es un prototipo.
-
-P1 BLOCKERS:
-- Copy editorial sin validar.
-- Paleta B sin aprobación visual del cliente.
+- Copy editorial, paleta B y autorización de imprenta sin cierre del cliente.
 - Bebidas, postres, salsas, dirección, teléfono y horario vacíos.
 - Grafías en revisión, Cansalada y la columna de formatges.
-- Pase físico del QR en un teléfono.
+- PRINT_GATE y PUBLICATION_GATE cerradas.
 
 NEXT ACTION:
-Enviar `docs/LA-BOBILA-CLIENT-REVIEW.md` con las dos láminas V2. No publicar. No imprimir. No QR_PRODUCTION. No merge final.
+Revisar la lámina V3 con el cliente, al lado de V2. No publicar. No imprimir. No generar QR_PRODUCTION. No merge final.
 
 ARCHIVOS:
-docs/LA-BOBILA-CLIENT-REVIEW.md
-docs/LA-BOBILA-EDITORIAL-V2-REVIEW.md
+la-bobila/print/renders/carta-a3-editorial-v3.png
+la-bobila/print/renders/carta-a3-editorial-v3.pdf
+docs/LA-BOBILA-DENSITY-REPORT.md
 docs/LA-BOBILA-TYPOGRAPHY.md
-la-bobila/print/renders/carta-a3-editorial-v2-clean.png
-la-bobila/print/renders/carta-a3-editorial-v2-clean.pdf
-la-bobila/print/renders/carta-a3-editorial-v2-illustrated.png
-la-bobila/print/renders/carta-a3-editorial-v2-illustrated.pdf

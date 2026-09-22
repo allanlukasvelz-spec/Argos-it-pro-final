@@ -26,7 +26,91 @@ export const pizzaContour = `<svg class="lb-illus lb-illus--contour" viewBox="0 
   <path d="M46 98c18 7 36 8 54 2" stroke="currentColor" stroke-width="0.75" stroke-linecap="round"/>
 </svg>`;
 
-/** Available to the system. Not placed on the A3 sheet: three drawings are enough. */
+/** Same hand as pizzaContour: one weight of line, no fill, no clipart.
+ *  Background support for the A3. Not navigation icons and not product data. */
+
+export const burger = `<svg class="lb-illus lb-illus--burger" viewBox="0 0 160 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M30 50c6-24 94-24 100 2" stroke="currentColor" stroke-width="1.15" stroke-linecap="round"/>
+  <path d="M36 49c7 4 12 4 16-1M62 48c8 5 13 4 18-1M90 48c7 5 12 4 16-1" stroke="currentColor" stroke-width="0.75" stroke-linecap="round"/>
+  <path d="M26 63c22-7 86-8 108 3" stroke="currentColor" stroke-width="1.05" stroke-linecap="round"/>
+  <path d="M32 76c10 6 14-4 24 1 9 5 12-5 22 0 10 5 14-3 24 1 8 3 16 1 22 3" stroke="currentColor" stroke-width="0.9" stroke-linecap="round"/>
+  <path class="lb-line--tomato" d="M48 68c10-5 18 2 28-2" stroke="currentColor" stroke-width="0.9" stroke-linecap="round"/>
+  <path d="M24 92c12 16 100 16 112-1" stroke="currentColor" stroke-width="1.15" stroke-linecap="round"/>
+</svg>`;
+
+export const fries = `<svg class="lb-illus lb-illus--fries" viewBox="0 0 140 150" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M46 62c-4 30-2 52 10 68M94 62c4 30 2 52-10 68" stroke="currentColor" stroke-width="1.15" stroke-linecap="round"/>
+  <path d="M44 64c16 6 36 6 52-1" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+  <path d="M58 62c-1-26 3-34-2-46" stroke="currentColor" stroke-width="0.95" stroke-linecap="round"/>
+  <path d="M70 60c2-28-1-36 3-50" stroke="currentColor" stroke-width="0.95" stroke-linecap="round"/>
+  <path d="M82 62c1-24 4-32-1-44" stroke="currentColor" stroke-width="0.95" stroke-linecap="round"/>
+  <path d="M64 63c-8-16-4-24-7-34" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
+  <path d="M88 63c6-14 3-22 6-32" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
+</svg>`;
+
+export const saladBowl = `<svg class="lb-illus lb-illus--salad" viewBox="0 0 160 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M24 70c12 30 100 30 112 0" stroke="currentColor" stroke-width="1.15" stroke-linecap="round"/>
+  <path d="M30 68c14-8 86-8 100 3" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+  <path d="M46 66c4-20 2-28-4-36" stroke="currentColor" stroke-width="0.9" stroke-linecap="round"/>
+  <path d="M68 62c-2-22 6-30 1-40" stroke="currentColor" stroke-width="0.9" stroke-linecap="round"/>
+  <path d="M96 64c8-18 14-24 8-34" stroke="currentColor" stroke-width="0.9" stroke-linecap="round"/>
+  <path d="M78 66c10-8 18-6 22-14" stroke="currentColor" stroke-width="0.75" stroke-linecap="round"/>
+  <path class="lb-line--tomato" d="M84 58c4 1 7 5 4 8-4 2-8-1-8-4 0-2 2-4 4-4z" stroke="currentColor" stroke-width="0.8"/>
+</svg>`;
+
+export const iceCream = `<svg class="lb-illus lb-illus--ice" viewBox="0 0 120 150" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M60 28c16 1 30 14 27 30-8 6-46 7-54 0C26 42 40 26 60 28z" stroke="currentColor" stroke-width="1.15" stroke-linecap="round"/>
+  <path d="M42 58c8 6 28 6 36-1" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
+  <path d="M46 64l14 68 16-68" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M52 86c8 2 12 2 18-1M55 104c6 2 10 2 14-1" stroke="currentColor" stroke-width="0.75" stroke-linecap="round"/>
+</svg>`;
+
+export const wineGlass = `<svg class="lb-illus lb-illus--wine" viewBox="0 0 100 160" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M30 16h40c1 26-4 46-20 56-16-10-21-30-20-56z" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"/>
+  <path class="lb-line--tomato" d="M34 42c8 8 24 8 32-1" stroke="currentColor" stroke-width="0.85" stroke-linecap="round"/>
+  <path d="M50 72v46" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+  <path d="M32 126h36" stroke="currentColor" stroke-width="1.05" stroke-linecap="round"/>
+</svg>`;
+
+/** Four corner sprigs. Same leaf construction as the olive study, each drawn apart.
+ *  Not a rotation of one file and not a cut from the logo master. */
+export const laurelTl = `<svg class="lb-laurel lb-laurel--tl" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M8 18c28 8 52 28 70 62" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
+  <ellipse cx="28" cy="28" rx="11" ry="3.2" transform="rotate(-28 28 28)" stroke="currentColor" stroke-width="0.7"/>
+  <ellipse cx="46" cy="40" rx="10" ry="3" transform="rotate(18 46 40)" stroke="currentColor" stroke-width="0.7"/>
+  <ellipse cx="34" cy="48" rx="9" ry="2.8" transform="rotate(-42 34 48)" stroke="currentColor" stroke-width="0.65"/>
+  <ellipse cx="58" cy="58" rx="9" ry="2.7" transform="rotate(24 58 58)" stroke="currentColor" stroke-width="0.65"/>
+  <ellipse cx="48" cy="70" rx="8" ry="2.5" transform="rotate(-18 48 70)" stroke="currentColor" stroke-width="0.6"/>
+</svg>`;
+
+export const laurelTr = `<svg class="lb-laurel lb-laurel--tr" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M112 14c-22 16-40 36-58 68" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
+  <ellipse cx="96" cy="30" rx="12" ry="3.1" transform="rotate(32 96 30)" stroke="currentColor" stroke-width="0.7"/>
+  <ellipse cx="78" cy="36" rx="9" ry="2.8" transform="rotate(-20 78 36)" stroke="currentColor" stroke-width="0.65"/>
+  <ellipse cx="84" cy="52" rx="10" ry="2.9" transform="rotate(40 84 52)" stroke="currentColor" stroke-width="0.7"/>
+  <ellipse cx="66" cy="62" rx="8" ry="2.6" transform="rotate(-8 66 62)" stroke="currentColor" stroke-width="0.6"/>
+  <ellipse cx="70" cy="76" rx="7.5" ry="2.4" transform="rotate(26 70 76)" stroke="currentColor" stroke-width="0.6"/>
+</svg>`;
+
+export const laurelBl = `<svg class="lb-laurel lb-laurel--bl" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M10 108c24-10 46-32 74-58" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
+  <ellipse cx="26" cy="96" rx="11" ry="3" transform="rotate(24 26 96)" stroke="currentColor" stroke-width="0.7"/>
+  <ellipse cx="42" cy="86" rx="9" ry="2.7" transform="rotate(-36 42 86)" stroke="currentColor" stroke-width="0.65"/>
+  <ellipse cx="38" cy="74" rx="8" ry="2.6" transform="rotate(12 38 74)" stroke="currentColor" stroke-width="0.6"/>
+  <ellipse cx="56" cy="68" rx="10" ry="2.8" transform="rotate(-22 56 68)" stroke="currentColor" stroke-width="0.7"/>
+  <ellipse cx="62" cy="54" rx="7" ry="2.3" transform="rotate(30 62 54)" stroke="currentColor" stroke-width="0.6"/>
+</svg>`;
+
+export const laurelBr = `<svg class="lb-laurel lb-laurel--br" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M112 104c-30-6-48-28-66-64" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
+  <ellipse cx="98" cy="92" rx="12" ry="3.2" transform="rotate(-18 98 92)" stroke="currentColor" stroke-width="0.7"/>
+  <ellipse cx="80" cy="84" rx="8.5" ry="2.6" transform="rotate(28 80 84)" stroke="currentColor" stroke-width="0.65"/>
+  <ellipse cx="86" cy="70" rx="9" ry="2.7" transform="rotate(-34 86 70)" stroke="currentColor" stroke-width="0.65"/>
+  <ellipse cx="70" cy="64" rx="8" ry="2.5" transform="rotate(8 70 64)" stroke="currentColor" stroke-width="0.6"/>
+  <ellipse cx="64" cy="50" rx="7" ry="2.3" transform="rotate(-24 64 50)" stroke="currentColor" stroke-width="0.6"/>
+  <ellipse cx="76" cy="46" rx="6" ry="2.1" transform="rotate(16 76 46)" stroke="currentColor" stroke-width="0.55"/>
+</svg>`;
+
 export const wheat = `<svg class="lb-illus lb-illus--wheat" viewBox="0 0 40 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
   <path d="M20 112V18" stroke="currentColor" stroke-width="0.8" stroke-linecap="round"/>
   <ellipse cx="14" cy="28" rx="5" ry="2.2" transform="rotate(-35 14 28)" stroke="currentColor" stroke-width="0.7"/>
