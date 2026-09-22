@@ -26,9 +26,9 @@
     "editorial_copy": {
       "desde": "Des de 2005",
       "tipo": "Pizzeria artesana",
-      "estado": "EDITORIAL_COPY",
+      "estado": "EDITORIAL_COPY_PENDING",
       "decision": "ADR-019",
-      "observaciones": "Copy de proyecto. Va fuera del logo. No es una lectura del archivo."
+      "observaciones": "Copy de proyecto, pendiente de validación del cliente. Va fuera del logo. No es una lectura del archivo."
     }
   },
   "moneda": {

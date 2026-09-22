@@ -62,8 +62,10 @@ export function renderHtml(catalog, options = {}) {
   validate(catalog);
   const architecture = options.architecture === "a" || options.architecture === "b" ? options.architecture : "c";
   const palette = options.palette === "a" ? "a" : "b";
+  const copy = options.copy === "a" || options.copy === "b" ? options.copy : "c";
+  const illustration = options.illustration === "tomato" ? "tomato" : "clean";
   const caption = options.caption
-    ?? "EDITORIAL PROTOTYPE V1 · PROVA / NO IMPRIMIR · Candidata B · sense decisió de paleta";
+    ?? "PROTOTIP / NO IMPRIMIR · Candidata B, pendent";
   const ui = uiFrom(catalog);
   const pizzes = sectionById(catalog, "pizzes");
   const crea = sectionById(catalog, "crea");
@@ -75,11 +77,11 @@ export function renderHtml(catalog, options = {}) {
 
   const body = [
     `<p class="lb-stamp" data-component="DevStamp">${esc(caption)}</p>`,
-    BrandHeader(catalog.marca),
+    BrandHeader(catalog.marca, copy),
     LegalInfo(catalog.aviso_lamina),
     SectionDivider(),
     `<section class="zone-pizza" data-zone="pizzes">
-      ${CategoryHeader(pizzes, ui, { icon: tomato, badge: sectionBadge(pizzes, ui) })}
+      ${CategoryHeader(pizzes, ui, { icon: illustration === "tomato" ? tomato : "", badge: sectionBadge(pizzes, ui) })}
       ${pizzaNote}
       <div class="pizza-names">
         ${pizzaItems.map((product) => MenuRow(product, ui)).join("")}
@@ -109,7 +111,7 @@ export function renderHtml(catalog, options = {}) {
 </head>
 <body>
   <!-- Generado por print/render.mjs desde catalog/catalog.json. No editar el texto de producto aquí. -->
-  <article class="sheet palette-${palette}" data-palette="${palette}" data-architecture="${architecture}" data-revision="${catalog.revision}" data-version="${catalog.version}">
+  <article class="sheet palette-${palette}" data-palette="${palette}" data-architecture="${architecture}" data-copy="${copy}" data-illustration="${illustration}" data-revision="${catalog.revision}" data-version="${catalog.version}">
     <div class="sheet__frame" aria-hidden="true"></div>
     <div class="sheet__inner">
       ${body}

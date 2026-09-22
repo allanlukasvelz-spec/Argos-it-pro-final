@@ -20,12 +20,12 @@ export function MobileMenuHeader(catalog) {
       <img src="/assets/logo.png" alt="Logotip La Bòbila" width="1600" height="863">
     </figure>
     <h1 class="m-sr">${esc(catalog.marca.nombre)}</h1>
-    <p class="m-editorial" data-copy="EDITORIAL_COPY" data-decision="${esc(editorial.decision ?? "ADR-019")}">
-      <span class="m-editorial__mark">Text de projecte</span>
-      <span>${esc(editorial.tipo)}</span>
-      <span class="m-editorial__desde">${esc(editorial.desde)}</span>
-    </p>
-  </header>`;
+  </header>
+  <p class="m-editorial" data-copy="EDITORIAL_COPY" data-status="EDITORIAL_COPY_PENDING" data-decision="${esc(editorial.decision ?? "ADR-019")}">
+    <span class="m-editorial__mark">Pendent de client</span>
+    <span>${esc(editorial.tipo)}</span>
+    <span class="m-editorial__desde">${esc(editorial.desde)}</span>
+  </p>`;
 }
 
 export function MobileCategoryNav(secciones) {
@@ -120,7 +120,7 @@ export function MobileCreateYourPizza(section, grupos, productos, ui) {
       .filter((item) => item.subcategoria === group.id)
       .sort((a, b) => a.orden - b.orden);
     const extra = group.extra && group.extra.status === "CONFIRMADO_SOURCE" && typeof group.extra.value === "number"
-      ? ` ${esc(group.extra.value.toFixed(2).replace(".", ","))}`
+      ? ` <span class="m-extra">${esc(group.extra.value.toFixed(2).replace(".", ","))}</span>`
       : "";
     const rows = slots.length
       ? slots.map((slot) => {
@@ -180,7 +180,7 @@ export function MobileFooter(catalog, ui) {
     ${social}
     <h2>${esc(catalog.privacitat.titulo)}</h2>
     ${privacy}
-    <p class="m-footer__brand">${esc(catalog.marca.nombre)} ${esc(catalog.interfaz.separador_marca)} ${esc(catalog.marca.tipo)} ${esc(catalog.interfaz.separador_marca)} ${esc(catalog.marca.desde)}</p>
+    <p class="m-footer__brand">${esc(catalog.marca.nombre)}</p>
   </footer>`;
 }
 

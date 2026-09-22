@@ -10,18 +10,31 @@ export function esc(value) {
     .replaceAll('"', "&quot;");
 }
 
-export function BrandHeader(marca) {
-  const editorial = marca.editorial_copy ?? { tipo: marca.tipo, desde: marca.desde, decision: "ADR-019" };
-  return `<header class="lb-brand" data-component="BrandHeader">
-    <figure class="lb-brand__logo" data-copy="BRAND_ASSET_TEXT">
-      <img src="../processed/logo/la-bobila-logo-presentation.png" alt="Logotip La Bòbila" width="1600" height="863">
-    </figure>
-    <p class="lb-editorial" data-copy="EDITORIAL_COPY" data-decision="${esc(editorial.decision ?? "ADR-019")}">
-      <span class="lb-editorial__mark">Text de projecte</span>
+function editorialBlock(editorial, placement) {
+  return `<p class="lb-editorial lb-editorial--${placement}" data-copy="EDITORIAL_COPY" data-status="EDITORIAL_COPY_PENDING" data-decision="${esc(editorial.decision ?? "ADR-019")}">
+      <span class="lb-editorial__mark">Pendent de client</span>
       <span class="lb-editorial__line">${esc(editorial.tipo)}</span>
       <span class="lb-editorial__line">${esc(editorial.desde)}</span>
-    </p>
+    </p>`;
+}
+
+export function BrandHeader(marca, treatment = "c") {
+  const editorial = marca.editorial_copy ?? { tipo: marca.tipo, desde: marca.desde, decision: "ADR-019" };
+  const mode = treatment === "a" || treatment === "b" ? treatment : "c";
+  const logo = `<figure class="lb-brand__logo" data-copy="BRAND_ASSET_TEXT">
+      <img src="../processed/logo/la-bobila-logo-presentation.png" alt="Logotip La Bòbila" width="1600" height="863">
+    </figure>`;
+  if (mode === "a") {
+    return `<header class="lb-brand" data-component="BrandHeader" data-copy-treatment="a">${logo}</header>`;
+  }
+  if (mode === "b") {
+    return `<header class="lb-brand" data-component="BrandHeader" data-copy-treatment="b">
+    ${logo}
+    ${editorialBlock(editorial, "under")}
   </header>`;
+  }
+  return `<header class="lb-brand" data-component="BrandHeader" data-copy-treatment="c">${logo}</header>
+  ${editorialBlock(editorial, "separate")}`;
 }
 
 export function sectionBadge(section, ui) {
@@ -270,13 +283,11 @@ export function ContactBlock(contacto, ui) {
 }
 
 export function FooterInfo(catalog, ui) {
-  const editorial = catalog.marca.editorial_copy ?? { tipo: catalog.marca.tipo, desde: catalog.marca.desde };
-  const marca = `${catalog.marca.nombre} ${catalog.interfaz.separador_marca} ${editorial.tipo} ${catalog.interfaz.separador_marca} ${editorial.desde}`;
   return `<footer class="lb-footer" data-component="FooterInfo" data-zone="footer">
     <div class="lb-footer__grid">
       ${AllergenBadge(catalog.alergenos, ui)}
       ${ContactBlock(catalog.contacto, ui)}
     </div>
-    <p class="lb-footer__brand" data-copy="EDITORIAL_COPY">${esc(marca)}</p>
+    <p class="lb-footer__brand">${esc(catalog.marca.nombre)}</p>
   </footer>`;
 }

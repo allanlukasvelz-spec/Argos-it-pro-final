@@ -202,3 +202,35 @@ ADRs breves. Fecha de todas: 2026-09-22.
 - Impacto: `node la-bobila/print/production-guard.mjs` con build de producción sale en error. El test lo cubre.
 - Estado: aceptada. `QR_PRODUCTION_GATE` sigue BLOCKED.
 
+## ADR-026 — La arquitectura C queda como baseline
+
+- Decisión: C es la arquitectura editorial. No se vuelve a A ni a B salvo una regresión medida. En V2 el cuerpo de Crea la teva sigue en 3,6 mm e interlínea 1,35. Los toppings no pasan al QR.
+- Motivo: A y B desbordaban con el mismo tipo. V2 no ha mostrado esa regresión: la pila cierra a 16 mm del borde.
+- Roles: Head of Product Design, CPO, COO.
+- Impacto: las dos láminas V2 usan C. La retícula de 6 columnas no cambia.
+- Estado: aceptada para el prototipo. No es carta final.
+
+## ADR-027 — La rama no pinta el texto crítico pequeño
+
+- Decisión: la candidata B sigue en estudio. No se tocan `tokens.css` ni `tokens.json`. En la lámina y en `/carta` los precios, el cuerpo, los ingredientes y los avisos pendientes van en tinta `#202B17`. La rama `#6C7153` queda en filetes, el marco interior y adorno. `/carta` aplica la candidata en el `body`, sin sustituir el token global.
+- Motivo: la rama sobre el marfil está en 4,53:1. Pasa justo y no sobra en papel ni en un precio pequeño. La tinta está en 13,16:1.
+- Roles: CSO, Head of Product Design, CLO.
+- Impacto: `PALETTE_GATE` sigue PARTIAL. No hay paleta definitiva.
+- Estado: candidata de trabajo. Pendiente del cliente.
+
+## ADR-028 — El copy editorial sigue pendiente y va fuera del logo
+
+- Decisión: `editorial_copy.estado` es `EDITORIAL_COPY_PENDING`. Las frases «Des de 2005» y «Pizzeria artesana» no se presentan como texto del archivo. Se midieron tres tratamientos. Las láminas V2 usan el C: descriptor separado, con la marca «Pendent de client». A no enseña el copy que el cliente tiene que cerrar. B lo coloca en el eje del logo y se lee como pie del propio dibujo.
+- Motivo: la elección no es de gusto. Es para no atribuir al máster un texto que el cliente no ha validado.
+- Roles: CSO, CLO, Head of Product Design.
+- Impacto: `COPY_GATE` sigue PARTIAL. El máster no se edita.
+- Estado: pendiente del cliente.
+
+## ADR-029 — Una microilustración, sin ganadora
+
+- Decisión: V2 clean no lleva dibujo. V2 illustrated lleva un solo tomate de línea en la cabecera de pizzas. No hay rama, hoja, masa ni contorno en la misma lámina. Mismo contenido, misma retícula, misma candidata.
+- Motivo: el tomate marca la categoría protagonista y sale del vocabulario ya derivado del logo. Poner más dibujos sería decoración.
+- Roles: Head of Product Design, CSO.
+- Impacto: no se declara ganadora entre V1, V2 clean y V2 illustrated.
+- Estado: estudio.
+

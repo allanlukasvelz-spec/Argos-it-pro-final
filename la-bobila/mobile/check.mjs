@@ -37,7 +37,7 @@ check("touch target css", mobileCss.includes("min-height: 44px"));
 check("analytics seam inactive", mobileHtml.includes('"activo":false') && mobileHtml.includes("CLO"));
 check("no tracker script src", !/script[^>]+src=/.test(mobileHtml));
 check("no second catalog string in html generators", !printHtml.includes("catalog-mobile") && !mobileHtml.includes("catalog-print"));
-check("dev stamp", printHtml.includes("PROVA / NO IMPRIMIR"));
+check("dev stamp", printHtml.includes("PROTOTIP / NO IMPRIMIR"));
 check("editorial copy separate from logo asset text", printHtml.includes('data-copy="EDITORIAL_COPY"') && printHtml.includes("Pizzeria artesana") && !printHtml.includes("PIZZERIA ARTIGIANALE") && !printHtml.includes("DESDE 2005"));
 check("presentation logo placed", printHtml.includes("la-bobila-logo-presentation.png") && mobileHtml.includes("/assets/logo.png"));
 check("allergen placeholders are not on dishes", printHtml.includes('data-attached="false"') && mobileHtml.includes('data-attached="false"') && !mobileHtml.includes("m-allergens"));

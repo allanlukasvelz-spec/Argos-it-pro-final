@@ -172,8 +172,8 @@ export function validate(catalog) {
     errors.push("BRAND_ASSET_TEXT debe conservar «DESDE 2005» y «PIZZERIA ARTIGIANALE».");
   }
   if (assetText?.fuente !== "LB-ASSET-LOGO-001") errors.push("BRAND_ASSET_TEXT cita el logo, no la carta.");
-  if (editorial?.estado !== "EDITORIAL_COPY" || editorial?.desde !== "Des de 2005" || editorial?.tipo !== "Pizzeria artesana") {
-    errors.push("EDITORIAL_COPY debe ser «Des de 2005» y «Pizzeria artesana», aparte del logo.");
+  if (editorial?.estado !== "EDITORIAL_COPY_PENDING" || editorial?.desde !== "Des de 2005" || editorial?.tipo !== "Pizzeria artesana") {
+    errors.push("EDITORIAL_COPY sigue pendiente del cliente: «Des de 2005» y «Pizzeria artesana», aparte del logo.");
   }
   if (catalog.moneda?.estado !== "CONFIRMADO") {
     if (catalog.moneda?.presentacion !== "EUR_PENDING_PRESENTATION") {
