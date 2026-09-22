@@ -40,7 +40,7 @@ ADRs breves. Fecha de todas: 2026-09-22.
 - Motivo: no hay logo. Un emblema inventado impediría el reconocimiento real y ensuciaría la identidad.
 - Roles: CEO, CSO, Head of Product Design.
 - Impacto: la lámina no puede declararse PASS de reconocimiento. El bloqueo se sustituye entero cuando llegue el archivo.
-- Estado: aceptada.
+- Estado: aceptada en su momento. ADR-020 coloca el archivo recibido como identidad de cabecera. Fraunces sigue en categorías y en el copy de proyecto, no dentro del logo.
 
 ## ADR-006 — Fraunces y Source Sans 3
 
@@ -104,7 +104,7 @@ ADRs breves. Fecha de todas: 2026-09-22.
 - Motivo: aunque el PNG ya está ingerido, pegarlo en la cabecera sería un cambio de diseño. El wordmark tipográfico sigue en su sitio hasta una decisión aparte.
 - Roles: CEO, CSO, Head of Product Design.
 - Impacto: la cabecera móvil marca el hueco. La A3 sigue con el nombre en Fraunces, no con un símbolo inventado.
-- Estado: aceptada.
+- Estado: el wordmark tipográfico sigue `PLACEHOLDER`. La cabecera ya no depende de él: ADR-020 coloca el archivo.
 
 ## ADR-014 — La paleta sigue provisional hasta muestrear el logo
 
@@ -144,4 +144,61 @@ ADRs breves. Fecha de todas: 2026-09-22.
 - Motivo: ya hay archivo. Seguir con huecos vacíos sería ignorar la fuente. Sustituir la paleta o pegar el PNG sería diseñar antes de cerrar el contraste de marca.
 - Roles: CEO, CPO, COO, CFO, CSO, CRO, CDAO, CLO, Head of Product Design, CTO, Chief of Staff.
 - Impacto: 17 pizzas, 4 smash, 11 complements y 3 amanides en `CONFIRMADO`. Doce líneas de Crea la teva en `REVIEW_REQUIRED`, incluida cansalada en la columna de verdura. A3 en OVERFLOW por ese módulo. No hay alérgenos legales. No hay segunda carta ni segundo PR.
+- Estado: aceptada. La colocación del archivo y el arreglo de retícula quedan en ADR-019 a ADR-022. El overflow de aquella A3 no se cierra bajando el tipo.
+
+## ADR-019 — El texto del logo y el copy de proyecto no se mezclan
+
+- Decisión: `BRAND_ASSET_TEXT` es el texto del archivo, sin tocarlo: «DESDE 2005» y «PIZZERIA ARTIGIANALE». `EDITORIAL_COPY` es decisión de proyecto: «Des de 2005» y «Pizzeria artesana». El copy de proyecto solo aparece fuera del logo, con la marca visible «Text de projecte». No se reescribe el PNG. No se presenta el copy como si estuviera dentro del logo.
+- Motivo: el encargo y el archivo no dicen lo mismo. Sustituir uno por el otro falsificaría la fuente o el encargo.
+- Roles: CEO, CSO, CPO, Head of Product Design, CLO.
+- Impacto: la cabecera muestra el archivo y, debajo, el copy marcado. `marca.wordmark` sigue en `PLACEHOLDER`.
 - Estado: aceptada.
+
+## ADR-020 — Se coloca una copia de presentación, no el máster
+
+- Decisión: el máster `la-bobila/source/logo/la-bobila-logo-reference.png` no se modifica. sha256 `6b82915752bd3bd3b0f9a698feb36b7b4897357555bd462af7c89164b49bc9fc`. La copia byte a byte permanece en `processed/logo/`. Como el PNG es RGB sin alfa y el crema de fondo (mediana 250, 241, 230) dibuja un rectángulo sobre la lámina, se genera `la-bobila-logo-presentation.png`: el mismo píxel, con alfa donde el fondo coincide (distancia ≤ 14 transparente, ≥ 36 opaco, pluma entre medias). Sin recorte, sin redibujo, sin autotrace. Esa copia es la identidad de la A3 y de `/carta`.
+- Motivo: el archivo ya puede colocarse. Seguir con el wordmark tipográfico como identidad primaria escondería el logo recibido.
+- Roles: CSO, Head of Product Design, CDAO.
+- Impacto: el wordmark Fraunces deja de ser la cabecera. Fraunces sigue en categorías y en el copy de proyecto.
+- Estado: aceptada.
+
+## ADR-021 — Estudio de paleta, sin ganadora
+
+- Decisión: no se sustituyen los tokens. No hay paleta C. El prototipo editorial prueba la candidata B y lo dice en la lámina. No es una decisión de marca.
+- Motivo: la candidata A (marfil `#F3EEE4`, verde `#1E3A32`, terracota `#C15B3A`, oliva `#6E7A45`) deja la terracota en 3,76:1 y la oliva en 4,01:1 sobre el marfil, por debajo de 4,5:1 para texto pequeño. La candidata B (marfil `#FAF0E7`, tinta `#202B17`, tomate `#8E4A30`, rama `#6C7153`) pasa: tinta 13,16, tomate 5,89, rama 4,53. B ya cumple el contraste y coincide con el logo colocado. Inventar una tercera mezcla sería preferencia, no una necesidad. La rama queda justa para papel no estucado en el tipo más pequeño. Los tintes de apoyo (lavado, filete, verde suave) son mezclas de los cuatro hex de la candidata, no una paleta nueva.
+- Roles: CSO, Head of Product Design.
+- Impacto: `tokens.json` no cambia. `/carta` sigue en los tokens provisionales. La lámina del prototipo lleva la clase de la candidata B.
+- Estado: estudio. Sin ganadora.
+
+## ADR-022 — Crea la teva usa el corte editorial
+
+- Decisión: de las tres arquitecturas medidas con el mismo tipo (3,6 mm, interlínea 1,35), se usa la C. La base y los suplementos van en una banda de 6 columnas. La lista completa sigue en la A3, en líneas que fluyen, no en una columna de trece. A y B se rechazan porque desbordan la lámina (12,2 mm y 69,1 mm) sin bajar el tipo. El detalle está en `docs/LA-BOBILA-CREATE-YOUR-PIZZA-STUDY.md`.
+- Motivo: el desborde no era un problema de cuerpo. Encoger la letra para esconderlo estaba prohibido.
+- Roles: Head of Product Design, CPO, COO, CRO, Customer Success.
+- Impacto: la A3 de conjunto pasa a 0 OVERFLOW. La pizza sigue delante y con más aire que la smash. Los toppings confirmados no se aparcan en el QR.
+- Estado: aceptada para el prototipo editorial. No es carta final.
+
+## ADR-023 — Alérgenos: arquitectura híbrida, capa legal vacía
+
+- Decisión: se prototipa la opción 3. La A3 y `/carta` muestran un sistema de marcas neutras que no se asigna a ningún plato. Cuando exista la matriz, el detalle por plato vivirá en `/carta` y la A3 conservará la leyenda, no un icono pegado al plato sin fuente. No se infieren alérgenos.
+- Motivo: un icono junto a un plato parecería una declaración legal. Hoy no hay matriz.
+- Roles: CLO, CPO, COO, Head of Product Design.
+- Impacto: `ALLERGEN_GATE` sigue BLOCKED. El componente `AllergenSystem` va con `data-attached="false"`.
+- Estado: recomendación de arquitectura. Sin contenido legal.
+
+## ADR-024 — La moneda se conserva y no se pinta
+
+- Decisión: los valores no se tocan y no se pierden decimales. `moneda.presentacion` es `EUR_PENDING_PRESENTATION`. El símbolo no entra en la A3 ni en `/carta` mientras `moneda.estado` no sea `CONFIRMADO`.
+- Motivo: la foto pinta el euro y el cierre editorial de la moneda no está dado.
+- Roles: CFO, CLO, CPO.
+- Impacto: 6 Formatges sigue en 15,90 `CONFIRMADO_SOURCE`. El 13,90 histórico es otro periodo y no abre conflicto.
+- Estado: aceptada.
+
+## ADR-025 — Una build de producción no puede apuntar a localhost
+
+- Decisión: `QR_PRODUCTION` sigue `BLOQUEADO` y con destino null. `QR_DEV` puede seguir en `127.0.0.1`. Si `LA_BOBILA_BUILD=production` o `NODE_ENV=production`, el guard falla cuando un destino es localhost. La lámina de desarrollo enseña `PROVA / NO IMPRIMIR`. La URL local no se pinta como arte. El módulo «La carta al teu mòbil» sigue siendo un componente propio.
+- Motivo: un QR de imprenta que abre localhost no se puede retirar.
+- Roles: CTO, CISO, CLO, COO.
+- Impacto: `node la-bobila/print/production-guard.mjs` con build de producción sale en error. El test lo cubre.
+- Estado: aceptada. `QR_PRODUCTION_GATE` sigue BLOCKED.
+

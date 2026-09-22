@@ -36,7 +36,7 @@ export function renderMobileHtml(catalog) {
   };
   const sections = catalog.secciones.map((section) => {
     if (section.id === "crea") return MobileCreateYourPizza(section, catalog.grupos_crea, byCategory(catalog, "crea"), ui);
-    return MobileCategorySection(section, byCategory(catalog, section.id), ui, catalog.alergenos);
+    return MobileCategorySection(section, byCategory(catalog, section.id), ui);
   }).join("\n");
 
   return `<!DOCTYPE html>

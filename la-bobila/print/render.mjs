@@ -18,7 +18,7 @@ import {
   esc,
   sectionBadge,
 } from "./components.mjs";
-import { oliveBranch, tomato } from "./illustrations.mjs";
+import { tomato } from "./illustrations.mjs";
 import { devQrSvg } from "./qr-svg.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -58,8 +58,12 @@ function column(catalog, section, ui) {
   </section>`;
 }
 
-export function renderHtml(catalog) {
+export function renderHtml(catalog, options = {}) {
   validate(catalog);
+  const architecture = options.architecture === "a" || options.architecture === "b" ? options.architecture : "c";
+  const palette = options.palette === "a" ? "a" : "b";
+  const caption = options.caption
+    ?? "EDITORIAL PROTOTYPE V1 · PROVA / NO IMPRIMIR · Candidata B · sense decisió de paleta";
   const ui = uiFrom(catalog);
   const pizzes = sectionById(catalog, "pizzes");
   const crea = sectionById(catalog, "crea");
@@ -70,7 +74,8 @@ export function renderHtml(catalog) {
   const smashNote = smash.nota ? `<p class="lb-note">${esc(smash.nota)}</p>` : "";
 
   const body = [
-    BrandHeader(catalog.marca, oliveBranch),
+    `<p class="lb-stamp" data-component="DevStamp">${esc(caption)}</p>`,
+    BrandHeader(catalog.marca),
     LegalInfo(catalog.aviso_lamina),
     SectionDivider(),
     `<section class="zone-pizza" data-zone="pizzes">
@@ -80,7 +85,7 @@ export function renderHtml(catalog) {
         ${pizzaItems.map((product) => MenuRow(product, ui)).join("")}
       </div>
     </section>`,
-    CreateYourPizzaModule(crea, catalog.grupos_crea, byCategory(catalog, "crea"), ui),
+    CreateYourPizzaModule(crea, catalog.grupos_crea, byCategory(catalog, "crea"), ui, architecture),
     `<section class="zone-smash" data-zone="smash">
       ${CategoryHeader(smash, ui, { badge: sectionBadge(smash, ui) })}
       ${smashNote}
@@ -104,7 +109,7 @@ export function renderHtml(catalog) {
 </head>
 <body>
   <!-- Generado por print/render.mjs desde catalog/catalog.json. No editar el texto de producto aquí. -->
-  <article class="sheet" data-revision="${catalog.revision}" data-version="${catalog.version}">
+  <article class="sheet palette-${palette}" data-palette="${palette}" data-architecture="${architecture}" data-revision="${catalog.revision}" data-version="${catalog.version}">
     <div class="sheet__frame" aria-hidden="true"></div>
     <div class="sheet__inner">
       ${body}
@@ -115,10 +120,11 @@ export function renderHtml(catalog) {
 `;
 }
 
-export function writeHtml(catalog = loadCatalog()) {
-  const html = renderHtml(catalog);
-  writeFileSync(htmlPath, html);
-  return htmlPath;
+export function writeHtml(catalog = loadCatalog(), options = {}) {
+  const html = renderHtml(catalog, options);
+  const target = options.htmlPath ?? htmlPath;
+  writeFileSync(target, html);
+  return target;
 }
 
 const isMain = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;

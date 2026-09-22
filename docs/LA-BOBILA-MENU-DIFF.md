@@ -5,7 +5,7 @@ La histórica no se copia a `productos`. Estado de esas filas: `HISTORICO`, en `
 ## Precio
 
 - Bases pizza: histórica 10,00, vigente 12,00. Las dos lecturas cierran.
-- 6 Formatges: una banda histórica pone 13,90 junto al nombre y la vigente lee 15,90. La columna está borrosa. No se da por cerrado.
+- 6 Formatges: la vigente, en doble contraste, lee 15,90 y permanece `CONFIRMADO_SOURCE`. Una banda histórica pone 13,90. Es otro periodo. No invalida el precio vigente y no abre un conflicto entre periodos.
 - El resto de precios históricos que se aíslan (Prosciutto 13,90, Napolitana 13,90, 4 Estacions 15,90, patates 5,90, top fries 7,90) coinciden con la vigente.
 
 ## Ingredientes

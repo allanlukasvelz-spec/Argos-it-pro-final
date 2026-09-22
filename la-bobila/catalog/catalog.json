@@ -1,11 +1,11 @@
 {
   "id": "la-bobila-catalog",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "revision": "2026-09-22",
   "idioma_cliente": "ca",
   "idioma_interno": "es",
   "fuente": "LB-ASSET-MENU-CURRENT-001",
-  "aviso": "Catálogo contrastado con la foto de la carta vigente ingerida el 2026-09-22. Las 17 pizzas candidatas coinciden con esa foto. La moneda global sigue POR_CONFIRMAR: el archivo muestra el signo, y no se pinta. No hay matriz de alérgenos. Lo histórico no está en productos vigentes. QR_PRODUCTION sigue bloqueado.",
+  "aviso": "Catálogo contrastado con la foto de la carta vigente ingerida el 2026-09-22. Las 17 pizzas candidatas coinciden con esa foto. La moneda global sigue POR_CONFIRMAR y su presentación es EUR_PENDING_PRESENTATION: el archivo muestra el signo, y no se pinta. No hay matriz de alérgenos. Lo histórico no está en productos vigentes y sus precios citan solo LB-ASSET-MENU-HISTORICAL-001. QR_PRODUCTION sigue bloqueado.",
   "marca": {
     "nombre": "La Bòbila",
     "tipo": "Pizzeria artesana",
@@ -14,14 +14,30 @@
     "wordmark": "PLACEHOLDER",
     "logo_archivo": "la-bobila/source/logo/la-bobila-logo-reference.png",
     "fuente": "LB-ASSET-LOGO-001",
-    "observaciones": "El máster está ingerido y no se edita. El wordmark de la lámina sigue PLACEHOLDER: no se sustituye el logo en la maqueta. OCR del archivo, dos pases: «• DESDE 2005 •» y «- PIZZERIA ARTIGIANALE -». No coincide con el «Des de 2005» ni con «Pizzeria artesana» del encargo. No se reemplaza solo."
+    "observaciones": "El máster no se edita. La cabecera coloca la copia de presentación. BRAND_ASSET_TEXT queda en el píxel («DESDE 2005», «PIZZERIA ARTIGIANALE»). EDITORIAL_COPY («Des de 2005», «Pizzeria artesana») va aparte, ADR-019. El wordmark tipográfico sigue PLACEHOLDER.",
+    "logo_presentacion": "la-bobila/processed/logo/la-bobila-logo-presentation.png",
+    "brand_asset_text": {
+      "desde": "DESDE 2005",
+      "tipo": "PIZZERIA ARTIGIANALE",
+      "estado": "BRAND_ASSET_TEXT",
+      "fuente": "LB-ASSET-LOGO-001",
+      "observaciones": "Texto del archivo de logo. No se reescribe ni se pinta como copy."
+    },
+    "editorial_copy": {
+      "desde": "Des de 2005",
+      "tipo": "Pizzeria artesana",
+      "estado": "EDITORIAL_COPY",
+      "decision": "ADR-019",
+      "observaciones": "Copy de proyecto. Va fuera del logo. No es una lectura del archivo."
+    }
   },
   "moneda": {
     "codigo": null,
     "simbolo": null,
     "estado": "POR_CONFIRMAR",
     "fuente": "LB-ASSET-MENU-CURRENT-001",
-    "observaciones": "El archivo vigente pinta el signo de euro en cada precio. La presentación editorial de la moneda no está cerrada, así que el símbolo no entra en A3 ni en /carta."
+    "observaciones": "El archivo vigente pinta el signo de euro en cada precio. Los valores se conservan con dos decimales. La presentación es EUR_PENDING_PRESENTATION: el símbolo no entra en la A3 ni en /carta.",
+    "presentacion": "EUR_PENDING_PRESENTATION"
   },
   "interfaz": {
     "pendiente": "Per confirmar",
@@ -2001,7 +2017,7 @@
         "precio_historico": {
           "value": 10.0,
           "currency": null,
-          "source": "LB-ASSET-MENU-CURRENT-001",
+          "source": "LB-ASSET-MENU-HISTORICAL-001",
           "status": "CONFIRMADO_SOURCE",
           "original": "10,00 €"
         },
@@ -2028,7 +2044,7 @@
         "precio_historico": {
           "value": 1.0,
           "currency": null,
-          "source": "LB-ASSET-MENU-CURRENT-001",
+          "source": "LB-ASSET-MENU-HISTORICAL-001",
           "status": "CONFIRMADO_SOURCE",
           "original": "1,00 €"
         },
@@ -2040,7 +2056,7 @@
         "precio_historico": {
           "value": 6.9,
           "currency": null,
-          "source": "LB-ASSET-MENU-CURRENT-001",
+          "source": "LB-ASSET-MENU-HISTORICAL-001",
           "status": "CONFIRMADO_SOURCE",
           "original": "6,90 €"
         },

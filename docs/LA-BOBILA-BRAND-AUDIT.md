@@ -41,3 +41,20 @@ Impresión: el PNG a 1600 px se queda corto si se amplía a un frente de A3. Hac
 ## Decisión
 
 CSO, Head of Product Design, CPO y CEO: no se reemplazan los hex ni el wordmark de forma automática. La diferencia «DESDE 2005» / «PIZZERIA ARTIGIANALE» frente a «Des de 2005» / «Pizzeria artesana» queda para el cliente. Ver ADR-018.
+
+## Fase 4 — copia de presentación y contraste
+
+El máster no se ha modificado. sha256 sigue `6b82915752bd3bd3b0f9a698feb36b7b4897357555bd462af7c89164b49bc9fc`.
+
+El fondo RGB (mediana 250, 241, 230, cerca del marfil muestreado `#FAF0E7`) dibuja un rectángulo si se coloca tal cual sobre otra base. La copia `la-bobila/processed/logo/la-bobila-logo-presentation.png` (sha256 `ba7b0648ac45efafd698510dc0d2c69782fcf41d320cadd6759e0bd77b918113`) añade alfa sin recortar ni redibujar: distancia euclídea al crema ≤ 14 transparente, ≥ 36 opaco, pluma en medio. Es trazable al máster. ADR-020. Esa copia es la que va en la A3 y en `/carta`. El texto del archivo no se reescribe.
+
+Contraste relativo, texto pequeño (umbral 4,5:1) y texto grande (3:1). Prueba de pantalla sRGB, no separación de imprenta.
+
+| Par | Candidata A | Candidata B |
+| --- | --- | --- |
+| Tinta o verde sobre marfil | 10,64 | 13,16 |
+| Acento sobre marfil | 3,76 terracota | 5,89 tomate |
+| Oliva o rama sobre marfil | 4,01 | 4,53 |
+| Marfil sobre tinta o verde | 10,64 | 13,16 |
+
+En papel no estucado la rama de B (4,53) tiene poco margen en el meta más pequeño. La terracota y la oliva de A no sirven para precio pequeño. No hay candidata C: B ya pasa el contraste y es la que coincide con el logo. No se declara ganadora. Los tokens no se sustituyen. El prototipo prueba B y lo rotula. `/carta` sigue en los tokens provisionales, así que el precio móvil en oliva queda en 4,01:1 hasta que haya decisión.

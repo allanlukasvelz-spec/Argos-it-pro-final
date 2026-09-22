@@ -44,7 +44,7 @@ El precio vigente es `{ value, currency: null, source, status: CONFIRMADO_SOURCE
 
 ## Marca y QR
 
-`marca.nombre`, tipo y «Des de 2005» siguen en el encargo. `marca.wordmark` es `PLACEHOLDER`: el PNG ingerido no se pega en la cabecera. `logo_archivo` apunta al máster. El OCR del archivo lee «DESDE 2005» y «PIZZERIA ARTIGIANALE»; no sustituye el encargo.
+`marca.wordmark` sigue en `PLACEHOLDER`: es el wordmark tipográfico, no el archivo. La cabecera coloca la copia de presentación del PNG. `brand_asset_text` guarda «DESDE 2005» y «PIZZERIA ARTIGIANALE» como texto del logo. `editorial_copy` guarda «Des de 2005» y «Pizzeria artesana» como copy de proyecto (ADR-019). No se cruzan. `moneda.presentacion` es `EUR_PENDING_PRESENTATION`: los valores se conservan con dos decimales y el símbolo no se pinta. Un registro de `historico` solo puede citar `LB-ASSET-MENU-HISTORICAL-001`. Un precio `CONFIRMADO_SOURCE` de la carta vigente solo puede citar `LB-ASSET-MENU-CURRENT-001`.
 
 `qr.ruta_estable` es `/carta`. `QR_PRODUCTION` está `BLOQUEADO` y su destino es `null`. `QR_DEV` solo puede ser `http://127.0.0.1:<puerto>/carta`. El validador rechaza cualquier otra URL.
 

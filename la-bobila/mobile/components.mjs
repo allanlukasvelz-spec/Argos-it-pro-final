@@ -13,15 +13,18 @@ function blockedName(product, ui) {
 }
 
 export function MobileMenuHeader(catalog) {
-  const marca = catalog.marca;
+  const editorial = catalog.marca.editorial_copy ?? { tipo: catalog.marca.tipo, desde: catalog.marca.desde, decision: "ADR-019" };
   return `<header class="m-header" data-component="MobileMenuHeader">
     <p class="m-banner" role="status">${esc(catalog.interfaz.banner_mobil)}</p>
-    <div class="m-logo" data-wordmark="${esc(marca.wordmark)}">
-      <span class="m-logo__slot">${esc(marca.wordmark)}</span>
-      <h1 class="m-logo__name">${esc(marca.nombre)}</h1>
-    </div>
-    <p class="m-logo__tipo">${esc(marca.tipo)}</p>
-    <p class="m-logo__desde">${esc(marca.desde)}</p>
+    <figure class="m-logo" data-copy="BRAND_ASSET_TEXT">
+      <img src="/assets/logo.png" alt="Logotip La Bòbila" width="1600" height="863">
+    </figure>
+    <h1 class="m-sr">${esc(catalog.marca.nombre)}</h1>
+    <p class="m-editorial" data-copy="EDITORIAL_COPY" data-decision="${esc(editorial.decision ?? "ADR-019")}">
+      <span class="m-editorial__mark">Text de projecte</span>
+      <span>${esc(editorial.tipo)}</span>
+      <span class="m-editorial__desde">${esc(editorial.desde)}</span>
+    </p>
   </header>`;
 }
 
@@ -67,7 +70,7 @@ export function MobileAllergenInfo(product, ui, alergenos) {
   return `<p class="m-allergens is-pending" data-component="MobileAllergenInfo">${esc(alergenos?.titulo ?? "Al·lèrgens")}: ${esc(ui.pendiente)}</p>`;
 }
 
-export function MobileMenuItem(product, ui, alergenos) {
+export function MobileMenuItem(product, ui) {
   const photo = product.estado === "CONFIRMADO" && product.foto
     ? `<img src="${esc(product.foto)}" alt="" loading="lazy">`
     : "";
@@ -79,11 +82,10 @@ export function MobileMenuItem(product, ui, alergenos) {
     </div>
     ${MobileDescription(product)}
     ${MobileIngredientList(product, ui)}
-    ${MobileAllergenInfo(product, ui, alergenos)}
   </article>`;
 }
 
-export function MobileFeaturedItem(product, ui, alergenos) {
+export function MobileFeaturedItem(product, ui) {
   if (!(product.destacado === true && product.estado === "CONFIRMADO")) return "";
   return `<article class="m-item m-item--featured" id="${esc(product.id)}" data-component="MobileFeaturedItem" data-estado="${esc(product.estado)}">
     <p class="m-featured">${esc(ui.destacat)}</p>
@@ -93,14 +95,13 @@ export function MobileFeaturedItem(product, ui, alergenos) {
     </div>
     ${MobileDescription(product)}
     ${MobileIngredientList(product, ui)}
-    ${MobileAllergenInfo(product, ui, alergenos)}
   </article>`;
 }
 
-export function MobileCategorySection(section, products, ui, alergenos) {
+export function MobileCategorySection(section, products, ui) {
   const items = products.map((product) => {
-    const featured = MobileFeaturedItem(product, ui, alergenos);
-    return featured || MobileMenuItem(product, ui, alergenos);
+    const featured = MobileFeaturedItem(product, ui);
+    return featured || MobileMenuItem(product, ui);
   }).join("");
   const note = section.nota
     ? `<p class="m-note">${esc(section.nota)}</p>`
@@ -169,7 +170,10 @@ export function MobileFooter(catalog, ui) {
     <h2>${esc(catalog.contacto.titulo)}</h2>
     ${MobileContactActions(catalog.contacto, ui)}
     <h2>${esc(catalog.alergenos.titulo)}</h2>
-    ${MobileAllergenInfo(null, ui, catalog.alergenos)}
+    <section class="m-allergen-system" data-component="AllergenSystem" data-attached="false">
+      <p class="is-pending">Matriu pendent. Marques neutres, sense plat assignat.</p>
+      <p class="m-ph-row" aria-hidden="true"><i></i><i></i><i></i></p>
+    </section>
     <h2>${esc(catalog.legal.titulo)}</h2>
     ${legal}
     <h2>${esc(catalog.social.titulo)}</h2>

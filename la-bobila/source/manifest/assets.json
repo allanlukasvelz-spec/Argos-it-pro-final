@@ -14,7 +14,7 @@
       "date_ingested": "2026-09-22",
       "provenance": "/Users/allanlukasvelz/Downloads/web pizeria/LA-BOBILA_SOURCE_ASSETS.zip",
       "status": "INGESTED",
-      "notes": "PNG 1600×863, RGB, sin canal alfa. Wordmark La Bòbila con tomate y rama. No es un logo de Argos IT. El máster no se edita. La copia de trabajo está en la-bobila/processed/logo/ con el mismo sha256."
+      "notes": "PNG 1600×863, RGB, sin canal alfa. Wordmark La Bòbila con tomate y rama. No es un logo de Argos IT. El máster no se edita. La copia byte a byte sigue en la-bobila/processed/logo/la-bobila-logo-reference.png con el mismo sha256. La variante de colocación es la-bobila/processed/logo/la-bobila-logo-presentation.png (RGBA, sha256 ba7b0648ac45efafd698510dc0d2c69782fcf41d320cadd6759e0bd77b918113): alfa sobre el crema de fondo, mediana 250,241,230, sin recorte ni redibujo. ADR-020.",
     },
     {
       "id": "LB-ASSET-MENU-CURRENT-001",

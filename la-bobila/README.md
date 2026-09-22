@@ -14,6 +14,15 @@ node la-bobila/mobile/check.mjs     # comprobaciones automáticas, no sustituyen
 
 `CHROME_PATH` puede apuntar a otro binario compatible. `LA_BOBILA_PORT` cambia el puerto del servidor local; si cambia, hay que regenerar el QR_DEV. No se añade una dependencia al `package.json` de Argos.
 
+```bash
+node --test la-bobila/catalog/provenance.test.mjs
+node --test la-bobila/print/production-guard.test.mjs
+LA_BOBILA_BUILD=production node la-bobila/print/production-guard.mjs   # debe fallar: QR_DEV apunta a localhost
+node la-bobila/print/export.mjs   # prototipo editorial y estudio de paleta
+```
+
+El prototipo es `print/renders/carta-a3-editorial-v1.pdf`. Lleva `PROVA / NO IMPRIMIR`. No es imprenta ni producción. `QR_PRODUCTION` sigue bloqueado.
+
 `/carta` es la ruta estable. `GET /` redirige ahí. `QR_PRODUCTION` no se genera: no hay dominio. El código de la lámina es `QR_DEV` y no se imprime como carta final.
 
 Documentos: `docs/LA-BOBILA-MASTER-SPEC.md`, `docs/LA-BOBILA-DATA-MODEL.md`, `docs/LA-BOBILA-DESIGN-SYSTEM.md`, `docs/LA-BOBILA-DECISIONS.md`, `docs/LA-BOBILA-STATUS.md`.

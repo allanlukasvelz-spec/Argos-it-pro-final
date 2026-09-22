@@ -15,6 +15,7 @@ const files = new Map([
   ["/carta/", { path: resolve(root, "mobile/carta.html"), type: "text/html; charset=utf-8" }],
   ["/assets/tokens.css", { path: resolve(root, "tokens/tokens.css"), type: "text/css; charset=utf-8" }],
   ["/assets/mobile.css", { path: resolve(root, "mobile/carta.css"), type: "text/css; charset=utf-8" }],
+  ["/assets/logo.png", { path: resolve(root, "processed/logo/la-bobila-logo-presentation.png"), type: "image/png" }],
 ]);
 
 function fontFile(urlPath) {

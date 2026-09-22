@@ -10,16 +10,17 @@ export function esc(value) {
     .replaceAll('"', "&quot;");
 }
 
-export function BrandHeader(marca, olive) {
+export function BrandHeader(marca) {
+  const editorial = marca.editorial_copy ?? { tipo: marca.tipo, desde: marca.desde, decision: "ADR-019" };
   return `<header class="lb-brand" data-component="BrandHeader">
-    <div class="lb-brand__olive">${olive}</div>
-    <div class="lb-brand__lockup">
-      <p class="lb-brand__name">${esc(marca.nombre)}</p>
-      <p class="lb-brand__tipo">${esc(marca.tipo)}</p>
-      <p class="lb-brand__desde">${esc(marca.desde)}</p>
-      <span class="lb-brand__tick" aria-hidden="true"></span>
-    </div>
-    <div class="lb-brand__balance" aria-hidden="true"></div>
+    <figure class="lb-brand__logo" data-copy="BRAND_ASSET_TEXT">
+      <img src="../processed/logo/la-bobila-logo-presentation.png" alt="Logotip La Bòbila" width="1600" height="863">
+    </figure>
+    <p class="lb-editorial" data-copy="EDITORIAL_COPY" data-decision="${esc(editorial.decision ?? "ADR-019")}">
+      <span class="lb-editorial__mark">Text de projecte</span>
+      <span class="lb-editorial__line">${esc(editorial.tipo)}</span>
+      <span class="lb-editorial__line">${esc(editorial.desde)}</span>
+    </p>
   </header>`;
 }
 
@@ -139,45 +140,94 @@ export function MenuRow(product, ui) {
   </article>`;
 }
 
-export function CreateYourPizzaModule(section, grupos, productos, ui) {
-  const columns = grupos.map((group) => {
-    const slots = productos
-      .filter((item) => item.subcategoria === group.id)
-      .sort((a, b) => a.orden - b.orden);
-    const rows = slots.length
-      ? slots.map((slot) => {
-        const confirmed = (slot.estado === "CONFIRMADO" || slot.estado === "CONFIRMADO_SOURCE") && slot.nombre;
-        const label = slot.nombre && (confirmed || slot.estado === "REVIEW_REQUIRED")
-          ? esc(slot.nombre)
-          : esc(ui.pendiente);
-        const klass = confirmed ? "lb-crea__name" : "lb-crea__pending is-pending";
-        return `<li class="lb-crea__slot">
-      <span class="${klass}">${label}</span>
-    </li>`;
-      }).join("")
-      : `<li class="lb-crea__slot"><span class="lb-crea__pending is-pending">${esc(ui.pendiente)}</span></li>`;
+function money(value) {
+  return Number(value).toFixed(2).replace(".", ",");
+}
+
+function groupPrice(group) {
+  if (!group?.extra || group.extra.status !== "CONFIRMADO_SOURCE" || typeof group.extra.value !== "number") return "";
+  return money(group.extra.value);
+}
+
+function creaSlots(group, productos, ui) {
+  return productos
+    .filter((item) => item.subcategoria === group.id)
+    .sort((a, b) => a.orden - b.orden)
+    .map((slot) => {
+      const confirmed = (slot.estado === "CONFIRMADO" || slot.estado === "CONFIRMADO_SOURCE") && slot.nombre;
+      const readable = Boolean(slot.nombre) && (confirmed || slot.estado === "REVIEW_REQUIRED");
+      const label = readable ? esc(slot.nombre) : esc(ui.pendiente);
+      const klass = confirmed ? "lb-crea__name" : "lb-crea__pending is-pending";
+      return `<li class="lb-crea__slot" data-estado="${esc(slot.estado)}"><span class="${klass}">${label}</span></li>`;
+    }).join("");
+}
+
+function creaGroups(grupos) {
+  const byId = new Map(grupos.map((group) => [group.id, group]));
+  return ["base", "carnes", "vegetales", "quesos"].map((id) => byId.get(id)).filter(Boolean);
+}
+
+export function CreateYourPizzaModule(section, grupos, productos, ui, architecture = "c") {
+  const groups = creaGroups(grupos);
+  const altres = grupos.find((group) => group.id === "altres");
+  const altresLine = altres
+    ? `<p class="lb-crea__altres is-pending" data-estado="${esc(altres.estado)}">${esc(altres.etiqueta)}: ${esc(ui.pendiente)}</p>`
+    : "";
+  const note = section.nota ? `<p class="lb-note">${esc(section.nota)}</p>` : "";
+  const head = `${CategoryHeader(section, ui, { badge: sectionBadge(section, ui) })}${note}`;
+  const arch = architecture === "a" || architecture === "b" ? architecture : "c";
+
+  if (arch === "a" || arch === "b") {
+    const columns = groups.map((group) => {
+      const price = groupPrice(group);
+      return `<div class="lb-crea__group" data-grupo="${esc(group.id)}">
+      <h3 class="lb-crea__label">${esc(group.etiqueta)}${price ? ` <span class="lb-crea__price">${esc(price)}</span>` : ""}</h3>
+      <ul class="lb-crea__list">${creaSlots(group, productos, ui)}</ul>
+    </div>`;
+    }).join("");
+    return `<section class="lb-crea" data-component="CreateYourPizzaModule" data-zone="crea" data-architecture="${arch}">
+    ${head}
+    <div class="lb-crea__grid">${columns}</div>
+    ${altresLine}
+  </section>`;
+  }
+
+  const strip = groups.map((group) => {
+    const price = groupPrice(group);
+    const kind = group.id === "base" ? "base" : "extra";
+    const amount = price
+      ? `<span class="lb-price">${esc(price)}</span>`
+      : `<span class="lb-price is-empty">${esc(ui.precio_vacio)}</span>`;
+    return `<p class="lb-crea__strip-item lb-crea__strip-item--${kind}" data-grupo="${esc(group.id)}"><span class="lb-crea__label">${esc(group.etiqueta)}</span> ${amount}</p>`;
+  }).join("");
+  const expanded = groups.filter((group) => group.id !== "base").map((group) => {
+    const price = groupPrice(group);
     return `<div class="lb-crea__group" data-grupo="${esc(group.id)}">
-      <h3 class="lb-crea__label">${esc(group.etiqueta)}${group.extra && group.extra.status === "CONFIRMADO_SOURCE" && typeof group.extra.value === "number" ? ` ${esc(group.extra.value.toFixed(2).replace(".", ","))}` : ""}</h3>
-      <ul class="lb-crea__list">${rows}</ul>
+      <h3 class="lb-crea__label">${esc(group.etiqueta)}${price ? ` <span class="lb-crea__price">${esc(price)}</span>` : ""}</h3>
+      <ul class="lb-crea__list">${creaSlots(group, productos, ui)}</ul>
     </div>`;
   }).join("");
-
-  const note = section.nota ? `<p class="lb-note">${esc(section.nota)}</p>` : "";
-  return `<section class="lb-crea" data-component="CreateYourPizzaModule" data-zone="crea">
-    ${CategoryHeader(section, ui, { badge: sectionBadge(section, ui) })}
-    ${note}
-    <div class="lb-crea__grid">${columns}</div>
+  return `<section class="lb-crea" data-component="CreateYourPizzaModule" data-zone="crea" data-architecture="c">
+    ${head}
+    <div class="lb-crea__strip">${strip}</div>
+    <div class="lb-crea__expanded">${expanded}</div>
+    ${altresLine}
   </section>`;
 }
 
 export function AllergenBadge(block, ui) {
   const confirmed = block.estado === "CONFIRMADO" && Array.isArray(block.items);
-  const body = confirmed
-    ? `<div class="lb-badges">${block.items.map((item) => `<span class="lb-badge" data-component="AllergenBadge">${esc(item)}</span>`).join("")}</div>`
-    : `<p class="lb-badge is-pending" data-component="AllergenBadge">${esc(ui.pendiente)}</p>`;
-  return `<section class="lb-allergens">
+  if (confirmed) {
+    const body = `<div class="lb-badges">${block.items.map((item) => `<span class="lb-badge" data-component="AllergenBadge">${esc(item)}</span>`).join("")}</div>`;
+    return `<section class="lb-allergens">
     <h2 class="lb-foot__title">${esc(block.titulo)}</h2>
     ${body}
+  </section>`;
+  }
+  return `<section class="lb-allergen-system" data-component="AllergenSystem" data-attached="false">
+    <h2 class="lb-foot__title">${esc(block.titulo)}</h2>
+    <p class="lb-badge is-pending">Matriu pendent. Marques neutres, sense plat assignat.</p>
+    <p class="lb-ph-row" aria-hidden="true"><i></i><i></i><i></i></p>
   </section>`;
 }
 
@@ -194,9 +244,9 @@ export function QRBlock(qr, svg) {
       <h2 class="lb-qrmod__title">${esc(qr.modulo.titulo)}</h2>
       <p class="lb-qrmod__text">${esc(qr.modulo.texto)}</p>
       <p class="lb-qrmod__dev">${esc(qr.desarrollo.aviso)}</p>
-      <p class="lb-qrmod__url">${esc(qr.desarrollo.destino)}</p>
+      <p class="lb-sr" data-qr-dev-url="${esc(qr.desarrollo.destino)}">${esc(qr.desarrollo.destino)}</p>
     </div>
-    <div class="lb-qrmod__mark">${svg}</div>
+    <div class="lb-qrmod__mark" data-qr-state="blocked">${svg}</div>
   </section>`;
 }
 
@@ -220,12 +270,13 @@ export function ContactBlock(contacto, ui) {
 }
 
 export function FooterInfo(catalog, ui) {
-  const marca = `${catalog.marca.nombre} ${catalog.interfaz.separador_marca} ${catalog.marca.tipo} ${catalog.interfaz.separador_marca} ${catalog.marca.desde}`;
+  const editorial = catalog.marca.editorial_copy ?? { tipo: catalog.marca.tipo, desde: catalog.marca.desde };
+  const marca = `${catalog.marca.nombre} ${catalog.interfaz.separador_marca} ${editorial.tipo} ${catalog.interfaz.separador_marca} ${editorial.desde}`;
   return `<footer class="lb-footer" data-component="FooterInfo" data-zone="footer">
     <div class="lb-footer__grid">
       ${AllergenBadge(catalog.alergenos, ui)}
       ${ContactBlock(catalog.contacto, ui)}
     </div>
-    <p class="lb-footer__brand">${esc(marca)}</p>
+    <p class="lb-footer__brand" data-copy="EDITORIAL_COPY">${esc(marca)}</p>
   </footer>`;
 }

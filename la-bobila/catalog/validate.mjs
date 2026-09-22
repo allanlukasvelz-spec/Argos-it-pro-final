@@ -165,7 +165,63 @@ export function validate(catalog) {
   if (catalog.privacitat?.url != null) errors.push("Privacidad: no inventar URL.");
   if (catalog.analitica?.activo !== false) errors.push("La analítica debe estar inactiva.");
   if (catalog.marca?.nombre !== "La Bòbila") errors.push("La marca debe ser La Bòbila.");
-  if (catalog.marca?.wordmark !== "PLACEHOLDER") errors.push("El wordmark sigue siendo PLACEHOLDER.");
+  if (catalog.marca?.wordmark !== "PLACEHOLDER") errors.push("El wordmark tipográfico sigue siendo PLACEHOLDER.");
+  const assetText = catalog.marca?.brand_asset_text;
+  const editorial = catalog.marca?.editorial_copy;
+  if (assetText?.estado !== "BRAND_ASSET_TEXT" || assetText?.desde !== "DESDE 2005" || assetText?.tipo !== "PIZZERIA ARTIGIANALE") {
+    errors.push("BRAND_ASSET_TEXT debe conservar «DESDE 2005» y «PIZZERIA ARTIGIANALE».");
+  }
+  if (assetText?.fuente !== "LB-ASSET-LOGO-001") errors.push("BRAND_ASSET_TEXT cita el logo, no la carta.");
+  if (editorial?.estado !== "EDITORIAL_COPY" || editorial?.desde !== "Des de 2005" || editorial?.tipo !== "Pizzeria artesana") {
+    errors.push("EDITORIAL_COPY debe ser «Des de 2005» y «Pizzeria artesana», aparte del logo.");
+  }
+  if (catalog.moneda?.estado !== "CONFIRMADO") {
+    if (catalog.moneda?.presentacion !== "EUR_PENDING_PRESENTATION") {
+      errors.push("La presentación de la moneda debe ser EUR_PENDING_PRESENTATION.");
+    }
+    if (catalog.moneda?.simbolo != null || catalog.moneda?.codigo != null) {
+      errors.push("No se autoriza símbolo ni código mientras la presentación está pendiente.");
+    }
+  }
+
+  const CURRENT = "LB-ASSET-MENU-CURRENT-001";
+  const HISTORICAL = "LB-ASSET-MENU-HISTORICAL-001";
+  const cites = (value, asset) => JSON.stringify(value ?? null).includes(asset);
+  if (catalog.historico) {
+    if (catalog.historico.fuente !== HISTORICAL) {
+      errors.push("historico.fuente debe ser LB-ASSET-MENU-HISTORICAL-001.");
+    }
+    if (cites(catalog.historico, CURRENT)) {
+      errors.push("Un registro HISTORICO cita LB-ASSET-MENU-CURRENT-001.");
+    }
+  }
+  for (const section of catalog.secciones ?? []) {
+    if (section.estado_contenido === "HISTORICO" && section.fuente !== HISTORICAL) {
+      errors.push(`${section.id}: una sección HISTORICO solo puede citar la carta histórica.`);
+    }
+    if (section.estado_contenido === "HISTORICO" && cites(section, CURRENT)) {
+      errors.push(`${section.id}: una sección HISTORICO cita la carta vigente.`);
+    }
+  }
+  for (const product of catalog.productos ?? []) {
+    if (product.estado === "HISTORICO" && cites(product, CURRENT)) {
+      errors.push(`${product.id}: un producto HISTORICO cita la carta vigente.`);
+    }
+    if (product.precio_historico && product.precio_historico.source !== HISTORICAL) {
+      errors.push(`${product.id}: precio_historico solo puede citar la carta histórica.`);
+    }
+    if (product.precio?.status === "CONFIRMADO_SOURCE" && product.precio.source !== CURRENT) {
+      errors.push(`${product.id}: un precio CONFIRMADO_SOURCE de la carta vigente cita un asset que no es el vigente.`);
+    }
+    if (product.precio?.status === "CONFIRMADO_SOURCE" && product.precio.source === HISTORICAL) {
+      errors.push(`${product.id}: un precio CONFIRMADO_SOURCE cita la carta histórica.`);
+    }
+  }
+  for (const group of catalog.grupos_crea ?? []) {
+    if (group.extra?.status === "CONFIRMADO_SOURCE" && group.extra.source !== CURRENT) {
+      errors.push(`${group.id}: el suplemento CONFIRMADO_SOURCE cita un asset que no es el vigente.`);
+    }
+  }
 
   if (errors.length) {
     throw new Error(`Catálogo rechazado:\n- ${errors.join("\n- ")}`);
