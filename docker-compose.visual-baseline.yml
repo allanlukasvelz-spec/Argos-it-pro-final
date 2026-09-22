@@ -14,7 +14,7 @@ services:
       retries: 10
 
   visual-baseline:
-    image: node:22-bookworm
+    image: node:24-bookworm
     working_dir: /work
     volumes:
       - .:/work

@@ -1,31 +1,9 @@
 import { test, expect } from "@playwright/test";
+import { VISUAL_VIEWPORT, gotoStable, installVisualTestInit } from "./helpers/visual-stable";
 import {
-  VISUAL_VIEWPORT,
-  gotoStable,
-  installVisualTestInit,
-  stabilizePage,
-} from "./helpers/visual-stable";
-
-import { BACKEND, e2eAuthHeaders } from "./helpers/e2eEnv";
-
-const PASSWORD = "E2eSecure2026!";
-const VISUAL_DASHBOARD_EMAIL = "argos-visual-regression@example.test";
-const VISUAL_DASHBOARD_USER = {
-  email: VISUAL_DASHBOARD_EMAIL,
-  password: PASSWORD,
-  name: "Visual Baseline",
-  company: "Baseline Corp",
-};
-
-async function ensureVisualDashboardUser(request: import("@playwright/test").APIRequestContext): Promise<void> {
-  const register = await request.post(`${BACKEND}/api/auth/register`, {
-    data: VISUAL_DASHBOARD_USER,
-    headers: e2eAuthHeaders(),
-  });
-  if (![201, 400, 409].includes(register.status())) {
-    throw new Error(`visual dashboard register unexpected status ${register.status()}`);
-  }
-}
+  ensureVisualDashboardUser,
+  loginAndSettleDashboard,
+} from "./helpers/visualDashboard";
 
 const screenshotOptions = {
   fullPage: false,
@@ -77,36 +55,9 @@ test.describe("visual regression baseline (21.1)", () => {
 
   test("dashboard /dashboard (authenticated)", async ({ page, request }) => {
     await ensureVisualDashboardUser(request);
-
-    await page.goto("/auth/login", { waitUntil: "domcontentloaded" });
-    await page.locator("#login-email").fill(VISUAL_DASHBOARD_EMAIL);
-    await page.locator("#login-password").fill(PASSWORD);
-    const [loginResponse] = await Promise.all([
-      page.waitForResponse(
-        (r) => r.url().includes("/api/auth/login") && r.request().method() === "POST",
-        { timeout: 15_000 }
-      ),
-      page.getByRole("button", { name: /Iniciar sesion/i }).click(),
-    ]);
-    expect(loginResponse.status()).toBe(200);
-    await expect(page).toHaveURL(/\/dashboard/, { timeout: 10_000 });
-
-    await expect(page.getByText("Cargando portal")).toHaveCount(0, { timeout: 15_000 });
-    await expect(
-      page.getByRole("heading", { name: /Portal de cliente|Client portal/i })
-    ).toBeVisible({ timeout: 10_000 });
-    await expect(page.getByText("Baseline Corp")).toBeVisible({ timeout: 10_000 });
-
-    await expect(page.getByRole("heading", { name: "Proyecto web" })).toBeVisible({
-      timeout: 15_000,
-    });
-
-    await stabilizePage(page);
+    await loginAndSettleDashboard(page);
 
     const content = page.locator("main.cp-main");
-    await expect(content).toHaveScreenshot("dashboard.png", {
-      ...screenshotOptions,
-      mask: [page.locator(".chico-guardian")],
-    });
+    await expect(content).toHaveScreenshot("dashboard.png", screenshotOptions);
   });
 });
