@@ -20,7 +20,7 @@ ADRs breves. Fecha de todas: 2026-09-22.
 
 ## ADR-003 — Un dato no confirmado no se presenta como real
 
-- Decisión: precio, ingredientes, alérgenos, horario y dirección solo se pintan con estado `CONFIRMADO`. Un nombre `SOURCE_MISSING` puede mostrarse marcado como no contrastado. Si no hay nombre, el hueco dice «Per confirmar». El precio desconocido es «—».
+- Decisión: precio, ingredientes, alérgenos, horario y dirección solo se pintan con estado `CONFIRMADO`. Un nombre `SOURCE_MISSING` o `CANDIDATE_MATCH` puede mostrarse marcado como no contrastado. Si no hay nombre, el hueco dice «Per confirmar». El precio desconocido es «—».
 - Motivo: inventar una carta utilizable haría daño operativo y legal.
 - Roles: CDAO, CPO, CFO, CLO, COO.
 - Impacto: el validador rechaza el render si un hueco `POR_CONFIRMAR` trae hechos rellenos. El renderer vuelve a comprobar el estado antes de pintar.
@@ -129,3 +129,11 @@ ADRs breves. Fecha de todas: 2026-09-22.
 - Roles: CTO, CISO, COO, CLO.
 - Impacto: cero código de offline. La página sigue siendo ligera.
 - Estado: propuesta, no construida.
+
+## ADR-017 — Primero se ingiere, y el original no se toca
+
+- Decisión: el orden es archivo fuente, extracción, normalización, `catalog.json`, validación, A3 y `/carta`. Los másteres en `la-bobila/source/` son inmutables. Las copias van a `la-bobila/processed/`. Sin archivo físico no hay muestreo de logo, ni transcripción, ni diff. `QR_PRODUCTION` sigue bloqueado.
+- Motivo: el andamiaje no sustituye al logo ni a las cartas. Inventar su contenido o descargar un logo parecido falsificaría la fuente.
+- Roles: CDAO, CEO, CPO, CLO, CTO, Chief of Staff.
+- Impacto: manifiesto `assets.json` con `FILE_NOT_INGESTED` y `sha256` null. Los 17 nombres de pizza pasan a `CANDIDATE_MATCH`. No hay `CONFIRMADO_SOURCE`. No se reexporta el PDF.
+- Estado: aceptada. La ingesta de esta fase queda `ASSET_INGESTION_BLOCKED`.

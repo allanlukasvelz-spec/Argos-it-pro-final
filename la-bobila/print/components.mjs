@@ -25,7 +25,9 @@ export function BrandHeader(marca, olive) {
 
 export function sectionBadge(section, ui) {
   if (section.estado_contenido === "HISTORICO") return ui.historic;
-  if (section.estado_contenido === "SOURCE_MISSING") return ui.sense_contrastar;
+  if (section.estado_contenido === "SOURCE_MISSING" || section.estado_contenido === "CANDIDATE_MATCH") {
+    return ui.sense_contrastar;
+  }
   if (section.estado_etiqueta !== "CONFIRMADO" || section.estado_contenido === "POR_CONFIRMAR") {
     return ui.pendiente;
   }
@@ -77,7 +79,7 @@ export function IngredientList(product, ui) {
 
 function visibleName(product, ui) {
   if (product.estado === "CONFIRMADO" && product.nombre) return esc(product.nombre);
-  if (product.estado === "SOURCE_MISSING" && product.nombre) {
+  if ((product.estado === "SOURCE_MISSING" || product.estado === "CANDIDATE_MATCH") && product.nombre) {
     return `<span class="is-uncontrasted">${esc(product.nombre)}</span>`;
   }
   return `<span class="is-pending">${esc(ui.pendiente)}</span>`;
@@ -86,7 +88,7 @@ function visibleName(product, ui) {
 export function MenuItem(product, ui, opts = {}) {
   const featured = opts.featured === true && product.destacado === true && product.estado === "CONFIRMADO";
   const component = featured ? "MenuItemFeatured" : "MenuItem";
-  const pendingName = !(product.nombre && (product.estado === "CONFIRMADO" || product.estado === "SOURCE_MISSING"));
+  const pendingName = !(product.nombre && (product.estado === "CONFIRMADO" || product.estado === "SOURCE_MISSING" || product.estado === "CANDIDATE_MATCH"));
   const name = visibleName(product, ui);
   const id = product.estado === "CONFIRMADO"
     ? ""
@@ -109,7 +111,7 @@ export function MenuItemFeatured(product, ui, opts = {}) {
 }
 
 export function MenuRow(product, ui) {
-  const pendingName = !(product.nombre && (product.estado === "CONFIRMADO" || product.estado === "SOURCE_MISSING"));
+  const pendingName = !(product.nombre && (product.estado === "CONFIRMADO" || product.estado === "SOURCE_MISSING" || product.estado === "CANDIDATE_MATCH"));
   const id = product.nombre ? "" : `<span class="lb-id">${esc(product.id)}</span>`;
   return `<article class="lb-row" data-component="MenuItem" data-id="${esc(product.id)}" data-estado="${esc(product.estado)}">
     <h3 class="lb-name${pendingName ? " is-pending" : " is-uncontrasted"}">${product.nombre && !pendingName ? esc(product.nombre) : esc(ui.pendiente)}</h3>

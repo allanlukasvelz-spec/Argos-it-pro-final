@@ -31,7 +31,7 @@ Sin el logo y sin la carta vigente, el reconocimiento inmediato no se puede decl
 - Sin pergamino falso, sin negro dominante, sin abuso de dorado, sin clichés italianos, sin fotos genéricas, sin datos inventados.
 - Orden: verdad de producto, arquitectura, jerarquía, diseño, implementación.
 - Una sola fuente: `la-bobila/catalog/catalog.json`.
-- Estados: `CONFIRMADO`, `POR_CONFIRMAR`, `SOURCE_MISSING`, `HISTORICO`, `PROPUESTA_ARGOS`, `DESCARTADO`.
+- Estados de fila y de activo: ver `docs/LA-BOBILA-DATA-MODEL.md`. Un nombre candidato no es un dato confirmado.
 
 ## Roles
 
@@ -70,7 +70,7 @@ node la-bobila/print/export.mjs
 
 ## Catálogo
 
-Versión 0.2.0. No es el catálogo definitivo. 17 pizzas con nombre `SOURCE_MISSING` (extracción textual, sin documento ingerido). 4 smash, 11 complements y 3 amanides sin nombre, mismo estado: el recuento se conoce y el nombre no. Crea la teva: solo cuatro etiquetas, cero toppings. Postres y gelats: nota `HISTORICO`, cero productos. Begudes: cero productos, catálogo no confirmado por el cliente. Cero precios, ingredientes, alérgenos y fotos. Modelo en `docs/LA-BOBILA-DATA-MODEL.md`.
+Versión 0.3.0. No es el catálogo definitivo. 17 pizzas con nombre `CANDIDATE_MATCH` (extracción textual, sin carta ingerida, no confirmadas). 4 smash, 11 complements y 3 amanides sin nombre, `SOURCE_MISSING`: el recuento se conoce y el nombre no. Crea la teva: solo cuatro etiquetas, cero toppings. Postres y gelats: nota `HISTORICO`, cero productos. Begudes: cero productos, catálogo no confirmado por el cliente. Cero precios, ingredientes, alérgenos y fotos. Modelo en `docs/LA-BOBILA-DATA-MODEL.md`.
 
 No confundir «no está en el repo» con «no existe». El logo, la carta vigente, la carta histórica, los precios y los ingredientes visibles existen fuera y aún no se han ingerido.
 
@@ -78,7 +78,7 @@ No confundir «no está en el repo» con «no existe». El logo, la carta vigent
 
 1. Hecho: infraestructura provisional (reglas, tokens, renderer A3).
 2. Hecho en este pase: `/carta`, módulo QR_DEV, estado `SOURCE_MISSING`, nombres de pizza de la extracción textual.
-3. Siguiente: ingerir en el repo el logo y la carta vigente que ya existen fuera, muestrear el logo sobre una copia y rellenar solo hechos contrastados.
+3. Bloqueado en ingesta: colocar el logo en `la-bobila/source/logo/`, la carta vigente en `la-bobila/source/menu-current/` y la histórica en `la-bobila/source/menu-historical/`. Luego extraer, contrastar dos veces y rellenar solo esos hechos. El andamiaje ya está; los archivos no.
 4. Bloqueado: `QR_PRODUCTION` hasta un dominio. Luego la URL estable redirige a `/carta`.
 5. Después: web pública sobre el mismo catálogo. PWA solo cuando la carta contrastada exista (ADR-016).
 6. Imprenta: la A3 sigue siendo un estudio. La tolerancia final espera una prueba de máquina. El redondeo de Chrome por debajo de 0,15 mm no bloquea.

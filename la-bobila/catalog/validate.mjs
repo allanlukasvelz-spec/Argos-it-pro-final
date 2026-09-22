@@ -2,8 +2,12 @@
 
 const ESTADOS = new Set([
   "CONFIRMADO",
+  "CONFIRMADO_SOURCE",
   "POR_CONFIRMAR",
   "SOURCE_MISSING",
+  "CANDIDATE_MATCH",
+  "REVIEW_REQUIRED",
+  "SOURCE_CONFLICT",
   "HISTORICO",
   "PROPUESTA_ARGOS",
   "DESCARTADO",
@@ -67,6 +71,20 @@ export function validate(catalog) {
     }
     if (product.estado === "POR_CONFIRMAR" && product.nombre != null) {
       errors.push(`${product.id}: POR_CONFIRMAR no puede llevar nombre.`);
+    }
+    if (product.estado === "CONFIRMADO_SOURCE") {
+      errors.push(`${product.id}: CONFIRMADO_SOURCE exige carta vigente ingerida y doble contraste. Hoy no hay archivo.`);
+    }
+    if (product.estado === "CANDIDATE_MATCH") {
+      if (product.categoria !== "pizzes") {
+        errors.push(`${product.id}: CANDIDATE_MATCH solo aplica a nombres de pizza ya extraídos.`);
+      }
+      if (product.fuente !== "extraccion-textual-2026-09-22-sin-documento") {
+        errors.push(`${product.id}: CANDIDATE_MATCH sigue citando la extracción, no un documento ingerido.`);
+      }
+      if (typeof product.nombre !== "string" || product.nombre.trim() === "") {
+        errors.push(`${product.id}: CANDIDATE_MATCH necesita el nombre candidato.`);
+      }
     }
     if (product.estado === "SOURCE_MISSING") {
       if (product.fuente !== "extraccion-textual-2026-09-22-sin-documento") {

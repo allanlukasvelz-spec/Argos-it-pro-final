@@ -4,7 +4,7 @@ import { esc, sectionBadge } from "../print/components.mjs";
 
 function blockedName(product, ui) {
   if (product.estado === "CONFIRMADO" && product.nombre) return esc(product.nombre);
-  if (product.estado === "SOURCE_MISSING" && product.nombre) {
+  if ((product.estado === "SOURCE_MISSING" || product.estado === "CANDIDATE_MATCH") && product.nombre) {
     return `<span class="is-uncontrasted">${esc(product.nombre)}</span>`;
   }
   return `<span class="is-pending">${esc(ui.pendiente)}</span>`;

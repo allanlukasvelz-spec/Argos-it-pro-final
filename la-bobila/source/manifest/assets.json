@@ -1,0 +1,59 @@
+{
+  "id": "la-bobila-asset-manifest",
+  "revision": "2026-09-22",
+  "busqueda": "Repositorio, workspace y /cursor/stores/bc-70d42429-279a-4600-b0fd-616ef926aa11. No hay máster de logo ni carta física. media/carta-a3.png del store es el render de estudio, idéntico en tamaño a la-bobila/print/renders/carta-a3.png. Los PNG de Argos IT no son La Bòbila y no se usan.",
+  "assets": [
+    {
+      "id": "LB-ASSET-LOGO-001",
+      "filename": null,
+      "type": "logo",
+      "source_category": "logo",
+      "original": null,
+      "sha256": null,
+      "date_ingested": null,
+      "provenance": "AVAILABLE_EXTERNALLY",
+      "status": "FILE_NOT_INGESTED",
+      "expected_drop_path": "la-bobila/source/logo/",
+      "notes": "El logo visual existe fuera del repositorio. No está en el repo ni en el store. No se ha descargado un sustituto. No hay hash."
+    },
+    {
+      "id": "LB-ASSET-MENU-CURRENT-001",
+      "filename": null,
+      "type": "menu",
+      "source_category": "menu-current",
+      "original": null,
+      "sha256": null,
+      "date_ingested": null,
+      "provenance": "AVAILABLE_EXTERNALLY",
+      "status": "FILE_NOT_INGESTED",
+      "expected_drop_path": "la-bobila/source/menu-current/",
+      "notes": "Fuente primaria de producto cuando el archivo esté aquí. Precios e ingredientes visibles no se inventan. No hay transcripción."
+    },
+    {
+      "id": "LB-ASSET-MENU-HISTORICAL-001",
+      "filename": null,
+      "type": "menu",
+      "source_category": "menu-historical",
+      "original": null,
+      "sha256": null,
+      "date_ingested": null,
+      "provenance": "AVAILABLE_EXTERNALLY",
+      "status": "FILE_NOT_INGESTED",
+      "expected_drop_path": "la-bobila/source/menu-historical/",
+      "notes": "Solo se transcribe después de la carta vigente. No hay diff. No se mezclan productos históricos en el catálogo vigente."
+    },
+    {
+      "id": "LB-ASSET-GRAPHICS-001",
+      "filename": null,
+      "type": "graphic",
+      "source_category": "photos",
+      "original": null,
+      "sha256": null,
+      "date_ingested": null,
+      "provenance": "AVAILABLE_EXTERNALLY",
+      "status": "FILE_NOT_INGESTED",
+      "expected_drop_path": "la-bobila/source/photos/",
+      "notes": "Gráficos o fotos reales relacionados, si existen aparte del logo. Ninguno encontrado en la búsqueda. No se usan fotos de stock."
+    }
+  ]
+}

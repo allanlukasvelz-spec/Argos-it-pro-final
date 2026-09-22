@@ -1,11 +1,11 @@
 {
   "id": "la-bobila-catalog",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "revision": "2026-09-22",
   "idioma_cliente": "ca",
   "idioma_interno": "es",
   "fuente": "estructura-inicial",
-  "aviso": "Este catálogo no es definitivo. Los nombres SOURCE_MISSING salen de una extracción textual sin documento ingerido. No hay precios, ingredientes ni alérgenos confirmados. No confundir ausencia en el repositorio con inexistencia.",
+  "aviso": "Este catálogo no es definitivo. Los 17 nombres de pizza son CANDIDATE_MATCH de una extracción textual, no CONFIRMADO. No hay carta vigente ingerida. No hay precios, ingredientes ni alérgenos. No confundir ausencia en el repositorio con inexistencia.",
   "marca": {
     "nombre": "La Bòbila",
     "tipo": "Pizzeria artesana",
@@ -41,9 +41,9 @@
       "tipo": "categoria",
       "peso": "protagonista",
       "estado_etiqueta": "CONFIRMADO",
-      "estado_contenido": "SOURCE_MISSING",
+      "estado_contenido": "CANDIDATE_MATCH",
       "fuente": "extraccion-textual-2026-09-22-sin-documento",
-      "nota": "Noms d'una extracció externa, sense contrastar. Preus, ingredients i al·lèrgens no consten.",
+      "nota": "Noms candidats d'una extracció externa, sense contrastar amb la carta. Preus, ingredients i al·lèrgens no consten.",
       "nota_estado": "PROPUESTA_ARGOS"
     },
     {
@@ -168,8 +168,8 @@
       "orden": 1,
       "foto": null,
       "fuente": "extraccion-textual-2026-09-22-sin-documento",
-      "estado": "SOURCE_MISSING",
-      "observaciones": "Nom citado en una extracción textual externa del 2026-09-22. No contrastado con el documento de la carta. No confirmado. Precio, ingredientes, alérgenos, descripción y foto quedan en null a propósito.",
+      "estado": "CANDIDATE_MATCH",
+      "observaciones": "Candidato de la extracción textual del 2026-09-22. No cruzado con la carta vigente: el archivo no está en el repositorio. No es CONFIRMADO ni CONFIRMADO_SOURCE. Precio, ingredientes, alérgenos, descripción y foto en null.",
       "ultima_revision": "2026-09-22"
     },
     {
@@ -189,8 +189,8 @@
       "orden": 2,
       "foto": null,
       "fuente": "extraccion-textual-2026-09-22-sin-documento",
-      "estado": "SOURCE_MISSING",
-      "observaciones": "Nom citado en una extracción textual externa del 2026-09-22. No contrastado con el documento de la carta. No confirmado. Precio, ingredientes, alérgenos, descripción y foto quedan en null a propósito.",
+      "estado": "CANDIDATE_MATCH",
+      "observaciones": "Candidato de la extracción textual del 2026-09-22. No cruzado con la carta vigente: el archivo no está en el repositorio. No es CONFIRMADO ni CONFIRMADO_SOURCE. Precio, ingredientes, alérgenos, descripción y foto en null.",
       "ultima_revision": "2026-09-22"
     },
     {
@@ -210,8 +210,8 @@
       "orden": 3,
       "foto": null,
       "fuente": "extraccion-textual-2026-09-22-sin-documento",
-      "estado": "SOURCE_MISSING",
-      "observaciones": "Nom citado en una extracción textual externa del 2026-09-22. No contrastado con el documento de la carta. No confirmado. Precio, ingredientes, alérgenos, descripción y foto quedan en null a propósito.",
+      "estado": "CANDIDATE_MATCH",
+      "observaciones": "Candidato de la extracción textual del 2026-09-22. No cruzado con la carta vigente: el archivo no está en el repositorio. No es CONFIRMADO ni CONFIRMADO_SOURCE. Precio, ingredientes, alérgenos, descripción y foto en null.",
       "ultima_revision": "2026-09-22"
     },
     {
@@ -231,8 +231,8 @@
       "orden": 4,
       "foto": null,
       "fuente": "extraccion-textual-2026-09-22-sin-documento",
-      "estado": "SOURCE_MISSING",
-      "observaciones": "Nom citado en una extracción textual externa del 2026-09-22. No contrastado con el documento de la carta. No confirmado. Precio, ingredientes, alérgenos, descripción y foto quedan en null a propósito.",
+      "estado": "CANDIDATE_MATCH",
+      "observaciones": "Candidato de la extracción textual del 2026-09-22. No cruzado con la carta vigente: el archivo no está en el repositorio. No es CONFIRMADO ni CONFIRMADO_SOURCE. Precio, ingredientes, alérgenos, descripción y foto en null.",
       "ultima_revision": "2026-09-22"
     },
     {
@@ -252,8 +252,8 @@
       "orden": 5,
       "foto": null,
       "fuente": "extraccion-textual-2026-09-22-sin-documento",
-      "estado": "SOURCE_MISSING",
-      "observaciones": "Nom citado en una extracción textual externa del 2026-09-22. No contrastado con el documento de la carta. No confirmado. Precio, ingredientes, alérgenos, descripción y foto quedan en null a propósito.",
+      "estado": "CANDIDATE_MATCH",
+      "observaciones": "Candidato de la extracción textual del 2026-09-22. No cruzado con la carta vigente: el archivo no está en el repositorio. No es CONFIRMADO ni CONFIRMADO_SOURCE. Precio, ingredientes, alérgenos, descripción y foto en null.",
       "ultima_revision": "2026-09-22"
     },
     {
@@ -273,8 +273,8 @@
       "orden": 6,
       "foto": null,
       "fuente": "extraccion-textual-2026-09-22-sin-documento",
-      "estado": "SOURCE_MISSING",
-      "observaciones": "Nom citado en una extracción textual externa del 2026-09-22. No contrastado con el documento de la carta. No confirmado. Precio, ingredientes, alérgenos, descripción y foto quedan en null a propósito.",
+      "estado": "CANDIDATE_MATCH",
+      "observaciones": "Candidato de la extracción textual del 2026-09-22. No cruzado con la carta vigente: el archivo no está en el repositorio. No es CONFIRMADO ni CONFIRMADO_SOURCE. Precio, ingredientes, alérgenos, descripción y foto en null.",
       "ultima_revision": "2026-09-22"
     },
     {
@@ -294,8 +294,8 @@
       "orden": 7,
       "foto": null,
       "fuente": "extraccion-textual-2026-09-22-sin-documento",
-      "estado": "SOURCE_MISSING",
-      "observaciones": "Nom citado en una extracción textual externa del 2026-09-22. No contrastado con el documento de la carta. No confirmado. Precio, ingredientes, alérgenos, descripción y foto quedan en null a propósito.",
+      "estado": "CANDIDATE_MATCH",
+      "observaciones": "Candidato de la extracción textual del 2026-09-22. No cruzado con la carta vigente: el archivo no está en el repositorio. No es CONFIRMADO ni CONFIRMADO_SOURCE. Precio, ingredientes, alérgenos, descripción y foto en null.",
       "ultima_revision": "2026-09-22"
     },
     {
@@ -315,8 +315,8 @@
       "orden": 8,
       "foto": null,
       "fuente": "extraccion-textual-2026-09-22-sin-documento",
-      "estado": "SOURCE_MISSING",
-      "observaciones": "Nom citado en una extracción textual externa del 2026-09-22. No contrastado con el documento de la carta. No confirmado. Precio, ingredientes, alérgenos, descripción y foto quedan en null a propósito.",
+      "estado": "CANDIDATE_MATCH",
+      "observaciones": "Candidato de la extracción textual del 2026-09-22. No cruzado con la carta vigente: el archivo no está en el repositorio. No es CONFIRMADO ni CONFIRMADO_SOURCE. Precio, ingredientes, alérgenos, descripción y foto en null.",
       "ultima_revision": "2026-09-22"
     },
     {
@@ -336,8 +336,8 @@
       "orden": 9,
       "foto": null,
       "fuente": "extraccion-textual-2026-09-22-sin-documento",
-      "estado": "SOURCE_MISSING",
-      "observaciones": "Nom citado en una extracción textual externa del 2026-09-22. No contrastado con el documento de la carta. No confirmado. Precio, ingredientes, alérgenos, descripción y foto quedan en null a propósito.",
+      "estado": "CANDIDATE_MATCH",
+      "observaciones": "Candidato de la extracción textual del 2026-09-22. No cruzado con la carta vigente: el archivo no está en el repositorio. No es CONFIRMADO ni CONFIRMADO_SOURCE. Precio, ingredientes, alérgenos, descripción y foto en null.",
       "ultima_revision": "2026-09-22"
     },
     {
@@ -357,8 +357,8 @@
       "orden": 10,
       "foto": null,
       "fuente": "extraccion-textual-2026-09-22-sin-documento",
-      "estado": "SOURCE_MISSING",
-      "observaciones": "Nom citado en una extracción textual externa del 2026-09-22. No contrastado con el documento de la carta. No confirmado. Precio, ingredientes, alérgenos, descripción y foto quedan en null a propósito.",
+      "estado": "CANDIDATE_MATCH",
+      "observaciones": "Candidato de la extracción textual del 2026-09-22. No cruzado con la carta vigente: el archivo no está en el repositorio. No es CONFIRMADO ni CONFIRMADO_SOURCE. Precio, ingredientes, alérgenos, descripción y foto en null.",
       "ultima_revision": "2026-09-22"
     },
     {
@@ -378,8 +378,8 @@
       "orden": 11,
       "foto": null,
       "fuente": "extraccion-textual-2026-09-22-sin-documento",
-      "estado": "SOURCE_MISSING",
-      "observaciones": "Nom citado en una extracción textual externa del 2026-09-22. No contrastado con el documento de la carta. No confirmado. Precio, ingredientes, alérgenos, descripción y foto quedan en null a propósito.",
+      "estado": "CANDIDATE_MATCH",
+      "observaciones": "Candidato de la extracción textual del 2026-09-22. No cruzado con la carta vigente: el archivo no está en el repositorio. No es CONFIRMADO ni CONFIRMADO_SOURCE. Precio, ingredientes, alérgenos, descripción y foto en null.",
       "ultima_revision": "2026-09-22"
     },
     {
@@ -399,8 +399,8 @@
       "orden": 12,
       "foto": null,
       "fuente": "extraccion-textual-2026-09-22-sin-documento",
-      "estado": "SOURCE_MISSING",
-      "observaciones": "Nom citado en una extracción textual externa del 2026-09-22. No contrastado con el documento de la carta. No confirmado. Precio, ingredientes, alérgenos, descripción y foto quedan en null a propósito.",
+      "estado": "CANDIDATE_MATCH",
+      "observaciones": "Candidato de la extracción textual del 2026-09-22. No cruzado con la carta vigente: el archivo no está en el repositorio. No es CONFIRMADO ni CONFIRMADO_SOURCE. Precio, ingredientes, alérgenos, descripción y foto en null.",
       "ultima_revision": "2026-09-22"
     },
     {
@@ -420,8 +420,8 @@
       "orden": 13,
       "foto": null,
       "fuente": "extraccion-textual-2026-09-22-sin-documento",
-      "estado": "SOURCE_MISSING",
-      "observaciones": "Nom citado en una extracción textual externa del 2026-09-22. No contrastado con el documento de la carta. No confirmado. Precio, ingredientes, alérgenos, descripción y foto quedan en null a propósito.",
+      "estado": "CANDIDATE_MATCH",
+      "observaciones": "Candidato de la extracción textual del 2026-09-22. No cruzado con la carta vigente: el archivo no está en el repositorio. No es CONFIRMADO ni CONFIRMADO_SOURCE. Precio, ingredientes, alérgenos, descripción y foto en null.",
       "ultima_revision": "2026-09-22"
     },
     {
@@ -441,8 +441,8 @@
       "orden": 14,
       "foto": null,
       "fuente": "extraccion-textual-2026-09-22-sin-documento",
-      "estado": "SOURCE_MISSING",
-      "observaciones": "Nom citado en una extracción textual externa del 2026-09-22. No contrastado con el documento de la carta. No confirmado. Precio, ingredientes, alérgenos, descripción y foto quedan en null a propósito.",
+      "estado": "CANDIDATE_MATCH",
+      "observaciones": "Candidato de la extracción textual del 2026-09-22. No cruzado con la carta vigente: el archivo no está en el repositorio. No es CONFIRMADO ni CONFIRMADO_SOURCE. Precio, ingredientes, alérgenos, descripción y foto en null.",
       "ultima_revision": "2026-09-22"
     },
     {
@@ -462,8 +462,8 @@
       "orden": 15,
       "foto": null,
       "fuente": "extraccion-textual-2026-09-22-sin-documento",
-      "estado": "SOURCE_MISSING",
-      "observaciones": "Nom citado en una extracción textual externa del 2026-09-22. No contrastado con el documento de la carta. No confirmado. Precio, ingredientes, alérgenos, descripción y foto quedan en null a propósito.",
+      "estado": "CANDIDATE_MATCH",
+      "observaciones": "Candidato de la extracción textual del 2026-09-22. No cruzado con la carta vigente: el archivo no está en el repositorio. No es CONFIRMADO ni CONFIRMADO_SOURCE. Precio, ingredientes, alérgenos, descripción y foto en null.",
       "ultima_revision": "2026-09-22"
     },
     {
@@ -483,8 +483,8 @@
       "orden": 16,
       "foto": null,
       "fuente": "extraccion-textual-2026-09-22-sin-documento",
-      "estado": "SOURCE_MISSING",
-      "observaciones": "Nom citado en una extracción textual externa del 2026-09-22. No contrastado con el documento de la carta. No confirmado. Precio, ingredientes, alérgenos, descripción y foto quedan en null a propósito.",
+      "estado": "CANDIDATE_MATCH",
+      "observaciones": "Candidato de la extracción textual del 2026-09-22. No cruzado con la carta vigente: el archivo no está en el repositorio. No es CONFIRMADO ni CONFIRMADO_SOURCE. Precio, ingredientes, alérgenos, descripción y foto en null.",
       "ultima_revision": "2026-09-22"
     },
     {
@@ -504,8 +504,8 @@
       "orden": 17,
       "foto": null,
       "fuente": "extraccion-textual-2026-09-22-sin-documento",
-      "estado": "SOURCE_MISSING",
-      "observaciones": "Nom citado en una extracción textual externa del 2026-09-22. No contrastado con el documento de la carta. No confirmado. Precio, ingredientes, alérgenos, descripción y foto quedan en null a propósito.",
+      "estado": "CANDIDATE_MATCH",
+      "observaciones": "Candidato de la extracción textual del 2026-09-22. No cruzado con la carta vigente: el archivo no está en el repositorio. No es CONFIRMADO ni CONFIRMADO_SOURCE. Precio, ingredientes, alérgenos, descripción y foto en null.",
       "ultima_revision": "2026-09-22"
     },
     {

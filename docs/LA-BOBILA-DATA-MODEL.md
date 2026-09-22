@@ -1,6 +1,6 @@
 # La Bòbila — modelo de datos
 
-Fecha: 2026-09-22. Versión de catálogo: 0.2.0. Fuente ejecutable: `la-bobila/catalog/catalog.json`. El validador está en `la-bobila/catalog/validate.mjs`. Lo usan la A3 y `/carta`.
+Fecha: 2026-09-22. Versión de catálogo: 0.3.0. Fuente ejecutable: `la-bobila/catalog/catalog.json`. El validador está en `la-bobila/catalog/validate.mjs`. Lo usan la A3 y `/carta`. Los originales, cuando existan, viven en `la-bobila/source/` y se registran en `la-bobila/source/manifest/assets.json`.
 
 ## Una sola fuente
 
@@ -10,10 +10,16 @@ Impresión, carta móvil y QR salen de este JSON. No hay `catalog-mobile.json`, 
 
 | Estado | Significado |
 | --- | --- |
-| `CONFIRMADO` | Dato contrastado. Solo entonces se pinta como hecho. |
-| `POR_CONFIRMAR` | El cliente no lo ha confirmado. |
-| `SOURCE_MISSING` | Existe fuera del repositorio. El documento fuente no está ingerido. No significa que no exista. |
-| `HISTORICO` | Referencia antigua. No se da por vigente. |
+| `AVAILABLE_EXTERNALLY` | Se sabe que existe fuera del repositorio. Estado de activo, no de fila de producto. |
+| `FILE_NOT_INGESTED` | El archivo no está físicamente en el repo. `sha256` null. No es un hash fingido. |
+| `SOURCE_MISSING` | No hay documento con el que contrastar ese hecho. |
+| `CANDIDATE_MATCH` | Nombre anotado, sin cruce contra la carta vigente. No es confirmado. |
+| `REVIEW_REQUIRED` | Original y normalización divergen, o el dato pide revisión. |
+| `SOURCE_CONFLICT` | El candidato no está en la fuente, o dos fuentes chocan. |
+| `POR_CONFIRMAR` | Hay documento, y el cliente aún debe validar el dato. |
+| `CONFIRMADO` | Contrastado y válido. |
+| `CONFIRMADO_SOURCE` | Solo tras transcripción y segundo contraste contra el archivo. Hoy el validador lo rechaza: no hay carta ingerida. |
+| `HISTORICO` | Carta o estado anterior. No entra solo en la carta vigente ni en `/carta`. |
 | `PROPUESTA_ARGOS` | Texto nuestro, no un dato del negocio. |
 | `DESCARTADO` | Se conserva la traza y no se muestra. Hoy no hay filas. |
 
@@ -25,7 +31,7 @@ No es el catálogo definitivo.
 
 | Grupo | Filas | Estado | Nombre |
 | --- | --- | --- | --- |
-| Pizzes `LB-PIZ-001` … `017` | 17 | `SOURCE_MISSING` | El de la extracción textual |
+| Pizzes `LB-PIZ-001` … `017` | 17 | `CANDIDATE_MATCH` | El de la extracción textual, sin cruce |
 | Smash `LB-BUR-001` … `004` | 4 | `SOURCE_MISSING` | null. El recuento se conoce; el nombre no |
 | Complements `LB-COM-001` … `011` | 11 | `SOURCE_MISSING` | null. Igual |
 | Amanides `LB-AMA-001` … `003` | 3 | `SOURCE_MISSING` | null. Igual |
@@ -34,7 +40,9 @@ No es el catálogo definitivo.
 | Begudes | 0 | sección `POR_CONFIRMAR` | El cliente no ha confirmado el catálogo |
 | Combos | 0 | — | No confirmados. No se añaden |
 
-Fuente de las filas `SOURCE_MISSING`: `extraccion-textual-2026-09-22-sin-documento`. Precio, ingredientes, alérgenos, descripción y foto en `null`. `destacado` es `false`. Esas pizzas no están marcadas `CONFIRMADO`.
+Fuente de las filas candidatas y de los huecos sin nombre: `extraccion-textual-2026-09-22-sin-documento`. Precio, ingredientes, alérgenos, descripción y foto en `null`. `destacado` es `false`. Ninguna fila es `CONFIRMADO` ni `CONFIRMADO_SOURCE`.
+
+El precio, cuando se extraiga de la carta, será `{ value, currency, source, status }`. La moneda global sigue `POR_CONFIRMAR`. No se rellena un precio por patrón. Crea la teva, cuando la carta lo permita, será base más grupos carn, vegetals, formatges y altres, cada ingrediente con id, nombre, grupo, extra y estado. Hoy solo hay las cuatro etiquetas y cero SKU. Un alérgeno legal no se infiere de un ingrediente.
 
 ## Marca y QR
 
@@ -49,7 +57,8 @@ Dirección, horario, teléfono, redes, privacidad y texto legal de publicación 
 ## Reglas del validador
 
 - Un `POR_CONFIRMAR` no lleva nombre ni valores.
-- Un `SOURCE_MISSING` puede llevar el nombre extraído en pizzas, y debe llevarlo en null en smash, complements y amanides.
+- Un `CANDIDATE_MATCH` es una pizza con nombre de la extracción y sin valores.
+- Un `SOURCE_MISSING` de smash, complements o amanides lleva el nombre en null.
 - Precio, ingredientes, alérgenos, descripción y foto siguen en null fuera de `CONFIRMADO`.
 - Cero productos en crea, postres y begudes.
 - Postres de sección en `HISTORICO`.

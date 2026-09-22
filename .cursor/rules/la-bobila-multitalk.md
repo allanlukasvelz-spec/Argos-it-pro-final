@@ -58,13 +58,32 @@ Solo cuando el asunto lo exija: SRE, Security Operations, Backup & Recovery, Obs
 
 ## Estados de dato
 
-`CONFIRMADO`, `POR_CONFIRMAR`, `SOURCE_MISSING`, `HISTORICO`, `PROPUESTA_ARGOS`, `DESCARTADO`.
+No se mezclan.
 
-- `POR_CONFIRMAR`: el cliente no lo ha confirmado.
-- `SOURCE_MISSING`: existe fuera del repositorio y el documento fuente aún no está ingerido. No es lo mismo que «no existe».
-- `null` en un campo de valor (precio, ingredientes, alérgenos, foto) significa que ese valor no está en el catálogo. No borra la diferencia entre los dos estados anteriores.
+- `AVAILABLE_EXTERNALLY`: se sabe que existe fuera del repositorio.
+- `FILE_NOT_INGESTED`: el archivo existe fuera y todavía no está físicamente en el repo. El manifiesto lo registra con `sha256` null y la ruta de entrega. No se finge un hash.
+- `SOURCE_MISSING`: no hay documento fuente con el que contrastar el hecho.
+- `CANDIDATE_MATCH`: nombre ya anotado, pendiente de cruce uno a uno con la carta vigente. No es `CONFIRMADO`.
+- `REVIEW_REQUIRED`: el original y la normalización no coinciden, o el dato pide revisión. No se corrige en silencio.
+- `SOURCE_CONFLICT`: el candidato no aparece en la fuente, o dos fuentes se contradicen.
+- `POR_CONFIRMAR`: el documento existe, y el cliente todavía tiene que validar el dato.
+- `CONFIRMADO`: contrastado y válido.
+- `CONFIRMADO_SOURCE`: solo después de transcripción y de un segundo contraste contra el archivo. Prohibido sin carta vigente ingerida.
+- `HISTORICO`: pertenece a una carta o un estado anterior. No entra solo en la carta vigente ni en `/carta`.
+- `PROPUESTA_ARGOS`: texto nuestro, no un dato del negocio.
+- `DESCARTADO`: se conserva la traza y no se muestra.
 
-Un dato no confirmado no se presenta como real. Si no hay nombre, el hueco dice «Per confirmar». Un nombre `SOURCE_MISSING` puede mostrarse como no contrastado. El precio desconocido es una raya (—), nunca un número inventado.
+`null` es un valor desconocido (precio, ingredientes, alérgenos, foto). No sustituye a estos estados.
+
+Un dato no confirmado no se presenta como real. Si no hay nombre, el hueco dice «Per confirmar». Un nombre `SOURCE_MISSING` o `CANDIDATE_MATCH` puede mostrarse como no contrastado. El precio desconocido es una raya (—), nunca un número inventado. No se infiere un alérgeno legal a partir de un ingrediente.
+
+## Ingesta
+
+Orden único: archivos fuente → extracción → normalización → `catalog.json` → validación → A3 → `/carta`. No se invierte. Los hechos de producto no viven en HTML, CSS ni componentes.
+
+`la-bobila/source/` es inmutable. El máster no se edita. Las copias van a `la-bobila/processed/`. Sin el archivo físico no hay auditoría de marca, ni transcripción, ni diff histórico. El andamiaje no es una ingesta terminada.
+
+Los 17 nombres de pizza ya anotados permanecen en `CANDIDATE_MATCH` hasta cruzarlos con la carta vigente. No pasan a `CONFIRMADO` por estar escritos en el JSON.
 
 ## P0: QR y carta móvil
 
