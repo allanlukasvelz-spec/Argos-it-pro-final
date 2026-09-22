@@ -1,0 +1,565 @@
+/* La Bòbila — A3 print layout. Product text is not authored here. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--lb-ivory);
+  color: var(--lb-charcoal);
+}
+
+@page {
+  size: 303mm 426mm;
+  margin: 0;
+}
+
+.sheet {
+  position: relative;
+  width: var(--lb-page-w);
+  height: var(--lb-page-h);
+  overflow: hidden;
+  background-color: var(--lb-ivory);
+  background-image:
+    radial-gradient(150mm 95mm at 8% 0%, rgba(193, 91, 58, 0.05), transparent 62%),
+    radial-gradient(130mm 110mm at 100% 16%, rgba(110, 122, 69, 0.07), transparent 64%);
+  color: var(--lb-charcoal);
+}
+
+.sheet__frame {
+  position: absolute;
+  inset: 4.2mm;
+  border: var(--lb-rule) solid var(--lb-green);
+  pointer-events: none;
+}
+
+.sheet__frame::after {
+  content: "";
+  position: absolute;
+  inset: 1.15mm;
+  border: var(--lb-hairline) solid rgba(110, 122, 69, 0.45);
+}
+
+.sheet__inner {
+  position: absolute;
+  inset: var(--lb-inset);
+  display: flex;
+  flex-direction: column;
+  gap: 2.8mm;
+  min-height: 0;
+}
+
+.lb-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.is-pending {
+  font-style: italic;
+}
+
+.lb-brand {
+  flex: 0 0 31mm;
+  display: grid;
+  grid-template-columns: 24mm 1fr 24mm;
+  align-items: center;
+  min-height: 0;
+}
+
+.lb-brand__olive {
+  color: var(--lb-olive);
+  height: 28mm;
+}
+
+.lb-brand__olive svg {
+  height: 28mm;
+  width: auto;
+  display: block;
+}
+
+.lb-brand__lockup {
+  text-align: center;
+}
+
+.lb-brand__name {
+  margin: 0;
+  font-family: var(--lb-font-serif);
+  font-weight: 500;
+  font-size: var(--lb-type-brand);
+  line-height: 0.88;
+  letter-spacing: -0.03em;
+  color: var(--lb-green);
+}
+
+.lb-brand__tipo {
+  margin: 1.7mm 0 0;
+  font-family: var(--lb-font-sans);
+  font-weight: 500;
+  font-size: 3.35mm;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--lb-charcoal);
+}
+
+.lb-brand__desde {
+  margin: 1.15mm 0 0;
+  font-family: var(--lb-font-serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 4mm;
+  color: var(--lb-terracotta);
+}
+
+.lb-brand__tick {
+  display: block;
+  width: 16mm;
+  margin: 1.8mm auto 0;
+  border-top: 0.55mm solid var(--lb-terracotta);
+}
+
+.lb-divider {
+  flex: 0 0 auto;
+  position: relative;
+  height: 0;
+  border-top: var(--lb-hairline) solid var(--lb-line);
+}
+
+.lb-divider span {
+  position: absolute;
+  left: 50%;
+  top: -0.4mm;
+  width: 14mm;
+  margin-left: -7mm;
+  border-top: 0.55mm solid var(--lb-terracotta);
+}
+
+.lb-cat {
+  display: flex;
+  align-items: center;
+  gap: 2.4mm;
+  margin: 0;
+  min-height: 0;
+}
+
+.lb-cat__title {
+  margin: 0;
+  font-family: var(--lb-font-serif);
+  font-weight: 600;
+  font-size: var(--lb-type-category);
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lb-green);
+}
+
+.lb-cat--secundario .lb-cat__title,
+.lb-cat--terciario .lb-cat__title {
+  font-size: var(--lb-type-category-secondary);
+  letter-spacing: 0.12em;
+}
+
+.lb-cat--pendiente .lb-cat__title {
+  font-size: 4.6mm;
+  letter-spacing: 0.12em;
+  color: var(--lb-olive-deep);
+}
+
+.lb-cat__rule {
+  flex: 1 1 auto;
+  border-top: var(--lb-hairline) solid var(--lb-line);
+}
+
+.lb-cat__badge {
+  font-family: var(--lb-font-sans);
+  font-size: var(--lb-type-meta);
+  font-style: italic;
+  letter-spacing: 0.04em;
+  color: var(--lb-olive-deep);
+  text-transform: none;
+}
+
+.lb-illus--tomato {
+  width: 7.2mm;
+  height: 7.2mm;
+  color: var(--lb-terracotta);
+  flex: 0 0 auto;
+}
+
+.zone-pizza {
+  flex: 1.24 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2.6mm;
+}
+
+.pizza-hero,
+.pizza-rest,
+.lb-grid-3,
+.zone-mid,
+.zone-late {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: var(--lb-gutter);
+  min-height: 0;
+}
+
+.pizza-hero {
+  flex: 1.15 1 0;
+}
+
+.pizza-rest {
+  flex: 0.88 1 0;
+}
+
+.pizza-rest > .lb-item,
+.lb-grid-3 > .lb-item,
+.zone-late .lb-item {
+  grid-column: span 2;
+}
+
+.lb-stack {
+  grid-column: 5 / span 2;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 3mm;
+  min-height: 0;
+}
+
+.lb-item--featured {
+  grid-column: 1 / span 4;
+}
+
+.lb-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15mm;
+  min-height: 0;
+  height: 100%;
+  padding-top: 1.8mm;
+  border-top: var(--lb-hairline) solid var(--lb-line);
+  overflow: hidden;
+}
+
+.lb-item--featured {
+  border-top: var(--lb-rule-strong) solid var(--lb-green);
+  padding-right: 22mm;
+}
+
+.lb-item__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 2mm;
+}
+
+.lb-id {
+  font-family: var(--lb-font-sans);
+  font-size: var(--lb-type-meta);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lb-olive);
+}
+
+.lb-name {
+  margin: 0;
+  font-family: var(--lb-font-serif);
+  font-weight: 500;
+  font-size: var(--lb-type-product);
+  line-height: 1.08;
+  color: var(--lb-green);
+}
+
+.lb-name.is-pending {
+  font-style: italic;
+  font-weight: 500;
+  text-decoration: underline dotted rgba(30, 58, 50, 0.38);
+  text-underline-offset: 0.7mm;
+}
+
+.lb-item--featured .lb-name {
+  font-size: var(--lb-type-product-featured);
+}
+
+.zone-smash .lb-name {
+  font-size: var(--lb-type-product-secondary);
+}
+
+.lb-ingredients {
+  margin: 0;
+  font-family: var(--lb-font-sans);
+  font-weight: 400;
+  font-size: var(--lb-type-ingredients);
+  line-height: 1.32;
+  color: var(--lb-charcoal);
+}
+
+.lb-desc {
+  margin: 0;
+  font-family: var(--lb-font-sans);
+  font-size: var(--lb-type-small);
+  line-height: 1.3;
+  color: var(--lb-charcoal-soft);
+}
+
+.lb-price {
+  font-family: var(--lb-font-sans);
+  font-weight: 400;
+  font-size: var(--lb-type-price);
+  letter-spacing: 0.04em;
+  color: var(--lb-olive);
+  flex: 0 0 auto;
+}
+
+.lb-illus--contour {
+  position: absolute;
+  right: -6mm;
+  bottom: -8mm;
+  width: 42mm;
+  height: 42mm;
+  color: var(--lb-olive);
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.lb-crea {
+  flex: 0.36 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2mm;
+  padding: 2.4mm 3mm 2mm;
+  background: var(--lb-wash);
+  border-radius: var(--lb-radius);
+  overflow: hidden;
+}
+
+.lb-crea .lb-cat__title {
+  font-size: 5.4mm;
+}
+
+.lb-crea__grid {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0;
+}
+
+.lb-crea__group {
+  min-width: 0;
+  padding: 0 2.4mm;
+  border-left: var(--lb-hairline) solid var(--lb-line);
+}
+
+.lb-crea__group:first-child {
+  border-left: 0;
+  padding-left: 0;
+}
+
+.lb-crea__label {
+  margin: 0 0 1.4mm;
+  font-family: var(--lb-font-serif);
+  font-weight: 600;
+  font-size: 3.5mm;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lb-green);
+}
+
+.lb-crea__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5mm;
+}
+
+.lb-crea__slot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3mm;
+}
+
+.lb-crea__pending {
+  font-family: var(--lb-font-sans);
+  font-size: 3.2mm;
+  line-height: 1.2;
+  color: var(--lb-charcoal);
+}
+
+.zone-smash {
+  flex: 0.36 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2mm;
+  overflow: hidden;
+}
+
+.zone-smash .lb-grid-3 {
+  flex: 1 1 auto;
+}
+
+.zone-mid {
+  flex: 0.54 1 0;
+  min-height: 0;
+}
+
+.zone-late {
+  flex: 0.34 1 0;
+  min-height: 0;
+}
+
+.lb-col {
+  grid-column: span 3;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.8mm;
+  overflow: hidden;
+}
+
+.lb-col .lb-item {
+  flex: 1 1 0;
+}
+
+.lb-footer {
+  flex: 0 0 38mm;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6mm;
+  min-height: 0;
+  padding-top: 2.2mm;
+  border-top: var(--lb-rule) solid var(--lb-green);
+}
+
+.lb-footer__grid {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1.35fr 0.7fr 1.25fr;
+  gap: 5mm;
+}
+
+.lb-foot__title {
+  margin: 0 0 1.1mm;
+  font-family: var(--lb-font-serif);
+  font-weight: 600;
+  font-size: 3.7mm;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lb-green);
+}
+
+.lb-badge,
+.lb-contact__row,
+.lb-qr__dest,
+.lb-legal,
+.lb-footer__brand {
+  font-family: var(--lb-font-sans);
+  font-weight: 400;
+}
+
+.lb-badge {
+  margin: 0;
+  font-size: var(--lb-type-small);
+  color: var(--lb-charcoal);
+}
+
+.lb-badge.is-pending,
+.lb-contact__row .is-pending,
+.lb-qr__dest.is-pending {
+  color: var(--lb-olive-deep);
+}
+
+.lb-qr {
+  text-align: center;
+}
+
+.lb-qr__frame {
+  position: relative;
+  width: 16mm;
+  height: 16mm;
+  margin: 0 auto 1mm;
+}
+
+.lb-qr__frame i {
+  position: absolute;
+  width: 3.4mm;
+  height: 3.4mm;
+  border: 0 solid var(--lb-green);
+}
+
+.lb-qr__frame i:nth-child(1) { top: 0; left: 0; border-top-width: 0.35mm; border-left-width: 0.35mm; }
+.lb-qr__frame i:nth-child(2) { top: 0; right: 0; border-top-width: 0.35mm; border-right-width: 0.35mm; }
+.lb-qr__frame i:nth-child(3) { bottom: 0; left: 0; border-bottom-width: 0.35mm; border-left-width: 0.35mm; }
+.lb-qr__frame i:nth-child(4) { bottom: 0; right: 0; border-bottom-width: 0.35mm; border-right-width: 0.35mm; }
+
+.lb-qr__dest {
+  margin: 0;
+  font-size: var(--lb-type-meta);
+}
+
+.lb-contact__row {
+  margin: 0 0 0.7mm;
+  font-size: var(--lb-type-small);
+  line-height: 1.25;
+  color: var(--lb-charcoal);
+}
+
+.lb-contact__label {
+  color: var(--lb-charcoal-soft);
+}
+
+.lb-legal {
+  margin: 0;
+  font-size: 2.7mm;
+  line-height: 1.3;
+  color: var(--lb-charcoal-soft);
+}
+
+.lb-footer__brand {
+  margin: 0;
+  text-align: center;
+  font-size: 2.8mm;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lb-green);
+}
+
+@media screen {
+  body {
+    background: #cfc8bc;
+    padding: 16px 0;
+  }
+
+  .sheet {
+    margin: 0 auto;
+    box-shadow: 0 10px 36px rgba(30, 40, 30, 0.16);
+  }
+}
+
+@media print {
+  html,
+  body {
+    background: transparent;
+    padding: 0;
+  }
+}
