@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** Writes editorial V3. Does not regenerate V1, V2, or the palette studies. */
+/** Writes editorial V4. Does not regenerate V1, V2, or V3. */
 
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -10,7 +10,7 @@ import { captureFiles, captureMetrics, withSheet } from "./chrome-sheet.mjs";
 
 const printDir = dirname(fileURLToPath(import.meta.url));
 const outDir = resolve(printDir, "renders");
-const caption = "PROTOTIP EDITORIAL V3 · PROVA / NO IMPRIMIR";
+const caption = "PROTOTIP EDITORIAL V4 · PROVA / NO IMPRIMIR";
 
 const HEADER_EXPRESSION = `(() => {
   const pxToMm = (px) => px / (96 / 25.4);
@@ -70,8 +70,8 @@ async function main() {
       returnByValue: true,
     });
     await captureFiles(cdp, {
-      pdfPath: resolve(outDir, "carta-a3-editorial-v3.pdf"),
-      pngPath: resolve(outDir, "carta-a3-editorial-v3.png"),
+      pdfPath: resolve(outDir, "carta-a3-editorial-v4.pdf"),
+      pngPath: resolve(outDir, "carta-a3-editorial-v4.png"),
     });
     return { ...metrics, header: header.result.value };
   });

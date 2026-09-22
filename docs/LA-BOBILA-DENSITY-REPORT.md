@@ -57,3 +57,7 @@ Medido el 2026-09-22 después de subir 1 pt la tipografía de lectura, sin bajar
 Carn sigue en 1 línea, vegetals en 2, formatges en 1. Ningún nombre de fila parte. El aire que faltaba tras el punto extra se recuperó en gaps y paddings, no en el interlineado ni en el margen de 16 mm. Complements sigue lleno y sin recorte.
 
 `/carta` no es una lámina fija. En 320, 360, 390 y 430 px no hay scroll horizontal. La página crece en vertical. El pase físico del QR no está hecho.
+
+## V4
+
+La corrección visual no mueve la retícula. Medido otra vez sobre `carta-a3-editorial-v4`: overflow false, pie a −16 mm (cierra en el margen de 16 mm), nombre de pizza 4,55 mm, precio 3,70 mm, topping de Crea 3,95 mm, interlínea 5,34 mm, máximo 2 líneas, ningún nombre partido, copy a 0,00 mm. Los dibujos van en absoluto y no cambian esas cifras.

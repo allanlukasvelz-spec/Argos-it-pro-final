@@ -240,5 +240,13 @@ ADRs breves. Fecha de todas: 2026-09-22.
 - Motivo: el punto mejora la lectura. El dibujo identifica la zona sin convertirse en dato ni en foto.
 - Roles: Head of Product Design, CPO, CDAO, CLO.
 - Impacto: V2 no se sobrescribe. `/carta` no hereda las marcas de agua grandes. `PRINT_GATE` sigue cerrado.
-- Estado: prototipo V3. Sin impresión.
+- Estado: prototipo V3. Sin impresión. V4, en ADR-031, sustituye el dibujo y no la medida.
+
+## ADR-031 — El dibujo de V4 se reconoce sin leer el título
+
+- Decisión: V4 conserva la arquitectura C, la tipografía de V3, la retícula, el copy centrado y el logo. Sustituye el contorno vacío de pizza, la hamburguesa abstracta, las patatas de trazo, el bol vacío y las ramas de 28 mm. La pizza es una pieza vista desde arriba, con corteza, tomate, albahaca, queso y otros ingredientes, y cruza Pizzes y Crea la teva. Hamburguesa, patatas en cucurucho, ensalada, helado de cucurucho y copa de vino quedan detrás de su zona. Cuatro ramas distintas nacen de las esquinas. El helado y la copa son decoración: no añaden productos.
+- Motivo: la revisión humana de V3 rechazó el dibujo por irreconocible, pequeño o demasiado tenue. El archivo SVG no basta; el objeto tiene que leerse en la lámina.
+- Roles: Head of Product Design, CSO, CLO.
+- Impacto: V2 y V3 no se sobrescriben. La tipografía no vuelve a subir ni a bajar. `PRINT_GATE` sigue cerrado.
+- Estado: prototipo V4. Sin impresión.
 

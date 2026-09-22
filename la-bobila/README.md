@@ -18,10 +18,10 @@ node la-bobila/mobile/check.mjs     # comprobaciones automáticas, no sustituyen
 node --test la-bobila/catalog/provenance.test.mjs
 node --test la-bobila/print/production-guard.test.mjs
 LA_BOBILA_BUILD=production node la-bobila/print/production-guard.mjs   # debe fallar: QR_DEV apunta a localhost
-node la-bobila/print/export.mjs   # prototipo V3; no regenera V1 ni V2
+node la-bobila/print/export.mjs   # prototipo V4; no regenera V1, V2 ni V3
 ```
 
-El prototipo V3 es `print/renders/carta-a3-editorial-v3.pdf`. Lleva `PROTOTIP EDITORIAL V3` y `PROVA / NO IMPRIMIR`. V1 y V2 se conservan. No es imprenta ni producción. `QR_PRODUCTION` sigue bloqueado.
+El prototipo V4 es `print/renders/carta-a3-editorial-v4.pdf`. Lleva `PROTOTIP EDITORIAL V4` y `PROVA / NO IMPRIMIR`. V1, V2 y V3 se conservan. No es imprenta ni producción. `QR_PRODUCTION` sigue bloqueado.
 
 `/carta` es la ruta estable. `GET /` redirige ahí. `QR_PRODUCTION` no se genera: no hay dominio. El código de la lámina es `QR_DEV` y no se imprime como carta final.
 

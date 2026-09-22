@@ -26,7 +26,7 @@ import {
   laurelBr,
   laurelTl,
   laurelTr,
-  pizzaContour,
+  artisanPizza,
   saladBowl,
   tomato,
   wineGlass,
@@ -88,7 +88,7 @@ export function renderHtml(catalog, options = {}) {
   const copy = options.copy === "a" || options.copy === "b" ? options.copy : "c";
   const illustration = options.illustration === "tomato" ? "tomato" : "clean";
   const caption = options.caption
-    ?? "PROTOTIP EDITORIAL V3 · PROVA / NO IMPRIMIR";
+    ?? "PROTOTIP EDITORIAL V4 · PROVA / NO IMPRIMIR";
   const ui = uiFrom(catalog);
   const pizzes = sectionById(catalog, "pizzes");
   const crea = sectionById(catalog, "crea");
@@ -104,7 +104,7 @@ export function renderHtml(catalog, options = {}) {
     LegalInfo(catalog.aviso_lamina),
     SectionDivider(),
     `<div class="zone-hero">
-      <div class="lb-watermark lb-watermark--pizza" aria-hidden="true">${pizzaContour}</div>
+      <div class="lb-watermark lb-watermark--pizza" aria-hidden="true">${artisanPizza}</div>
       <section class="zone-pizza" data-zone="pizzes">
         ${CategoryHeader(pizzes, ui, { icon: illustration === "tomato" ? tomato : "", badge: sectionBadge(pizzes, ui) })}
         ${pizzaNote}
@@ -138,7 +138,7 @@ export function renderHtml(catalog, options = {}) {
 </head>
 <body>
   <!-- Generado por print/render.mjs desde catalog/catalog.json. No editar el texto de producto aquí. -->
-  <article class="sheet palette-${palette}" data-palette="${palette}" data-architecture="${architecture}" data-copy="${copy}" data-illustration="${illustration}" data-edition="v3" data-revision="${catalog.revision}" data-version="${catalog.version}">
+  <article class="sheet palette-${palette}" data-palette="${palette}" data-architecture="${architecture}" data-copy="${copy}" data-illustration="${illustration}" data-edition="v4" data-revision="${catalog.revision}" data-version="${catalog.version}">
     <div class="sheet__frame" aria-hidden="true"></div>
     <div class="lb-corners" aria-hidden="true">${laurelTl}${laurelTr}${laurelBl}${laurelBr}</div>
     <div class="sheet__inner">

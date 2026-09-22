@@ -833,15 +833,19 @@ body {
 
 .lb-laurel {
   position: absolute;
-  width: 28mm;
-  height: 28mm;
-  opacity: 0.55;
+  width: 58mm;
+  height: 58mm;
+  opacity: 0.28;
 }
 
-.lb-laurel--tl { top: -3mm; left: -3mm; }
-.lb-laurel--tr { top: -2mm; right: -4mm; }
-.lb-laurel--bl { bottom: -3mm; left: -2mm; }
-.lb-laurel--br { bottom: -4mm; right: -3mm; }
+.lb-laurel .lb-line--tomato {
+  color: var(--lb-terracotta);
+}
+
+.lb-laurel--tl { top: -4mm; left: -4mm; }
+.lb-laurel--tr { top: -3mm; right: -5mm; }
+.lb-laurel--bl { bottom: -4mm; left: -3mm; }
+.lb-laurel--br { bottom: -5mm; right: -4mm; }
 
 .lb-watermark {
   position: absolute;
@@ -872,37 +876,101 @@ body {
 }
 
 .lb-watermark--pizza {
-  inset: -2% 4% -4%;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
 }
 
 .lb-watermark--pizza svg {
-  width: 112%;
-  height: 112%;
-  margin-left: -6%;
-  margin-top: -4%;
-  opacity: 0.26;
-  mask-image: radial-gradient(closest-side, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 1) 76%);
+  width: 150mm;
+  height: 150mm;
+  margin: 0;
+  opacity: 0.17;
+  flex: 0 0 auto;
 }
 
 .lb-watermark--burger {
-  inset: 8% 18% 0;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
 }
 
-.lb-watermark--burger svg { opacity: 0.24; }
+.lb-watermark--burger svg {
+  width: 58mm;
+  height: 48mm;
+  opacity: 0.2;
+  flex: 0 0 auto;
+}
 
-.lb-watermark--complements,
+.lb-watermark--complements {
+  inset: auto 0 4% 0;
+  height: 52mm;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  padding-right: 8mm;
+  overflow: visible;
+}
+
+.lb-watermark--complements svg {
+  width: 44mm;
+  height: 52mm;
+  opacity: 0.2;
+  flex: 0 0 auto;
+}
+
 .lb-watermark--amanides {
-  inset: 12% 8% 4%;
+  inset: 1mm 0 auto 0;
+  height: 68mm;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: visible;
 }
 
-.lb-watermark--postres,
+.lb-watermark--amanides svg {
+  width: 80mm;
+  height: 68mm;
+  opacity: 0.18;
+  flex: 0 0 auto;
+}
+
+.lb-watermark--postres {
+  inset: auto auto -4mm 2mm;
+  width: 28.6mm;
+  height: 40mm;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  overflow: visible;
+}
+
 .lb-watermark--begudes {
-  inset: -20% 8% -30% 42%;
+  inset: auto 2mm -10mm auto;
+  width: 23.5mm;
+  height: 40mm;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  overflow: visible;
 }
 
-.lb-watermark--postres svg,
-.lb-watermark--begudes svg {
+.lb-watermark--postres svg {
+  width: 28.6mm;
+  height: 40mm;
   opacity: 0.22;
+  flex: 0 0 auto;
+}
+
+.lb-watermark--begudes svg {
+  width: 23.5mm;
+  height: 40mm;
+  opacity: 0.22;
+  flex: 0 0 auto;
 }
 
 @media screen {
