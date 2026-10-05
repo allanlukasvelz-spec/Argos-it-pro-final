@@ -133,6 +133,7 @@ body.master-spread {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: 3.2mm;
 }
 
@@ -288,9 +289,9 @@ body.master-spread {
   vertical-align: 0.4mm;
 }
 
-.zone--crea { margin-top: 5mm; }
-.zone--second { margin-top: auto; }
-.zone--close { margin-top: auto; }
+.zone--crea { margin-top: 0; }
+.zone--second { margin-top: 0; }
+.zone--close { margin-top: 0; }
 
 .crea-grid {
   display: grid;

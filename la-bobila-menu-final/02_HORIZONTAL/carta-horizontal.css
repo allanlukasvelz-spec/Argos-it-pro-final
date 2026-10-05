@@ -172,9 +172,9 @@ body.master-h {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   column-gap: 2mm;
-  row-gap: 0.25mm;
+  row-gap: 0.6mm;
   align-items: baseline;
-  margin: 0 0 1.55mm;
+  margin: 0 0 0.7mm;
   break-inside: avoid;
   position: relative;
   z-index: 1;
@@ -209,13 +209,13 @@ body.master-h {
 
 .ings {
   grid-column: 1 / -1;
-  font-size: 2.85mm;
-  line-height: 3.55mm;
+  font-size: 5mm;
+  line-height: 5.25mm;
   font-weight: 400;
   color: var(--ink);
 }
 
-.zone--second .ings { font-size: 3mm; line-height: 3.75mm; }
+.zone--second .ings { font-size: 5mm; line-height: 5.25mm; }
 
 .sep { white-space: pre; }
 
@@ -225,16 +225,16 @@ body.master-h {
   font-style: normal;
   font-family: var(--sans);
   font-weight: 600;
-  font-size: 2.15mm;
+  font-size: 5mm;
   letter-spacing: 0.03em;
   color: var(--terra);
-  line-height: 1;
-  vertical-align: 0.35mm;
+  line-height: 5.6mm;
+  vertical-align: 0;
 }
 
 .zone--pizzes { flex: 0 0 auto; }
 .zone--crea { margin-top: 4mm; }
-.zone--second { margin-top: auto; }
+.zone--second { margin-top: 0; }
 
 .crea-grid {
   display: grid;

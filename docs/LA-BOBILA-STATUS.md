@@ -65,3 +65,19 @@ PRINT_SIZE_STATUS: PENDIENTE DE CONFIRMAR
 Informe: `la-bobila-menu-final/05_QA/visual-forensic-audit-v1.md`
 Capturas: `la-bobila-menu-final/05_QA/visual-audit-v1/`
 NEXT ACTION: esperar autorización antes de cualquier corrección.
+
+## CORRECCIÓN VISUAL V1
+
+Solo los cinco arreglos autorizados. No se ha rediseñado, no se ha añadido contenido y no se ha tocado el catálogo, el HTML ni el logo. Los prototipos V2, V3 y V4 siguen en `la-bobila/print/renders/`. Los renders auditados quedan como BEFORE. Las vistas AFTER son archivos aparte.
+
+CORRECTION_GATE: PASS
+253,90 mm → 65,88 mm. 210,90 mm → 8,00 mm. 117,37 mm → 3,00 mm. 2,85 mm → 5,00 mm. 2,15 mm → 5,00 mm.
+DATA_INTEGRITY: PASS (NAME_DIFF 0, PRICE_DIFF 0, INGREDIENT_DIFF 0, CATEGORY_DIFF 0)
+FOLD_SAFETY: PASS
+OVERFLOW_COUNT: 0
+LOGO_INTEGRITY: PASS
+LOGO_RESOLUTION_REVIEW_REQUIRED. El hash del máster no cambia.
+PRINT_SIZE_STATUS: PENDIENTE DE CONFIRMAR
+
+Informe: `la-bobila-menu-final/05_QA/visual-correction-v1-report.md`
+NEXT ACTION: revisión comparativa, y después autorización humana.
