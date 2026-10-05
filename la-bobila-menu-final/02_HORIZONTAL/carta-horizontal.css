@@ -209,13 +209,13 @@ body.master-h {
 
 .ings {
   grid-column: 1 / -1;
-  font-size: 5mm;
+  font-size: 2.85mm;
   line-height: 5.25mm;
   font-weight: 400;
   color: var(--ink);
 }
 
-.zone--second .ings { font-size: 5mm; line-height: 5.25mm; }
+.zone--second .ings { font-size: 2.85mm; line-height: 5.25mm; }
 
 .sep { white-space: pre; }
 
@@ -225,7 +225,7 @@ body.master-h {
   font-style: normal;
   font-family: var(--sans);
   font-weight: 600;
-  font-size: 5mm;
+  font-size: 2.15mm;
   letter-spacing: 0.03em;
   color: var(--terra);
   line-height: 5.6mm;
