@@ -4,7 +4,7 @@ Base: `b34624b` en `la-bobila-menu-system`. Solo los ocho grupos confirmados. No
 
 Santlucar no se ha tocado. Sigue literal en LB-COM-005, con su marca PENDIENTE.
 
-Las notas de origen (`observaciones`) que citan la foto — ORIGINAL CLASSICA, ORIGINAL PARMESA, ORIGINAL COGOMBREE, «El pa de briox está en la página» — se dejan como estaban. No son el texto de la carta. Los prototipos `la-bobila/mobile/carta.html` y `la-bobila/print/carta-a3.html` también conservan la grafía anterior: no están en la lista de archivos de esta corrección. `cogombret` y el `formatge parmesà` de la amanida cèsar no se han reescrito. Los `fior di latte` que ya estaban bien tampoco.
+Las notas de origen (`observaciones`) que citan la foto — ORIGINAL CLASSICA, ORIGINAL PARMESA, ORIGINAL COGOMBREE, «El pa de briox está en la página» — se dejan como estaban. No son el texto de la carta. La auditoría forense `visual-forensic-audit-v1.md` tampoco se reescribe: es el registro de aquel momento. `cogombret` y el `formatge parmesà` de la amanida cèsar no se han reescrito. Los `fior di latte` que ya estaban bien tampoco.
 
 ## Inventario, antes de editar
 
@@ -79,7 +79,17 @@ LANGUAGE_GATE: PASS_WITH_PENDING
 - `la-bobila-menu-final/04_RENDERS/carta-horizontal-language-v1.png`
 - `la-bobila-menu-final/04_RENDERS/interior-language-v1.png`
 
-No se han sobrescrito `carta-horizontal-v1.1.png` ni `interior-after.png`.
+No se han sobrescrito `carta-horizontal-v1.1.png` ni `interior-after.png`. Los PNG de esta corrección, `carta-horizontal-language-v1.png` e `interior-language-v1.png`, tampoco se han regenerado.
+
+## Fuentes derivadas
+
+Los másteres de `a130abf` no se han vuelto a generar. Un rebuild podría mover el hueco interior de 66,30 mm. La horizontal y el interior ya coinciden con el catálogo.
+
+`build-masters.mjs` deja en `DUDAS` solo `Santlucar`. Salen los ocho tokens ya confirmados.
+
+`la-bobila/mobile/carta.html` recibe las mismas ocho grafías en el texto visible. `la-bobila/print/carta-a3.html` solo pintaba una de ellas, el nombre Classica, y pasa a Clàssica. Santlucar sigue igual en las dos. Ninguna de esas páginas llevaba una marca PENDIENTE pegada solo a esos tokens; las demás marcas de pendiente se quedan.
+
+FILES_CHANGED: `la-bobila/catalog/catalog.json`, `la-bobila-menu-final/01_SOURCE_OF_TRUTH/catalogo_normalizado.json`, `la-bobila-menu-final/02_HORIZONTAL/carta-horizontal.html`, `la-bobila-menu-final/03_VERTICAL/interior.html`, `la-bobila-menu-final/05_QA/linguistic-audit.md`, `la-bobila-menu-final/05_QA/language-correction-v1-report.md`, `la-bobila-menu-final/04_RENDERS/carta-horizontal-language-v1.png`, `la-bobila-menu-final/04_RENDERS/interior-language-v1.png`, `la-bobila-menu-final/build-masters.mjs`, `la-bobila/mobile/carta.html`, `la-bobila/print/carta-a3.html`.
 
 PRINT_SIZE_STATUS: PENDIENTE DE CONFIRMAR
 NEXT ACTION: revisión humana conjunta de horizontal e interior con los textos corregidos.

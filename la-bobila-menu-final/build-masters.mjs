@@ -28,16 +28,7 @@ const qaDir = resolve(root, "05_QA");
 
 const STAMP = "PROTOTIPO / REVISIÓN / PENDIENTE";
 const DUDAS = [
-  "salsa la bòbila",
-  "flor di latte",
-  "all i oli",
-  "pa de brioche",
-  "pa de briox",
-  "butifarra",
-  "cogombree",
   "Santlucar",
-  "Classica",
-  "parmesa",
 ];
 
 const FORBIDDEN = [
