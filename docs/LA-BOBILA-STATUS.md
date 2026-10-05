@@ -1,6 +1,24 @@
-Los prototipos V2, V3 y V4 siguen en `la-bobila/print/renders/` y no son este documento de producción.
+Los prototipos V2, V3 y V4 siguen en `la-bobila/print/renders/` y no son este documento de producción. La auditoría de la fase 1 sigue debajo.
 
 STATUS:
+FASE: MÁSTERES EDITORIALES EN PROTOTIPO
+
+No se fusiona, no se publica y no se imprime. Sello: PROTOTIPO / REVISIÓN / PENDIENTE. La medida sigue sin confirmar por la imprenta.
+
+QUÉ SE HA MAQUETADO:
+Cara horizontal 489 × 335 mm: Amanides, Pizzes artesanes, Crea la teva pizza (base, carn, vegetals, formatges), Per compartir / complements y Smash burgers. Libro vertical reconstruido: portada con el logo oficial, doble página 664 × 489 mm (plec al centro) e interior con los mismos hechos, contraportada con las seis notas históricas confirmadas.
+
+QUÉ QUEDA VACÍO:
+Plats del dia, Postres y Begudes, sin productos. Base de Crea, sin ingredientes confirmados. Formatges, sin nombre confirmado. Calidad de la contraportada, sin frase confirmada. Sin fotos, sin Altres, sin salses vigentes y sin gelats vigentes.
+
+QA:
+`la-bobila-menu-final/05_QA/qa-horizontal.md` PASS. `la-bobila-menu-final/05_QA/qa-vertical.md` PASS. Cero discrepancias de nombre, precio o ingrediente. El plec no corta ningún hecho.
+
+VISTAS:
+`/cursor/stores/bc-70d42429-279a-4600-b0fd-616ef926aa11/media/carta-horizontal-preview.png`
+`/cursor/stores/bc-70d42429-279a-4600-b0fd-616ef926aa11/media/carta-vertical-preview.png`
+
+STATUS ANTERIOR:
 FASE: 1 AUDITORÍA
 
 CATÁLOGO:

@@ -468,9 +468,13 @@ function compareMenu(catalog, extracted, { includeHistorico, expectProducts }) {
       if (confirmed) {
         if (found.visibleNombre !== row.nombre) push(`${row.id} nombre visible «${found.visibleNombre}» ≠ «${row.nombre}».`);
         if (found.nombre !== row.nombre) push(`${row.id} data-nombre «${found.nombre}» ≠ «${row.nombre}».`);
-        const expectPrice = formatPrice(row.precio.value);
-        if (found.visiblePrecio !== expectPrice || found.precio !== expectPrice) {
-          push(`${row.id} precio «${found.visiblePrecio}» ≠ «${expectPrice}».`);
+        if (row.precio && row.precio.value != null) {
+          const expectPrice = formatPrice(row.precio.value);
+          if (found.visiblePrecio !== expectPrice || found.precio !== expectPrice) {
+            push(`${row.id} precio «${found.visiblePrecio}» ≠ «${expectPrice}».`);
+          }
+        } else if (found.visiblePrecio || found.precio) {
+          push(`${row.id} muestra un precio que el catálogo no confirma.`);
         }
         const expectIngs = row.ingredientes || [];
         if (found.ings.join("\n") !== expectIngs.join("\n") || found.visibleIngs.join("\n") !== expectIngs.join("\n")) {

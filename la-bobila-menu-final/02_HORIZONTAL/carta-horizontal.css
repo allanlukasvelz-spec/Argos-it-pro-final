@@ -233,7 +233,7 @@ body.master-h {
 }
 
 .zone--pizzes { flex: 0 0 auto; }
-.zone--crea { margin-top: auto; }
+.zone--crea { margin-top: 4mm; }
 .zone--second { margin-top: auto; }
 
 .crea-grid {
