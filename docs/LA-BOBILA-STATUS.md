@@ -1,46 +1,34 @@
+Los prototipos V2, V3 y V4 siguen en `la-bobila/print/renders/` y no son este documento de producción.
+
 STATUS:
-EDITORIAL V4. Corrección visual sobre V3. Prototipo. No es carta final, ni imprenta, ni producción. EDITORIAL_ARCHITECTURE_GATE PASS. BRAND_GATE PARTIAL. PALETTE_GATE PARTIAL. COPY_GATE PARTIAL. ALLERGEN_GATE BLOCKED. QR_PRODUCTION_GATE BLOCKED. PRINT_GATE BLOCKED. PUBLICATION_GATE BLOCKED.
+FASE: 1 AUDITORÍA
 
-INK:
-Los alimentos y las ramas usan la misma tinta del logo, `#202B17`, a una sola mano: contorno irregular, detalle fino, sin relleno y sin segundo color. Van con opacidad (pizza 0,14; hamburguesa y patatas 0,16; ensalada 0,15; helado y copa 0,18; ramas 0,22) para que el texto siga leyéndose. El archivo del logo no se ha tocado.
+CATÁLOGO:
+`la-bobila/catalog/catalog.json`, versión 0.4.1, revisión 2026-09-22. 62 productos: 50 CONFIRMADO y 12 REVIEW_REQUIRED en el archivo maestro. Por sección: 17 pizzes, 4 smash, 11 complements, 3 amanides, 27 crea. Postres y begudes no tienen productos. El normalizado de esta fase está en `la-bobila-menu-final/01_SOURCE_OF_TRUTH/catalogo_normalizado.json`: 50 CONFIRMADO, 11 PENDIENTE DE CONFIRMAR y 1 SOURCE_CONFLICT. Los precios confirmados conservan dos decimales. La presentación sigue EUR_PENDING_PRESENTATION.
 
-ILLUSTRATION RECOGNIZABILITY:
-IR01 PIZZA PASS. Pizza completa, vista desde arriba, con corteza irregular, superficie interior, tomate, albahaca, queso y otros ingredientes. 150 mm, opacidad 0,17, centrada en Pizzes y Crea la teva. Se lee sin el título de sección y el texto sigue delante.
-IR02 BURGER PASS. Smash burger de frente: pan superior, hoja, tomate, queso, carne y pan inferior. 58 × 48 mm, opacidad 0,20, detrás de Smash burgers.
-IR03 FRIES PASS. Patatas de distinta altura dentro de un cucurucho. 44 × 52 mm, opacidad 0,20, detrás de Per compartir / complements.
-IR04 SALAD PASS. Bol mediterráneo con hojas, tomate y volumen por encima del borde. 80 × 68 mm, opacidad 0,18, detrás de Amanides.
-IR05 ICE_CREAM PASS. Dos bolas y cucurucho. 28,6 × 40 mm, opacidad 0,22, detrás de Postres. Decoración: no afirma que haya helado a la venta.
-IR06 WINE_GLASS PASS. Copa con cáliz, tallo, pie y línea de líquido. 23,5 × 40 mm, opacidad 0,22, detrás de Begudes. Decoración: no crea un vino en el catálogo.
-IR07 CORNER_BOTANICAL PASS. Cuatro ramas distintas, 58 mm, opacidad 0,28, color #6C7153 y un acento mínimo #8E4A30. Salen de cada esquina por los dos lados y no tocan el logo.
+LOGO:
+`la-bobila/source/logo/la-bobila-logo-reference.png`. sha256 `6b82915752bd3bd3b0f9a698feb36b7b4897357555bd462af7c89164b49bc9fc`. Los píxeles dicen «DESDE 2005» y «PIZZERIA ARTIGIANALE». No se ha reescrito.
 
-TYPOGRAPHY LOCK:
-PASS. Se conserva el +1 pt de V3. Nombre de pizza 4,55 mm. Precio de fila 3,70 mm. Topping de Crea la teva 3,95 mm, interlínea 5,34 mm. Familias, peso y tracking iguales. Ningún nombre de fila parte. El copy editorial sigue a 0,00 mm.
+FOTOS REALES:
+Ninguna foto de producto. `la-bobila/source/photos/` está vacío. Las únicas fotografías son la carta vigente y la carta histórica, más el logo.
 
-DENSITY:
-PASS. 0 OVERFLOW. El pie cierra a 16 mm. Las marcas de agua son absolutas y no cambian la retícula. Informe: `docs/LA-BOBILA-DENSITY-REPORT.md`.
+IMÁGENES QUE NO SON FUENTE:
+Renders V1, V2 clean, V2 illustrated, V3, V4, `carta-a3` y las dos comparaciones de paleta. La variante de colocación del logo. La imagen conceptual `referencia-conceptual-carta.png`. No se ha transcrito.
 
-LOGO INTEGRITY:
-PASS. sha256 `6b82915752bd3bd3b0f9a698feb36b7b4897357555bd462af7c89164b49bc9fc` antes y después. Una sola imagen, 36 mm de alto, sin mover.
+CONTRADICCIONES:
+El logo dice «DESDE 2005» y «PIZZERIA ARTIGIANALE». El copy «Des de 2005» y «Pizzeria artesana» es editorial y sigue pendiente. No se calcula «25 años». 6 Formatges vigente es 15,90, CONFIRMADO_SOURCE, fuente de la carta vigente. Una banda histórica, anotada en `docs/LA-BOBILA-MENU-DIFF.md`, lee 13,90 y no está guardada como precio del producto ni en `historico`. Bases: histórica 10,00 y vigente 12,00, cada una con su asset. Piera, Verdura y Miss Smash cambian de ingredientes entre periodos y esas diferencias citan la foto histórica. High Protein vigente y High-Protein histórica son el mismo nombre de periodo distinto. Ningún producto vigente cita los dos assets a la vez.
 
-DATA INTEGRITY:
-PASS. `catalog.json` no cambia. Arquitectura C intacta. Sin €. Sin fotos. Sin productos nuevos. Las lecturas REVIEW_REQUIRED siguen abiertas.
+PENDIENTE DE CONFIRMAR:
+Copy editorial. Moneda y símbolo. Alérgenos. Dirección, horario, teléfono, redes, privacidad y texto legal. QR de producción, sin destino. Begudes, vacía. Postres vigentes, vacíos. Grupo Altres. Salses, solo históricas y sin copiar. Gelats históricos a 6,90, sabores ilegibles y fuera de la carta vigente. Lecturas abiertas del pie de Crea la teva: Pernil ibèric, Tonyina, Pebrot vermell, Carxofa, Xampinyons, Mozzarella fior di latte, Emmental, Formatge de cabra, Roquefort, Parmesà, Formatge feta. Lecturas que el catálogo ya dejó sin cerrar dentro de platos confirmados: FLOR/FIOR, BACON/BACÓ, PARMESA, COGOMBREE/COGOMBRET, Santlucar, Classica, briox. Free gluten, massa mare, forn y 48 h. Medida A3+ con la imprenta.
 
-MOBILE:
-PASS en 320, 390 y 430. Sin scroll horizontal, nav sticky, objetivos de 44 px, cero marcas de agua grandes, sin €.
+SOURCE_CONFLICT:
+Cansalada. El catálogo la lee en la columna de vegetals y una nota interna la clasificaría como carn. No se mueve. En el normalizado el nombre queda null y el estado es SOURCE_CONFLICT. No hay otra fila vigente que mezcle la cita histórica con la vigente.
 
-REMAINING BLOCKERS:
-- QR_PRODUCTION sin destino.
-- Matriz de alérgenos ausente.
-- Copy editorial, paleta B y autorización de imprenta sin cierre del cliente.
-- Bebidas, postres, salsas, dirección, teléfono y horario vacíos.
-- Grafías en revisión, Cansalada y la columna de formatges.
-- PRINT_GATE y PUBLICATION_GATE cerradas.
+MEDIDA A3+:
+Provisional 329 × 483 mm. Cara horizontal 483 × 329 mm, archivo con sangre 489 × 335 mm. Página vertical 329 × 483 mm, archivo con sangre 335 × 489 mm. Sangre 3 mm. PENDIENTE DE CONFIRMAR con la imprenta. No es medida final.
+
+NO SE HA MAQUETADO:
+Sí.
 
 NEXT ACTION:
-Revisar la lámina V4 con el cliente, al lado de V3. No publicar. No imprimir. No generar QR_PRODUCTION. No merge final.
-
-ARCHIVOS:
-la-bobila/print/renders/carta-a3-editorial-v4.png
-la-bobila/print/renders/carta-a3-editorial-v4.pdf
-docs/LA-BOBILA-DENSITY-REPORT.md
-docs/LA-BOBILA-DECISIONS.md
+Aceptar esta auditoría. No hay fase de diseño hasta entonces.
