@@ -50,3 +50,18 @@ Sí.
 
 NEXT ACTION:
 Aceptar esta auditoría. No hay fase de diseño hasta entonces.
+
+## VISUAL FORENSIC AUDIT V1
+
+Inspección solamente. No se ha editado la carta, el catálogo, el HTML, el CSS ni el logo. Los prototipos V2, V3 y V4 siguen en `la-bobila/print/renders/` y no son el documento de producción.
+
+OVERALL_VISUAL_GATE: PASS_WITH_CHANGES
+DATA_INTEGRITY: PASS (NAME_DIFF 0, PRICE_DIFF 0, INGREDIENT_DIFF 0, CATEGORY_DIFF 0)
+LOGO_INTEGRITY: PASS
+FOLD_SAFETY: PASS
+OVERFLOW_COUNT: 0
+PRINT_SIZE_STATUS: PENDIENTE DE CONFIRMAR
+
+Informe: `la-bobila-menu-final/05_QA/visual-forensic-audit-v1.md`
+Capturas: `la-bobila-menu-final/05_QA/visual-audit-v1/`
+NEXT ACTION: esperar autorización antes de cualquier corrección.
