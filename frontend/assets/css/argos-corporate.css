@@ -18,15 +18,26 @@
   min-width: 0;
   overflow-x: clip;
 
-  /* Canonical brand (immutable) */
-  --argos-navy: #1f3a5f;
-  --argos-teal: #2f7d6d;
-  --argos-ivory: #f7f7f5;
+  /*
+   * D+ official palette — MASTER v2.0 auditado (corporate public scope only).
+   * Legacy #2f7d6d / #1f3a5f are not used inside `.argos-corporate`.
+   */
+  --dplus-azul: #102c54;
+  --dplus-teal: #168b8c;
+  --dplus-teal-light: #65bfc1;
+  --dplus-text-muted: #657183;
+  --dplus-surface: #eef6f7;
+  --dplus-white: #ffffff;
+
+  /* Canonical brand (corporate remapped to D+) */
+  --argos-navy: var(--dplus-azul);
+  --argos-teal: var(--dplus-teal);
+  --argos-ivory: var(--dplus-surface);
   --argos-ink: #0b1320;
 
   /* Visual Refinement 05 — semantic roles */
-  --argos-blue: #263746;
-  --argos-petroleum: #2f7d6d;
+  --argos-blue: var(--dplus-azul);
+  --argos-petroleum: var(--dplus-teal);
   --argos-mint: #c8ddd6;
   --argos-mint-deep: #a8c9bc;
   --argos-cream: #f3eee4;
@@ -34,10 +45,19 @@
   --argos-mineral: #eef1f4;
   --argos-surface: #fcfcfa;
   --argos-text: #0b1320;
-  --argos-muted: #64748b;
+  --argos-muted: var(--dplus-text-muted);
   --argos-border: #d4dce4;
-  --grad-method-bar: linear-gradient(105deg, #152233 0%, #1f3a5f 42%, #263746 72%, #152233 100%);
-  --grad-diag-exec: linear-gradient(145deg, #152233 0%, #1f3a5f 38%, #2f7d6d 100%);
+  --grad-method-bar: linear-gradient(
+    105deg,
+    color-mix(in srgb, var(--dplus-azul) 92%, #000) 0%,
+    var(--dplus-azul) 48%,
+    color-mix(in srgb, var(--dplus-teal) 35%, var(--dplus-azul)) 100%
+  );
+  --grad-diag-exec: linear-gradient(
+    145deg,
+    var(--dplus-azul) 0%,
+    color-mix(in srgb, var(--dplus-teal) 55%, var(--dplus-azul)) 100%
+  );
   --grad-mint-card: linear-gradient(165deg, #e8f2ee 0%, #d5e8e0 55%, #c8ddd6 100%);
   --grad-cream-card: linear-gradient(165deg, #faf7f1 0%, #f3eee4 55%, #ebe3d6 100%);
   --argos-card-blue-bg: color-mix(in srgb, #1d4d7a 72%, #ffffff);
@@ -69,13 +89,13 @@
   --text-muted: #64748b;
   --border-default: #d4dce4;
   --border-mineral: rgba(31, 58, 95, 0.12);
-  --action-primary: var(--argos-brand-primary);
-  --action-secondary: var(--argos-brand-secondary);
-  --action-accent: var(--argos-brand-secondary);
+  --action-primary: var(--dplus-teal);
+  --action-secondary: var(--dplus-azul);
+  --action-accent: var(--dplus-teal-light);
   --status-info: var(--argos-brand-primary);
 
-  --corporate-action-hover: #18304f;
-  --corporate-focus: #93c5fd;
+  --corporate-action-hover: color-mix(in srgb, var(--dplus-teal) 78%, #000);
+  --corporate-focus: var(--dplus-teal-light);
 
   /* VP-07 — motion tokens (calm / precise) */
   --motion-fast: 140ms;
@@ -3902,6 +3922,103 @@ a.argos-card:active {
 
 .argos-wp-public .argos-corp-cta-row {
   flex-wrap: wrap;
+}
+
+/* D+ blue band — editorial variant (MASTER v2) */
+.argos-dplus-blue-band {
+  position: relative;
+  background: var(--dplus-azul);
+  color: var(--dplus-white);
+  padding: clamp(2rem, 4vw, 3rem) 0;
+  overflow: hidden;
+}
+
+.argos-dplus-blue-band__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+}
+
+.argos-dplus-blue-band__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+  font-weight: 600;
+  max-width: 28ch;
+}
+
+.argos-dplus-blue-band__lead {
+  margin: 0.35rem 0 0;
+  max-width: 42ch;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--dplus-white) 88%, var(--dplus-teal-light));
+}
+
+.argos-dplus-blue-band .argos-corporate-cta {
+  background: var(--dplus-teal);
+  flex-shrink: 0;
+}
+
+.argos-dplus-blue-band .argos-corporate-cta:hover {
+  background: var(--corporate-action-hover);
+}
+
+/* Four strategic pillars — editorial grid (official photography) */
+.argos-corp-pillars {
+  display: grid;
+  gap: 1rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 768px) {
+  .argos-corp-pillars {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .argos-corp-pillars {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.argos-corp-pillar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.argos-corp-pillar__media {
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  background: var(--dplus-surface);
+}
+
+.argos-corp-pillar__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.argos-corp-pillar__label {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--dplus-azul);
 }
 
 @media (max-width: 390px) {

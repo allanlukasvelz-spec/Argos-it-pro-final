@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import ArgosAssistantRoot from "@/components/assistant/ArgosAssistantRoot";
 import ClientAssistants from "@/components/ClientAssistants";
+import CorporateBlueBand from "@/components/corporate/CorporateBlueBand";
 import CorporateFooter from "@/components/corporate/CorporateFooter";
 import CorporateHeader from "@/components/corporate/CorporateHeader";
 import CorporateHistoryNav from "@/components/corporate/CorporateHistoryNav";
@@ -47,6 +48,7 @@ export default function SiteShell({ children }: Props) {
                 <CorporateHistoryNav />
               </div>
               {children}
+              <CorporateBlueBand />
               <CorporateFooter />
             </div>
             <ArgosAssistantRoot />
