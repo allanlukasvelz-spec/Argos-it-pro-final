@@ -51,3 +51,29 @@ Cansalada sigue en SOURCE_CONFLICT, en la columna de vegetals. No se mueve a car
 ## Fuera de la carta
 
 No están y no se añaden: Risotto ai quattro formaggi, free gluten, massa mare, forn, 48 h, plats del dia, «25 años».
+
+## CLIENT_CONFIRMED_CORRECTION
+
+Corrección lingüística V1, sobre el commit `b34624b`. El pase 3 de arriba queda como historia: en aquel momento no se tocó el catálogo. Estas ocho dudas ya tienen corrección confirmada. Santlucar no entra.
+
+| Id | Antes | Después | Estado |
+| --- | --- | --- | --- |
+| LB-BUR-001 | Classica | Clàssica | CLIENT_CONFIRMED_CORRECTION |
+| LB-PIZ-012 | parmesa | parmesà | CLIENT_CONFIRMED_CORRECTION |
+| LB-PIZ-016 | butifarra | botifarra | CLIENT_CONFIRMED_CORRECTION |
+| LB-PIZ-016 | all i oli | allioli | CLIENT_CONFIRMED_CORRECTION |
+| LB-BUR-001 | pa de brioche | pa de brioix | CLIENT_CONFIRMED_CORRECTION |
+| LB-BUR-002 | pa de briox | pa de brioix | CLIENT_CONFIRMED_CORRECTION |
+| LB-BUR-003 | pa de briox | pa de brioix | CLIENT_CONFIRMED_CORRECTION |
+| LB-BUR-001 | salsa la bòbila | salsa La Bòbila | CLIENT_CONFIRMED_CORRECTION |
+| LB-BUR-002 | salsa la bòbila | salsa La Bòbila | CLIENT_CONFIRMED_CORRECTION |
+| LB-AMA-003 | cogombree | cogombre | CLIENT_CONFIRMED_CORRECTION |
+| LB-PIZ-001 | flor di latte | fior di latte | CLIENT_CONFIRMED_CORRECTION |
+
+La marca PENDIENTE de esas grafías sale de la carta. No se añade ni se quita ningún ingrediente. `cogombret` sigue en la Clàssica. `formatge parmesà` de la amanida cèsar no se toca. Los `fior di latte` que ya estaban bien no se reescriben.
+
+Santlucar sigue literal en LB-COM-005: PENDIENTE_DE_CONFIRMAR.
+
+Siguen pendientes, sin grafía nueva: Pernil ibèric, Tonyina, Pebrot vermell, Carxofa, Xampinyons, Mozzarella fior di latte, Emmental, Formatge de cabra, Roquefort, Parmesà, Formatge feta. Cansalada sigue en SOURCE_CONFLICT, en vegetals.
+
+LANGUAGE_GATE: PASS_WITH_PENDING

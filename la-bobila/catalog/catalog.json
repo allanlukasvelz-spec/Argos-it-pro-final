@@ -218,7 +218,7 @@
       "ingredientes": [
         "salsa de tomàquet",
         "mozzarella",
-        "flor di latte",
+        "fior di latte",
         "pernil dolç",
         "orenga"
       ],
@@ -613,7 +613,7 @@
         "fior di latte",
         "bacó",
         "ou",
-        "parmesa",
+        "parmesà",
         "orenga"
       ],
       "precio": {
@@ -748,10 +748,10 @@
       "nombre_corto": null,
       "descripcion": null,
       "ingredientes": [
-        "butifarra",
+        "botifarra",
         "ou",
         "ceba",
-        "all i oli",
+        "allioli",
         "xampinyons"
       ],
       "precio": {
@@ -809,7 +809,7 @@
     {
       "id": "LB-BUR-001",
       "categoria": "smash",
-      "nombre": "Classica",
+      "nombre": "Clàssica",
       "nombre_corto": null,
       "descripcion": null,
       "ingredientes": [
@@ -819,8 +819,8 @@
         "formatge cheddar",
         "cogombret",
         "enciam fresc",
-        "pa de brioche",
-        "salsa la bòbila"
+        "pa de brioix",
+        "salsa La Bòbila"
       ],
       "precio": {
         "value": 11.5,
@@ -856,8 +856,8 @@
         "enciam fresc",
         "bacó cruixent",
         "ou",
-        "salsa la bòbila",
-        "pa de briox"
+        "salsa La Bòbila",
+        "pa de brioix"
       ],
       "precio": {
         "value": 13.5,
@@ -889,7 +889,7 @@
         "doble smash de vedella 100%",
         "formatge cheddar",
         "salsa de tòfona negra",
-        "pa de briox"
+        "pa de brioix"
       ],
       "precio": {
         "value": 13.9,
@@ -1335,7 +1335,7 @@
       "ingredientes": [
         "enciam fresc",
         "ceba",
-        "cogombree",
+        "cogombre",
         "tomàquet",
         "olives variades",
         "tonyina"
