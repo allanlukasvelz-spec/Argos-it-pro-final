@@ -1,0 +1,57 @@
+{
+  "id": "la-bobila-asset-manifest",
+  "revision": "2026-09-22",
+  "zip": "/Users/allanlukasvelz/Downloads/web pizeria/LA-BOBILA_SOURCE_ASSETS.zip",
+  "busqueda": "No se ha recorrido el disco. La ingesta sale de ese zip, listado antes de extraer. El zip se ha dejado en Downloads. Los másteres del repositorio son copia byte a byte. No hay logos de Argos IT ni facturas dentro del zip.",
+  "assets": [
+    {
+      "id": "LB-ASSET-LOGO-001",
+      "filename": "la-bobila-logo-reference.png",
+      "type": "logo",
+      "source_category": "logo",
+      "original": "la-bobila/source/logo/la-bobila-logo-reference.png",
+      "sha256": "6b82915752bd3bd3b0f9a698feb36b7b4897357555bd462af7c89164b49bc9fc",
+      "date_ingested": "2026-09-22",
+      "provenance": "/Users/allanlukasvelz/Downloads/web pizeria/LA-BOBILA_SOURCE_ASSETS.zip",
+      "status": "INGESTED",
+      "notes": "PNG 1600×863, RGB, sin canal alfa. Wordmark La Bòbila con tomate y rama. No es un logo de Argos IT. El máster no se edita. La copia byte a byte sigue en la-bobila/processed/logo/la-bobila-logo-reference.png con el mismo sha256. La variante de colocación es la-bobila/processed/logo/la-bobila-logo-presentation.png (RGBA, sha256 ba7b0648ac45efafd698510dc0d2c69782fcf41d320cadd6759e0bd77b918113): alfa sobre el crema de fondo, mediana 250,241,230, sin recorte ni redibujo. ADR-020.",
+    },
+    {
+      "id": "LB-ASSET-MENU-CURRENT-001",
+      "filename": "la-bobila-carta-vigente.jpeg",
+      "type": "menu",
+      "source_category": "menu-current",
+      "original": "la-bobila/source/menu-current/la-bobila-carta-vigente.jpeg",
+      "sha256": "3484610b4d455e837d8c77568a155073894427d1ef06b424bcd1e2412bb54755",
+      "date_ingested": "2026-09-22",
+      "provenance": "/Users/allanlukasvelz/Downloads/web pizeria/LA-BOBILA_SOURCE_ASSETS.zip",
+      "status": "INGESTED",
+      "notes": "JPEG 1022×1536. Foto de la carta vigente en tres columnas: pizzes, amanides y smash, complements, y el pie de Crea la teva. Fuente primaria de producto. Copia de trabajo en la-bobila/processed/menu-current/ con el mismo sha256."
+    },
+    {
+      "id": "LB-ASSET-MENU-HISTORICAL-001",
+      "filename": "la-bobila-carta-historica.jpeg",
+      "type": "menu",
+      "source_category": "menu-historical",
+      "original": "la-bobila/source/menu-historical/la-bobila-carta-historica.jpeg",
+      "sha256": "a19f86d39c9471e2517a9d9f3e1bb279538b5535bc608998874b5575e5f59193",
+      "date_ingested": "2026-09-22",
+      "provenance": "/Users/allanlukasvelz/Downloads/web pizeria/LA-BOBILA_SOURCE_ASSETS.zip",
+      "status": "INGESTED",
+      "notes": "JPEG 864×1536. Foto más borrosa de una carta anterior. No se han copiado sus productos a la carta vigente. Copia de trabajo en la-bobila/processed/menu-historical/ con el mismo sha256."
+    },
+    {
+      "id": "LB-ASSET-GRAPHICS-001",
+      "filename": null,
+      "type": "graphic",
+      "source_category": "photos",
+      "original": null,
+      "sha256": null,
+      "date_ingested": null,
+      "provenance": "/Users/allanlukasvelz/Downloads/web pizeria/LA-BOBILA_SOURCE_ASSETS.zip",
+      "status": "FILE_NOT_INGESTED",
+      "expected_drop_path": "la-bobila/source/photos/",
+      "notes": "El zip no trae fotos ni gráficos aparte del logo y de las dos cartas. No se usa stock. No hay hash."
+    }
+  ]
+}
