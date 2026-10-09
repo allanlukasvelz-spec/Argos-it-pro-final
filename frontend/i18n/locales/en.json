@@ -254,7 +254,8 @@
     "message": "We use technical and analytics cookies to improve your experience. You can accept or reject non-essential cookies.",
     "accept": "Accept",
     "reject": "Reject",
-    "policy": "View cookie policy"
+    "policy": "View cookie policy",
+    "change": "Change cookie preferences"
   },
   "footer": {
     "tagline": "Professional IT consulting for companies and teams that need stability, security and continuity.",

@@ -25,7 +25,6 @@ const menuItems: NavItem[] = [
 const pillItems: NavItem[] = [
   { href: "/servicios", key: "nav.services" },
   { href: "/metodo", key: "nav.methodArgos" },
-  { href: "/#planes", key: "nav.plans" },
   { href: "/auth/login", key: "nav.portal" },
   { href: "/contacto", key: "nav.contact" }
 ];

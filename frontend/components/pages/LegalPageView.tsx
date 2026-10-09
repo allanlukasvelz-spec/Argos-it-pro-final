@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import ArgosPageShell from "@/components/layout/ArgosPageShell";
+import { reopenCookiePreferences } from "@/components/layout/CookieBanner";
 import { useI18n } from "@/i18n/useI18n";
 import { usePageMeta } from "@/components/seo/usePageMeta";
 
@@ -33,6 +34,15 @@ export default function LegalPageView({ type }: Props) {
           </Link>
           <h1 className="text-4xl font-bold text-white">{title}</h1>
           <p className="mt-4 max-w-3xl text-[#D7E8F6]">{intro}</p>
+          {type === "cookies" && (
+            <button
+              type="button"
+              className="mt-6 rounded-md border border-[#39F4FF] px-4 py-2 text-sm font-bold text-[#39F4FF] transition hover:bg-[#39F4FF]/10"
+              onClick={reopenCookiePreferences}
+            >
+              {t("cookiesBanner.change")}
+            </button>
+          )}
         </div>
       </header>
 
