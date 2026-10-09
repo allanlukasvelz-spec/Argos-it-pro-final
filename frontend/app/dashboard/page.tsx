@@ -54,6 +54,12 @@ type DiagnosticDetailResponse = {
   answers: { questionId: string; question: string; answerLabel: string; riskPoints: number }[];
 };
 
+type ActivityItem = {
+  id: number;
+  action_type: string;
+  created_at: string;
+};
+
 type ClientPortalPayload = {
   user: PortalUser;
   roles: string[];
@@ -70,7 +76,7 @@ type ClientPortalPayload = {
   improvementPanel: { statusOptions: string[]; fields: string[] };
   messages: unknown[];
   submissions: { id: number; data: Record<string, unknown>; status: string; created_at: string }[];
-  activity: unknown[];
+  activity: ActivityItem[];
   argosDiagnostics?: ArgosDiagnosticListItem[];
 };
 
@@ -116,7 +122,14 @@ const copy = {
     diagAnswers: "Respuestas enviadas",
     diagPriorities: "Prioridades",
     diagRisksTitle: "Riesgos detectados",
-    diagStrengthsTitle: "Puntos fuertes"
+    diagStrengthsTitle: "Puntos fuertes",
+    servicesTitle: "Servicios contratados",
+    servicesEmpty: "Aún no hay servicios contratados registrados.",
+    activityTitle: "Actividad reciente",
+    activityEmpty: "Aún no hay actividad registrada.",
+    nextStep: "Siguiente paso",
+    websiteUrl: "Web registrada",
+    websiteUrlEmpty: "Sin URL de web registrada."
   },
   en: {
     portal: "Client portal",
@@ -159,7 +172,14 @@ const copy = {
     diagAnswers: "Answers submitted",
     diagPriorities: "Priorities",
     diagRisksTitle: "Detected risks",
-    diagStrengthsTitle: "Strengths"
+    diagStrengthsTitle: "Strengths",
+    servicesTitle: "Contracted services",
+    servicesEmpty: "No contracted services are registered yet.",
+    activityTitle: "Recent activity",
+    activityEmpty: "No activity recorded yet.",
+    nextStep: "Next step",
+    websiteUrl: "Registered website",
+    websiteUrlEmpty: "No website URL registered."
   },
   ca: {
     portal: "Portal de client",
@@ -202,7 +222,14 @@ const copy = {
     diagAnswers: "Respostes enviades",
     diagPriorities: "Prioritats",
     diagRisksTitle: "Riscos detectats",
-    diagStrengthsTitle: "Punts forts"
+    diagStrengthsTitle: "Punts forts",
+    servicesTitle: "Serveis contractats",
+    servicesEmpty: "Encara no hi ha serveis contractats registrats.",
+    activityTitle: "Activitat recent",
+    activityEmpty: "Encara no hi ha activitat registrada.",
+    nextStep: "Següent pas",
+    websiteUrl: "Web registrada",
+    websiteUrlEmpty: "Sense URL de web registrada."
   }
 };
 
@@ -417,6 +444,12 @@ export default function Dashboard() {
               <p className="text-sm font-black uppercase text-[#2563EB]">{t.company}</p>
               <h2 className="mt-1 text-2xl font-black">{portal?.user?.company || user?.company || "Empresa pendiente"}</h2>
               <p className="text-[#4B5563]">{portal?.user?.email || user?.email}</p>
+              {portal?.companyProfile?.nextStep ? (
+                <p className="mt-3 text-sm text-[#111827]">
+                  <span className="font-bold">{t.nextStep}: </span>
+                  {portal.companyProfile.nextStep}
+                </p>
+              ) : null}
             </div>
             <div className="rounded-md border border-[#E5E7EB] bg-[#F9FAFB] px-4 py-3 text-right">
               <p className="text-sm font-bold text-[#2563EB]">{t.score}</p>
@@ -426,6 +459,25 @@ export default function Dashboard() {
 
           <div className="mt-7">
             <h3 className="text-xl font-black">{t.website}</h3>
+            <p className="mt-2 text-sm text-[#4B5563]">
+              <span className="font-bold">{t.websiteUrl}: </span>
+              {portal?.websiteAudit?.websiteUrl ? (
+                /^https?:\/\//i.test(portal.websiteAudit.websiteUrl) ? (
+                  <a
+                    href={portal.websiteAudit.websiteUrl}
+                    className="font-semibold text-[#2563EB] underline"
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    {portal.websiteAudit.websiteUrl}
+                  </a>
+                ) : (
+                  portal.websiteAudit.websiteUrl
+                )
+              ) : (
+                t.websiteUrlEmpty
+              )}
+            </p>
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               {auditChecks.length === 0 ? (
                 <p className="col-span-full text-sm text-[#4B5563]">{t.noAuditChecks}</p>
@@ -434,6 +486,22 @@ export default function Dashboard() {
                   <div key={check.label} className="rounded-md border border-[#E5E7EB] bg-[#F9FAFB] p-4">
                     <p className="font-bold">{check.label}</p>
                     <p className="text-sm text-[#4B5563]">{check.status}</p>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+
+          <div className="mt-7">
+            <h3 className="text-xl font-black">{t.servicesTitle}</h3>
+            <div className="mt-4 grid gap-3">
+              {(portal?.activeServices || []).length === 0 ? (
+                <p className="text-sm text-[#4B5563]">{t.servicesEmpty}</p>
+              ) : (
+                (portal?.activeServices || []).map((service) => (
+                  <div key={`${service.slug}-${service.startedAt ?? ""}`} className="rounded-md border border-[#E5E7EB] bg-[#F9FAFB] p-4">
+                    <p className="font-bold">{service.name}</p>
+                    <p className="text-sm text-[#4B5563]">{service.status}</p>
                   </div>
                 ))
               )}
@@ -648,6 +716,30 @@ export default function Dashboard() {
                   )}
                 </div>
               ))
+            )}
+          </div>
+        </section>
+
+        <section className="rounded-lg border border-[#E5E7EB] bg-white p-6 shadow-sm">
+          <h2 className="text-2xl font-black">{t.activityTitle}</h2>
+          <div className="mt-5 space-y-3">
+            {portal?.activity?.length ? (
+              portal.activity.map((item) => (
+                <div key={item.id} className="rounded-md border border-[#E5E7EB] bg-[#F9FAFB] p-4">
+                  <p className="font-bold text-[#111827]">
+                    {item.action_type === "improvement_request_created"
+                      ? t.kindImprovement
+                      : item.action_type === "direct_message_created"
+                        ? t.kindMessage
+                        : item.action_type}
+                  </p>
+                  <p className="mt-2 text-xs font-semibold text-[#6B7280]">
+                    {new Date(item.created_at).toLocaleString()}
+                  </p>
+                </div>
+              ))
+            ) : (
+              <p className="text-[#4B5563]">{t.activityEmpty}</p>
             )}
           </div>
         </section>

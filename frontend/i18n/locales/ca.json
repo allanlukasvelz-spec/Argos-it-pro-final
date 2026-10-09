@@ -193,6 +193,7 @@
     "cards": {
       "emailTitle": "Email",
       "phoneTitle": "Telèfon",
+      "phonePending": "Canal a confirmar després de la sol·licitud",
       "coverageTitle": "Cobertura",
       "coverageLines": [
         "Servei internacional",
@@ -246,7 +247,8 @@
     "message": "Utilitzem cookies tècniques i analítiques per millorar l'experiència. Pots acceptar o rebutjar les no essencials.",
     "accept": "Acceptar",
     "reject": "Rebutjar",
-    "policy": "Veure política de cookies"
+    "policy": "Veure política de cookies",
+    "change": "Canviar preferències de galetes"
   },
   "footer": {
     "tagline": "Consultoria informàtica professional per a empreses que necessiten estabilitat, seguretat i continuïtat.",

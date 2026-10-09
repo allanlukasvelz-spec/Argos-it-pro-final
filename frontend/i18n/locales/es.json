@@ -367,6 +367,7 @@
     "cards": {
       "emailTitle": "Email",
       "phoneTitle": "Teléfono",
+      "phonePending": "Canal a confirmar tras la solicitud",
       "coverageTitle": "Cobertura",
       "coverageLines": [
         "Cualquier lugar",
@@ -474,7 +475,8 @@
     "message": "Usamos cookies técnicas y analíticas para mejorar tu experiencia. Puedes aceptar o rechazar las no esenciales.",
     "accept": "Aceptar",
     "reject": "Rechazar",
-    "policy": "Ver política de cookies"
+    "policy": "Ver política de cookies",
+    "change": "Cambiar preferencias de cookies"
   },
   "footer": {
     "tagline": "Consultoría tecnológica premium para empresas, autónomos y profesionales que necesitan estabilidad, seguridad y evolución digital.",

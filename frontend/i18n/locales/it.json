@@ -191,6 +191,7 @@
     "cards": {
       "emailTitle": "Email",
       "phoneTitle": "Telefono",
+      "phonePending": "Canale da confermare dopo la richiesta",
       "coverageTitle": "Copertura",
       "coverageLines": [
         "Servizio internazionale",
@@ -244,7 +245,8 @@
     "message": "Utilizziamo cookie tecnici e analitici per migliorare l'esperienza utente.",
     "accept": "Accetta",
     "reject": "Rifiuta",
-    "policy": "Vedi cookie policy"
+    "policy": "Vedi cookie policy",
+    "change": "Modifica le preferenze sui cookie"
   },
   "footer": {
     "tagline": "Consulenza IT professionale per aziende che richiedono stabilità, sicurezza e continuità.",

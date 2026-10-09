@@ -191,6 +191,7 @@
     "cards": {
       "emailTitle": "E-Mail",
       "phoneTitle": "Telefon",
+      "phonePending": "Kanal wird nach der Anfrage bestätigt",
       "coverageTitle": "Abdeckung",
       "coverageLines": [
         "Internationaler Service",
@@ -244,7 +245,8 @@
     "message": "Wir verwenden technische und analytische Cookies zur Verbesserung der Nutzererfahrung.",
     "accept": "Akzeptieren",
     "reject": "Ablehnen",
-    "policy": "Cookie-Richtlinie ansehen"
+    "policy": "Cookie-Richtlinie ansehen",
+    "change": "Cookie-Einstellungen ändern"
   },
   "footer": {
     "tagline": "Professionelle IT-Beratung für Unternehmen mit Fokus auf Stabilität, Sicherheit und Kontinuität.",

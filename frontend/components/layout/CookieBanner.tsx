@@ -5,6 +5,11 @@ import { useEffect, useState } from "react";
 import { useI18n } from "@/i18n/useI18n";
 
 const COOKIE_KEY = "argos_cookie_preferences_v1";
+export const COOKIE_PREFERENCES_EVENT = "argos:reopen-cookie-banner";
+
+export function reopenCookiePreferences() {
+  window.dispatchEvent(new Event(COOKIE_PREFERENCES_EVENT));
+}
 
 export default function CookieBanner() {
   const { t } = useI18n();
@@ -13,6 +18,9 @@ export default function CookieBanner() {
   useEffect(() => {
     const saved = window.localStorage.getItem(COOKIE_KEY);
     setVisible(!saved);
+    const reopen = () => setVisible(true);
+    window.addEventListener(COOKIE_PREFERENCES_EVENT, reopen);
+    return () => window.removeEventListener(COOKIE_PREFERENCES_EVENT, reopen);
   }, []);
 
   const save = (value: "accepted" | "rejected") => {
