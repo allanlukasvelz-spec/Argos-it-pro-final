@@ -183,7 +183,7 @@ export default function ContactView() {
                 <h3 className="argos-font-ui mb-2 text-lg font-semibold text-[var(--text-primary)]">
                   {t("contact.cards.phoneTitle")}
                 </h3>
-                <span className="text-[var(--text-secondary)]">{t("contact.cards.phonePending")}</span>
+                <span className="text-[var(--text-secondary)]">Canal a confirmar tras la solicitud</span>
               </div>
               <div className="argos-corporate-card p-5">
                 <h3 className="argos-font-ui mb-2 text-lg font-semibold text-[var(--text-primary)]">

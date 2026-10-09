@@ -191,7 +191,6 @@
     "cards": {
       "emailTitle": "Email",
       "phoneTitle": "Téléphone",
-      "phonePending": "Canal à confirmer après la demande",
       "coverageTitle": "Couverture",
       "coverageLines": [
         "Service international",

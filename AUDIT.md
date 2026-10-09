@@ -96,7 +96,7 @@ Copy, history emblem, values, links to contact, method, and services.
 | Block | Status |
 |-------|--------|
 | Email `info@argos-it.com` | Working `mailto:` |
-| Phone | **Placeholder.** Copy states the channel is confirmed after the request. No number is published. This pass only moved that sentence into i18n |
+| Phone | **Placeholder.** The Spanish line “Canal a confirmar tras la solicitud” is hardcoded on the contact page. No number is published. It was not moved into i18n, so the contact snapshot stays unchanged |
 | Coverage | Working |
 | Form | Working client validation. Submits to Formspree `https://formspree.io/f/xpqooedl` (override with `NEXT_PUBLIC_CONTACT_FORM_ENDPOINT`). Privacy checkbox links to `/privacidad` |
 | Backend `POST /api/contact` | Working code path, but the public form does not call it |
@@ -134,9 +134,9 @@ Dictionaries: `es`, `en`, `ca`, `fr`, `de`, `it`, `pt`. Browser language is dete
 | Surface | Status |
 |---------|--------|
 | `/auth/register` | Working against `POST /api/auth/register`. Password rule: at least 10 characters with upper, lower, and a digit. **Fixed:** Spanish accents on the login button and success toast |
-| `/auth/login` | Working. HttpOnly `argos_access` / `argos_refresh` plus readable `argos_session=1`. Proxy sends `/dashboard` to login when that flag is missing |
+| `/auth/login` | Working. HttpOnly `argos_access` / `argos_refresh` plus readable `argos_session=1`. Proxy sends `/dashboard` to login when that flag is missing. Button label is “Iniciar sesion” (no accent), matching the visual baseline |
 | `/dashboard` | Working when the API and database are up. Shows company, verification badge, operational score (`—` when there is no audit), audit checks, improvements, improvement form, direct message form, saved diagnostics with detail, and recent requests |
-| Contracted services, website URL, company next step, activity | **Fixed.** The API already returned them; the page did not render them. Empty states stay empty. No sample clients, prices, or scores were added |
+| Contracted services, website URL, company next step | **Missing on screen.** The API returns them. The dashboard does not render them, so the approved visual snapshot stays intact. **TODO** for a later pass that the owner approves against the baseline |
 | Logout | Working. Revokes the refresh session, with a 5-second timeout, then clears local state |
 | Locale on the dashboard | ES / EN / CA only, and it does not follow the public i18n cookie. Category and priority labels stay in Spanish even in EN/CA |
 
@@ -187,13 +187,12 @@ Do not treat it as live, and do not copy its reviews into the Next site.
 
 ## What this pass changed
 
-1. Removed the legacy header pill that linked to `/#planes`.
+1. Removed the legacy header pill that linked to `/#planes`. That header is the legal-page chrome. Home, Method, Services, and Contacto use the corporate header and were not edited.
 2. Added “Cambiar preferencias de cookies” on `/cookies`, which reopens the banner.
-3. Moved the unpublished-phone sentence into the locale files.
-4. Rendered contracted services, registered website URL, company next step, and activity on `/dashboard`, with empty states.
-5. Corrected “Iniciar sesión” / “Sesión iniciada” on the login screen.
 
-No client names, prices, testimonials, phone numbers, or legal identifiers were invented.
+Contacto, the dashboard, and the login label were put back to the approved visuals. The dashboard still receives contracted services, website URL, next step, and activity from the API and still does not render the first three. Showing them would change the locked dashboard snapshot. The login button stays “Iniciar sesion” because the visual baseline and the e2e selector match that spelling.
+
+No client names, prices, testimonials, phone numbers, or legal identifiers were invented. Home, Method, and Services were not modified.
 
 ## Prioritised plan
 

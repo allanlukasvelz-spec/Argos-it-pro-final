@@ -367,7 +367,6 @@
     "cards": {
       "emailTitle": "Email",
       "phoneTitle": "Teléfono",
-      "phonePending": "Canal a confirmar tras la solicitud",
       "coverageTitle": "Cobertura",
       "coverageLines": [
         "Cualquier lugar",

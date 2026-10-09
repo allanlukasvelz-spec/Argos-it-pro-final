@@ -31,7 +31,7 @@ export default function Login() {
       const res = await API.post("/api/auth/login", { email, password });
 
       login(res.data.user);
-      toast.success("Sesión iniciada");
+      toast.success("Sesion iniciada");
       router.push("/dashboard");
     } catch (error: any) {
       toast.error(error.response?.data?.error || "Error en login");
@@ -81,7 +81,7 @@ export default function Login() {
             disabled={loading}
             className="w-full rounded border border-[#2563EB] bg-[#2563EB] p-3 font-black text-white transition hover:bg-[#1D4ED8] disabled:bg-[#93C5FD]"
           >
-            {loading ? "Iniciando..." : "Iniciar sesión"}
+            {loading ? "Iniciando..." : "Iniciar sesion"}
           </button>
         </form>
 

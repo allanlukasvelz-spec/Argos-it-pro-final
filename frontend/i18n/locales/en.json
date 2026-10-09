@@ -201,7 +201,6 @@
     "cards": {
       "emailTitle": "Email",
       "phoneTitle": "Phone",
-      "phonePending": "Number confirmed after your request",
       "coverageTitle": "Coverage",
       "coverageLines": [
         "International service",
