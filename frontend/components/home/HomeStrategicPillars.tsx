@@ -16,9 +16,9 @@ export default function HomeStrategicPillars() {
   const ordered = PILLAR_ORDER.filter((entry) => pillars.includes(entry.key));
 
   return (
-    <section className="argos-corp-section argos-corp-section--ivory" aria-labelledby="home-pillars-title">
+    <section className="argos-corp-section argos-corp-section--dplus-pillars" aria-labelledby="home-pillars-title">
       <div className="argos-corp-container">
-        <p className="argos-corp-section-index">03 / Cuatro pilares</p>
+        <p className="argos-corp-section-index">05 / Cuatro pilares</p>
         <h2 id="home-pillars-title" className="argos-font-display argos-corp-h2">
           {t("home.principlesTitle")}
         </h2>

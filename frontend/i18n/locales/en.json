@@ -111,7 +111,7 @@
     ],
     "brandMark": "ARGOS IT",
     "ctaMethod": "View full method",
-    "realityIndex": "07 / Client reality",
+    "realityIndex": "04 / Client reality",
     "problemTitle": "Technology should not be a burden",
     "problemLead": "Without clear criteria, silent friction appears: wasted time, unmapped risk and decisions made in the dark.",
     "realityItems": [
@@ -125,12 +125,12 @@
       "A failure, a weak access control or an untested backup can stall the day. The point is to spot those weak spots early and reinforce them — without drama."
     ],
     "realityAskDumbo": "Ask Dumbo",
-    "philosophyIndex": "02 / Philosophy",
+    "philosophyIndex": "10 / Philosophy",
     "philosophyTitle": "Philosophy",
     "philosophyQuote": "Understand before acting,\nprevent before reacting.",
     "principlesIndex": "03 / Principles",
     "principlesTitle": "Principles that guide the work",
-    "methodIndex": "04 / Method",
+    "methodIndex": "07 / Method",
     "methodIntroLead": "ARGOS is a closed five-phase method to move from technical problems to sustained improvement—without improvisation.",
     "servicesIndex": "06 / Services",
     "stabilityIndex": "08 / Continuity",
@@ -142,7 +142,7 @@
       "Preventive support and improvement proposals",
       "A long-term relationship, not one-off patches"
     ],
-    "trustIndex": "09 / Trust",
+    "trustIndex": "03 / Trust",
     "trustLead": "We work with human judgment: clarity, prevention and accompaniment—without invented operational theatre.",
     "finalCtaTitle": "Let’s talk with judgment",
     "finalCtaSubtitle": "Tell us your current situation. We will reply with a clear, prioritised and actionable proposal.",
@@ -242,7 +242,7 @@
       ]
     },
     "ctaHeroSecondary": "Learn how we work",
-    "publicPhasesIndex": "04a / Four movements"
+    "publicPhasesIndex": "07a / Four movements"
   },
   "servicesPage": {
     "title": "ARGOS-IT Services",

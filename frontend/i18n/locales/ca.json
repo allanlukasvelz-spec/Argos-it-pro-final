@@ -105,7 +105,7 @@
     ],
     "brandMark": "ARGOS IT",
     "ctaMethod": "Veure el mètode complet",
-    "realityIndex": "07 / Realitat del client",
+    "realityIndex": "04 / Realitat del client",
     "problemTitle": "La tecnologia no hauria de ser una càrrega",
     "problemLead": "Sense un criteri clar apareixen friccions silencioses: temps perdut, riscos sense mapa i decisions a cegues.",
     "realityItems": [
@@ -119,12 +119,12 @@
       "Una fallada, un accés mal controlat o una còpia sense provar poden frenar el dia a dia. El important és detectar aquests punts a temps i reforçar-los, sense dramatitzar."
     ],
     "realityAskDumbo": "Preguntar a Dumbo",
-    "philosophyIndex": "02 / Filosofia",
+    "philosophyIndex": "10 / Filosofia",
     "philosophyTitle": "Filosofia",
     "philosophyQuote": "Entendre abans d'actuar,\nprevenir abans de reaccionar.",
     "principlesIndex": "03 / Principis",
     "principlesTitle": "Principis que guien la feina",
-    "methodIndex": "04 / Mètode",
+    "methodIndex": "07 / Mètode",
     "methodIntroLead": "ARGOS és un mètode tancat de cinc fases per passar del problema tècnic a la millora sostinguda, sense improvisació.",
     "servicesIndex": "06 / Serveis",
     "stabilityIndex": "08 / Continuïtat",
@@ -136,7 +136,7 @@
       "Suport preventiu i propostes de millora",
       "Relació a llarg termini, no pedaços puntuals"
     ],
-    "trustIndex": "09 / Confiança",
+    "trustIndex": "03 / Confiança",
     "trustLead": "Treballem amb criteri humà: claredat, prevenció i acompanyament sense soroll operatiu inventat.",
     "finalCtaTitle": "Parlem amb criteri",
     "finalCtaSubtitle": "Explica'ns la teva situació actual. Et respondrem amb una proposta clara, prioritzada i accionable.",
@@ -236,7 +236,7 @@
       ]
     },
     "ctaHeroSecondary": "Coneixer com treballem",
-    "publicPhasesIndex": "04a / Quatre moviments"
+    "publicPhasesIndex": "07a / Quatre moviments"
   },
   "servicesPage": {
     "title": "Serveis ARGOS-IT",

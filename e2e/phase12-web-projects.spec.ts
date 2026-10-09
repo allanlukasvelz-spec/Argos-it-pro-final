@@ -3,6 +3,7 @@ import { mkdirSync } from "node:fs";
 import path from "node:path";
 import { resetAuthRateLimits } from "./helpers/resetRateLimits";
 import { BACKEND, e2eAuthHeaders } from "./helpers/e2eEnv";
+import { expectHomeGoldenMasterIndexes } from "./helpers/homeGoldenMaster";
 import { gotoE2e } from "./helpers/e2eNav";
 import { dismissCookieBanner, loginViaUi } from "./helpers/loginUi";
 import { promoteEmailToAdmin } from "./helpers/promoteNocAdmin";
@@ -108,14 +109,14 @@ async function addNocBriefNote(page: Page, type: string, content: string) {
 test.describe("PHASE 12 project brief + architecture handoff", () => {
   test.describe.configure({ timeout: 240000 });
 
-  test("Home order frozen 01 project / 07 reality", async ({ page }) => {
+  test("Home D+ V3 section indexes stay in the approved order", async ({ page }) => {
+    await page.addInitScript(() => {
+      window.localStorage.setItem("argos_locale", "es");
+    });
     await gotoE2e(page, "/");
     await dismissCookieBanner(page);
-    const indexes = page.locator(".argos-corp-section-index");
-    await expect(indexes.nth(0)).toHaveText(/01 \/ Proyecto web|01 \/ Projecte web|01 \/ Web project/i);
+    await expectHomeGoldenMasterIndexes(page);
     await expect(page.getByRole("link", { name: "Comenzar mi proyecto" })).toBeVisible();
-    const texts = (await indexes.allTextContents()).map((text) => text.replace(/\s+/g, " ").trim());
-    expect(texts.some((text) => /^07 \/ (Realidad del cliente|Realitat del client|Client reality)/.test(text))).toBeTruthy();
   });
 
   test("FLOW A-E brief, blockers, notes and architecture start", async ({ page, request, browser }) => {

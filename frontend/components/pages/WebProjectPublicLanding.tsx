@@ -35,7 +35,7 @@ export default function WebProjectPublicLanding() {
 
   return (
     <CorporatePageShell className="argos-wp-public">
-      <section className="argos-corp-section argos-corp-section--hero" aria-labelledby="wp-public-title">
+      <section className="argos-corp-section argos-corp-section--dplus-intro" aria-labelledby="wp-public-title">
         <div className="argos-corp-container argos-corp-container--narrow">
           <p className="argos-corp-brand-mark">ARGOS IT</p>
           <h1 id="wp-public-title" className="argos-font-display argos-corp-display">
@@ -59,7 +59,7 @@ export default function WebProjectPublicLanding() {
         </div>
       </section>
 
-      <section className="argos-corp-section argos-corp-section--ivory" aria-labelledby="wp-how-title">
+      <section className="argos-corp-section argos-corp-section--dplus-trust" aria-labelledby="wp-how-title">
         <div className="argos-corp-container argos-corp-container--narrow">
           <h2 id="wp-how-title" className="argos-font-display argos-corp-h2">
             {SELF_SERVICE_HOW_TITLE}
@@ -75,7 +75,7 @@ export default function WebProjectPublicLanding() {
         </div>
       </section>
 
-      <section className="argos-corp-section argos-corp-section--sand" aria-labelledby="wp-options-title">
+      <section className="argos-corp-section argos-corp-section--dplus-services" aria-labelledby="wp-options-title">
         <div className="argos-corp-container">
           <h2 id="wp-options-title" className="argos-font-display argos-corp-h2">
             {SELF_SERVICE_OPTIONS_TITLE}
@@ -93,7 +93,7 @@ export default function WebProjectPublicLanding() {
         </div>
       </section>
 
-      <section className="argos-corp-section argos-corp-section--mist" aria-labelledby="wp-pace-title">
+      <section className="argos-corp-section argos-corp-section--dplus-modes" aria-labelledby="wp-pace-title">
         <div className="argos-corp-container argos-corp-container--narrow">
           <h2 id="wp-pace-title" className="argos-font-display argos-corp-h2">
             {SELF_SERVICE_PACE_TITLE}
@@ -102,7 +102,7 @@ export default function WebProjectPublicLanding() {
         </div>
       </section>
 
-      <section className="argos-corp-section argos-corp-section--ivory" aria-labelledby="wp-privacy-title">
+      <section className="argos-corp-section argos-corp-section--dplus-faq" aria-labelledby="wp-privacy-title">
         <div className="argos-corp-container argos-corp-container--narrow">
           <h2 id="wp-privacy-title" className="argos-font-display argos-corp-h2">
             {SELF_SERVICE_PRIVACY_TITLE}
@@ -111,7 +111,7 @@ export default function WebProjectPublicLanding() {
         </div>
       </section>
 
-      <section className="argos-corp-section argos-corp-section--cta" aria-labelledby="wp-final-cta-title">
+      <section className="argos-corp-section argos-corp-section--dplus-trust" aria-labelledby="wp-final-cta-title">
         <div className="argos-corp-container argos-corp-container--editorial">
           <h2 id="wp-final-cta-title" className="argos-font-display argos-corp-h2">
             {SELF_SERVICE_LANDING_TITLE}

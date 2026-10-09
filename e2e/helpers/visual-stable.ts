@@ -56,6 +56,7 @@ export async function installVisualTestInit(page: Page): Promise<void> {
   await page.addInitScript(
     ({ cookieKey, freezeStyle }) => {
       window.localStorage.setItem(cookieKey, "accepted");
+      window.localStorage.setItem("argos_locale", "es");
       const inject = () => {
         if (document.getElementById("argos-pw-visual-freeze")) return;
         const style = document.createElement("style");

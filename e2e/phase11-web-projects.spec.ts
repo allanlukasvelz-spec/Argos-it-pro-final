@@ -3,6 +3,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { resetAuthRateLimits } from "./helpers/resetRateLimits";
 import { BACKEND, e2eAuthHeaders } from "./helpers/e2eEnv";
+import { expectHomeGoldenMasterIndexes } from "./helpers/homeGoldenMaster";
 import { gotoE2e } from "./helpers/e2eNav";
 import { dismissCookieBanner, loginViaUi } from "./helpers/loginUi";
 import { promoteEmailToAdmin } from "./helpers/promoteNocAdmin";
@@ -85,29 +86,15 @@ function itemBlock(page: Page, heading: string) {
 test.describe("PHASE 11 home swap + questionnaire", () => {
   test.describe.configure({ timeout: 240000 });
 
-  test("FLOW home swap 01 project / 07 reality and 02-06 stay put", async ({ page }) => {
+  test("Home D+ V3 section indexes stay in the approved order", async ({ page }) => {
+    await page.addInitScript(() => {
+      window.localStorage.setItem("argos_locale", "es");
+    });
     await gotoE2e(page, "/");
     await dismissCookieBanner(page);
-    const indexes = page.locator(".argos-corp-section-index");
-    await expect(indexes.nth(0)).toHaveText(/01 \/ Proyecto web|01 \/ Projecte web|01 \/ Web project/i);
+    await expectHomeGoldenMasterIndexes(page);
     await expect(page.getByRole("link", { name: "Comenzar mi proyecto" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Crea o mejora tu web con ARGOS" })).toBeVisible();
-    const texts = await indexes.allTextContents();
-    const normalized = texts.map((text) => text.replace(/\s+/g, " ").trim());
-    expect(normalized[0]).toMatch(/^01 \//);
-    expect(normalized.some((text) => /^02 \//.test(text))).toBeTruthy();
-    expect(normalized.some((text) => /^03 \//.test(text))).toBeTruthy();
-    expect(normalized.some((text) => /^06 \//.test(text))).toBeTruthy();
-    expect(normalized.some((text) => /^07 \/ (Realidad del cliente|Realitat del client|Client reality)/.test(text))).toBeTruthy();
-    const i01 = normalized.findIndex((text) => text.startsWith("01 /"));
-    const i02 = normalized.findIndex((text) => text.startsWith("02 /"));
-    const i03 = normalized.findIndex((text) => text.startsWith("03 /"));
-    const i06 = normalized.findIndex((text) => text.startsWith("06 /"));
-    const i07 = normalized.findIndex((text) => text.startsWith("07 /"));
-    expect(i01).toBeLessThan(i02);
-    expect(i02).toBeLessThan(i03);
-    expect(i03).toBeLessThan(i06);
-    expect(i06).toBeLessThan(i07);
     await page.screenshot({ path: path.join(SHOT_DIR, "01-home-project-web-position-01.png"), fullPage: true });
     await page.locator("#home-problem-title").scrollIntoViewIfNeeded();
     await page.screenshot({ path: path.join(SHOT_DIR, "03-home-reality-client-position-07.png"), fullPage: false });

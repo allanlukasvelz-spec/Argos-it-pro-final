@@ -25,7 +25,7 @@ export default function LegalPageView({ type }: Props) {
   usePageMeta(`${title} | ARGOS-IT`, intro);
 
   return (
-    <ArgosPageShell variant="legal">
+    <ArgosPageShell variant="portal">
       <header className="px-4 py-12 sm:px-6 md:px-8">
         <div className="mx-auto max-w-4xl">
           <Link href="/" className="mb-6 inline-block text-[#39F4FF] hover:underline">

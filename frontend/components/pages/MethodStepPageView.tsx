@@ -69,7 +69,7 @@ export default function MethodStepPageView({ step }: Props) {
 
   return (
     <CorporatePageShell>
-      <section className="argos-corp-section" aria-labelledby="method-step-title">
+      <section className="argos-corp-section argos-corp-section--dplus-intro" aria-labelledby="method-step-title">
         <div className="argos-corp-container" style={{ maxWidth: "64rem" }}>
           <div className="flex flex-wrap items-center gap-3">
             <Link href="/metodo" className="argos-corp-back">
@@ -79,8 +79,6 @@ export default function MethodStepPageView({ step }: Props) {
               Inicio
             </Link>
           </div>
-
-          <MethodArgosJourneyNav activeSlug={step.slug} className="mt-6 argos-corp-journey" />
 
           <div className="mt-8 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
             <div className="max-w-3xl">
@@ -100,6 +98,12 @@ export default function MethodStepPageView({ step }: Props) {
               <MethodCtaControl cta={step.secondaryCta} variant="secondary" />
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="argos-corp-section argos-corp-section--dplus-trust" aria-label={step.name}>
+        <div className="argos-corp-container" style={{ maxWidth: "64rem" }}>
+          <MethodArgosJourneyNav activeSlug={step.slug} className="argos-corp-journey" />
 
           <article className="argos-corporate-card argos-corp-detail-card mt-8">
             <h2>Qué significa esta fase</h2>
@@ -175,7 +179,7 @@ export default function MethodStepPageView({ step }: Props) {
               {step.faq.map((item) => (
                 <details
                   key={item.question}
-                  className="group overflow-hidden rounded-lg border border-[var(--border-default)] bg-white [&_summary::-webkit-details-marker]:hidden"
+                  className="group overflow-hidden border border-[var(--border-default)] bg-white [&_summary::-webkit-details-marker]:hidden"
                 >
                   <summary className="cursor-pointer list-none px-5 py-4 text-sm font-bold text-[var(--text-primary)]">
                     <span className="flex items-center justify-between gap-4">
@@ -217,7 +221,7 @@ export default function MethodStepPageView({ step }: Props) {
             </Link>
           </div>
 
-          <section className="mt-10 rounded-lg border border-[var(--border-default)] bg-white p-6 md:p-8">
+          <section className="argos-corporate-card argos-corp-detail-card mt-10">
             <h2 className="argos-font-display argos-corp-h2">Siguiente paso</h2>
             <p className="argos-corp-body mt-3">
               Elige cómo quieres continuar. Si aún no tienes una fotografía clara del estado actual, el

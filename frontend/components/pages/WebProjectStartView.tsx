@@ -208,7 +208,7 @@ export default function WebProjectStartView() {
 
   return (
     <CorporatePageShell className="argos-wp-public">
-      <section className="argos-corp-section" aria-labelledby="wp-start-title">
+      <section className="argos-corp-section argos-corp-section--dplus-trust" aria-labelledby="wp-start-title">
         <div className="argos-corp-container argos-corp-container--narrow">
           <h1 id="wp-start-title" className="argos-font-display argos-corp-page-title">
             {SELF_SERVICE_START_TITLE}

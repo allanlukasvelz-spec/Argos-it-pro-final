@@ -96,6 +96,7 @@ test.describe("ARGOS_VISUAL_ADOPTION_01", () => {
   test.beforeEach(async ({ page }) => {
     await page.addInitScript((cookieKey) => {
       window.localStorage.setItem(cookieKey, "accepted");
+      window.localStorage.setItem("argos_locale", "es");
       const inject = () => {
         if (document.getElementById("argos-va01-stable")) return;
         const style = document.createElement("style");
@@ -119,9 +120,7 @@ test.describe("ARGOS_VISUAL_ADOPTION_01", () => {
 
       const h1 = page.locator("#home-hero-title");
       await expect(h1).toBeVisible();
-      await expect(h1).toContainText(
-        /Tecnología serena para empresas que avanzan|Serene technology for companies that move forward|Tecnologia serena per a empreses que avancen/i
-      );
+      await expect(h1).toHaveText("Sistemas que no fallen cuando no deben.");
       await assertNotClipped(h1, `H1@${width}`);
 
       const phases = page.locator(".argos-corp-phase-letters-row > li");
@@ -137,21 +136,29 @@ test.describe("ARGOS_VISUAL_ADOPTION_01", () => {
       const phaseBoxes = await Promise.all(
         (await phases.all()).map(async (li) => boxOf(li))
       );
-      const minPhaseWidth = width <= 390 ? 58 : 64;
+      // Home D+ V3 editorial signature. Measured on the approved master:
+      // item height 38.4 at 1440/1024/768/390; narrowest item is Guiar
+      // (52.6 from 768 up, 34.3 at 390). Floors sit under those measures
+      // and still fail a collapsed or clipped chip.
+      const minPhaseWidth = width <= 390 ? 32 : 48;
       for (const box of phaseBoxes) {
         expect(box).not.toBeNull();
         expect(box!.width).toBeGreaterThan(minPhaseWidth);
-        expect(box!.height).toBeGreaterThan(48);
+        expect(box!.height).toBeGreaterThan(32);
       }
 
-      // At tablet/mobile the rail stacks; at desktop (≥1100) letters stay readable
+      const phaseTitles = page.locator(".argos-corp-phase-letters-row__title");
+      await expect(phaseTitles).toHaveText(["Analizar", "Reforzar", "Guiar", "Optimizar", "Supervisar"]);
+
+      // Desktop letters stay readable. The row is editorial, not the old 48px rail.
       if (width >= 1100) {
         const letters = page.locator(".argos-corp-phase-letters-row__letter");
-        await expect(letters).toHaveCount(5);
+        await expect(letters).toHaveText(["A", "R", "G", "O", "S"]);
         for (const letter of await letters.all()) {
           const b = await boxOf(letter);
-          expect(b!.width).toBeGreaterThanOrEqual(20);
-          expect(b!.height).toBeGreaterThanOrEqual(20);
+          // Approved editorial letters. Narrowest is S at 10.3×15.2 on 1440.
+          expect(b!.width).toBeGreaterThanOrEqual(9);
+          expect(b!.height).toBeGreaterThanOrEqual(14);
         }
       }
 

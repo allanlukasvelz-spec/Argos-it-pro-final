@@ -35,10 +35,26 @@ body[data-detail-mode-open] .argos-assistant-launcher {
   pointer-events: none;
 }
 
+/* Corporate: el contacto vive en la misma columna reservada que Chico, no en una segunda capa. */
+body:has(.argos-corporate) .argos-assistant-launcher {
+  left: var(--floating-ui-gap, 0.75rem);
+  right: auto;
+  bottom: calc(var(--floating-ui-gap, 0.75rem) + 7.25rem + env(safe-area-inset-bottom, 0px));
+  width: var(--floating-ui-width, 13rem);
+  max-width: var(--floating-ui-width, 13rem);
+  box-sizing: border-box;
+  white-space: normal;
+  text-align: left;
+}
+
 @media (max-width: 1023px) {
   .argos-assistant-launcher {
     bottom: max(1rem, env(safe-area-inset-bottom));
     left: max(0.75rem, env(safe-area-inset-left));
+  }
+
+  body:has(.argos-corporate) .argos-assistant-launcher {
+    display: none !important;
   }
 }
 

@@ -11,6 +11,7 @@ import CorporateHistoryNav from "@/components/corporate/CorporateHistoryNav";
 import { MascotChatProvider } from "@/components/mascots/MascotChatContext";
 import { MascotPauseControlProvider } from "@/components/mascots/MascotPauseControlContext";
 import CookieBanner from "@/components/layout/CookieBanner";
+import PublicMotionField from "@/components/layout/PublicMotionField";
 import { DiagnosticSurveyLauncherProvider } from "@/components/diagnostic/DiagnosticSurveyLauncher";
 import SiteFooter from "@/components/layout/SiteFooter";
 import SiteHeader from "@/components/layout/SiteHeader";
@@ -39,7 +40,8 @@ export default function SiteShell({ children }: Props) {
           children
         ) : chromeOwner === "corporate" ? (
           <DiagnosticSurveyLauncherProvider>
-            <div className="argos-corporate">
+            <PublicMotionField />
+            <div className={pathname === "/" ? "argos-corporate argos-corporate--home" : "argos-corporate"}>
               <CorporateHeader />
               {isContactRoute && showCookies ? (
                 <CookieBanner placement="contact-inline" />

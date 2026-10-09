@@ -3,6 +3,7 @@
 import Link from "next/link";
 import CorporatePageShell from "@/components/layout/CorporatePageShell";
 import HomeDiagnosisCard from "@/components/home/HomeDiagnosisCard";
+import HomeFaq from "@/components/home/HomeFaq";
 import HomeStrategicPillars from "@/components/home/HomeStrategicPillars";
 import ArgosExpandableCard from "@/components/corporate/ArgosExpandableCard";
 import ArgosReveal from "@/components/corporate/ArgosReveal";
@@ -46,7 +47,7 @@ export default function HomeView() {
   const methodSteps = get<MethodStepCopy[]>("method.steps", []);
   const publicMethodSteps = get<MethodPublicStepCopy[]>("method.publicSteps", []);
   const stabilityItems = get<string[]>("home.stabilityItems", []);
-  const trustItems = get<string[]>("about.values", []);
+  const confidenceItems = get<string[]>("home.trustItems", []);
 
   usePageMeta(t("meta.homeTitle"), t("meta.homeDescription"));
 
@@ -59,9 +60,22 @@ export default function HomeView() {
 
   return (
     <CorporatePageShell className="argos-corp-home">
-      {/* 1. Hero — frozen content */}
-      <section className="argos-corp-section argos-corp-section--hero" aria-labelledby="home-hero-title">
-        <div className="argos-corp-container argos-corp-hero-grid">
+      {/* 02 Hero — copy congelado. Foto A+B subordinada al texto. Onda oficial debajo del copy. */}
+      <section className="argos-corp-section argos-corp-section--hero argos-corp-section--dplus-hero" aria-labelledby="home-hero-title">
+        <picture className="argos-hero-photo">
+          <source media="(max-width: 480px)" srcSet="/hero/hero-argos-ab-390.webp" />
+          <source media="(max-width: 1024px)" srcSet="/hero/hero-argos-ab-768.webp" />
+          <img
+            className="argos-hero-photo__img"
+            src="/hero/hero-argos-ab.webp"
+            alt=""
+            width={2560}
+            height={1440}
+            decoding="async"
+          />
+        </picture>
+        <div className="argos-hero-veil" aria-hidden="true" />
+        <div className="argos-corp-container">
           <div className="argos-corp-hero-copy">
             <p className="argos-corp-brand-mark">{t("home.brandMark")}</p>
             <h1 id="home-hero-title" className="argos-font-display argos-corp-display">
@@ -77,21 +91,40 @@ export default function HomeView() {
               </Link>
             </div>
           </div>
-          <HomeDiagnosisCard />
+        </div>
+        <img
+          className="argos-dplus-wave argos-dplus-wave--hero"
+          src="/brand/onda-dplus.png"
+          alt=""
+          width={610}
+          height={250}
+        />
+      </section>
+
+      {/* 03 Confianza — cuatro argumentos ya escritos. Sin métricas ni logos. */}
+      <section className="argos-corp-section argos-corp-section--dplus-trust" aria-labelledby="home-trust-title">
+        <div className="argos-corp-container">
+          <p className="argos-corp-section-index">{t("home.trustIndex")}</p>
+          <h2 id="home-trust-title" className="argos-font-display argos-corp-h2">
+            {t("home.trustTitle")}
+          </h2>
+          <p className="argos-corp-body argos-corp-text-justify">{t("home.trustLead")}</p>
+          <ul className="argos-corp-rule-list">
+            {confidenceItems.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
         </div>
       </section>
 
-      <HomeStrategicPillars />
-
-      {/* Problema — antes de servicios (MASTER §13) */}
-      <section className="argos-corp-section argos-corp-section--sand" aria-labelledby="home-problem-title">
+      {/* 04 Problema */}
+      <section className="argos-corp-section argos-corp-section--dplus-problem" aria-labelledby="home-problem-title">
         <ArgosReveal className="argos-corp-container">
-          <article className="argos-surface-card argos-surface-card--01">
-            <p className="argos-corp-section-index">{t("home.realityIndex")}</p>
-            <h2 id="home-problem-title" className="argos-font-display argos-corp-h2">
-              {t("home.problemTitle")}
-            </h2>
-            <p className="argos-corp-body argos-corp-text-justify">{t("home.problemLead")}</p>
+          <p className="argos-corp-section-index">{t("home.realityIndex")}</p>
+          <h2 id="home-problem-title" className="argos-font-display argos-corp-h2">
+            {t("home.problemTitle")}
+          </h2>
+          <p className="argos-corp-body argos-corp-text-justify">{t("home.problemLead")}</p>
             <ul className="argos-mint-card-grid">
               {realityItems.map((item, index) => (
                 <li key={item}>
@@ -107,12 +140,13 @@ export default function HomeView() {
                 </li>
               ))}
             </ul>
-          </article>
         </ArgosReveal>
       </section>
 
-      {/* Servicios */}
-      <section className="argos-corp-section argos-corp-section--mist" aria-labelledby="home-services-title">
+      <HomeStrategicPillars />
+
+      {/* 06 Servicios */}
+      <section className="argos-corp-section argos-corp-section--dplus-services" aria-labelledby="home-services-title">
         <ArgosReveal className="argos-corp-container">
           <p className="argos-corp-section-index">{t("home.servicesIndex")}</p>
           <h2 id="home-services-title" className="argos-font-display argos-corp-h2">
@@ -147,9 +181,10 @@ export default function HomeView() {
         </ArgosReveal>
       </section>
 
-      {/* Método ARGOS */}
-      <section className="argos-corp-section argos-corp-section--muted" aria-labelledby="home-method-title">
+      {/* 07 Método ARGOS. Independencia y casos reales: sin copy ni evidencia aprobada. */}
+      <section className="argos-corp-section argos-corp-section--dplus-method" aria-labelledby="home-method-title">
         <ArgosReveal className="argos-corp-container">
+          <p className="argos-corp-section-index">{t("home.methodIndex")}</p>
           <MethodArgosBar
             title={t("nav.methodArgos")}
             titleId="home-method-title"
@@ -171,74 +206,65 @@ export default function HomeView() {
         </ArgosReveal>
       </section>
 
-      {/* Proyectos web — formas de trabajo */}
-      <section className="argos-corp-section argos-corp-section--ivory" aria-labelledby="home-web-project-title">
-        <ArgosReveal className="argos-corp-container">
-          <article className="argos-surface-card argos-surface-card--01">
-            <p className="argos-corp-section-index">{t("home.webProjectIndex")}</p>
-            <h2 id="home-web-project-title" className="argos-font-display argos-corp-h2">
-              {SELF_SERVICE_HOME_TITLE}
-            </h2>
-            <p className="argos-corp-body argos-corp-text-justify">{SELF_SERVICE_HOME_LEAD}</p>
-            <div className="argos-corp-cta-row">
+      {/* 08 Diagnóstico — la tarjeta sale del hero y ocupa su lugar en la narrativa. */}
+      <section className="argos-corp-section argos-corp-section--dplus-diagnosis" aria-labelledby="home-diag-title">
+        <div className="argos-corp-container">
+          <HomeDiagnosisCard />
+        </div>
+      </section>
+
+      {/* 09 Tres modalidades: diagnóstico, proyecto y continuidad. Copy existente. */}
+      <section
+        className="argos-corp-section argos-corp-section--dplus-modes"
+        aria-labelledby="home-mode-diag home-web-project-title home-stability-title"
+      >
+        <div className="argos-corp-container">
+          <ul className="argos-home-modes">
+            <li>
+              <h2 id="home-mode-diag" className="argos-font-display argos-corp-h2">
+                {t("home.ctaDiagnostic")}
+              </h2>
+              <p className="argos-corp-body argos-corp-text-justify">{t("home.diagBody")}</p>
+              <button type="button" className="argos-corporate-cta" onClick={openDiagnostic}>
+                {t("nav.startDiagnostic")}
+              </button>
+            </li>
+            <li>
+              <h2 id="home-web-project-title" className="argos-font-display argos-corp-h2">
+                {SELF_SERVICE_HOME_TITLE}
+              </h2>
+              <p className="argos-corp-body argos-corp-text-justify">{SELF_SERVICE_HOME_LEAD}</p>
               <Link href="/proyecto-web" className="argos-corporate-cta">
                 {SELF_SERVICE_HOME_CTA}
               </Link>
-            </div>
-          </article>
-        </ArgosReveal>
-      </section>
-
-      <section
-        className="argos-corp-section argos-corp-section--sand"
-        aria-labelledby="home-philosophy-title"
-      >
-        <ArgosReveal className="argos-corp-container">
-          <article className="argos-surface-card argos-surface-card--02 argos-surface-card--philosophy">
-            <p className="argos-corp-section-index" id="home-philosophy-title">
-              {t("home.philosophyIndex")}
-            </p>
-            <blockquote className="argos-font-display argos-corp-quote argos-corp-quote--xl">
-              {t("home.philosophyQuote")}
-            </blockquote>
-          </article>
-        </ArgosReveal>
-      </section>
-
-      {/* Continuidad / independencia */}
-      <section className="argos-corp-section argos-corp-section--ivory" aria-labelledby="home-stability-title">
-        <ArgosReveal className="argos-corp-container argos-corp-container--editorial">
-          <p className="argos-corp-section-index">{t("home.stabilityIndex")}</p>
-          <h2 id="home-stability-title" className="argos-font-display argos-corp-h2">
-            {t("home.stabilityTitle")}
-          </h2>
-          <ul className="argos-corp-rule-list">
-            {stabilityItems.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
+            </li>
+            <li>
+              <h2 id="home-stability-title" className="argos-font-display argos-corp-h2">
+                {t("home.stabilityTitle")}
+              </h2>
+              <ul className="argos-corp-rule-list">
+                {stabilityItems.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </li>
           </ul>
-        </ArgosReveal>
+        </div>
       </section>
 
-      {/* Evidencia / confianza humana */}
-      <section className="argos-corp-section argos-corp-section--trust" aria-labelledby="home-trust-title">
-        <ArgosReveal className="argos-corp-container">
-          <p className="argos-corp-section-index">{t("home.trustIndex")}</p>
-          <h2 id="home-trust-title" className="argos-font-display argos-corp-h2">
-            {t("home.trustTitle")}
-          </h2>
-          <p className="argos-corp-body argos-corp-text-justify">{t("home.trustLead")}</p>
-          <ul className="argos-card-grid argos-card-grid--trust">
-            {trustItems.map((item) => (
-              <li key={item}>
-                <article className="argos-card argos-card--trust">
-                  <p className="argos-corp-card-body">{item}</p>
-                </article>
-              </li>
-            ))}
-          </ul>
-        </ArgosReveal>
+      {/* 10 Tecnología comprensible — cita editorial ya aprobada. */}
+      <section className="argos-corp-section argos-corp-section--dplus-philosophy" aria-labelledby="home-philosophy-title">
+        <div className="argos-corp-container argos-corp-container--editorial">
+          <p className="argos-corp-section-index" id="home-philosophy-title">
+            {t("home.philosophyIndex")}
+          </p>
+          <blockquote className="argos-font-display argos-corp-quote argos-corp-quote--xl">
+            {t("home.philosophyQuote")}
+          </blockquote>
+        </div>
       </section>
+
+      <HomeFaq />
     </CorporatePageShell>
   );
 }
