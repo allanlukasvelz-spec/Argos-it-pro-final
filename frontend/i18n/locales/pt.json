@@ -244,7 +244,8 @@
     "message": "Usamos cookies técnicas e analíticas para melhorar a experiência.",
     "accept": "Aceitar",
     "reject": "Rejeitar",
-    "policy": "Ver política de cookies"
+    "policy": "Ver política de cookies",
+    "change": "Alterar preferências de cookies"
   },
   "footer": {
     "tagline": "Consultoria informática profissional para empresas que precisam de estabilidade, segurança e continuidade.",

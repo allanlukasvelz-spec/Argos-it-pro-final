@@ -244,7 +244,8 @@
     "message": "Nous utilisons des cookies techniques et analytiques pour améliorer votre expérience.",
     "accept": "Accepter",
     "reject": "Refuser",
-    "policy": "Voir la politique de cookies"
+    "policy": "Voir la politique de cookies",
+    "change": "Modifier les préférences de cookies"
   },
   "footer": {
     "tagline": "Conseil informatique professionnel pour les entreprises qui ont besoin de stabilité, sécurité et continuité.",
