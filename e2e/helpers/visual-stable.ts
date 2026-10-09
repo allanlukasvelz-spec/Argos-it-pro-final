@@ -1,10 +1,13 @@
-import type { Page } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
 
 export const COOKIE_KEY = "argos_cookie_preferences_v1";
 
 export const VISUAL_VIEWPORT = { width: 1280, height: 720 };
 
 const FREEZE_STYLE = `
+  html, body {
+    overflow: hidden !important;
+  }
   *, *::before, *::after {
     animation: none !important;
     animation-duration: 0s !important;
@@ -38,6 +41,15 @@ const FREEZE_STYLE = `
   .react-hot-toast > * {
     visibility: hidden !important;
   }
+  .chico-guardian {
+    display: none !important;
+  }
+`;
+
+const DASHBOARD_CAPTURE_STYLE = `
+  .chico-guardian {
+    display: none !important;
+  }
 `;
 
 export async function installVisualTestInit(page: Page): Promise<void> {
@@ -58,6 +70,87 @@ export async function installVisualTestInit(page: Page): Promise<void> {
   );
 }
 
+export async function waitForVisualReadiness(page: Page): Promise<void> {
+  await page.evaluate(async () => {
+    const waitWithTimeout = (ms: number) =>
+      new Promise<void>((resolve) => {
+        window.setTimeout(resolve, ms);
+      });
+
+    const imageCountsForVisualCapture = (img: HTMLImageElement): boolean => {
+      if (img.complete) return false;
+      const style = window.getComputedStyle(img);
+      if (style.display === "none" || style.visibility === "hidden") return false;
+      let parent: Element | null = img.parentElement;
+      while (parent) {
+        const ps = window.getComputedStyle(parent);
+        if (ps.display === "none" || ps.visibility === "hidden") return false;
+        parent = parent.parentElement;
+      }
+      return true;
+    };
+
+    if (document.fonts?.ready) {
+      await Promise.race([document.fonts.ready, waitWithTimeout(5000)]);
+    }
+    const pendingImages = Array.from(document.images).filter((img) =>
+      imageCountsForVisualCapture(img as HTMLImageElement)
+    );
+    await Promise.race([
+      Promise.all(
+        pendingImages.map((img) =>
+          Promise.race([
+            new Promise<void>((resolve) => {
+              img.addEventListener("load", () => resolve(), { once: true });
+              img.addEventListener("error", () => resolve(), { once: true });
+            }),
+            waitWithTimeout(3000),
+          ])
+        )
+      ),
+      waitWithTimeout(6000),
+    ]);
+  });
+}
+
+export async function waitForDashboardClientData(page: Page): Promise<void> {
+  await expect(page.getByText("Cargando portal")).toHaveCount(0, { timeout: 15_000 });
+  await expect(page.getByText("Cargando resumen")).toHaveCount(0, { timeout: 15_000 });
+  await expect(
+    page.getByRole("heading", { name: /Portal de cliente|Client portal/i })
+  ).toBeVisible({ timeout: 10_000 });
+  await expect(page.getByText("Baseline Corp")).toBeVisible({ timeout: 10_000 });
+  await expect(page.getByRole("heading", { name: "Proyecto web" })).toBeVisible({
+    timeout: 15_000,
+  });
+  await page.waitForFunction(
+    () => {
+      const imgs = Array.from(document.querySelectorAll("main.cp-main img"));
+      return imgs.every((img) => (img as HTMLImageElement).complete);
+    },
+    { timeout: 10_000 }
+  );
+}
+
+export async function prepareVisualCapture(
+  page: Page,
+  options: { hideChicoGuardian?: boolean } = {}
+): Promise<void> {
+  if (options.hideChicoGuardian) {
+    await page.addStyleTag({ content: DASHBOARD_CAPTURE_STYLE });
+  }
+  await page.evaluate(() => {
+    const active = document.activeElement;
+    if (active instanceof HTMLElement) {
+      active.blur();
+    }
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  });
+  await stabilizePage(page);
+}
+
 export async function stabilizePage(page: Page): Promise<void> {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.addStyleTag({ content: FREEZE_STYLE });
@@ -73,11 +166,12 @@ export async function stabilizePage(page: Page): Promise<void> {
       node.remove();
     });
   });
-  await page.waitForLoadState("networkidle");
-  await page.waitForTimeout(600);
+  await page.waitForLoadState("load");
+  await page.waitForLoadState("networkidle", { timeout: 5000 }).catch(() => undefined);
+  await waitForVisualReadiness(page);
 }
 
 export async function gotoStable(page: Page, path: string): Promise<void> {
   await page.goto(path, { waitUntil: "domcontentloaded" });
-  await stabilizePage(page);
+  await prepareVisualCapture(page);
 }

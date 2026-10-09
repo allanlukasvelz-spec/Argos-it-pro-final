@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ARGOS Phase 7 — Implementation Map (Planning Only)</title>
+  <style>
+    :root {
+      --navy: #1F3A5F;
+      --dark: #0B1320;
+      --teal: #2F7D6D;
+      --canvas: #F7F7F5;
+      --warn: #B45309;
+      --crit: #B91C1C;
+      --unk: #6B7280;
+      --border: #D1D5DB;
+      --surface: #fff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: var(--canvas);
+      color: var(--dark);
+      line-height: 1.45;
+      font-size: 15px;
+    }
+    header.hero {
+      background: linear-gradient(135deg, var(--dark), var(--navy));
+      color: #E8EEF4;
+      padding: 2rem 1.5rem 2.5rem;
+    }
+    header.hero h1 { margin: 0 0 0.35rem; font-size: 1.75rem; letter-spacing: 0.02em; }
+    header.hero p { margin: 0.25rem 0; max-width: 52rem; opacity: 0.92; }
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-right: 0.35rem;
+    }
+    .badge-stop { background: var(--crit); color: #fff; }
+    .badge-plan { background: var(--teal); color: #fff; }
+    .badge-cur { background: #334155; color: #fff; }
+    .badge-tgt { background: var(--navy); color: #fff; }
+    .badge-fut { background: var(--unk); color: #fff; }
+    .badge-block { background: #7F1D1D; color: #FECACA; border: 1px dashed #FCA5A5; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 1100px; margin: 0 auto; }
+    section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.1rem 1.25rem;
+      margin-bottom: 1rem;
+    }
+    section h2 {
+      margin: 0 0 0.75rem;
+      font-size: 1.1rem;
+      color: var(--navy);
+      border-bottom: 2px solid var(--teal);
+      padding-bottom: 0.35rem;
+    }
+    h3 { margin: 1rem 0 0.4rem; font-size: 0.95rem; color: var(--dark); }
+    .grid { display: grid; gap: 0.75rem; }
+    .grid-2 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.75rem;
+      background: #FAFBFC;
+    }
+    .card strong { display: block; color: var(--navy); margin-bottom: 0.25rem; }
+    .flow {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem;
+      font-size: 0.82rem; font-weight: 600;
+    }
+    .flow span {
+      background: var(--dark); color: #fff; padding: 0.35rem 0.55rem; border-radius: 4px;
+    }
+    .flow .arr { background: transparent; color: var(--teal); padding: 0; }
+    .warn-panel {
+      background: #FEF2F2; border: 2px solid var(--crit); border-radius: 8px;
+      padding: 1rem; color: #7F1D1D;
+    }
+    .warn-panel h2 { color: var(--crit); border-color: var(--crit); }
+    .ok-panel {
+      background: #ECFDF5; border: 1px solid var(--teal); border-radius: 8px; padding: 1rem;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    th, td { text-align: left; padding: 0.4rem 0.5rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { color: var(--unk); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .state {
+      display: inline-block; padding: 0.15rem 0.4rem; border-radius: 3px;
+      font-size: 0.7rem; font-weight: 700;
+    }
+    .s-online { background: #D1FAE5; color: #065F46; }
+    .s-stale { background: #FEF3C7; color: var(--warn); }
+    .s-off { background: #FEE2E2; color: var(--crit); }
+    .s-unk { background: #F3F4F6; color: var(--unk); border: 1px dashed var(--unk); }
+    .s-rev { background: var(--dark); color: #fff; }
+    .arch {
+      display: grid; grid-template-columns: 1fr 1.2fr 1fr; gap: 0.75rem;
+    }
+    @media (max-width: 860px) { .arch { grid-template-columns: 1fr; } }
+    .zone {
+      border-radius: 8px; padding: 0.85rem; min-height: 12rem;
+    }
+    .zone-cust { background: #EEF2FF; border: 2px dashed #6366F1; }
+    .zone-core { background: #F0FDFA; border: 2px solid var(--teal); }
+    .zone-access { background: #F8FAFC; border: 2px solid var(--navy); }
+    .zone h3 { margin-top: 0; }
+    .chico-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .chico {
+      width: 7.5rem; text-align: center; border: 1px solid var(--border);
+      border-radius: 8px; padding: 0.5rem; background: #fff;
+    }
+    .dog {
+      width: 48px; height: 48px; margin: 0 auto 0.35rem; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; border: 2px solid var(--navy);
+    }
+    .phases { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.4rem; }
+    .phase {
+      border-left: 4px solid var(--teal); background: #fff; border: 1px solid var(--border);
+      border-left-width: 4px; padding: 0.45rem 0.5rem; font-size: 0.78rem;
+    }
+    .phase em { display: block; color: var(--crit); font-style: normal; font-weight: 700; font-size: 0.65rem; }
+    footer {
+      margin-top: 1.5rem; padding: 1rem; background: var(--dark); color: #CBD5E1;
+      border-radius: 8px; font-size: 0.85rem;
+    }
+    ul.tight { margin: 0.25rem 0; padding-left: 1.1rem; }
+    ul.tight li { margin: 0.15rem 0; }
+    .legend span { margin-right: 0.75rem; }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div>
+      <span class="badge badge-stop">Implementation NO</span>
+      <span class="badge badge-plan">Planning YES</span>
+      <span class="badge badge-block">Remote remediation NOT authorized</span>
+    </div>
+    <h1>ARGOS Phase 7 — Agents / Remote Monitoring Foundation</h1>
+    <p>Mapa visual para revisión humana. Baseline git <strong>9a5e8cd</strong> · rama <strong>feature/argos-multitenant-platform</strong>.</p>
+    <p>Principio: <strong>OBSERVE → VALIDATE → EVALUATE → DECIDE → ACT</strong>. Agent ONLINE ≠ asset HEALTHY. UNKNOWN es de primera clase.</p>
+    <p class="legend" style="margin-top:1rem">
+      <span class="badge badge-cur">CURRENT</span>
+      <span class="badge badge-tgt">TARGET P7</span>
+      <span class="badge badge-fut">FUTURE</span>
+    </p>
+  </header>
+
+  <main>
+    <section class="warn-panel">
+      <h2>Fuera de alcance / bloqueado en Phase 7</h2>
+      <ul class="tight">
+        <li>Shell remoto, SSH, SQL arbitrario, scripts, filesystem libre</li>
+        <li>Ejecución de comandos genéricos · mutación HTTP arbitraria</li>
+        <li>Auto-fix silencioso · remediación autónoma en producción vía agente</li>
+        <li>Canal de ejecución remota para Phase 6 runbooks</li>
+        <li>Recolección de secretos / private keys · auto-update sin modelo aparte</li>
+      </ul>
+      <p><strong>AGENT = canal de observación. NO = canal de remediación remota.</strong></p>
+    </section>
+
+    <section>
+      <h2>1. Arquitectura global (CURRENT + TARGET P7)</h2>
+      <div class="arch">
+        <div class="zone zone-cust">
+          <h3>Cliente / Infra <span class="badge badge-tgt">+ Agent</span></h3>
+          <ul class="tight">
+            <li>Linux / Windows / Apps / DB / Red</li>
+            <li><strong>ARGOS Agent</strong>: identidad, heartbeat, obs tipadas, spool acotado, backoff</li>
+            <li>Solo HTTPS saliente TLS 1.2+</li>
+            <li>Sin ejecución remota</li>
+          </ul>
+        </div>
+        <div class="zone zone-core">
+          <h3>ARGOS Core <span class="badge badge-cur">0–6</span> <span class="badge badge-tgt">ingest</span></h3>
+          <ul class="tight">
+            <li>API ingest agents (propuesta)</li>
+            <li>Auth · tenant/asset · capabilities · anti-replay</li>
+            <li>Normalize → observations (source=AGENT)</li>
+            <li>Health Engine existente → Alerts / Incidents</li>
+            <li>Runbooks P6 (control-plane / simulador)</li>
+            <li>PostgreSQL + audit</li>
+          </ul>
+        </div>
+        <div class="zone zone-access">
+          <h3>Acceso</h3>
+          <ul class="tight">
+            <li><strong>NOC</strong>: Agents UI (hoy placeholder)</li>
+            <li>Enroll · rotate · revoke · evidencia</li>
+            <li><strong>Client Portal</strong>: estado honesto</li>
+            <li><strong>CHICO</strong>: Security Guardian (plan; runtime NO)</li>
+            <li><strong>DUMBO</strong>: guía UX preservado</li>
+          </ul>
+        </div>
+      </div>
+      <h3>Flujo de telemetría</h3>
+      <div class="flow">
+        <span>Agent</span><span class="arr">→</span>
+        <span>TLS</span><span class="arr">→</span>
+        <span>Ingest</span><span class="arr">→</span>
+        <span>Validate</span><span class="arr">→</span>
+        <span>Normalize</span><span class="arr">→</span>
+        <span>Health</span><span class="arr">→</span>
+        <span>Alerts</span><span class="arr">→</span>
+        <span>NOC / Client</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>2. Estados del agente (≠ salud del activo)</h2>
+      <div class="grid grid-3">
+        <div class="card"><span class="state s-online">ONLINE</span><p>Heartbeat reciente</p></div>
+        <div class="card"><span class="state s-stale">STALE</span><p>Fuera de umbral corto</p></div>
+        <div class="card"><span class="state s-off">OFFLINE</span><p>Silencio prolongado</p></div>
+        <div class="card"><span class="state s-unk">UNKNOWN</span><p>Datos insuficientes</p></div>
+        <div class="card"><span class="state s-rev">REVOKED</span><p>Revocado por operador/seguridad</p></div>
+        <div class="card"><span class="state s-unk">ENROLLMENT_PENDING</span><p>Token emitido, aún no enrolado</p></div>
+      </div>
+      <p class="ok-panel" style="margin-top:0.75rem"><strong>Prohibido:</strong> Agent online = HEALTHY · Heartbeat = protegido · Sin telemetría = HEALTHY.</p>
+    </section>
+
+    <section>
+      <h2>3. Enrollment / Heartbeat / Observaciones</h2>
+      <div class="grid grid-3">
+        <div class="card">
+          <strong>Enrollment</strong>
+          NOC crea token TTL → agent POST enroll → consume atómico → credencial operativa → primer heartbeat.
+        </div>
+        <div class="card">
+          <strong>Heartbeat</strong>
+          Intervalo + jitter · seq anti-replay · server_received_at manda para STALE/OFFLINE.
+        </div>
+        <div class="card">
+          <strong>Observations</strong>
+          Tipadas + schema + capability · idempotency_key · proyectan a healthEngine (una verdad).
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>4. Capacidades (allowlist propuesta)</h2>
+      <table>
+        <thead><tr><th>Capability</th><th>P7</th><th>Notas</th></tr></thead>
+        <tbody>
+          <tr><td>HEARTBEAT</td><td>REQUIRED</td><td>Liveness</td></tr>
+          <tr><td>SYSTEM_METRICS_READ</td><td>OPCIONAL MVP</td><td>Agregados; sin listados de ficheros</td></tr>
+          <tr><td>DISK / MEM / LOAD / SERVICE / NETWORK / SAFE_LOCAL_PROBE</td><td>DEFER</td><td>Solo si el gate humano lo pide</td></tr>
+          <tr><td>SHELL / SQL / EXEC / HTTP_MUTATE</td><td>RECHAZADO</td><td>Nunca en P7</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>5. Frontera Phase 6 ↔ Agent</h2>
+      <div class="warn-panel">
+        <p><strong>REMOTE REMEDIATION NOT AUTHORIZED</strong></p>
+        <p>Runbook → Approval → Execute (P6) opera en el control-plane / simulador tipado.<br/>
+        El agente <em>no</em> es transporte de ejecución. Cualquier “exec en host” = FUTURE + threat model aparte + gate humano.</p>
+      </div>
+      <div class="flow" style="margin-top:0.75rem">
+        <span>Signal</span><span class="arr">→</span>
+        <span>Evidence</span><span class="arr">→</span>
+        <span>Hypothesis</span><span class="arr">→</span>
+        <span>A</span><span class="arr">→</span>
+        <span>Verify</span><span class="arr">→</span>
+        <span>B/C</span><span class="arr">→</span>
+        <span>Safe Stop</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>6. CHICO — ARGOS SECURITY GUARDIAN</h2>
+      <p><strong>CHICO</strong> = cara visual primaria de seguridad del cliente. Explica / avisa / guía. <strong>No</strong> es fuente de verdad ni ejecutor remoto.<br/>
+      <strong>DUMBO</strong> = persona robot existente (guía / UX) — <em>rol preservado</em>; no es Security Guardian.</p>
+      <pre style="background:var(--dark);color:#D7E8F6;padding:0.85rem;border-radius:6px;font-size:0.72rem;overflow:auto;line-height:1.35">                    CUSTOMER
+                       │
+                       ▼
+                ┌─────────────┐
+                │    CHICO    │
+                │  SECURITY   │
+                │  GUARDIAN   │
+                └──────┬──────┘
+                       │
+            explains / warns / guides
+                       │
+                ┌──────▼──────┐
+                │ ARGOS CORE  │
+                │ SOURCE TRUTH│
+                └──────┬──────┘
+                       ▲
+               VERIFIED OBSERVATIONS
+                       ▲
+              ┌────────┴────────┐
+              │ ARGOS TECHNICAL │
+              │      AGENTS     │
+              └────────┬────────┘
+                       ▲
+              CUSTOMER INFRASTRUCTURE
+
+DUMBO = EXISTING ARGOS ROBOT PERSONA = ROLE PRESERVED = NOT SECURITY GUARDIAN</pre>
+      <div class="chico-row" style="margin-top:0.75rem">
+        <div class="chico"><div class="dog" style="background:#D1FAE5">◉</div>NORMAL</div>
+        <div class="chico"><div class="dog" style="background:#FEF3C7">!</div>ATTENTION</div>
+        <div class="chico"><div class="dog" style="background:#FEE2E2;border-color:var(--crit)">◆</div>CRITICAL</div>
+        <div class="chico"><div class="dog" style="background:#F3F4F6;border-style:dashed">?</div>UNKNOWN</div>
+        <div class="chico"><div class="dog" style="background:#DBEAFE">…</div>VERIFYING</div>
+        <div class="chico"><div class="dog" style="background:#CCFBF1">✓</div>RESOLVED</div>
+      </div>
+      <p style="margin-top:0.75rem;font-size:0.85rem"><strong>Cardinalidad:</strong> 1 org → 1 CHICO Security Guardian → N assets/monitores → 0..N agentes técnicos.<br/>
+      <strong>Design Contract:</strong> TARGET enmendado — CHICO permitido en superficies de seguridad del Client Portal (docs). Canonical: <code>docs/design/ARGOS_CHICO_SECURITY_GUARDIAN_CONTRACT.md</code>.<br/>
+      <strong>Identidad:</strong> conservar CHICO robot/perro guardián existente; no inventar tercera mascota.<br/>
+      <code>PHASE_7_CHICO_RUNTIME_UI_IMPLEMENTATION=NO</code></p>
+      <pre style="background:var(--dark);color:#D7E8F6;padding:0.75rem;border-radius:6px;font-size:0.72rem;overflow:auto;margin-top:0.75rem">INFRASTRUCTURE → TECHNICAL AGENT → INGEST → ARGOS CORE
+→ HEALTH/ALERTS/INCIDENTS → POLICY+RUNBOOK+APPROVAL
+→ AUTHORIZED ACTION (only where implemented) → VERIFY
+→ CHICO CUSTOMER EXPLANATION</pre>
+    </section>
+
+    <section>
+      <h2>7. Controles de seguridad (resumen)</h2>
+      <div class="grid grid-2">
+        <div class="card"><strong>Identidad</strong>Token enroll 1-uso · credencial hasheada · rotate/revoke</div>
+        <div class="card"><strong>Aislamiento</strong>org/asset desde credencial, no del body</div>
+        <div class="card"><strong>Anti-abuso</strong>rate limit · size cap · anti-replay · spool acotado</div>
+        <div class="card"><strong>Audit</strong>enroll/reject/spoof/flood/rotate/revoke · sin secretos en logs</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>8. Stages 7A–7J (todas IMPLEMENTATION_AUTHORIZED=NO)</h2>
+      <div class="phases">
+        <div class="phase">7A Threat Model<em>NO impl</em></div>
+        <div class="phase">7B Identity / Data<em>NO impl</em></div>
+        <div class="phase">7C Enrollment<em>NO impl</em></div>
+        <div class="phase">7D Auth / API<em>NO impl</em></div>
+        <div class="phase">7E Heartbeats<em>NO impl</em></div>
+        <div class="phase">7F Observations<em>NO impl</em></div>
+        <div class="phase">7G Spool / Retry<em>NO impl</em></div>
+        <div class="phase">7H NOC UI<em>NO impl</em></div>
+        <div class="phase">7I Rotate / Revoke<em>NO impl</em></div>
+        <div class="phase">7J Red Team / Freeze<em>NO impl</em></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>9. Matriz de fallo (ejemplo)</h2>
+      <table>
+        <thead><tr><th>Señal</th><th>A</th><th>B</th><th>C / Safe stop</th></tr></thead>
+        <tbody>
+          <tr><td>Heartbeat perdido</td><td>STALE</td><td>OFFLINE · health→UNKNOWN si aplica</td><td>Escalado humano · no fingir HEALTHY</td></tr>
+          <tr><td>Auth inválida</td><td>Reject + audit</td><td>Dual-window rotate</td><td>Revoke + re-enroll</td></tr>
+          <tr><td>Cross-tenant spoof</td><td>403 · no write</td><td>Auto-revoke</td><td>Incidente seguridad</td></tr>
+          <tr><td>Replay obs</td><td>Idempotent / watermark</td><td>Ventana untrusted</td><td>Revoke si patrón malicioso</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <footer>
+      <p><strong>STOP FOR HUMAN REVIEW</strong> — Este HTML es documentación de planificación.</p>
+      <p>RUNTIME_CHANGED=NO · DATABASE_CHANGED=NO · MIGRATIONS_CREATED=NO · PUSH=NO · Phase 8 = Notifications &amp; Reporting (FUTURE).</p>
+      <p>Paquete: docs/phase7/ARGOS_PHASE_7_*.md</p>
+    </footer>
+  </main>
+</body>
+</html>

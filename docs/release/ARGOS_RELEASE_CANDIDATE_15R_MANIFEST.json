@@ -1,0 +1,103 @@
+{
+  "mission": "RELEASE_REPRODUCIBILITY_15R",
+  "timestamp": "2026-09-01T22:00:00Z",
+  "candidate": {
+    "name": "ARGOS_RC_15R",
+    "baseBranch": "feature/argos-multitenant-platform",
+    "baseSha": "640adb048a769d3d4dd9a72f3caccd637d3a81ce",
+    "stagedTreeSha": "d3dcfc9de7afc99e949bf7e6b91ef82158f4838d",
+    "stagedPathCount": 117,
+    "runtimeFileCount": 72,
+    "assetFileCount": 14,
+    "aiFileCount": 30,
+    "testFileCount": 8,
+    "governanceDocCount": 35
+  },
+  "productionRollback": {
+    "runningSha": "651deb54e543748e990ca28f427cbfe2ca6fbccc",
+    "branch": "deploy/production-v1",
+    "coolifyDeploymentUuid": "i14iy1x8w4c9bjvpswb49j2n",
+    "autoDeploy": false
+  },
+  "contentFreeze": {
+    "result": "12/12 PASS",
+    "heroH1": "Sistemas que no fallen cuando no deben.",
+    "primaryCta": "Iniciar diagnóstico ARGOS",
+    "secondaryCta": "Conocer cómo trabajamos",
+    "seoMetaPreservedFromHead": true
+  },
+  "architecture": {
+    "publicMethodPhases": 4,
+    "operationalMethodPhases": 5,
+    "publicServices": 6,
+    "pillars": 4
+  },
+  "ai": {
+    "codeInRc": true,
+    "atomicGroup": "PASS",
+    "routePresent": true,
+    "uiPresent": true,
+    "securityGuardsPresent": true,
+    "offlineSecurityTests": "31/31 PASS",
+    "productionReady": false,
+    "liveProviderBlocked": "OPENAI_API_KEY not live-validated (14B)"
+  },
+  "validation": {
+    "stagedSnapshotExtracted": true,
+    "contentFreezeOnSnapshot": "12/12 PASS",
+    "assistantTestsOnSnapshot": "31/31 PASS",
+    "backendVerifyOnSnapshot": "PASS",
+    "frontendLintBuildOnSnapshot": "PARTIAL (tsc PASS; turbopack symlink warning in artifact dir)",
+    "priorMissionVerify": "FA10/14 lint+build PASS on equivalent worktree",
+    "stagedWhitespaceErrors": "docs trailing whitespace only (P2)"
+  },
+  "database": {
+    "migrationsAtBaseHead": 13,
+    "migrationsAtProductionSha": 0,
+    "rcMigrationCountVsProduction": 13,
+    "risk": "ADDITIVE_SAFE",
+    "aiRequiresMigration": false
+  },
+  "requiredEnvNames": [
+    "OPENAI_API_KEY",
+    "AI_PROVIDER",
+    "AI_MODEL",
+    "OPENAI_MODEL",
+    "OPENAI_TIMEOUT_MS",
+    "AI_MESSAGE_MAX_LEN",
+    "AI_MAX_OUTPUT_TOKENS",
+    "AI_CONVERSATION_MAX_MESSAGES",
+    "AI_CONVERSATION_TTL_MS",
+    "AI_CONVERSATION_MAX_TOTAL",
+    "AI_RATE_LIMIT_WINDOW_MS",
+    "AI_RATE_LIMIT_MAX"
+  ],
+  "security": {
+    "secretScan": "PASS",
+    "openaiSecretValueInRc": 0,
+    "b12DistinctiveCopyHits": 0,
+    "blockedPublicClaims": 0
+  },
+  "release": {
+    "rcGitReproducible": true,
+    "rcProvenanceComplete": true,
+    "safeToDeploy": false,
+    "readyForRcCommit": true,
+    "readyForRcCommitCaveats": [
+      "Doc trailing whitespace in staged markdown (P2; non-runtime)",
+      "Owner should run npm run verify once before COMMIT RC",
+      "15R governance docs not yet staged"
+    ],
+    "p0": 0,
+    "p1": 0,
+    "p2": 2,
+    "p3": 1
+  },
+  "git": {
+    "commits": 0,
+    "pushes": 0,
+    "prs": 0,
+    "deploys": 0,
+    "indexStagedPaths": 117
+  }
+}

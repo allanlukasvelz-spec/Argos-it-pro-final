@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const OpenAI = require("openai");
 const { normalizeChatMessage } = require("../lib/aiMessage");
 
 const OPENAI_TIMEOUT_MS = Number(process.env.OPENAI_TIMEOUT_MS || 45000);
@@ -38,6 +37,8 @@ function getOpenAIClient() {
     throw err;
   }
 
+  // Lazy-load: top-level require("openai") can block process boot in some local envs.
+  const OpenAI = require("openai");
   return new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
     timeout: OPENAI_TIMEOUT_MS

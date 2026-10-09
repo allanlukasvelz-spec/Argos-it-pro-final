@@ -1,0 +1,167 @@
+{
+  "startedAt": "2026-08-25T23:32:41.671Z",
+  "ts": 1787700761671,
+  "checks": {
+    "pipeline_request": {
+      "ok": true,
+      "detail": {
+        "reportId": "d24278d4-5264-4632-93b7-be5c79a08ceb",
+        "runId": "bc7ed34c-6412-4bc2-8d44-628b5b1cfbbc"
+      }
+    },
+    "pipeline_queue": {
+      "ok": true,
+      "detail": true
+    },
+    "pipeline_worker": {
+      "ok": true,
+      "detail": true
+    },
+    "pipeline_ready": {
+      "ok": false,
+      "detail": "QUEUED"
+    },
+    "idempotency_same_run": {
+      "ok": true,
+      "detail": true
+    },
+    "idempotency_no_duplicate_reports": {
+      "ok": true,
+      "detail": true
+    },
+    "idempotency_notification_dedupe": {
+      "ok": false,
+      "detail": {
+        "before": 0,
+        "after": 0
+      }
+    },
+    "idempotency_semantics": {
+      "ok": true,
+      "detail": "Same organization_id+idempotency_key returns existing report_run; job idempotency_key job:report-run:{runId} prevents duplicate platform_jobs; evidence idempotency report-run:{runId} prevents duplicate artifacts; REPORT_READY event dedupe_key is per run."
+    },
+    "two_worker_concurrency": {
+      "ok": true,
+      "detail": {
+        "j1": "4",
+        "j2": "5"
+      }
+    },
+    "duplicate_execution": {
+      "ok": true,
+      "detail": false
+    },
+    "claim_ownership": {
+      "ok": true,
+      "detail": {
+        "w1": "w-conc-a",
+        "w2": "w-conc-b"
+      }
+    },
+    "stale_recovery": {
+      "ok": true,
+      "detail": "RETRY_WAIT"
+    },
+    "crash_recovery_reclaim": {
+      "ok": false,
+      "detail": "7"
+    },
+    "crash_no_false_ready": {
+      "ok": true,
+      "detail": "QUEUED"
+    },
+    "dead_letter": {
+      "ok": true,
+      "detail": {
+        "deadLetter": true,
+        "attempts": 1
+      }
+    },
+    "dead_letter_status": {
+      "ok": true,
+      "detail": {
+        "status": "DEAD_LETTER",
+        "attempts": 1
+      }
+    },
+    "dead_letter_no_auto_retry": {
+      "ok": true,
+      "detail": true
+    },
+    "failure_invalid_payload": {
+      "ok": true,
+      "detail": true
+    },
+    "failure_missing_incident": {
+      "ok": true,
+      "detail": true
+    },
+    "noc_legitimate_access": {
+      "ok": true,
+      "detail": true
+    },
+    "noc_gate_client": {
+      "ok": true,
+      "detail": 403
+    },
+    "noc_gate_org_admin": {
+      "ok": true,
+      "detail": 403
+    },
+    "noc_forged_role": {
+      "ok": true,
+      "detail": 401
+    },
+    "renderer_escaped_output": {
+      "ok": false,
+      "detail": "raw dangerous patterns in HTML"
+    },
+    "javascript_execution": {
+      "ok": true,
+      "detail": false
+    },
+    "renderer_ssrf": {
+      "ok": true,
+      "detail": 0
+    },
+    "file_access": {
+      "ok": true,
+      "detail": "blocked via escape + route abort"
+    },
+    "secret_leakage": {
+      "ok": true,
+      "detail": true
+    },
+    "truth_unknown_invariant": {
+      "ok": true,
+      "detail": "unknown"
+    },
+    "false_healthy": {
+      "ok": true,
+      "detail": true
+    },
+    "truth_freshness": {
+      "ok": true,
+      "detail": "2026-08-25T23:32:44.288Z"
+    }
+  },
+  "artifacts": {},
+  "fixes": [],
+  "fixtures": {
+    "orgA": 139,
+    "orgB": 140,
+    "incA": 6,
+    "emails": {
+      "userA": "phase81-a-1787700761671@example.test",
+      "userB": "phase81-b-1787700761671@example.test",
+      "noc": "phase81-noc-1787700761671@example.test"
+    },
+    "password": "[REDACTED — Phase81TestPass1 in harness only]"
+  },
+  "summary": {
+    "total": 31,
+    "failed": 4,
+    "status": "FAIL"
+  },
+  "completedAt": "2026-08-25T23:32:44.295Z"
+}

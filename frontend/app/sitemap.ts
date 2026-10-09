@@ -16,6 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/metodo/supervisar",
     "/sobre-argos-it",
     "/contacto",
+    "/proyecto-web",
     "/aviso-legal",
     "/privacidad",
     "/cookies"

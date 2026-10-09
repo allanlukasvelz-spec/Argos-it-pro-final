@@ -1,0 +1,256 @@
+{
+  "startedAt": "2026-08-25T16:12:40.034Z",
+  "results": {
+    "health": {
+      "ok": true,
+      "detail": {
+        "status": "OK",
+        "db": "connected",
+        "timestamp": "2026-08-25T16:12:40.109Z"
+      }
+    },
+    "local_db_guard": {
+      "ok": true,
+      "detail": "127.0.0.1"
+    },
+    "migration_005": {
+      "ok": true,
+      "detail": "agent_credentials,agent_enrollments,agent_heartbeats,agent_observations,agent_security_events,agents"
+    },
+    "test_topology": {
+      "ok": true,
+      "detail": {
+        "orgId": 98,
+        "assetId": 3,
+        "adminEmail": "phase7-admin-1787674360152@example.test",
+        "clientEmail": "phase7-client-1787674360152@example.test"
+      }
+    },
+    "admin_login": {
+      "ok": true,
+      "detail": "cookies set"
+    },
+    "client_noc_forbidden": {
+      "ok": true,
+      "detail": "NOC_FORBIDDEN"
+    },
+    "enrollment_create": {
+      "ok": true,
+      "detail": {
+        "enrollmentId": 1,
+        "expiresAt": "2026-08-25T17:12:40.759Z"
+      }
+    },
+    "enrollment_ttl": {
+      "ok": true,
+      "detail": "2026-08-25T17:12:40.759Z"
+    },
+    "enrollment_consume": {
+      "ok": true,
+      "detail": {
+        "agentId": 1
+      }
+    },
+    "token_reuse_rejected": {
+      "ok": true,
+      "detail": "ENROLL_REPLAY"
+    },
+    "heartbeat_online": {
+      "ok": true,
+      "detail": {
+        "status": "ONLINE",
+        "serverTime": "2026-08-25T16:12:40.869Z",
+        "seq": 1
+      }
+    },
+    "noc_agent_online": {
+      "ok": true,
+      "detail": "ONLINE"
+    },
+    "chico_api": {
+      "ok": true,
+      "detail": {
+        "state": "UNKNOWN",
+        "overall": "UNKNOWN",
+        "agentStatus": "ONLINE"
+      }
+    },
+    "online_not_equal_healthy_check": {
+      "ok": true,
+      "detail": {
+        "agent": "ONLINE",
+        "overall": "UNKNOWN",
+        "chico": "UNKNOWN"
+      }
+    },
+    "telemetry_ingest": {
+      "ok": true,
+      "detail": {
+        "accepted": 8,
+        "rejected": 0
+      }
+    },
+    "idempotency_duplicate": {
+      "ok": true,
+      "detail": {
+        "idempotencyKey": "cpu-1787674360152",
+        "duplicate": true,
+        "id": "2"
+      }
+    },
+    "heartbeat_replay_rejected": {
+      "ok": true,
+      "detail": "REPLAY"
+    },
+    "old_seq_rejected": {
+      "ok": true,
+      "detail": "REPLAY"
+    },
+    "org_spoof_rejected": {
+      "ok": true,
+      "detail": true
+    },
+    "asset_spoof_rejected": {
+      "ok": true,
+      "detail": true
+    },
+    "unknown_type_rejected": {
+      "ok": true,
+      "detail": {
+        "accepted": [],
+        "rejected": [
+          {
+            "idempotencyKey": "shell-1787674360152",
+            "code": "UNKNOWN_TYPE",
+            "error": "Unknown type"
+          }
+        ],
+        "serverTime": "2026-08-25T16:12:41.147Z"
+      }
+    },
+    "forbidden_field_rejected": {
+      "ok": true,
+      "detail": {
+        "idempotencyKey": "cmd-1787674360152",
+        "code": "FORBIDDEN_FIELD",
+        "error": "Forbidden measurement key: command"
+      }
+    },
+    "oversized_rejected": {
+      "ok": true,
+      "detail": "PAYLOAD_TOO_LARGE"
+    },
+    "boundary_exec": {
+      "ok": true,
+      "detail": "REMOTE_EXEC_FORBIDDEN"
+    },
+    "boundary_shell": {
+      "ok": true,
+      "detail": "REMOTE_EXEC_FORBIDDEN"
+    },
+    "boundary_sql": {
+      "ok": true,
+      "detail": "REMOTE_EXEC_FORBIDDEN"
+    },
+    "boundary_remediate": {
+      "ok": true,
+      "detail": "REMOTE_EXEC_FORBIDDEN"
+    },
+    "spoof_audited": {
+      "ok": true,
+      "detail": [
+        "ASSET_SPOOF",
+        "TENANT_SPOOF",
+        "HEARTBEAT_REPLAY",
+        "HEARTBEAT_REPLAY",
+        "ENROLL_OK"
+      ]
+    },
+    "secret_leakage_noc": {
+      "ok": true,
+      "detail": "no secrets in detail"
+    },
+    "stale_or_offline_transition": {
+      "ok": true,
+      "detail": "STALE"
+    },
+    "chico_stale_behavior": {
+      "ok": true,
+      "detail": {
+        "state": "UNKNOWN",
+        "overall": "UNKNOWN"
+      }
+    },
+    "recovery_online": {
+      "ok": true,
+      "detail": "ONLINE"
+    },
+    "rotation": {
+      "ok": true,
+      "detail": {
+        "version": 2
+      }
+    },
+    "old_credential_rejected": {
+      "ok": true,
+      "detail": "AGENT_AUTH_FAIL"
+    },
+    "new_credential_accepted": {
+      "ok": true,
+      "detail": "ONLINE"
+    },
+    "revocation": {
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "status": "REVOKED"
+      }
+    },
+    "revoked_heartbeat_rejected": {
+      "ok": true,
+      "detail": "AGENT_REVOKED"
+    },
+    "revoked_observation_rejected": {
+      "ok": true,
+      "detail": "AGENT_REVOKED"
+    },
+    "no_write_after_revoke": {
+      "ok": true,
+      "detail": {
+        "n": 8
+      }
+    },
+    "noc_shows_revoked": {
+      "ok": true,
+      "detail": "REVOKED"
+    },
+    "chico_after_alert": {
+      "ok": true,
+      "detail": {
+        "state": "CRITICAL",
+        "message": "ARGOS ha confirmado un problema que requiere revisión.",
+        "overall": "UNKNOWN"
+      }
+    },
+    "secret_leakage_audit": {
+      "ok": true,
+      "detail": "no plaintext secrets in audit"
+    }
+  },
+  "failures": [],
+  "notes": [],
+  "endedAt": "2026-08-25T16:12:41.514Z",
+  "summary": {
+    "pass": 42,
+    "fail": 0
+  },
+  "credentials": {
+    "adminEmail": "phase7-admin-1787674360152@example.test",
+    "clientEmail": "phase7-client-1787674360152@example.test",
+    "password": "[REDACTED]",
+    "orgId": 98,
+    "assetId": 3,
+    "agentId": 1,
+    "note": "credentials not stored; test users in local DB only"
+  }
+}

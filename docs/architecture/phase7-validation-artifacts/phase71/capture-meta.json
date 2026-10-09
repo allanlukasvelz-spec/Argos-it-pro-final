@@ -1,0 +1,78 @@
+{
+  "at": "2026-08-25T18:57:08.669Z",
+  "chico": {
+    "UNKNOWN": {
+      "expected": "UNKNOWN",
+      "observed": "UNKNOWN",
+      "seed": {
+        "why": "no_monitors"
+      },
+      "match": true,
+      "screenshot": "chico-unknown.png",
+      "domState": "UNKNOWN"
+    },
+    "NORMAL": {
+      "expected": "NORMAL",
+      "observed": "NORMAL",
+      "seed": {
+        "why": "healthy_with_evidence",
+        "monitorId": 1
+      },
+      "match": true,
+      "screenshot": "chico-normal.png",
+      "domState": "NORMAL"
+    },
+    "ATTENTION": {
+      "expected": "ATTENTION",
+      "observed": "ATTENTION",
+      "seed": {
+        "why": "open_alerts",
+        "monitorId": 2
+      },
+      "match": true,
+      "screenshot": "chico-attention.png",
+      "domState": "ATTENTION"
+    },
+    "CRITICAL": {
+      "expected": "CRITICAL",
+      "observed": "CRITICAL",
+      "seed": {
+        "why": "critical_alert",
+        "monitorId": 3
+      },
+      "match": true,
+      "screenshot": "chico-critical.png",
+      "domState": "CRITICAL"
+    },
+    "VERIFYING": {
+      "expected": "VERIFYING",
+      "observed": "VERIFYING",
+      "seed": {
+        "why": "remediation_verifying",
+        "monitorId": 4
+      },
+      "match": true,
+      "screenshot": "chico-verifying.png",
+      "domState": "VERIFYING"
+    },
+    "RESOLVED": {
+      "expected": "RESOLVED",
+      "observed": "RESOLVED",
+      "seed": {
+        "why": "verified_resolution",
+        "monitorId": 5
+      },
+      "match": true,
+      "screenshot": "chico-resolved.png",
+      "domState": "RESOLVED"
+    }
+  },
+  "noc": {
+    "agents_list": "noc-agents-list.png",
+    "enrollment": "noc-enrollment.png",
+    "agent_detail": "noc-agent-detail.png",
+    "stale_offline": "noc-agent-stale.png",
+    "revoked": "noc-agent-revoked.png"
+  },
+  "notReproducible": []
+}

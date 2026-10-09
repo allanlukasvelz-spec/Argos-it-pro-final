@@ -19,6 +19,7 @@ export const corporateFooterNav: CorporateNavItem[] = [
   { href: "/servicios", key: "nav.services" },
   { href: "/metodo", key: "nav.methodArgos" },
   { href: "/sobre-argos-it", key: "nav.about" },
+  { href: "/proyecto-web", key: "nav.webProject" },
   { href: "/contacto", key: "nav.contact" },
   { href: "/portal", key: "nav.portalShort" }
 ];

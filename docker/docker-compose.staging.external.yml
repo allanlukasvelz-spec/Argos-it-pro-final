@@ -1,0 +1,17 @@
+# External staging overlay — same-origin HTTPS via Traefik (staging.argos-it.es).
+# Local loopback Compose omits this file. VPS uses:
+#   docker compose -f docker/docker-compose.staging.yml \
+#     -f docker/docker-compose.staging.external.yml --env-file docker/.env.staging up -d
+services:
+  frontend:
+    build:
+      args:
+        NEXT_PUBLIC_BACKEND_URL: https://staging.argos-it.es
+    environment:
+      NEXT_PUBLIC_BACKEND_URL: https://staging.argos-it.es
+      BACKEND_URL: http://api:4000
+  api:
+    environment:
+      FRONTEND_URL: https://staging.argos-it.es
+      CORS_ORIGINS: https://staging.argos-it.es
+      ARGOS_COOKIE_SECURE: "1"

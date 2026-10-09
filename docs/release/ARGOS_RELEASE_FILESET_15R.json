@@ -1,0 +1,280 @@
+{
+  "mission": "RELEASE_REPRODUCIBILITY_15R",
+  "timestamp": "2026-09-01T22:00:00Z",
+  "base": {
+    "branch": "feature/argos-multitenant-platform",
+    "sha": "640adb048a769d3d4dd9a72f3caccd637d3a81ce",
+    "shortSha": "640adb0",
+    "rationale": "Legitimate development lineage (43 commits ahead of origin/main) containing platform, staging, NOC, and pre-RC work. NOT production SHA 651deb5 (deploy/production-v1 stale snapshot)."
+  },
+  "productionReference": {
+    "sha": "651deb54e543748e990ca28f427cbfe2ca6fbccc",
+    "branch": "deploy/production-v1",
+    "status": "STALE_VERSION"
+  },
+  "composition": {
+    "fileset11Base": 87,
+    "post11ApprovedDelta": 30,
+    "totalCandidatePaths": 117,
+    "note": "Fileset 11 (75 full + 12 partial) + AI 13/14 delta + Forensics 15A docs"
+  },
+  "releaseRequiredFull": [
+    "frontend/app/portal/page.tsx",
+    "frontend/components/corporate/ArgosCard.tsx",
+    "frontend/components/corporate/ArgosDetailDialog.tsx",
+    "frontend/components/corporate/ArgosExpandableCard.tsx",
+    "frontend/components/corporate/ArgosPhaseLettersRow.tsx",
+    "frontend/components/corporate/ArgosReveal.tsx",
+    "frontend/components/corporate/CorporateHeaderBanner.tsx",
+    "frontend/components/corporate/CorporateHistoryNav.tsx",
+    "frontend/components/corporate/CorporateNavDrawer.tsx",
+    "frontend/components/corporate/MethodArgosBar.tsx",
+    "frontend/components/corporate/MethodBrandHeader.tsx",
+    "frontend/components/corporate/PublicMovementsGrid.tsx",
+    "frontend/components/home/HomeDiagnosisCard.tsx",
+    "frontend/components/home/HomePerimeterPanel.tsx",
+    "frontend/components/pages/PortalView.tsx",
+    "frontend/hooks/useBrowserHistoryNav.ts",
+    "frontend/lib/contentFreezeV1.test.ts",
+    "frontend/lib/mascotPoseGraph.ts",
+    "frontend/lib/publicMethodMovements.ts",
+    "frontend/public/logo-argos-it-footer.png",
+    "frontend/public/mascots/chico/chico_alert.png",
+    "frontend/public/mascots/chico/chico_jump.jpg",
+    "frontend/public/mascots/chico/chico_lay.jpg",
+    "frontend/public/mascots/chico/chico_sit.png",
+    "frontend/public/mascots/chico/chico_sleep.jpg",
+    "frontend/public/mascots/chico/chico_turn.jpg",
+    "frontend/public/mascots/chico/chico_walk_01.jpg",
+    "frontend/public/mascots/dumbo/dumbo_jump.jpg",
+    "frontend/public/mascots/dumbo/dumbo_lay.jpg",
+    "frontend/public/mascots/dumbo/dumbo_look.jpg",
+    "frontend/public/mascots/dumbo/dumbo_sleep.jpg",
+    "frontend/public/mascots/dumbo/dumbo_walk_01.jpg",
+    "frontend/ai/mascotStates.ts",
+    "frontend/app/globals.css",
+    "frontend/components/ArgosExplainerAnimation.tsx",
+    "frontend/components/ClientAssistants.tsx",
+    "frontend/components/diagnostic/DiagnosticSurvey.tsx",
+    "frontend/components/diagnostic/DiagnosticSurveyModal.tsx",
+    "frontend/components/layout/CorporatePageShell.tsx",
+    "frontend/components/layout/SiteFooter.tsx",
+    "frontend/components/layout/SiteHeader.tsx",
+    "frontend/components/mascots/ChicoDumboSpriteSystem.tsx",
+    "frontend/components/mascots/MascotChatContext.tsx",
+    "frontend/lib/chromeOwnership.ts",
+    "frontend/lib/chromeOwnership.test.ts",
+    "frontend/lib/corporateNav.ts",
+    "frontend/public/logo-argos-it-header.png",
+    "frontend/sprites/spriteManifest.ts",
+    "frontend/styles/mascot-sprites.css",
+    "package.json",
+    "e2e/corporate-chrome.spec.ts",
+    "e2e/smoke.spec.ts",
+    "e2e/static-banner.spec.ts",
+    "e2e/visual-adoption-01.spec.ts",
+    "docs/content/ARGOS_CONTENT_FREEZE_V1.md",
+    "docs/content/ARGOS_CONTENT_OWNERSHIP_MAP.json",
+    "docs/content/ARGOS_CONTENT_DRIFT_REGISTER.md",
+    "docs/content/ARGOS_CONTENT_IMPLEMENTATION_04_REPORT.md",
+    "docs/content/ARGOS_DECISION_RESOLUTION_02.md",
+    "docs/content/ARGOS_HUMAN_DECISION_PACK_01.md",
+    "docs/content/ARGOS_METHOD_MAPPING_4_TO_5.md",
+    "docs/content/ARGOS_SERVICE_ARCHITECTURE_MAPPING.md",
+    "docs/design/ARGOS_VISUAL_REFINEMENT_05_REPORT.md",
+    "docs/design/ARGOS_VISUAL_INTEGRATION_06_REPORT.md",
+    "docs/design/ARGOS_VISUAL_POLISH_07_REPORT.md",
+    "docs/design/ARGOS_OWNER_VISUAL_QA_08_REPORT.md",
+    "docs/design/ARGOS_SURGICAL_VISUAL_FIX_09_REPORT.md",
+    "docs/design/ARGOS_CONTENT_FREEZE_POLICY.md",
+    "docs/audits/ARGOS_B12_CONTAMINATION_AUDIT.md",
+    "docs/audits/ARGOS_CONTENT_BASELINE.md",
+    "docs/audits/ARGOS_CONTENT_BASELINE.json",
+    "docs/release/ARGOS_FINAL_ACCEPTANCE_10_REPORT.md",
+    "docs/release/ARGOS_RELEASE_MANIFEST_10.json",
+    "docs/release/ARGOS_GIT_RELEASE_INTEGRATION_11.md",
+    "docs/release/ARGOS_RELEASE_FILESET_11.json",
+    "backend/lib/ai/argosKnowledge.js",
+    "backend/lib/ai/assistant.security14.test.js",
+    "backend/lib/ai/assistant.test.js",
+    "backend/lib/ai/assistantService.js",
+    "backend/lib/ai/conversationStore.js",
+    "backend/lib/ai/guards.js",
+    "backend/lib/ai/openaiProvider.js",
+    "backend/lib/ai/provider.js",
+    "backend/lib/ai/systemPrompt.js",
+    "backend/routes/assistant.js",
+    "backend/server.js",
+    "backend/lib/aiMessage.js",
+    "backend/.env.example",
+    "frontend/components/assistant/ArgosAssistantContext.tsx",
+    "frontend/components/assistant/ArgosAssistantLauncher.tsx",
+    "frontend/components/assistant/ArgosAssistantPanel.tsx",
+    "frontend/components/assistant/ArgosAssistantRoot.tsx",
+    "frontend/app/api/assistant/chat/route.ts",
+    "frontend/lib/assistantChatApi.ts",
+    "frontend/assets/css/argos-assistant.css",
+    "docs/ai/ARGOS_AI_ASSISTANT_ARCHITECTURE.md",
+    "docs/ai/ARGOS_AI_KNOWLEDGE_BOUNDARY.md",
+    "docs/ai/ARGOS_AI_SECURITY_MODEL.md",
+    "docs/ai/ARGOS_AI_IMPLEMENTATION_13_REPORT.md",
+    "docs/ai/ARGOS_AI_SECURITY_REVIEW_14.md",
+    "docs/ai/ARGOS_AI_PRODUCTION_READINESS_14.json",
+    "docs/ai/ARGOS_AI_LIVE_PROVIDER_VALIDATION_14B.md",
+    "docs/ai/ARGOS_AI_PRODUCTION_READINESS_14B.json",
+    "docs/release/ARGOS_PRODUCTION_VERSION_FORENSICS_15A.md",
+    "docs/release/ARGOS_PRODUCTION_VERSION_FORENSICS_15A.json"
+  ],
+  "releaseRequiredPartial": [
+    {
+      "path": "frontend/i18n/locales/es.json",
+      "mode": "surgical",
+      "accepted": "RC hero/support/CTAs, method, services, assistant keys, portal keys",
+      "rejected": "meta.homeTitle, meta.homeDescription (HEAD values preserved in staged candidate)",
+      "seoFixIncluded": false
+    },
+    {
+      "path": "frontend/assets/css/argos-corporate.css",
+      "mode": "whole-file",
+      "note": "Fileset 11 RC lineage hunks only; no opportunistic P3"
+    },
+    {
+      "path": "frontend/components/corporate/CorporateFooter.tsx",
+      "mode": "whole-file"
+    },
+    {
+      "path": "frontend/components/corporate/CorporateHeader.tsx",
+      "mode": "whole-file"
+    },
+    {
+      "path": "frontend/components/layout/SiteShell.tsx",
+      "mode": "whole-file"
+    },
+    {
+      "path": "frontend/components/pages/HomeView.tsx",
+      "mode": "whole-file"
+    },
+    {
+      "path": "frontend/components/pages/MethodView.tsx",
+      "mode": "whole-file"
+    },
+    {
+      "path": "frontend/components/pages/ServicesView.tsx",
+      "mode": "whole-file"
+    },
+    {
+      "path": "frontend/components/pages/AboutView.tsx",
+      "mode": "whole-file"
+    },
+    {
+      "path": "frontend/components/pages/ContactView.tsx",
+      "mode": "whole-file"
+    },
+    {
+      "path": "frontend/components/pages/ServiceDetailView.tsx",
+      "mode": "whole-file"
+    },
+    {
+      "path": "frontend/components/pages/MethodStepPageView.tsx",
+      "mode": "whole-file"
+    }
+  ],
+  "documentationRequired": [
+    "docs/release/ARGOS_RELEASE_FILESET_15R.json",
+    "docs/release/ARGOS_RELEASE_CANDIDATE_15R_MANIFEST.json",
+    "docs/release/ARGOS_RELEASE_REPRODUCIBILITY_15R_REPORT.md"
+  ],
+  "documentationRequiredNote": "Created by Mission 15R; intentionally UNSTAGED pending owner review of staged candidate (section 35).",
+  "ownerReview": [
+    "frontend/i18n/locales/en.json",
+    "frontend/i18n/locales/ca.json",
+    "docs/design/ARGOS_FRONTEND_SOURCE_OF_TRUTH_RECONCILIATION.md",
+    "docs/design/ARGOS_FRAMER_NEXTJS_RECONCILIATION.md",
+    "docs/design/ARGOS_PUBLIC_UI_RECONCILIATION_MAP.md",
+    "docs/design/ARGOS_LOCAL_CANONICAL_WIREFRAMES_21_7C.md",
+    "docs/design/ARGOS_WIREFRAMES_21_7C_1.md"
+  ],
+  "excluded": [
+    "artifacts/",
+    "docs/research/",
+    "docs/architecture/phase8-validation-artifacts/",
+    "frontend/public/logo-argos-it-header.orig.png",
+    "backend/.env",
+    "frontend/.env.local",
+    "docker/.env.staging",
+    "scripts/release-15r-stage.py"
+  ],
+  "unknownBlockers": [],
+  "atomicGroups": {
+    "mascots": [
+      "frontend/sprites/spriteManifest.ts",
+      "frontend/styles/mascot-sprites.css",
+      "frontend/components/mascots/ChicoDumboSpriteSystem.tsx",
+      "frontend/lib/mascotPoseGraph.ts",
+      "frontend/ai/mascotStates.ts",
+      "frontend/public/mascots/chico/chico_sit.png",
+      "frontend/public/mascots/chico/chico_alert.png",
+      "frontend/public/mascots/chico/chico_jump.jpg",
+      "frontend/public/mascots/chico/chico_lay.jpg",
+      "frontend/public/mascots/chico/chico_sleep.jpg",
+      "frontend/public/mascots/chico/chico_turn.jpg",
+      "frontend/public/mascots/chico/chico_walk_01.jpg",
+      "frontend/public/mascots/dumbo/dumbo_jump.jpg",
+      "frontend/public/mascots/dumbo/dumbo_lay.jpg",
+      "frontend/public/mascots/dumbo/dumbo_look.jpg",
+      "frontend/public/mascots/dumbo/dumbo_sleep.jpg",
+      "frontend/public/mascots/dumbo/dumbo_walk_01.jpg",
+      "frontend/components/corporate/CorporateFooter.tsx"
+    ],
+    "logos": [
+      "frontend/public/logo-argos-it-header.png",
+      "frontend/public/logo-argos-it-footer.png",
+      "frontend/components/corporate/CorporateHeader.tsx",
+      "frontend/components/corporate/CorporateFooter.tsx"
+    ],
+    "ai": [
+      "backend/lib/ai/",
+      "backend/routes/assistant.js",
+      "backend/server.js",
+      "backend/lib/aiMessage.js",
+      "backend/.env.example",
+      "frontend/components/assistant/",
+      "frontend/app/api/assistant/chat/route.ts",
+      "frontend/lib/assistantChatApi.ts",
+      "frontend/assets/css/argos-assistant.css",
+      "frontend/components/layout/SiteShell.tsx",
+      "docs/ai/"
+    ],
+    "diagnostic": [
+      "frontend/components/diagnostic/DiagnosticSurvey.tsx",
+      "frontend/components/diagnostic/DiagnosticSurveyModal.tsx",
+      "frontend/components/home/HomeDiagnosisCard.tsx"
+    ],
+    "contentFreeze": [
+      "frontend/i18n/locales/es.json",
+      "frontend/lib/contentFreezeV1.test.ts",
+      "frontend/components/pages/HomeView.tsx",
+      "frontend/components/pages/MethodView.tsx",
+      "frontend/components/pages/ServicesView.tsx"
+    ]
+  },
+  "staging": {
+    "expectedPaths": 117,
+    "actualStagedPaths": 117,
+    "unexpectedStaged": 0,
+    "missingStaged": 0,
+    "stagedTreeSha": "d3dcfc9de7afc99e949bf7e6b91ef82158f4838d",
+    "worktreeDiffersFromStagedCount": 1,
+    "worktreeDiffersPaths": ["frontend/i18n/locales/es.json"]
+  },
+  "gates": {
+    "unclassifiedPaths": 0,
+    "unknownBlockers": 0,
+    "secretFilesStaged": 0,
+    "envFilesStaged": 0,
+    "qaDumpsStaged": 0,
+    "b12Contamination": 0,
+    "openaiSecretValueInRc": 0,
+    "seoFixIncluded": false
+  }
+}

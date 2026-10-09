@@ -175,6 +175,44 @@ export default function ChicoDumboSpriteSystem() {
     };
   }, []);
 
+  useEffect(() => {
+    const preload = [
+      chicoSprites.idle,
+      chicoSprites.stand,
+      chicoSprites.alert,
+      chicoSprites.sit,
+      ...CHICO_WALK_CYCLE.map((k) => chicoSprites[k]),
+      dumboSprites.idle,
+      dumboSprites.sit,
+      dumboSprites.guide,
+      dumboSprites.look,
+      ...DUMBO_WALK_CYCLE.map((k) => dumboSprites[k])
+    ];
+    for (const src of preload) {
+      const img = new window.Image();
+      img.src = src;
+    }
+  }, []);
+
+  /* QA08-P1-01/P1-03 — hide floating dock while corporate footer occupies viewport */
+  useEffect(() => {
+    const footer = document.querySelector(".argos-corporate-footer");
+    if (!footer) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        const hit = entries.some((e) => e.isIntersecting);
+        if (hit) document.body.dataset.footerInView = "true";
+        else delete document.body.dataset.footerInView;
+      },
+      { root: null, threshold: 0, rootMargin: "0px 0px -8% 0px" }
+    );
+    io.observe(footer);
+    return () => {
+      io.disconnect();
+      delete document.body.dataset.footerInView;
+    };
+  }, []);
+
   return (
     <section
       className={`mascot-root ${webglReady ? "is-webgl-ready" : ""} ${

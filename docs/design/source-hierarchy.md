@@ -68,7 +68,12 @@ This hierarchy governs which sources may define canonical design decisions. High
 
 ## LEVEL 6 — Approved visual mockups
 
-**Status:** MISSING / DEFERRED
+**Status:** REFERENCE (Client `/dashboard` + NOC `/noc` Framer masters)
+
+- Framer project: **ARGOS — Product UI Master**
+- Role: visual composition reference (`FRAMER_SOURCE_OF_TRUTH = NO`, `PIXEL_PERFECT = NO`)
+- Binding spec: `docs/design/ARGOS_DESIGN_CONTRACT.md` and sibling Client/NOC docs
+- Does **not** authorize production paint or Phase 3 data
 
 ---
 

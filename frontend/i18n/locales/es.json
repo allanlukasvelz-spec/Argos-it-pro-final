@@ -4,8 +4,8 @@
     "defaultDescription": "Consultoría informática premium, soporte IT, seguridad informática, mantenimiento web, presencia web corporativa, automatización con IA y mejora continua para empresas y profesionales.",
     "keywords": "consultoría informática, servicios informáticos, mantenimiento informático, soporte IT, seguridad informática, diseño web profesional, automatización con IA",
     "author": "ARGOS-IT",
-    "homeTitle": "ARGOS-IT | Tecnología que protege, acompaña y simplifica",
-    "homeDescription": "Socio tecnológico externo para empresas y profesionales: soporte IT, ciberseguridad, mantenimiento web, automatización con IA y mejora continua.",
+    "homeTitle": "ARGOS-IT | Tecnología serena para empresas que avanzan",
+    "homeDescription": "ARGOS elimina la complejidad y la incertidumbre de tu operación tecnológica: soporte IT, seguridad, web e IA con criterio.",
     "servicesTitle": "Servicios premium | ARGOS-IT",
     "servicesDescription": "Consultoría IT premium, mantenimiento informático, seguridad, presencia web corporativa, automatización con IA y auditoría digital continua.",
     "methodTitle": "Método Argos | Analizar, Reforzar, Guiar, Optimizar y Supervisar",
@@ -15,7 +15,9 @@
     "contactTitle": "Contacto ARGOS-IT | Solicitar consulta técnica",
     "contactDescription": "Cuéntanos tu necesidad y te responderemos con una propuesta clara y accionable.",
     "portalTitle": "Portal ARGOS-IT | Acceso clientes",
-    "portalDescription": "Accede al portal de cliente ARGOS-IT o contacta con soporte si necesitas asistencia."
+    "portalDescription": "Accede al portal de cliente ARGOS-IT o contacta con soporte si necesitas asistencia.",
+    "webProjectTitle": "Crea o mejora tu web con ARGOS | ARGOS-IT",
+    "webProjectDescription": "Cuéntanos qué necesitas y te guiaremos paso a paso para reunir la información de tu proyecto web."
   },
   "language": {
     "label": "Idioma",
@@ -40,6 +42,7 @@
     "contacts": "Contactos",
     "menu": "Menú",
     "closeMenu": "Cerrar menú",
+    "webProject": "Proyecto web",
     "startDiagnostic": "Iniciar diagnóstico ARGOS"
   },
   "assistant": {
@@ -143,7 +146,7 @@
     ],
     "ctaDiagnostic": "Solicitar diagnóstico ARGOS",
     "ctaMethod": "Ver método completo",
-    "realityIndex": "01 / Realidad del cliente",
+    "realityIndex": "07 / Realidad del cliente",
     "problemTitle": "La tecnología no debería ser una carga",
     "problemLead": "Sin un criterio claro aparecen fricciones silenciosas: tiempo perdido, riesgos sin mapear y decisiones a ciegas.",
     "realityItems": [
@@ -167,7 +170,7 @@
     "publicPhasesIndex": "04a / Cuatro movimientos",
     "operationalPhasesIndex": "05 / Detalle A.R.G.O.S.",
     "servicesIndex": "06 / Servicios",
-    "stabilityIndex": "07 / Continuidad",
+    "stabilityIndex": "08 / Continuidad",
     "stabilityTitle": "Continuidad y prevención operativa",
     "stabilityItems": [
       "Seguimiento continuo con prioridades claras",
@@ -176,7 +179,7 @@
       "Soporte preventivo y propuestas de mejora",
       "Relación a largo plazo, no parches puntuales"
     ],
-    "trustIndex": "08 / Confianza",
+    "trustIndex": "09 / Confianza",
     "trustLead": "Trabajamos con criterio humano: claridad, prevención y acompañamiento sin ruido operativo inventado.",
     "finalCtaTitle": "Hablemos con criterio",
     "finalCtaSubtitle": "Cuéntanos tu situación actual. Te responderemos con una propuesta clara, priorizada y accionable.",
@@ -189,6 +192,7 @@
     "servicesEyebrow": "Servicios premium",
     "servicesTitle": "Seis áreas para proteger, gestionar y hacer evolucionar tu entorno digital.",
     "servicesSubtitle": "Diseñados para empresas, autónomos y profesionales de cualquier lugar que necesitan soporte IT, seguridad, presencia web corporativa, IA y mejora continua de forma telemática, telefónica o presencial.",
+    "webProjectIndex": "01 / Proyecto web",
     "explainer": {
       "eyebrow": "ARGOS-IT en movimiento",
       "stagesAria": "Etapas de la historia interactiva",
@@ -399,6 +403,16 @@
         "privacy": "Debes aceptar la política de privacidad.",
         "service": "Selecciona un servicio.",
         "maxLength": "Como máximo 2000 caracteres en este campo (límite técnico)."
+      },
+      "captcha": {
+        "label": "Verificación de seguridad",
+        "hint": "Para evitar envíos automáticos, resuelve esta suma.",
+        "questionPrefix": "¿Cuánto es",
+        "placeholder": "Respuesta",
+        "error": "La respuesta de verificación no es correcta. Inténtalo de nuevo.",
+        "loadError": "No se pudo cargar la verificación. Pulsa reintentar.",
+        "loading": "Cargando verificación…",
+        "retry": "Reintentar"
       }
     }
   },
@@ -471,6 +485,7 @@
     }
   },
   "cookiesBanner": {
+    "title": "Preferencias de cookies",
     "message": "Usamos cookies técnicas y analíticas para mejorar tu experiencia. Puedes aceptar o rechazar las no esenciales.",
     "accept": "Aceptar",
     "reject": "Rechazar",
