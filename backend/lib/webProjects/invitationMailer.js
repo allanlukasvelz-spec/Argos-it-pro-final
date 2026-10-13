@@ -1,9 +1,11 @@
 /**
- * Honest invitation delivery. There is no production SMTP channel.
- * ARGOS_EMAIL_TRANSPORT=qa accepts the message in memory outside production.
- * That is dispatch to QA, not delivery to a real mailbox.
+ * Invitation delivery.
+ * qa stays in memory and never runs in production.
+ * smtp runs only when ARGOS_EMAIL_TRANSPORT=smtp. Acceptance is not mailbox delivery.
  */
 const { acceptQaMessage, isQaTransport } = require("../email/qaOutbox");
+const { resolveEmailTransport } = require("../email/transport");
+const { createSmtpTransport } = require("../email/smtpTransport");
 const PUBLIC_INVITE_PATH = "/auth/invite";
 
 function frontendBaseUrl(env = process.env) {
@@ -44,20 +46,35 @@ function createInvitationMailer(env = process.env) {
     canRevealInviteUrl: () => canRevealInviteUrl(env),
     buildInviteUrl: (token) => buildInviteUrl(token, env),
     async send(input = {}) {
-      if (!isQaTransport(env)) {
-        return { delivered: false, dispatched: false, channel: null, reason: "NO_EMAIL_CHANNEL" };
-      }
       const copy = invitationEmailCopy({
         displayName: input.displayName,
         expiresAt: input.expiresAt
       });
-      acceptQaMessage({
-        kind: "invitation",
-        to: input.to || null,
-        subject: copy.subject,
-        text: copy.text
-      });
-      return { delivered: false, dispatched: true, channel: "qa", reason: "QA_OUTBOX" };
+      const selected = resolveEmailTransport(env);
+      if (selected.mode === "qa" && isQaTransport(env)) {
+        acceptQaMessage({
+          kind: "invitation",
+          to: input.to || null,
+          subject: copy.subject,
+          text: copy.text
+        });
+        return { delivered: false, accepted: false, dispatched: true, channel: "qa", reason: "QA_OUTBOX" };
+      }
+      if (selected.mode === "smtp") {
+        return createSmtpTransport(env).send({
+          kind: "invitation",
+          to: input.to || null,
+          subject: copy.subject,
+          text: input.inviteUrl ? `${copy.text}\n\n${input.inviteUrl}` : copy.text
+        });
+      }
+      return {
+        delivered: false,
+        accepted: false,
+        dispatched: false,
+        channel: null,
+        reason: "NO_EMAIL_CHANNEL"
+      };
     }
   };
 }

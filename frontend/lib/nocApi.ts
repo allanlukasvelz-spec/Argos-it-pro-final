@@ -1092,7 +1092,13 @@ export type NocWebProjectInvitation = {
 
 export type NocInvitationCreateResult = {
   invitation: NocWebProjectInvitation;
-  delivery: { delivered: boolean; reason: string | null };
+  delivery: {
+    delivered: boolean;
+    accepted?: boolean;
+    dispatched?: boolean;
+    channel?: string | null;
+    reason: string | null;
+  };
   inviteUrl?: string;
 };
 

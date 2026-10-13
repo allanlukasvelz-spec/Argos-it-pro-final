@@ -4,6 +4,9 @@ const { contactLimiter } = require("../middleware/security");
 const { createChallenge, verifyChallenge } = require("../lib/contactCaptcha");
 const { validateContactBody } = require("../lib/validateContact");
 const { acceptQaMessage, isQaTransport } = require("../lib/email/qaOutbox");
+const { resolveEmailTransport } = require("../lib/email/transport");
+const { createSmtpTransport } = require("../lib/email/smtpTransport");
+const { contactText, responseForSmtp } = require("../lib/email/contactDispatch");
 
 const router = express.Router();
 
@@ -53,6 +56,20 @@ router.post("/", contactLimiter, async (req, res) => {
       });
     }
 
+    if (resolveEmailTransport().mode === "smtp") {
+      const result = await createSmtpTransport().send({
+        kind: "contact",
+        replyTo: payload.email,
+        subject: "Nueva consulta desde ARGOS-IT",
+        text: contactText(payload)
+      });
+      const response = responseForSmtp(result);
+      if (response.status >= 500) {
+        console.error("[CONTACT] SMTP", result.reason);
+      }
+      return res.status(response.status).json(response.body);
+    }
+
     const endpoint = process.env.CONTACT_FORM_ENDPOINT;
     if (!endpoint) {
       console.warn("[CONTACT] CONTACT_FORM_ENDPOINT no configurado.");
@@ -78,9 +95,12 @@ router.post("/", contactLimiter, async (req, res) => {
       return res.status(502).json({ error: "No se pudo enviar la consulta." });
     }
 
-    res.json({ message: "Consulta enviada correctamente." });
+    res.json({
+      message: "Consulta aceptada por el enlace configurado. La entrega al buzón no está confirmada.",
+      delivered: false
+    });
   } catch (error) {
-    console.error("[CONTACT] Error:", error);
+    console.error("[CONTACT] Error", error && error.code ? error.code : "CONTACT_FAILED");
     res.status(500).json({ error: "Error procesando la consulta." });
   }
 });

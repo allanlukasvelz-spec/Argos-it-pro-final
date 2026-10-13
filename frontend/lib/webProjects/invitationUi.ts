@@ -39,10 +39,17 @@ export function deliveryStatusLabel(status: string | null | undefined): string {
 
 export function invitationCreatedMessage(delivery?: {
   delivered?: boolean;
+  accepted?: boolean;
   dispatched?: boolean;
   reason?: string | null;
 }): string {
   if (delivery?.delivered) return "Invitación enviada";
+  if (delivery?.accepted) {
+    return "Invitación aceptada por el transporte. La entrega al buzón no está confirmada.";
+  }
+  if (delivery?.reason === "SMTP_TIMEOUT" || delivery?.reason === "SMTP_OUTCOME_UNKNOWN") {
+    return "Invitación creada. El resultado del envío no está confirmado y no se ha reintentado.";
+  }
   if (delivery?.dispatched) {
     return "Invitación creada y aceptada por el transporte de prueba. No se ha entregado a un destinatario real.";
   }

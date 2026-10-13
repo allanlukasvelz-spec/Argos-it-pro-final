@@ -30,6 +30,14 @@ describe("web project invitation UI", () => {
       invitationCreatedMessage({ delivered: false, dispatched: true }),
       "Invitación creada y aceptada por el transporte de prueba. No se ha entregado a un destinatario real."
     );
+    assert.equal(
+      invitationCreatedMessage({ delivered: false, accepted: true, reason: "SMTP_ACCEPTED" }),
+      "Invitación aceptada por el transporte. La entrega al buzón no está confirmada."
+    );
+    assert.match(
+      invitationCreatedMessage({ delivered: false, reason: "SMTP_TIMEOUT" }),
+      /no se ha reintentado/
+    );
   });
 
   it("3-7 status and delivery stay separate", () => {

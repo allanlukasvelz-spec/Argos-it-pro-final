@@ -402,6 +402,8 @@ async function start() {
     await ensureEvidenceObjectsTable(pool);
     await ensurePhase8Tables(pool);
     await ensureWebProjects(pool);
+    const { assertEmailTransportReady } = require("./lib/email/transport");
+    assertEmailTransportReady();
   } catch (err) {
     console.error("❌ No se pudo asegurar tablas de arranque (sessions/diagnostics/orgs/assets/monitors/remediation/agents/evidence):", err.message);
     process.exit(1);

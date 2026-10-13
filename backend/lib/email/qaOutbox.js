@@ -3,10 +3,12 @@
  * No entrega a un buzón real y no se activa en producción.
  */
 
+const { resolveEmailTransport } = require("./transport");
+
 const messages = [];
 
 function isQaTransport(env = process.env) {
-  return String(env.NODE_ENV) !== "production" && String(env.ARGOS_EMAIL_TRANSPORT || "").toLowerCase() === "qa";
+  return resolveEmailTransport(env).mode === "qa";
 }
 
 function acceptQaMessage(message) {

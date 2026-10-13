@@ -240,6 +240,29 @@ function passwordMeetsPolicy(password) {
   return value.length >= 10 && /[A-Z]/.test(value) && /[a-z]/.test(value) && /[0-9]/.test(value);
 }
 
+function classifyInvitationDelivery(result = {}) {
+  const delivered = Boolean(result.delivered);
+  const accepted = Boolean(result.accepted);
+  const unknown = result.reason === "SMTP_TIMEOUT" || result.reason === "SMTP_OUTCOME_UNKNOWN";
+  const dispatched = Boolean(result.dispatched) && !delivered && !accepted;
+  const deliveryStatus = delivered || accepted ? "SENT" : dispatched || unknown ? "PENDING" : "FAILED";
+  const action = delivered
+    ? "WEB_PROJECT_INVITATION_SENT"
+    : accepted || dispatched || unknown
+      ? "WEB_PROJECT_INVITATION_DISPATCHED"
+      : "WEB_PROJECT_INVITATION_CREATED";
+  return {
+    delivered,
+    accepted,
+    dispatched,
+    unknown,
+    deliveryStatus,
+    action,
+    channel: result.channel || null,
+    reason: result.reason || null
+  };
+}
+
 function createInvitationService({
   pool,
   projectService,
@@ -257,40 +280,36 @@ function createInvitationService({
       expiresAt: invitation.expiresAt,
       inviteUrl: mailer.buildInviteUrl(token)
     });
-    const delivered = Boolean(result.delivered);
-    const dispatched = Boolean(result.dispatched) && !delivered;
-    const deliveryStatus = delivered ? "SENT" : dispatched ? "PENDING" : "FAILED";
+    const outcome = classifyInvitationDelivery(result);
     await pool.query(
       `UPDATE web_project_invitations
        SET delivery_status = $1, updated_at = NOW()
        WHERE id = $2`,
-      [deliveryStatus, invitation.id]
+      [outcome.deliveryStatus, invitation.id]
     );
-    invitation.deliveryStatus = deliveryStatus;
+    invitation.deliveryStatus = outcome.deliveryStatus;
     await audit(pool, {
       userId: actorUserId,
       organizationId: invitation.organizationId,
-      action: delivered
-        ? "WEB_PROJECT_INVITATION_SENT"
-        : dispatched
-          ? "WEB_PROJECT_INVITATION_DISPATCHED"
-          : "WEB_PROJECT_INVITATION_CREATED",
+      action: outcome.action,
       details: {
         invitationId: invitation.id,
         projectId: invitation.webProjectId,
-        delivered,
-        dispatched,
-        channel: result.channel || null,
-        reason: result.reason || null
+        delivered: outcome.delivered,
+        accepted: outcome.accepted,
+        dispatched: outcome.dispatched,
+        channel: outcome.channel,
+        reason: outcome.reason
       }
     });
     const payload = {
       invitation: toNocDto(invitation),
       delivery: {
-        delivered,
-        dispatched,
-        channel: result.channel || null,
-        reason: result.reason || null
+        delivered: outcome.delivered,
+        accepted: outcome.accepted,
+        dispatched: outcome.dispatched,
+        channel: outcome.channel,
+        reason: outcome.reason
       }
     };
     if (!result.delivered && mailer.canRevealInviteUrl()) {
@@ -660,6 +679,7 @@ function createInvitationService({
 
 module.exports = {
   createInvitationService,
+  classifyInvitationDelivery,
   normalizeEmail,
   defaultProjectTitle,
   GENERIC_INVALID,

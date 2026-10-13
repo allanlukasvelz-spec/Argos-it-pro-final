@@ -31,5 +31,6 @@ describe("invitation mailer transport", () => {
     assert.equal(stored[0].kind, "invitation");
     assert.equal(stored[0].delivered, false);
     assert.match(stored[0].text, /2026-07-01/);
+    assert.doesNotMatch(stored[0].text, /token=/);
   });
 });
