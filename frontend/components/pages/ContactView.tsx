@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FormEvent, useCallback, useMemo, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import CorporatePageShell from "@/components/layout/CorporatePageShell";
+import "@/assets/css/argos-contact.css";
 import { useI18n } from "@/i18n/useI18n";
 import { useLocalizedServices } from "@/hooks/useLocalizedServices";
 import { usePageMeta } from "@/components/seo/usePageMeta";
@@ -59,6 +60,7 @@ export default function ContactView() {
   const [challenge, setChallenge] = useState<ContactChallenge | null>(null);
   const [challengeError, setChallengeError] = useState(false);
   const [challengeLoading, setChallengeLoading] = useState(true);
+  const [reduceMotion, setReduceMotion] = useState(false);
 
   usePageMeta(t("meta.contactTitle"), t("meta.contactDescription"));
 
@@ -90,6 +92,18 @@ export default function ContactView() {
       setChallengeLoading(false);
     }
   }, []);
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const apply = () => setReduceMotion(media.matches);
+    apply();
+    media.addEventListener("change", apply);
+    return () => media.removeEventListener("change", apply);
+  }, []);
+
+  const enter = reduceMotion
+    ? { initial: false as const, animate: { opacity: 1, y: 0 }, transition: { duration: 0 } }
+    : fadeIn;
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -220,8 +234,8 @@ export default function ContactView() {
   };
 
   return (
-    <CorporatePageShell>
-      <div className="py-12">
+    <CorporatePageShell className="argos-contact">
+      <div className="argos-contact-hero">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 md:px-8">
           <Link href="/" className="argos-corporate-link mb-6 inline-block text-sm font-semibold no-underline hover:underline">
             ← {t("actions.backHome")}
@@ -230,52 +244,19 @@ export default function ContactView() {
           <h1 className="argos-font-display text-4xl text-[var(--text-primary)] sm:text-5xl">
             {t("contact.title")}
           </h1>
-          <p className="mt-4 max-w-3xl text-lg leading-8 text-[var(--text-secondary)]">
+          <p className="argos-contact-lead mt-4 text-lg leading-8">
             {t("contact.subtitle")}
           </p>
         </div>
       </div>
 
       <section className="px-4 pb-16 sm:px-6 md:px-8">
-        <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-[0.95fr_1.05fr]">
-          <motion.div {...fadeIn} className="mb-4 md:mb-0">
-            <p className="mb-8 text-lg leading-8 text-[var(--text-secondary)]">{t("contact.intro")}</p>
-
-            <div className="mb-4 grid grid-cols-1 gap-5 min-[480px]:grid-cols-3">
-              <div className="argos-corporate-card p-5">
-                <h3 className="argos-font-ui mb-2 text-lg font-semibold text-[var(--text-primary)]">
-                  {t("contact.cards.emailTitle")}
-                </h3>
-                <a href="mailto:info@argos-it.com" className="argos-corporate-link">
-                  info@argos-it.com
-                </a>
-              </div>
-              <div className="argos-corporate-card p-5">
-                <h3 className="argos-font-ui mb-2 text-lg font-semibold text-[var(--text-primary)]">
-                  {t("contact.cards.phoneTitle")}
-                </h3>
-                <span className="text-[var(--text-secondary)]">Canal a confirmar tras la solicitud</span>
-              </div>
-              <div className="argos-corporate-card p-5">
-                <h3 className="argos-font-ui mb-2 text-lg font-semibold text-[var(--text-primary)]">
-                  {t("contact.cards.coverageTitle")}
-                </h3>
-                <p className="text-[var(--text-secondary)]">
-                  {coverageLines.map((line) => (
-                    <span key={line} className="block">
-                      {line}
-                    </span>
-                  ))}
-                </p>
-              </div>
-            </div>
-          </motion.div>
-
+        <div className="argos-contact-layout mx-auto max-w-6xl">
           <motion.form
-            className="argos-corporate-card relative space-y-6 p-8"
+            className="argos-contact-form relative"
             onSubmit={onSubmit}
             onFocus={() => window.dispatchEvent(new CustomEvent("argos:onFormStart"))}
-            {...fadeIn}
+            {...enter}
           >
             <h2 className="argos-font-display mb-2 text-2xl text-[var(--text-primary)]">
               {t("contact.form.title")}
@@ -311,7 +292,7 @@ export default function ContactView() {
                   placeholder={t("contact.form.namePlaceholder")}
                   aria-invalid={Boolean(errors.name)}
                 />
-                {errors.name && <p className="mt-1 text-xs text-red-600">{errors.name}</p>}
+                {errors.name && <p className="argos-contact-error mt-1 text-xs">{errors.name}</p>}
               </div>
 
               <div>
@@ -329,7 +310,7 @@ export default function ContactView() {
                   placeholder={t("contact.form.emailPlaceholder")}
                   aria-invalid={Boolean(errors.email)}
                 />
-                {errors.email && <p className="mt-1 text-xs text-red-600">{errors.email}</p>}
+                {errors.email && <p className="argos-contact-error mt-1 text-xs">{errors.email}</p>}
               </div>
             </div>
 
@@ -349,7 +330,7 @@ export default function ContactView() {
                   placeholder={t("contact.form.phonePlaceholder")}
                   aria-invalid={Boolean(errors.phone)}
                 />
-                {errors.phone && <p className="mt-1 text-xs text-red-600">{errors.phone}</p>}
+                {errors.phone && <p className="argos-contact-error mt-1 text-xs">{errors.phone}</p>}
               </div>
 
               <div>
@@ -367,7 +348,7 @@ export default function ContactView() {
                   placeholder={t("contact.form.companyPlaceholder")}
                   aria-invalid={Boolean(errors.company)}
                 />
-                {errors.company && <p className="mt-1 text-xs text-red-600">{errors.company}</p>}
+                {errors.company && <p className="argos-contact-error mt-1 text-xs">{errors.company}</p>}
               </div>
             </div>
 
@@ -390,7 +371,7 @@ export default function ContactView() {
                   </option>
                 ))}
               </select>
-              {errors.service && <p className="mt-1 text-xs text-red-600">{errors.service}</p>}
+              {errors.service && <p className="argos-contact-error mt-1 text-xs">{errors.service}</p>}
             </div>
 
             <div>
@@ -408,11 +389,11 @@ export default function ContactView() {
                 placeholder={t("contact.form.messagePlaceholder")}
                 aria-invalid={Boolean(errors.message)}
               />
-              {errors.message && <p className="mt-1 text-xs text-red-600">{errors.message}</p>}
+              {errors.message && <p className="argos-contact-error mt-1 text-xs">{errors.message}</p>}
             </div>
 
             <div
-              className="rounded-lg border border-[var(--border-default)] bg-[var(--surface-primary)] p-4"
+              className="argos-contact-check"
               data-captcha-state={
                 challengeLoading ? "loading" : challengeError ? "error" : challenge ? "ready" : "loading"
               }
@@ -433,7 +414,7 @@ export default function ContactView() {
               ) : null}
               {!challengeLoading && challengeError ? (
                 <div className="mt-3 space-y-2">
-                  <p className="text-sm text-red-600">
+                  <p className="argos-contact-error text-sm">
                     {t(
                       "contact.form.captcha.loadError",
                       "No se pudo cargar la verificación. Inténtalo de nuevo."
@@ -471,7 +452,7 @@ export default function ContactView() {
                     aria-describedby={errors.captchaAnswer ? "contact-captcha-error" : "contact-captcha-label"}
                   />
                   {errors.captchaAnswer ? (
-                    <p id="contact-captcha-error" className="mt-1 text-xs text-red-600" role="alert">
+                    <p id="contact-captcha-error" className="argos-contact-error mt-1 text-xs" role="alert">
                       {errors.captchaAnswer}
                     </p>
                   ) : null}
@@ -479,7 +460,7 @@ export default function ContactView() {
               ) : null}
             </div>
 
-            <div className="rounded-lg border border-[var(--border-default)] bg-[var(--surface-primary)] p-4">
+            <div className="argos-contact-check">
               <label className="flex items-start gap-3">
                 <input
                   type="checkbox"
@@ -495,10 +476,10 @@ export default function ContactView() {
                   </Link>
                 </span>
               </label>
-              {errors.privacy && <p className="mt-1 text-xs text-red-600">{errors.privacy}</p>}
+              {errors.privacy && <p className="argos-contact-error mt-1 text-xs">{errors.privacy}</p>}
             </div>
 
-            <button type="submit" disabled={status === "loading"} className="argos-corporate-btn-primary">
+            <button type="submit" disabled={status === "loading"} className="argos-corporate-btn-primary argos-contact-submit">
               {status === "loading" ? "..." : t("contact.form.submit")}
             </button>
 
@@ -508,11 +489,46 @@ export default function ContactView() {
               </p>
             )}
             {status === "error" && (
-              <p className="text-center text-sm text-red-600">{statusMessage || t("contact.form.error")}</p>
+              <p className="argos-contact-error text-center text-sm">{statusMessage || t("contact.form.error")}</p>
             )}
 
             <p className="text-center text-sm text-[var(--text-secondary)]">{t("contact.form.requiredHint")}</p>
           </motion.form>
+
+          <motion.div {...enter} className="argos-contact-aside mb-4 md:mb-0">
+            <p className="argos-contact-lead mb-8 text-lg leading-8">{t("contact.intro")}</p>
+
+            <div className="argos-contact-channels">
+              <div className="argos-contact-channel">
+                <h3 className="argos-font-ui mb-2 text-lg font-semibold text-[var(--text-primary)]">
+                  {t("contact.cards.emailTitle")}
+                </h3>
+                <a href="mailto:info@argos-it.com" className="argos-corporate-link">
+                  info@argos-it.com
+                </a>
+              </div>
+              <div className="argos-contact-channel">
+                <h3 className="argos-font-ui mb-2 text-lg font-semibold text-[var(--text-primary)]">
+                  {t("contact.cards.phoneTitle")}
+                </h3>
+                <span className="text-[var(--text-secondary)]">Canal a confirmar tras la solicitud</span>
+              </div>
+              <div className="argos-contact-channel">
+                <h3 className="argos-font-ui mb-2 text-lg font-semibold text-[var(--text-primary)]">
+                  {t("contact.cards.coverageTitle")}
+                </h3>
+                <p className="text-[var(--text-secondary)]">
+                  {coverageLines.map((line) => (
+                    <span key={line} className="block">
+                      {line}
+                    </span>
+                  ))}
+                </p>
+              </div>
+            </div>
+          </motion.div>
+
+
         </div>
       </section>
 

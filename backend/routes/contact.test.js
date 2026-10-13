@@ -1,8 +1,9 @@
-const { describe, it, beforeEach } = require("node:test");
+const { describe, it, beforeEach, afterEach } = require("node:test");
 const assert = require("node:assert/strict");
 const express = require("express");
 const contactRoutes = require("../routes/contact");
 const { __resetStoreForTests } = require("../lib/contactCaptcha");
+const { clearQaMessages, listQaMessages } = require("../lib/email/qaOutbox");
 
 async function withContactServer(run) {
   const app = express();
@@ -33,8 +34,18 @@ const validBody = {
 };
 
 describe("contact routes", () => {
+  const previousTransport = process.env.ARGOS_EMAIL_TRANSPORT;
+
   beforeEach(() => {
     __resetStoreForTests();
+    clearQaMessages();
+    delete process.env.ARGOS_EMAIL_TRANSPORT;
+  });
+
+  afterEach(() => {
+    if (previousTransport === undefined) delete process.env.ARGOS_EMAIL_TRANSPORT;
+    else process.env.ARGOS_EMAIL_TRANSPORT = previousTransport;
+    clearQaMessages();
   });
 
   it("blocks direct POST without captcha validation", async () => {
@@ -84,6 +95,35 @@ describe("contact routes", () => {
         })
       });
       assert.equal(response.status, 202);
+    });
+  });
+
+  it("dispatches a valid captcha submission to the QA transport without real delivery", async () => {
+    process.env.ARGOS_EMAIL_TRANSPORT = "qa";
+    await withContactServer(async (baseUrl) => {
+      const challengeRes = await fetch(`${baseUrl}/api/contact/challenge`);
+      const challenge = await challengeRes.json();
+      const [left, right] = challenge.question.split("+").map((part) => Number.parseInt(part.trim(), 10));
+      const response = await fetch(`${baseUrl}/api/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          ...validBody,
+          challengeId: challenge.challengeId,
+          captchaAnswer: String(left + right)
+        })
+      });
+      assert.equal(response.status, 202);
+      const body = await response.json();
+      assert.equal(body.dispatch, "qa");
+      assert.equal(body.delivered, false);
+      assert.match(body.message, /no se ha entregado/i);
+      const stored = listQaMessages();
+      assert.equal(stored.length, 1);
+      assert.equal(stored[0].kind, "contact");
+      assert.equal(stored[0].delivered, false);
+      assert.equal(stored[0].dispatched, true);
+      assert.equal(stored[0].to, null);
     });
   });
 

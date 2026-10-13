@@ -254,9 +254,12 @@ function createInvitationService({
     const result = await mailer.send({
       to: invitation.email,
       displayName: invitation.displayName,
-      expiresAt: invitation.expiresAt
+      expiresAt: invitation.expiresAt,
+      inviteUrl: mailer.buildInviteUrl(token)
     });
-    const deliveryStatus = result.delivered ? "SENT" : "FAILED";
+    const delivered = Boolean(result.delivered);
+    const dispatched = Boolean(result.dispatched) && !delivered;
+    const deliveryStatus = delivered ? "SENT" : dispatched ? "PENDING" : "FAILED";
     await pool.query(
       `UPDATE web_project_invitations
        SET delivery_status = $1, updated_at = NOW()
@@ -267,15 +270,29 @@ function createInvitationService({
     await audit(pool, {
       userId: actorUserId,
       organizationId: invitation.organizationId,
-      action: result.delivered ? "WEB_PROJECT_INVITATION_SENT" : "WEB_PROJECT_INVITATION_CREATED",
+      action: delivered
+        ? "WEB_PROJECT_INVITATION_SENT"
+        : dispatched
+          ? "WEB_PROJECT_INVITATION_DISPATCHED"
+          : "WEB_PROJECT_INVITATION_CREATED",
       details: {
         invitationId: invitation.id,
         projectId: invitation.webProjectId,
-        delivered: Boolean(result.delivered),
+        delivered,
+        dispatched,
+        channel: result.channel || null,
         reason: result.reason || null
       }
     });
-    const payload = { invitation: toNocDto(invitation), delivery: { delivered: Boolean(result.delivered), reason: result.reason || null } };
+    const payload = {
+      invitation: toNocDto(invitation),
+      delivery: {
+        delivered,
+        dispatched,
+        channel: result.channel || null,
+        reason: result.reason || null
+      }
+    };
     if (!result.delivered && mailer.canRevealInviteUrl()) {
       payload.inviteUrl = mailer.buildInviteUrl(token);
     }

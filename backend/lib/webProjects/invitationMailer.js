@@ -1,7 +1,9 @@
 /**
- * Honest invitation delivery. CURRENT has no SMTP channel.
- * Does not pretend Formspree is an invite mailer.
+ * Honest invitation delivery. There is no production SMTP channel.
+ * ARGOS_EMAIL_TRANSPORT=qa accepts the message in memory outside production.
+ * That is dispatch to QA, not delivery to a real mailbox.
  */
+const { acceptQaMessage, isQaTransport } = require("../email/qaOutbox");
 const PUBLIC_INVITE_PATH = "/auth/invite";
 
 function frontendBaseUrl(env = process.env) {
@@ -41,8 +43,21 @@ function createInvitationMailer(env = process.env) {
   return {
     canRevealInviteUrl: () => canRevealInviteUrl(env),
     buildInviteUrl: (token) => buildInviteUrl(token, env),
-    async send() {
-      return { delivered: false, reason: "NO_EMAIL_CHANNEL" };
+    async send(input = {}) {
+      if (!isQaTransport(env)) {
+        return { delivered: false, dispatched: false, channel: null, reason: "NO_EMAIL_CHANNEL" };
+      }
+      const copy = invitationEmailCopy({
+        displayName: input.displayName,
+        expiresAt: input.expiresAt
+      });
+      acceptQaMessage({
+        kind: "invitation",
+        to: input.to || null,
+        subject: copy.subject,
+        text: copy.text
+      });
+      return { delivered: false, dispatched: true, channel: "qa", reason: "QA_OUTBOX" };
     }
   };
 }

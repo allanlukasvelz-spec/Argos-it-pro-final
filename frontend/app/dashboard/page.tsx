@@ -13,7 +13,7 @@ import {
 } from "@/components/client/Status";
 import { fetchMonitoring, fetchPortal, fetchGuardian } from "@/lib/clientApi";
 import type { ClientPortalPayload, MonitoringSummary } from "@/lib/clientTypes";
-import { coverageLabelEs, healthLabelEs, relativeTimeEs } from "@/lib/clientCopy";
+import { clientReasonCopy, coverageLabelEs, healthLabelEs, monitoringDisclaimerEs, relativeTimeEs } from "@/lib/clientCopy";
 import { deriveProtectionSummary } from "@/lib/clientHealthSemantics";
 import { ChicoGuardian } from "@/components/client/ChicoGuardian";
 import { WebProjectHomeCard } from "@/components/web-projects/WebProjectHomeCard";
@@ -66,39 +66,55 @@ export default function ResumenPage() {
       <PageHeader
         title="Portal de cliente"
         eyebrow="Resumen"
-        meta="Estado basado en evidencia real. Sin monitors o sin evidencia fresca ≠ protegido."
+        meta="Estado basado en evidencia real. Sin comprobaciones o sin evidencia reciente no equivale a protegido."
       />
 
       <ChicoGuardian guardian={guardian} compact />
 
-      <section aria-labelledby="protection-heading" style={{ marginBottom: "1.25rem" }}>
-        <h2 id="protection-heading" className="cp-page-header__eyebrow">
-          Protection summary
-        </h2>
+      <section className="cp-summary" aria-labelledby="protection-heading">
+        <h2 id="protection-heading">Resumen de protección</h2>
+        {summary.overall === "UNKNOWN" || summary.openAlerts > 0 || summary.openIncidents > 0 ? (
+          <div className="cp-status-split">
+            {summary.openAlerts > 0 || summary.openIncidents > 0 ? (
+              <p>
+                <strong>Qué requiere atención.</strong> Hay {summary.openAlerts} alerta
+                {summary.openAlerts === 1 ? "" : "s"} abierta{summary.openAlerts === 1 ? "" : "s"} y{" "}
+                {summary.openIncidents} incidente{summary.openIncidents === 1 ? "" : "s"} abierto
+                {summary.openIncidents === 1 ? "" : "s"}.
+              </p>
+            ) : null}
+            {summary.overall === "UNKNOWN" ? (
+              <p>
+                <strong>Qué no está confirmado.</strong> El estado de salud sigue sin datos suficientes.
+                Sin datos no significa protegido.
+              </p>
+            ) : null}
+          </div>
+        ) : null}
         <div className="cp-grid cp-grid--5" style={{ marginTop: "0.75rem" }}>
           <MetricCard
             label="Salud"
             value={<HealthIndicator overall={summary.overall} />}
             hint={
               summary.canShowHealthy
-                ? "Evidencia fresca suficiente."
-                : "UNKNOWN ≠ HEALTHY. Sin evidencia no se muestra como correcto."
+                ? "Evidencia reciente suficiente."
+                : "Estado de salud: sin datos suficientes."
             }
           />
           <MetricCard
-            label="Cobertura de monitors"
+            label="Cobertura de comprobaciones"
             value={coverageLabelEs(summary.coverage)}
-            hint={`${summary.monitorsEnabled} monitors · ${summary.assetsWithFreshEvidence} con evidencia fresca`}
+            hint={`${summary.monitorsEnabled} comprobaciones · ${summary.assetsWithFreshEvidence} con evidencia reciente`}
           />
           <MetricCard
             label="Alertas abiertas"
             value={String(summary.openAlerts)}
-            hint="Cero alertas ≠ estado correcto."
+            hint="Cero alertas no equivale a un estado correcto."
           />
           <MetricCard
             label="Incidentes abiertos"
             value={String(summary.openIncidents)}
-            hint="Sin incidentes ≠ totalmente saludable."
+            hint="Sin incidentes no equivale a estar protegido."
           />
           <MetricCard
             label="Activos activos"
@@ -111,7 +127,7 @@ export default function ResumenPage() {
             monitorsEnabled={summary.monitorsEnabled}
             fresh={summary.assetsWithFreshEvidence}
           />
-          <p className="cp-disclaimer">{monitoring.disclaimer}</p>
+          <p className="cp-disclaimer">{monitoringDisclaimerEs(monitoring.disclaimer)}</p>
           {summary.fullyProtected ? null : (
             <p className="cp-disclaimer">
               No se afirma «totalmente protegido»: faltan pruebas deterministas de cobertura completa.
@@ -133,7 +149,9 @@ export default function ResumenPage() {
                   <StatusBadge status={a.overall} label={healthLabelEs(a.overall)} />
                 </div>
                 {a.reasons?.length ? (
-                  <p className="cp-disclaimer">{a.reasons.slice(0, 2).join(" · ")}</p>
+                  <p className="cp-disclaimer">
+                    {a.reasons.slice(0, 2).map((reason) => clientReasonCopy(reason)).join(" · ")}
+                  </p>
                 ) : null}
               </div>
             ))}

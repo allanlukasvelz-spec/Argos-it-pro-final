@@ -41,6 +41,10 @@ const FREEZE_STYLE = `
   .react-hot-toast > * {
     visibility: hidden !important;
   }
+  /* El indicador de next dev no existe en next start ni en CI. */
+  nextjs-portal {
+    display: none !important;
+  }
   .chico-guardian {
     display: none !important;
   }

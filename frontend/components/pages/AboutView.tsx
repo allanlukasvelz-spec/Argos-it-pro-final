@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import CorporatePageShell from "@/components/layout/CorporatePageShell";
+import "@/assets/css/argos-abstract-surfaces.css";
 import { useI18n } from "@/i18n/useI18n";
 import { usePageMeta } from "@/components/seo/usePageMeta";
 
@@ -14,7 +15,7 @@ export default function AboutView() {
   usePageMeta(t("meta.aboutTitle"), t("meta.aboutDescription"));
 
   return (
-    <CorporatePageShell>
+    <CorporatePageShell className="argos-v4-surface argos-v4-about">
       <section className="argos-corp-section argos-corp-section--dplus-intro" aria-labelledby="about-title">
         <div className="argos-corp-container">
           <div className="grid items-start gap-10 lg:grid-cols-[1fr_240px]">

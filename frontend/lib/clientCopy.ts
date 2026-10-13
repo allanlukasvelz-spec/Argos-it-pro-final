@@ -13,7 +13,8 @@ const ERROR_CLASS_COPY: Record<string, string> = {
   DNS_FAILURE: "No hemos podido completar la resolución DNS.",
   SSRF_BLOCKED: "La comprobación no se ha podido ejecutar de forma segura.",
   RUNNER_ERROR: "La comprobación no se ha podido completar. El estado permanece desconocido.",
-  REDIRECT_BLOCKED: "La comprobación se detuvo ante una redirección no permitida."
+  REDIRECT_BLOCKED: "La comprobación se detuvo ante una redirección no permitida.",
+  NO_ACTIVE_MONITORS: "No hay comprobaciones activas. El estado de salud sigue sin datos suficientes."
 };
 
 export function clientReasonCopy(reason: string | null | undefined): string {
@@ -35,10 +36,36 @@ export function healthLabelEs(overall: string): string {
   }
 }
 
+export function chicoStateLabelEs(state: string): string {
+  switch (String(state).toUpperCase()) {
+    case "NORMAL":
+      return "Normal";
+    case "ATTENTION":
+      return "Atención";
+    case "CRITICAL":
+      return "Crítico";
+    case "VERIFYING":
+      return "Comprobando";
+    case "RESOLVED":
+      return "Resuelto";
+    default:
+      return "Sin datos suficientes";
+  }
+}
+
+export function monitoringDisclaimerEs(disclaimer: string | null | undefined): string {
+  const raw = String(disclaimer || "").trim();
+  if (!raw) return "Sin datos no significa protegido.";
+  if (/UNKNOWN\s*[≠!=]+\s*HEALTHY/i.test(raw)) {
+    return "Sin datos no significa protegido. La evidencia insuficiente no se muestra como un estado correcto.";
+  }
+  return raw;
+}
+
 export function coverageLabelEs(coverage: string): string {
   switch (coverage) {
     case "NONE":
-      return "Sin monitors";
+      return "Sin comprobaciones";
     case "PARTIAL":
       return "Parcial";
     case "MONITORED":

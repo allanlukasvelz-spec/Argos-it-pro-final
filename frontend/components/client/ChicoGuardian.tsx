@@ -1,6 +1,7 @@
 "use client";
 
 import { chicoShapeFor, chicoSpriteFor, normalizeChicoState, type ChicoGuardianPayload } from "@/lib/chicoGuardian";
+import { chicoStateLabelEs } from "@/lib/clientCopy";
 
 type Props = {
   guardian: ChicoGuardianPayload | null;
@@ -14,11 +15,12 @@ export function ChicoGuardian({ guardian, compact = false, className }: Props) {
   const sprite = chicoSpriteFor(state);
   const shape = chicoShapeFor(state);
   const unknown = state === "UNKNOWN";
+  const stateLabel = chicoStateLabelEs(state);
 
   return (
     <aside
       className={`chico-guardian ${compact ? "chico-guardian--compact" : ""} ${className || ""}`}
-      aria-label={`CHICO Security Guardian: ${state}`}
+      aria-label={`CHICO, guardián de seguridad: ${stateLabel}`}
       data-chico-state={state}
     >
       <div className="chico-guardian__visual">
@@ -38,9 +40,9 @@ export function ChicoGuardian({ guardian, compact = false, className }: Props) {
         </span>
       </div>
       <div className="chico-guardian__body">
-        <p className="chico-guardian__eyebrow">CHICO · Security Guardian</p>
+        <p className="chico-guardian__eyebrow">CHICO · Guardián de seguridad</p>
         <p className="chico-guardian__state">
-          <span className="chico-guardian__state-label">{state}</span>
+          <span className="chico-guardian__state-label">{stateLabel}</span>
         </p>
         <p className="chico-guardian__message">{guardian.message}</p>
       </div>

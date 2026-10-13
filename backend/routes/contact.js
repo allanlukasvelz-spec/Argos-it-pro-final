@@ -3,6 +3,7 @@ const rateLimit = require("express-rate-limit");
 const { contactLimiter } = require("../middleware/security");
 const { createChallenge, verifyChallenge } = require("../lib/contactCaptcha");
 const { validateContactBody } = require("../lib/validateContact");
+const { acceptQaMessage, isQaTransport } = require("../lib/email/qaOutbox");
 
 const router = express.Router();
 
@@ -38,6 +39,20 @@ router.post("/", contactLimiter, async (req, res) => {
     }
 
     const payload = validation.payload;
+    if (isQaTransport()) {
+      acceptQaMessage({
+        kind: "contact",
+        to: null,
+        subject: "Nueva consulta desde ARGOS-IT",
+        text: payload.message
+      });
+      return res.status(202).json({
+        message: "Consulta aceptada en el transporte de prueba. No se ha entregado a un destinatario real.",
+        dispatch: "qa",
+        delivered: false
+      });
+    }
+
     const endpoint = process.env.CONTACT_FORM_ENDPOINT;
     if (!endpoint) {
       console.warn("[CONTACT] CONTACT_FORM_ENDPOINT no configurado.");

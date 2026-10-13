@@ -37,8 +37,15 @@ export function deliveryStatusLabel(status: string | null | undefined): string {
   }
 }
 
-export function invitationCreatedMessage(delivery?: { delivered?: boolean; reason?: string | null }): string {
+export function invitationCreatedMessage(delivery?: {
+  delivered?: boolean;
+  dispatched?: boolean;
+  reason?: string | null;
+}): string {
   if (delivery?.delivered) return "Invitación enviada";
+  if (delivery?.dispatched) {
+    return "Invitación creada y aceptada por el transporte de prueba. No se ha entregado a un destinatario real.";
+  }
   return "Invitación creada; envío pendiente/no disponible";
 }
 

@@ -81,6 +81,63 @@
   gap: 1rem;
   flex-wrap: wrap;
   font-size: 0.8125rem;
+  min-width: 0;
+}
+
+.cp-topbar__account {
+  display: none;
+  position: relative;
+}
+
+.cp-topbar__account summary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #fff;
+  background: transparent;
+  cursor: pointer;
+  list-style: none;
+}
+
+.cp-topbar__account summary::-webkit-details-marker {
+  display: none;
+}
+
+.cp-topbar__account summary:focus-visible,
+.cp-topbar__menu:focus-visible,
+.cp-topbar__logout:focus-visible,
+.cp-topbar__brand:focus-visible {
+  outline: 3px solid #65bfc1;
+  outline-offset: 2px;
+}
+
+.cp-topbar__account-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.35rem);
+  z-index: 50;
+  min-width: 14rem;
+  max-width: min(18rem, calc(100vw - 1.5rem));
+  padding: 0.85rem;
+  background: #fff;
+  color: var(--cp-navy);
+  border: 1px solid var(--cp-border);
+}
+
+.cp-topbar__account-panel p {
+  margin: 0 0 0.4rem;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.cp-topbar__account-panel .cp-btn {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 0.35rem;
 }
 
 .cp-notify {
@@ -211,7 +268,34 @@
 }
 
 .cp-page-header {
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.cp-summary {
+  margin-bottom: 1.75rem;
+}
+
+.cp-summary > h2 {
+  margin: 0 0 0.75rem;
+  color: var(--cp-navy);
+  font-size: 1.15rem;
+  font-weight: 650;
+}
+
+.cp-status-split {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0 0 0.9rem;
+  padding: 0.8rem 0.95rem;
+  background: #fff;
+  border: 1px solid var(--cp-border);
+}
+
+.cp-status-split p {
+  margin: 0;
+  color: var(--cp-navy);
+  font-size: 0.92rem;
+  line-height: 1.45;
 }
 
 .cp-page-header__eyebrow {
@@ -486,6 +570,35 @@
 
   .cp-topbar__menu {
     display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 767px) {
+  .cp-topbar {
+    gap: 0.5rem;
+    padding: 0 0.65rem;
+    flex-wrap: nowrap;
+  }
+
+  .cp-topbar__meta {
+    flex-wrap: nowrap;
+    gap: 0.35rem;
+  }
+
+  .cp-topbar__context,
+  .cp-topbar__logout {
+    display: none;
+  }
+
+  .cp-topbar__account {
+    display: block;
+  }
+
+  .cp-notify__toggle {
+    white-space: nowrap;
+    padding: 0 0.55rem;
   }
 }
 

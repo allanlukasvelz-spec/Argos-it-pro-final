@@ -16,7 +16,12 @@ export function proxy(request: NextRequest) {
     return res;
   }
 
-  if (pathname.startsWith("/auth/login") || pathname.startsWith("/auth/register") || pathname.startsWith("/proyecto-web/comenzar")) {
+  if (
+    pathname.startsWith("/auth/") ||
+    pathname.startsWith("/proyecto-web/comenzar") ||
+    pathname.startsWith("/platform-map") ||
+    pathname.startsWith("/explainer")
+  ) {
     const res = NextResponse.next();
     res.headers.set("X-Robots-Tag", "noindex, nofollow");
     return res;
@@ -43,9 +48,12 @@ export const config = {
     "/dashboard/:path*",
     "/noc",
     "/noc/:path*",
-    "/auth/login",
-    "/auth/register",
+    "/auth/:path*",
     "/proyecto-web/comenzar",
+    "/platform-map",
+    "/platform-map/:path*",
+    "/explainer",
+    "/explainer/:path*",
     "/mascot-motion-lab",
     "/mascot-motion-lab/:path*"
   ]

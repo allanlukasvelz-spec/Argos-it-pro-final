@@ -53,11 +53,20 @@ test.describe("visual regression baseline (21.1)", () => {
     await expect(page).toHaveScreenshot("auth-login.png", screenshotOptions);
   });
 
-  test("dashboard /dashboard (authenticated)", async ({ page, request }) => {
-    await ensureVisualDashboardUser(request);
-    await loginAndSettleDashboard(page);
+  test.describe("dashboard deterministic clock", () => {
+    test.use({
+      locale: "es-ES",
+      timezoneId: "UTC",
+      viewport: VISUAL_VIEWPORT,
+      deviceScaleFactor: 1,
+    });
 
-    const content = page.locator("main.cp-main");
-    await expect(content).toHaveScreenshot("dashboard.png", screenshotOptions);
+    test("dashboard /dashboard (authenticated)", async ({ page, request }) => {
+      await ensureVisualDashboardUser(request);
+      await loginAndSettleDashboard(page);
+
+      const content = page.locator("main.cp-main");
+      await expect(content).toHaveScreenshot("dashboard.png", screenshotOptions);
+    });
   });
 });

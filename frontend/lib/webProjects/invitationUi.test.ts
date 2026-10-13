@@ -26,6 +26,10 @@ describe("web project invitation UI", () => {
       invitationCreatedMessage({ delivered: false }),
       "Invitación creada; envío pendiente/no disponible"
     );
+    assert.equal(
+      invitationCreatedMessage({ delivered: false, dispatched: true }),
+      "Invitación creada y aceptada por el transporte de prueba. No se ha entregado a un destinatario real."
+    );
   });
 
   it("3-7 status and delivery stay separate", () => {

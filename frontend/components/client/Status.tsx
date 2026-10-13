@@ -66,7 +66,7 @@ export function CoverageIndicator({
         label={label}
       />
       <p className="cp-disclaimer" style={{ marginTop: "0.35rem" }}>
-        Monitors activos: {monitorsEnabled}. Activos con evidencia fresca: {fresh}. Monitored ≠ Healthy.
+        Comprobaciones activas: {monitorsEnabled}. Activos con evidencia fresca: {fresh}. Tener comprobaciones no equivale a estar protegido.
       </p>
     </div>
   );

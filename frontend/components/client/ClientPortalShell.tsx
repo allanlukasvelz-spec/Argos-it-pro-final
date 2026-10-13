@@ -86,6 +86,15 @@ export default function ClientPortalShell({ children }: { children: ReactNode })
     setDrawerOpen(false);
   }, [pathname]);
 
+  const [compactAccount, setCompactAccount] = useState(false);
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 767px)");
+    const apply = () => setCompactAccount(media.matches);
+    apply();
+    media.addEventListener("change", apply);
+    return () => media.removeEventListener("change", apply);
+  }, []);
+
   async function onLogout() {
     await logout();
     router.push("/");
@@ -126,12 +135,27 @@ export default function ClientPortalShell({ children }: { children: ReactNode })
           </div>
           <div className="cp-topbar__meta">
             <ClientNotificationsBell />
-            <span>{orgName}</span>
-            <span aria-live="polite">{freshness}</span>
-            <span>{userName}</span>
-            <button type="button" className="cp-btn cp-btn--ghost" onClick={onLogout}>
+            <span className="cp-topbar__context">{orgName}</span>
+            <span className="cp-topbar__context" aria-live="polite">
+              {freshness}
+            </span>
+            <span className="cp-topbar__context">{userName}</span>
+            <button type="button" className="cp-btn cp-btn--ghost cp-topbar__logout" onClick={onLogout}>
               Cerrar sesión
             </button>
+            {compactAccount ? (
+            <details className="cp-topbar__account">
+              <summary>Cuenta</summary>
+              <div className="cp-topbar__account-panel">
+                <p>{orgName}</p>
+                <p>{freshness}</p>
+                <p>{userName}</p>
+                <button type="button" className="cp-btn cp-btn--secondary" onClick={onLogout}>
+                  Cerrar sesión
+                </button>
+              </div>
+            </details>
+            ) : null}
           </div>
         </header>
 
@@ -145,7 +169,7 @@ export default function ClientPortalShell({ children }: { children: ReactNode })
         ) : null}
 
         <nav id="cp-sidebar" className="cp-sidebar" aria-label="Portal de cliente">
-          <p className="cp-sidebar__label">Client Portal</p>
+          <p className="cp-sidebar__label">Portal de cliente</p>
           <ul className="cp-nav">
             {CLIENT_NAV.map((item) => {
               const current = navCurrent(pathname, item.href);
