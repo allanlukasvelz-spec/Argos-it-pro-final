@@ -1,9 +1,16 @@
 # Plan de producción ARGOS-IT
 
 Fecha de preparación: 2026-08-02
-Rama de trabajo: `release/production-v1`
-Commit base auditado: `db5c5a4`
+Rama de trabajo original: `release/production-v1`
+Commit histórico de aquella preparación: `db5c5a4`
+Revisión documental: 2026-10-14
 Estado: **preparación documental únicamente** — sin deploy, sin DNS, sin recursos nuevos, sin merge.
+
+Identidades, sin mezclarlas:
+
+- CURRENT INTEGRATION HEAD: `111ed70d554e8b4f34fc9316e71121fd3f1066ed` en `integration/gm-v3-main-b608665`. No consta desplegado.
+- CURRENT PRODUCTION VERSION: UNKNOWN.
+- ROLLBACK TARGET: UNKNOWN. Se anota con el commit y las imágenes del primer despliegue que realmente se publique.
 
 Referencias: [STAGING.md](./STAGING.md), [STAGING_RESULTADOS.md](./STAGING_RESULTADOS.md), [DEPLOYMENT.md](./DEPLOYMENT.md), [DEPLOY_AUTH.md](./DEPLOY_AUTH.md), [VERIFY.md](./VERIFY.md).
 
@@ -81,6 +88,8 @@ Nunca versionar `.env` reales. Generar secretos con `openssl rand -hex 48` (dos 
 
 ### 4.1 Backend producción (Coolify / proveedor)
 
+Obligatorias de aplicación:
+
 ```text
 NODE_ENV=production
 PORT=4000
@@ -90,15 +99,52 @@ JWT_REFRESH_SECRET=<nuevo y distinto — openssl rand -hex 48>
 CORS_ORIGINS=https://portal.argos-it.com
 FRONTEND_URL=https://portal.argos-it.com
 ENABLE_SOCKET_IO=false
+LOG_LEVEL=info
+```
+
+Correo de la aplicación. Contrato verificado en V7.11 y V7.12. No incluye contraseñas. El DNS y el correo de WordPress en el apex no forman parte de este bloque.
+
+Obligatorias para el transporte SMTP:
+
+```text
+ARGOS_EMAIL_TRANSPORT=smtp
+SMTP_HOST=smtp.hostinger.com
+SMTP_PORT=465
+SMTP_SECURE=true
+SMTP_USER=info@argos-it.com
+SMTP_PASSWORD=<secreto del buzón, solo en el proveedor, nunca en Git>
+EMAIL_FROM=info@argos-it.com
+CONTACT_EMAIL_TO=info@argos-it.com
+```
+
+`ARGOS_EMAIL_TRANSPORT=smtp` es lo que activa el adaptador. Las credenciales solas no envían correo. Si falta cualquiera de esas variables, el adaptador no abre socket. `CONTACT_EMAIL_TO` es el único destinatario del formulario; el cliente no puede sustituirlo ni cambiar `EMAIL_FROM`.
+
+Transporte QA, solo local o de prueba:
+
+```text
+ARGOS_EMAIL_TRANSPORT=qa
+```
+
+Con `NODE_ENV=production` el modo `qa` queda desactivado. No declara entrega a un buzón.
+
+Opcional del transporte:
+
+```text
+SMTP_TIMEOUT_MS=10000
+```
+
+El endpoint externo de formulario que figuraba aquí no es el transporte verificado. No copiarlo a producción. Si el transporte queda desactivado y ese endpoint existiera, el código aún podría usarlo; la configuración de publicación no debe depender de él.
+
+Opcional, pendiente de decisión:
+
+```text
 OPENAI_API_KEY=<pendiente decisión>
 OPENAI_MODEL=gpt-4o-mini
 OPENAI_TIMEOUT_MS=45000
 AI_MESSAGE_MAX_LEN=6000
-CONTACT_FORM_ENDPOINT=https://formspree.io/f/xpqooedl
-LOG_LEVEL=info
 ```
 
-Opcionales recomendados (ya en `backend/.env.example`; ajustar solo si se decide endurecer prod):
+Opcionales de límite, ya en `backend/.env.example`. Los valores por defecto del código no cambian si se omiten:
 
 ```text
 RATE_LIMIT_WINDOW_MS=900000
@@ -116,14 +162,16 @@ CONTACT_RATE_LIMIT_MAX=5
 ```text
 NEXT_PUBLIC_BACKEND_URL=https://api.portal.argos-it.com
 BACKEND_URL=<URL interna o pública confirmada del API>
-NEXT_PUBLIC_CONTACT_FORM_ENDPOINT=https://formspree.io/f/xpqooedl
 # Opcional metadata/OG:
 # NEXT_PUBLIC_SITE_URL=https://portal.argos-it.com
 ```
 
+El formulario público llama a `NEXT_PUBLIC_BACKEND_URL`. No usa un endpoint de formulario en el cliente.
+
 Notas de auditoría:
 
-- `NEXT_PUBLIC_BACKEND_URL` se inyecta en **build** (`frontend/Dockerfile` `ARG`/`ENV`); debe ser la URL pública del API.
+- `NEXT_PUBLIC_BACKEND_URL` se incrusta en el build. Un `next build` también lee `frontend/.env.local` si existe. Ese archivo es de desarrollo y no debe definir el artefacto de publicación.
+- Antes del build de publicación, con la URL pública ya exportada en el entorno y sin depender del `.env.local` de desarrollo: `ARGOS_RELEASE_BUILD=1 npm run check:release-build`. Si la URL resuelta es local, está vacía o no es `https`, el comando termina en error. `npm run build` ordinario no cambia y sigue sirviendo para verificación local.
 - `BACKEND_URL` la usan route handlers del servidor Next (p. ej. relay mascot-chat); puede ser la misma URL pública o una URL interna de red Coolify si se confirma reachability.
 - No usar `db`, `backend`, `localhost` ni `127.0.0.1` como URL pública de producción.
 
@@ -323,7 +371,7 @@ Orden propuesto (**no ejecutar en esta fase**):
 
 Reglas: sin `docker compose down -v` destructivo; sin force push; sin merge de emergencia a ciegas; no restaurar dumps de staging sobre prod.
 
-Commit/imagen de referencia a documentar en el momento del primer deploy exitoso (hoy: base de preparación `db5c5a4` en `release/production-v1`).
+Este procedimiento está documentado y no consta ensayado sobre producción. CURRENT PRODUCTION VERSION y ROLLBACK TARGET siguen UNKNOWN. `db5c5a4` es solo la base histórica de esta preparación; no es un objetivo de rollback. El script `scripts/staging/rollback-rehearsal.sh` pertenece al staging y no se ejecuta desde este plan.
 
 ---
 
@@ -368,7 +416,8 @@ Commit/imagen de referencia a documentar en el momento del primer deploy exitoso
 
 - [ ] Recursos prod creados y aislados de staging
 - [ ] DNS + TLS en `portal` y `api.portal`
-- [ ] Variables prod inyectadas (JWT nuevos, DB nueva, CORS/FRONTEND correctos)
+- [ ] Variables prod inyectadas (JWT nuevos, DB nueva, CORS/FRONTEND correctos, SMTP del §4.1)
+- [ ] `ARGOS_RELEASE_BUILD=1 npm run check:release-build` en PASS antes del build público
 - [ ] `migrate.sh` aplicado con éxito
 - [ ] `/api/health` 200 y frontend 200
 - [ ] verify-api público + autenticado PASS en prod

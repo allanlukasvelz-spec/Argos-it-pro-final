@@ -29,7 +29,6 @@ const authLimiter = rateLimit({
   // Staging E2E behind Traefik: isolate via X-Argos-Staging-E2E-Fwd (TEST-NET only).
   // Does not raise max; production ignores the header.
   keyGenerator: authRateLimitKey,
-  validate: { keyGeneratorIpFallback: false },
   message: { error: "Demasiados intentos. Intentalo de nuevo en unos minutos." }
 });
 
