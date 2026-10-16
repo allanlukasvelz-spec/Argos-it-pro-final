@@ -1,5 +1,8 @@
 # Staging ARGOS-IT — preparación
 
+> **Vigencia — 2026-10-16.** Esta nota describe la preparación del repositorio cuando el despliegue aún no constaba aquí. [STAGING_RESULTADOS.md](./STAGING_RESULTADOS.md) registra un staging operativo el 2026-08-02. La última observación pública, el 2026-10-14, fue HTTP 503 en `staging.argos-it.com` y `api-staging.argos-it.com`. V7.24 no repitió la prueba, no mantiene ese 503 como estado actual y no cierra una causa. La ausencia de configuración de proveedor dentro del repositorio sigue siendo cierta y no describe por sí sola el servicio público.
+
+
 Estado del repositorio: **preparado para staging**. Despliegue real **bloqueado** hasta disponer de proveedor, dominios y secretos.
 
 Arquitectura recomendada (sustituir por dominios reales confirmados):

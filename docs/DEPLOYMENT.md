@@ -1,5 +1,8 @@
 # 🌐 Deployment - Producción
 
+> **Vigencia — 2026-10-16.** Guía genérica de despliegue local o de un servidor propio. Railway, Heroku y el compose de este archivo no están confirmados como el alojamiento público. El `curl` a `/api/health` comprueba una ruta de aplicación que existe en el código. La sonda de la imagen, en el HEAD `e1c9a5d`, es otra: el backend llama a `/api/live` y el frontend a `http://127.0.0.1:3000/`. Ninguna de las dos identifica la revisión desplegada.
+
+
 Staging primero: ver [STAGING.md](./STAGING.md) y evidencia en [STAGING_RESULTADOS.md](./STAGING_RESULTADOS.md).
 No desplegar producción desde esta guía sin checklist de staging verde.
 

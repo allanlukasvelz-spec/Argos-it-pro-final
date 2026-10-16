@@ -1,5 +1,8 @@
 # 04 — Coolify
 
+> **Vigencia — 2026-10-16.** Este archivo conserva el registro de agosto de 2026. No describe el estado verificado el 2026-10-16 y V7.24 no ha reobservado la infraestructura. Coolify como sistema vigente: no verificado. WordPress como tecnología actual del apex: no confirmado; el 2026-10-14 el apex respondió como Next.js en `31.97.52.181`, sin que eso demuestre su retirada de todos los servidores. SHA desplegado, copias de producción y rollback: desconocidos o bloqueados. Clasificación: [ARCHITECTURE_CURRENT_STATUS.md](../ARCHITECTURE_CURRENT_STATUS.md).
+
+
 ## Resumen
 
 Coolify orquesta proyectos staging/producción, proxy Traefik, backups y panel en `https://coolify.argos-it.com`.

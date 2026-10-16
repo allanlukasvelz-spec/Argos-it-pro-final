@@ -3,16 +3,26 @@
 Fecha de preparación: 2026-08-02
 Rama de trabajo original: `release/production-v1`
 Commit histórico de aquella preparación: `db5c5a4`
-Revisión documental: 2026-10-14
+Revisión documental: 2026-10-14; nota de reconciliación 2026-10-16
 Estado: **preparación documental únicamente** — sin deploy, sin DNS, sin recursos nuevos, sin merge.
 
 Identidades, sin mezclarlas:
 
-- CURRENT INTEGRATION HEAD: `111ed70d554e8b4f34fc9316e71121fd3f1066ed` en `integration/gm-v3-main-b608665`. No consta desplegado.
+- INTEGRATION HEAD el 2026-10-16: `e1c9a5db03e52e8f637fc4f8c4d7c4b7e25ba88c` en `integration/gm-v3-main-b608665`. No consta desplegado.
+- INTEGRATION HEAD en la revisión del 2026-10-14: `111ed70d554e8b4f34fc9316e71121fd3f1066ed`, padre del commit anterior. Tampoco consta desplegado.
 - CURRENT PRODUCTION VERSION: UNKNOWN.
-- ROLLBACK TARGET: UNKNOWN. Se anota con el commit y las imágenes del primer despliegue que realmente se publique.
+- ROLLBACK TARGET: UNKNOWN y bloqueado. No se anota un commit de recuperación hasta identificar un despliegue real. `db5c5a4` sigue siendo solo la base histórica de esta preparación.
 
-Referencias: [STAGING.md](./STAGING.md), [STAGING_RESULTADOS.md](./STAGING_RESULTADOS.md), [DEPLOYMENT.md](./DEPLOYMENT.md), [DEPLOY_AUTH.md](./DEPLOY_AUTH.md), [VERIFY.md](./VERIFY.md).
+Referencias: [STAGING.md](./STAGING.md), [STAGING_RESULTADOS.md](./STAGING_RESULTADOS.md), [DEPLOYMENT.md](./DEPLOYMENT.md), [DEPLOY_AUTH.md](./DEPLOY_AUTH.md), [VERIFY.md](./VERIFY.md), [ARCHITECTURE_CURRENT_STATUS.md](./ARCHITECTURE_CURRENT_STATUS.md).
+
+> **Nota de reconciliación — 2026-10-16.** El texto siguiente conserva la preparación del 2026-08-02 y la revisión del 2026-10-14.
+>
+> - «WordPress actual» en el apex describe aquella preparación. El 2026-10-14 `argos-it.com` respondió como Next.js desde `31.97.52.181`. Eso no demuestra que WordPress se haya retirado de todos los servidores. `www.argos-it.com` no tenía registro A ni CNAME en esa observación.
+> - `portal.argos-it.com` y `api.portal.argos-it.com` respondieron HTTP 200 el 2026-10-14 desde `91.108.121.181`. Un 200 no identifica el commit desplegado. El portal no se declara coincidente con este HEAD ni listo para producción.
+> - El healthcheck público informó base de datos conectada. El motor y el servidor de esa base no tienen verificación administrativa.
+> - Coolify como orquestador vigente: no verificado. El registro de agosto no demuestra que siga en uso ni que esté apagado.
+> - Staging figura operativo el 2026-08-02 y en HTTP 503 el 2026-10-14. V7.24 no repitió la prueba y no cierra una causa.
+> - Copias de base, aplicación y almacenamiento de producción: no verificadas. La copia local V7.23 solo protege `artifacts/` en este Mac. Rollback: bloqueado.
 
 ---
 
@@ -233,7 +243,7 @@ Auditoría `database/migrate.sh`: exige `DATABASE_URL`; `ON_ERROR_STOP=1`; no ha
 | Ítem | Hallazgo / plan |
 |------|-----------------|
 | Dockerfile | `backend/Dockerfile` — Node 22 Alpine, `npm ci --omit=dev`, `EXPOSE 4000`, `CMD npm start` |
-| HEALTHCHECK | Presente: `fetch('http://127.0.0.1:4000/api/health')` interval 30s / timeout 5s / start 20s / retries 3 |
+| HEALTHCHECK | En el HEAD `e1c9a5d`: `fetch('http://127.0.0.1:4000/api/live')`, intervalo 30s / timeout 5s / arranque 20s / reintentos 3. La revisión del 2026-10-14 anotaba `/api/health`. Esa ruta sigue en el código como comprobación de aplicación; no es la sonda de la imagen. |
 | Coolify health | Preferir HEALTHCHECK de imagen; no forzar HTTP con curl en Alpine |
 | Health endpoint | `GET /api/health` → 200 |
 | Socket.IO | `ENABLE_SOCKET_IO=false` hasta decisión explícita |
@@ -248,7 +258,7 @@ Auditoría `database/migrate.sh`: exige `DATABASE_URL`; `ON_ERROR_STOP=1`; no ha
 | Ítem | Hallazgo / plan |
 |------|-----------------|
 | Dockerfile | `frontend/Dockerfile` — Node 22 Alpine, `npm ci`, build con `ARG NEXT_PUBLIC_BACKEND_URL`, `EXPOSE 3000` |
-| HEALTHCHECK | **Ausente** en imagen frontend (a diferencia del backend) — documentar; evaluar en fase de implementación (fuera de esta preparación) |
+| HEALTHCHECK | Presente en el HEAD `e1c9a5d`: `fetch('http://127.0.0.1:3000/')`, intervalo 20s / timeout 5s / arranque 25s / reintentos 5. La revisión del 2026-10-14 lo daba por ausente. |
 | Build-arg producción | `NEXT_PUBLIC_BACKEND_URL=https://api.portal.argos-it.com` |
 | Runtime | Confirmar bind host adecuado para Coolify (patrón ya usado en staging) |
 | Dominio | `portal.argos-it.com` |
@@ -264,6 +274,8 @@ Auditoría `database/migrate.sh`: exige `DATABASE_URL`; `ON_ERROR_STOP=1`; no ha
 | TLS Let’s Encrypt | Cuando existan hosts → proxy Coolify/Traefik |
 | CAA | Conservar `letsencrypt.org`; no tocar apex/`www` |
 | Separación | Staging DNS (`staging`, `api-staging`) permanece; producción es independiente |
+
+La fila «No crear todavía» es la instrucción de aquella preparación. El 2026-10-14 `portal` y `api.portal` ya resolvían en público. La fila no ordena crearlos ni afirma que sigan ausentes.
 
 ---
 
@@ -338,6 +350,8 @@ Canal de alertas de **producción** separado del de staging. Coolify Sentinel + 
 - [ ] `https://argos-it.com` y `https://www.argos-it.com` siguen sirviendo WordPress
 - [ ] Portal no rompe enlaces críticos del sitio marketing actual (acordar enlaces cruzados si aplica)
 
+Estos dos puntos conservan el criterio de la preparación. El 2026-10-14 el apex no se observó como WordPress. No son una orden de cambiar DNS ni hosting.
+
 ---
 
 ## 13. Cutover
@@ -384,7 +398,7 @@ Este procedimiento está documentado y no consta ensayado sobre producción. CUR
 | Confundir CORS con WordPress apex | `CORS_ORIGINS` solo `https://portal.argos-it.com` salvo decisión explícita |
 | `OPENAI_API_KEY` vacía | IA 503; producto debe comunicarlo o activar clave |
 | `ENABLE_SOCKET_IO=false` | Sin WS hasta decisión y cliente real |
-| Frontend sin HEALTHCHECK en Dockerfile | Riesgo de “Running” sin probe; valorar en fase impl. |
+| Frontend sin HEALTHCHECK en Dockerfile. Antecedente de la revisión del 2026-10-14; no describe el Dockerfile de este HEAD. | El riesgo de “Running” sin probe corresponde a aquella nota. En `e1c9a5d`, `frontend/Dockerfile` tiene HEALTHCHECK hacia `http://127.0.0.1:3000/`. |
 | sharp transitivo (Next.js) | No `npm audit fix --force` |
 | Divergencia WordPress vs portal | Enlaces y expectativa de marca claros en cutover |
 | Rate limit auth agresivo (8/15 min) | Operación consciente en smoke login |
@@ -452,10 +466,10 @@ Este procedimiento está documentado y no consta ensayado sobre producción. CUR
 | `backend/.env.example` | Variables API completas; JWT dual; Socket.IO/OpenAI documentados |
 | `frontend/.env.example` | `BACKEND_URL` + `NEXT_PUBLIC_BACKEND_URL` + Formspree |
 | `docker/.env.example` | Postgres local + JWT + puertos; compose local |
-| `backend/Dockerfile` | Node 22 Alpine + HEALTHCHECK `fetch` `/api/health` |
-| `frontend/Dockerfile` | Node 22 Alpine + build-arg `NEXT_PUBLIC_BACKEND_URL`; sin HEALTHCHECK |
+| `backend/Dockerfile` | Node 22 Alpine + HEALTHCHECK `fetch` `/api/live`. La nota del 2026-10-14 decía `/api/health`. |
+| `frontend/Dockerfile` | Node 22 Alpine + build-arg `NEXT_PUBLIC_BACKEND_URL` + HEALTHCHECK a `/`. La nota del 2026-10-14 decía que no había sonda. |
 | `database/migrate.sh` | Idempotente; requiere `DATABASE_URL`; sin seed admin |
-| `docs/STAGING.md` / `STAGING_RESULTADOS.md` | Staging operativo; offsite staging pendiente de proveedor |
+| `docs/STAGING.md` / `STAGING_RESULTADOS.md` | Preparación sin proveedor en el repo, y registro operativo del 2026-08-02. La observación pública del 2026-10-14 fue HTTP 503. |
 | `docs/DEPLOYMENT.md` / `VERIFY.md` / `DEPLOY_AUTH.md` | Guías previas; este plan las especializa a portal/api.portal |
 
 ## Apéndice B — Decisiones pendientes (operador)
