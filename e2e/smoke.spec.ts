@@ -70,9 +70,11 @@ test.describe("public and auth shell", () => {
     await expect(root).toHaveAttribute("data-active-mascot", "chico");
     await expect(page.locator('.mascot--chico [data-mascot-active="true"]')).toBeVisible();
     await expect(page.locator('.mascot--dumbo [data-mascot-active="false"]')).toBeVisible();
+    await expect
+      .poll(async () => (await page.locator(".mascot__img--chico").getAttribute("src")) || "")
+      .toMatch(/chico_alert\.png/);
     const chicoSrc =
       (await page.locator(".mascot__img--chico").getAttribute("src")) || "";
-    expect(chicoSrc).toMatch(/chico_alert\.png/);
     expect(chicoSrc).not.toMatch(/caminando/i);
     await page.keyboard.press("Escape");
     await expect(root).toHaveAttribute("data-active-mascot", "none");
