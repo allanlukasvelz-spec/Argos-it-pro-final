@@ -9,6 +9,7 @@ import "../assets/css/argos-backgrounds.css";
 import "../assets/css/argos-marketing-chrome.css";
 import "../assets/css/argos-method-galaxy.css";
 import "../assets/css/argos-corporate.css";
+import "../assets/css/argos-hyphen-stability.css";
 import "../styles/mascot-sprites.css";
 
 export const metadata: Metadata = {

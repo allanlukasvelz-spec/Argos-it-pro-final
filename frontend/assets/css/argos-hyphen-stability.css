@@ -1,0 +1,9 @@
+/*
+  .argos-corp-text-justify pide hyphens:auto. En Ubuntu 24.04 (GitHub Actions)
+  FreeType cruza el umbral y parte Ordenamos, ARGOS y distintos.
+  El diseño aprobado, el baseline y el corte por debajo de 639px mantienen
+  la palabra entera. Esta regla va después de argos-corporate.css.
+*/
+.argos-corp-text-justify {
+  hyphens: manual;
+}
