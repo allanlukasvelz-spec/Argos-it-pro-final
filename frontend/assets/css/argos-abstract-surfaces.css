@@ -1,0 +1,266 @@
+/*
+ * Fondos abstractos V4. Solo páginas con .argos-v4-surface.
+ * No altera Home, el formulario de contacto, el cromo ni la onda oficial.
+ * Formas originales. Paleta ARGOS. Sin animación.
+ */
+
+.argos-v4-surface {
+  --v4-navy: #102c54;
+  --v4-teal: #168b8c;
+  --v4-mist: #65bfc1;
+  --v4-ink: #eef6f7;
+  --v4-wave: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 640' fill='none'%3E%3Cpath d='M-30 150C150 40 250 220 470 120C690 20 820 90 1230 40' stroke='%2365BFC1' stroke-width='1.1' opacity='.55'/%3E%3Cpath d='M-30 190C170 80 290 250 500 150C720 50 860 130 1230 70' stroke='%23168B8C' stroke-width='.9' opacity='.4'/%3E%3Cpath d='M-40 430C180 300 320 560 560 400C800 240 980 340 1260 260' stroke='%2365BFC1' stroke-width='1.4' opacity='.7'/%3E%3Cpath d='M-40 470C200 340 360 590 600 430C840 270 1000 380 1260 300' stroke='%23168B8C' stroke-width='1' opacity='.45'/%3E%3Cpath d='M620 560C820 470 980 640 1240 520' stroke='%2365BFC1' stroke-width='10' stroke-linecap='butt' opacity='.16'/%3E%3C/svg%3E");
+  --v4-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 700' fill='none'%3E%3Cpath d='M-120 40C160 210 380-30 640 90C900 210 1040 20 1340 150L1340 340C980 160 760 420 420 250C140 110-80 280-120 170Z' fill='%2365BFC1' opacity='.34'/%3E%3Cpath d='M-140 430C120 300 400 620 700 450C980 290 1140 560 1360 400L1360 640C1040 760 700 520 380 640C80 750-90 560-140 610Z' fill='%23168B8C' opacity='.18'/%3E%3Cpath d='M80 80C280 10 460 190 700 90C940-10 1080 150 1280 70' stroke='%23FFFFFF' stroke-width='18' opacity='.55'/%3E%3Cpath d='M-60 210C140 120 280 300 500 210C720 120 880 250 1260 160' stroke='%23168B8C' stroke-width='1' opacity='.45'/%3E%3Cpath d='M-60 226C140 136 280 316 500 226C720 136 880 266 1260 176' stroke='%2365BFC1' stroke-width='.8' opacity='.55'/%3E%3Cpath d='M-60 242C140 152 280 332 500 242C720 152 880 282 1260 192' stroke='%23168B8C' stroke-width='.7' opacity='.35'/%3E%3Cpath d='M200 560C420 470 620 650 860 540C1040 460 1160 560 1320 500' stroke='%23168B8C' stroke-width='1' opacity='.4'/%3E%3Cpath d='M200 576C420 486 620 666 860 556C1040 476 1160 576 1320 516' stroke='%2365BFC1' stroke-width='.8' opacity='.5'/%3E%3Cpath d='M200 592C420 502 620 682 860 572C1040 492 1160 592 1320 532' stroke='%23168B8C' stroke-width='.7' opacity='.3'/%3E%3C/svg%3E");
+}
+
+.argos-v4-surface .argos-corp-section--dplus-intro,
+.argos-v4-surface .argos-corp-section--dplus-method {
+  background-color: var(--v4-navy);
+}
+
+.argos-v4-surface .argos-corp-section--dplus-intro::before,
+.argos-v4-surface .argos-corp-section--dplus-method::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-repeat: no-repeat;
+}
+
+.argos-v4-surface .argos-corp-section--dplus-intro .argos-corp-container,
+.argos-v4-surface .argos-corp-section--dplus-method .argos-corp-container {
+  position: relative;
+  z-index: 1;
+}
+
+/* Servicios — estilo C. Degradado direccional y curvas a la derecha. */
+.argos-v4-services .argos-corp-section--dplus-intro {
+  background-image: linear-gradient(
+    108deg,
+    var(--v4-navy) 0%,
+    var(--v4-navy) 58%,
+    color-mix(in srgb, var(--v4-teal) 28%, var(--v4-navy)) 100%
+  );
+}
+
+.argos-v4-services .argos-corp-section--dplus-intro::before {
+  background-image:
+    radial-gradient(78% 90% at 100% 72%, color-mix(in srgb, var(--v4-mist) 40%, transparent), transparent 62%),
+    var(--v4-wave);
+  background-size: auto, 92% auto;
+  background-position: right center, 118% center;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0 58%, #000 82%);
+  mask-image: linear-gradient(90deg, transparent 0 58%, #000 82%);
+}
+
+/* Sobre ARGOS-IT — estilo A. Azul profundo y ondas en el margen. */
+.argos-v4-about .argos-corp-section--dplus-intro {
+  background-image: linear-gradient(180deg, var(--v4-navy) 0%, var(--v4-navy) 100%);
+}
+
+.argos-v4-about .argos-corp-section--dplus-intro::before {
+  background-image:
+    radial-gradient(55% 70% at 100% 100%, color-mix(in srgb, var(--v4-teal) 32%, transparent), transparent 62%),
+    var(--v4-wave);
+  background-size: auto, 62% auto;
+  background-position: right bottom, right bottom;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0 52%, #000 80%);
+  mask-image: linear-gradient(90deg, transparent 0 52%, #000 80%);
+}
+
+/* Método — estilo D. Ondas en los bordes del bloque ancho. */
+.argos-v4-method .argos-corp-section--dplus-method::before {
+  background-image:
+    radial-gradient(42% 22% at 0% 0%, color-mix(in srgb, var(--v4-teal) 26%, transparent), transparent 70%),
+    var(--v4-wave);
+  background-size: auto, 168% auto;
+  background-position: left top, left top;
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, transparent 14%, transparent 86%, #000 100%);
+  mask-image: linear-gradient(90deg, #000 0%, transparent 14%, transparent 86%, #000 100%);
+}
+
+/* Barra del método — estilo C. El título queda sobre azul estable. */
+.argos-v4-method .argos-method-bar {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: linear-gradient(
+    100deg,
+    var(--v4-navy) 0%,
+    var(--v4-navy) 52%,
+    color-mix(in srgb, var(--v4-teal) 36%, var(--v4-navy)) 100%
+  );
+}
+
+.argos-v4-method .argos-method-bar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: var(--v4-wave);
+  background-repeat: no-repeat;
+  background-position: 130% 40%;
+  background-size: 240% auto;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0 46%, #000 100%);
+  mask-image: linear-gradient(90deg, transparent 0 46%, #000 100%);
+}
+
+.argos-v4-method .argos-method-bar > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Puente — estilo A. Poco texto, onda en la esquina. */
+.argos-v4-method .argos-card--bridge {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--v4-navy);
+}
+
+.argos-v4-method .argos-card--bridge::before {
+  content: "";
+  position: absolute;
+  inset: auto -8% -55% 48%;
+  z-index: 0;
+  height: 160%;
+  pointer-events: none;
+  background:
+    radial-gradient(closest-side, color-mix(in srgb, var(--v4-teal) 42%, transparent), transparent 72%),
+    var(--v4-wave) left 10% bottom / 78% auto no-repeat;
+  transform: rotate(-18deg);
+  transform-origin: 100% 100%;
+}
+
+.argos-v4-method .argos-card--bridge > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Diseño claro: curvas amplias sobre #EEF6F7. El texto queda en azul marino. */
+.argos-v4-services.argos-corporate .argos-corp-section--dplus-pillars,
+.argos-v4-services.argos-corporate .argos-corp-section--dplus-services,
+.argos-v4-about.argos-corporate .argos-corp-section--dplus-trust {
+  background-color: var(--v4-ink);
+  background-image: var(--v4-light);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  backdrop-filter: none;
+  color: var(--v4-navy);
+}
+
+.argos-v4-services .argos-corp-section--dplus-pillars .argos-corp-container,
+.argos-v4-services .argos-corp-section--dplus-services .argos-corp-container,
+.argos-v4-about .argos-corp-section--dplus-trust .argos-corp-container {
+  position: relative;
+  z-index: 1;
+}
+
+.argos-v4-method.argos-corporate .argos-corp-section--dplus-method .argos-card--method:not(.argos-card--bridge) {
+  background-color: var(--v4-ink);
+  background-image: var(--v4-light);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center top;
+  color: var(--v4-navy);
+  border-color: color-mix(in srgb, var(--v4-teal) 35%, var(--v4-ink));
+}
+
+@media (max-width: 767px) {
+  .argos-v4-services .argos-corp-section--dplus-intro {
+    background-image: none;
+  }
+
+  .argos-v4-services .argos-corp-section--dplus-intro::before {
+    background-size: auto, 110% auto;
+    background-position: right center, 140% center;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0 70%, #000 96%);
+    mask-image: linear-gradient(90deg, transparent 0 70%, #000 96%);
+    opacity: 1;
+  }
+
+  .argos-v4-about .argos-corp-section--dplus-intro {
+    background-image: none;
+  }
+
+  .argos-v4-about .argos-corp-section--dplus-intro::before {
+    background-size: auto, 148% auto;
+    background-position: right bottom, 100% 118%;
+    -webkit-mask-image: linear-gradient(180deg, transparent 0 64%, #000 90%);
+    mask-image: linear-gradient(180deg, transparent 0 64%, #000 90%);
+    opacity: 1;
+  }
+
+  .argos-v4-method .argos-corp-section--dplus-method::before {
+    background-size: auto, 120% auto;
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .argos-v4-surface .argos-corp-section--dplus-intro::before,
+  .argos-v4-surface .argos-corp-section--dplus-method::before,
+  .argos-v4-surface .argos-method-bar::before,
+  .argos-v4-surface .argos-card--bridge::before {
+    animation: none;
+  }
+}
+
+/* Barra A.R.G.O.S. Solo /metodo. Home no usa .argos-v4-method.
+   La fila congelada no parte línea y recorta S dentro de un scroll interno. */
+@media (max-width: 639px) {
+  .argos-v4-method .argos-method-bar__phases::after {
+    content: none;
+  }
+
+  .argos-v4-method .argos-corp-phase-letters-row {
+    flex-wrap: wrap;
+    overflow: visible;
+    scroll-snap-type: none;
+    padding-inline-end: 0;
+    row-gap: 0.15rem;
+  }
+
+  .argos-v4-method .argos-corp-phase-letters-row > li {
+    flex: 1 1 30%;
+    min-width: 0;
+  }
+
+  .argos-v4-method .argos-corp-phase-letters-row__item {
+    width: 100%;
+    min-width: 0;
+    flex: none;
+    padding: 0.3rem 0.15rem;
+    scroll-snap-align: unset;
+  }
+
+  .argos-v4-method .argos-corp-phase-letters-row__title {
+    white-space: normal;
+    line-height: 1.2;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .argos-v4-method .argos-method-bar__phases::after {
+    content: none;
+  }
+
+  .argos-v4-method .argos-corp-phase-letters-row {
+    overflow: visible;
+    padding-inline-end: 0;
+  }
+
+  .argos-v4-method .argos-corp-phase-letters-row > li {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .argos-v4-method .argos-corp-phase-letters-row__item {
+    width: 100%;
+    min-width: 0;
+    padding-inline: 0.2rem;
+  }
+}

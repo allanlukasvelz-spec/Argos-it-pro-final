@@ -1,5 +1,17 @@
 const IS_PROD = process.env.NODE_ENV === "production";
 
+/**
+ * Cookie Secure flag:
+ * - ARGOS_COOKIE_SECURE=0|1 overrides (staging HTTP loopback needs 0)
+ * - otherwise Secure when NODE_ENV=production
+ */
+function cookieSecure() {
+  const override = String(process.env.ARGOS_COOKIE_SECURE || "").trim();
+  if (override === "0") return false;
+  if (override === "1") return true;
+  return IS_PROD;
+}
+
 const ACCESS_COOKIE = "argos_access";
 const REFRESH_COOKIE = "argos_refresh";
 const SESSION_COOKIE = "argos_session";
@@ -9,7 +21,7 @@ const REFRESH_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
 
 const baseCookieOpts = {
   httpOnly: true,
-  secure: IS_PROD,
+  secure: cookieSecure(),
   sameSite: "lax",
 };
 
@@ -28,7 +40,7 @@ function setTokenCookies(res, accessToken, refreshToken) {
 
   res.cookie(SESSION_COOKIE, "1", {
     httpOnly: false,
-    secure: IS_PROD,
+    secure: cookieSecure(),
     sameSite: "lax",
     path: "/",
     maxAge: REFRESH_MAX_AGE_MS,
@@ -47,4 +59,5 @@ module.exports = {
   SESSION_COOKIE,
   setTokenCookies,
   clearTokenCookies,
+  cookieSecure
 };

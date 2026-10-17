@@ -1,5 +1,8 @@
 # 20 — Executive Summary
 
+> **Vigencia — 2026-10-16.** Este archivo conserva el registro de agosto de 2026. No describe el estado verificado el 2026-10-16 y V7.24 no ha reobservado la infraestructura. Coolify como sistema vigente: no verificado. WordPress como tecnología actual del apex: no confirmado; el 2026-10-14 el apex respondió como Next.js en `31.97.52.181`, sin que eso demuestre su retirada de todos los servidores. SHA desplegado, copias de producción y rollback: desconocidos o bloqueados. Clasificación: [ARCHITECTURE_CURRENT_STATUS.md](../ARCHITECTURE_CURRENT_STATUS.md).
+
+
 ## Resumen
 
 ARGOS-IT opera un portal full-stack (Next.js + Express + PostgreSQL) en un VPS Hostinger con Coolify **4.2.0 fijado**, Traefik, swap 2G, hardening SSH/UFW y backups offsite R2 vía rclone. WordPress marketing está separado. Restore temporal PG validado; MFA/Zero Trust y drill total VPS pendientes.

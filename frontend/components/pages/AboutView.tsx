@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import CorporatePageShell from "@/components/layout/CorporatePageShell";
+import "@/assets/css/argos-abstract-surfaces.css";
 import { useI18n } from "@/i18n/useI18n";
 import { usePageMeta } from "@/components/seo/usePageMeta";
 
@@ -14,8 +15,8 @@ export default function AboutView() {
   usePageMeta(t("meta.aboutTitle"), t("meta.aboutDescription"));
 
   return (
-    <CorporatePageShell>
-      <section className="argos-corp-section" aria-labelledby="about-title">
+    <CorporatePageShell className="argos-v4-surface argos-v4-about">
+      <section className="argos-corp-section argos-corp-section--dplus-intro" aria-labelledby="about-title">
         <div className="argos-corp-container">
           <div className="grid items-start gap-10 lg:grid-cols-[1fr_240px]">
             <div>
@@ -34,7 +35,7 @@ export default function AboutView() {
                 ))}
               </div>
             </div>
-            <div className="flex justify-center lg:justify-end">
+            <div className="argos-about-emblem flex justify-center lg:justify-end">
               <Image
                 src="/argos-history-emblem.png"
                 alt="Emblema de Chico y Dumbo en la historia de ARGOS-IT"
@@ -45,8 +46,12 @@ export default function AboutView() {
               />
             </div>
           </div>
+        </div>
+      </section>
 
-          <section className="argos-corporate-card argos-corp-detail-card mt-10" aria-labelledby="about-values-title">
+      <section className="argos-corp-section argos-corp-section--dplus-trust" aria-labelledby="about-values-title">
+        <div className="argos-corp-container">
+          <div className="argos-corporate-card argos-corp-detail-card">
             <h2 id="about-values-title" className="argos-font-display argos-corp-h2">
               {t("about.valuesTitle")}
             </h2>
@@ -55,7 +60,7 @@ export default function AboutView() {
                 <li key={value}>{value}</li>
               ))}
             </ul>
-          </section>
+          </div>
 
           <div className="argos-corp-cta-row" style={{ marginTop: "2rem" }}>
             <Link href="/contacto" className="argos-corporate-cta">

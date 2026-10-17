@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ARGOS Phase 8 — Implementation Map (Planning Only)</title>
+  <style>
+    :root {
+      --navy: #1F3A5F;
+      --dark: #0B1320;
+      --teal: #2F7D6D;
+      --canvas: #F7F7F5;
+      --warn: #B45309;
+      --crit: #B91C1C;
+      --unk: #6B7280;
+      --border: #D1D5DB;
+      --surface: #fff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: var(--canvas);
+      color: var(--dark);
+      line-height: 1.45;
+      font-size: 15px;
+    }
+    header.hero {
+      background: linear-gradient(135deg, var(--dark), var(--navy));
+      color: #E8EEF4;
+      padding: 2rem 1.5rem 2.5rem;
+    }
+    header.hero h1 { margin: 0 0 0.35rem; font-size: 1.75rem; }
+    header.hero p { margin: 0.25rem 0; max-width: 54rem; opacity: 0.92; }
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-right: 0.35rem;
+    }
+    .badge-stop { background: var(--crit); color: #fff; }
+    .badge-plan { background: var(--teal); color: #fff; }
+    .badge-cur { background: #334155; color: #fff; }
+    .badge-tgt { background: var(--navy); color: #fff; }
+    .badge-fut { background: var(--unk); color: #fff; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 1100px; margin: 0 auto; }
+    section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.1rem 1.25rem;
+      margin-bottom: 1rem;
+    }
+    section h2 {
+      margin: 0 0 0.75rem;
+      font-size: 1.1rem;
+      color: var(--navy);
+      border-bottom: 2px solid var(--teal);
+      padding-bottom: 0.35rem;
+    }
+    h3 { margin: 1rem 0 0.4rem; font-size: 0.95rem; }
+    .grid-2 { display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.75rem;
+      background: #FAFBFC;
+    }
+    .card strong { display: block; color: var(--navy); margin-bottom: 0.25rem; }
+    .flow {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem;
+      font-size: 0.82rem; font-weight: 600;
+    }
+    .flow span {
+      background: #E2E8F0;
+      padding: 0.35rem 0.55rem;
+      border-radius: 4px;
+    }
+    .flow .arrow { background: none; color: var(--teal); padding: 0; }
+    .boundary {
+      border: 2px dashed var(--warn);
+      border-radius: 8px;
+      padding: 0.75rem;
+      margin: 0.75rem 0;
+      background: #FFFBEB;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    th, td { border: 1px solid var(--border); padding: 0.45rem 0.6rem; text-align: left; }
+    th { background: #EDF2F7; }
+    footer { text-align: center; color: var(--unk); font-size: 0.8rem; padding: 1rem; }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <h1>ARGOS Phase 8 — Implementation Map</h1>
+    <p>
+      <span class="badge badge-stop">IMPLEMENTATION_AUTHORIZED = NO</span>
+      <span class="badge badge-plan">PLANNING ONLY</span>
+      <span class="badge badge-cur">CURRENT</span>
+      <span class="badge badge-tgt">TARGET</span>
+      <span class="badge badge-fut">FUTURE</span>
+    </p>
+    <p>Reporting · Notifications · Evidence Intelligence — DATE 2026-08-26 · HEAD 3114290</p>
+  </header>
+
+  <main>
+    <section>
+      <h2>Checkpoint</h2>
+      <div class="grid-2">
+        <div class="card"><strong>Object storage</strong> PASS — EvidenceService + local/S3 POC</div>
+        <div class="card"><strong>Reports UI</strong> <span class="badge badge-cur">PLACEHOLDER</span> informes + noc/reports</div>
+        <div class="card"><strong>Notifications</strong> <span class="badge badge-cur">NOT IMPLEMENTED</span></div>
+        <div class="card"><strong>Job queue</strong> <span class="badge badge-fut">PLANNED</span> ADR-004 PG first</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Reporting pipeline</h2>
+      <div class="flow">
+        <span class="badge badge-cur">PG sources</span><span class="arrow">→</span>
+        <span class="badge badge-tgt">Snapshot query</span><span class="arrow">→</span>
+        <span class="badge badge-tgt">Normalize</span><span class="arrow">→</span>
+        <span class="badge badge-tgt">Report model</span><span class="arrow">→</span>
+        <span class="badge badge-tgt">Render HTML/PDF</span><span class="arrow">→</span>
+        <span class="badge badge-cur">EvidenceService</span><span class="arrow">→</span>
+        <span class="badge badge-tgt">report_runs</span><span class="arrow">→</span>
+        <span class="badge badge-tgt">Client / NOC</span>
+      </div>
+      <p><strong>MVP report:</strong> Incident Summary · <strong>Artifact:</strong> PDF in evidence_objects · <strong>No second storage</strong></p>
+    </section>
+
+    <section>
+      <h2>Notification pipeline</h2>
+      <div class="flow">
+        <span class="badge badge-tgt">Domain event</span><span class="arrow">→</span>
+        <span class="badge badge-tgt">Policy + dedupe</span><span class="arrow">→</span>
+        <span class="badge badge-tgt">Recipient resolve</span><span class="arrow">→</span>
+        <span class="badge badge-tgt">platform_jobs</span><span class="arrow">→</span>
+        <span class="badge badge-tgt">IN_APP (MVP)</span><span class="arrow">→</span>
+        <span class="badge badge-fut">EMAIL</span><span class="arrow">→</span>
+        <span class="badge badge-tgt">Audit</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>Evidence links</h2>
+      <div class="flow">
+        <span>report_run</span><span class="arrow">→</span>
+        <span>evidence_object_id</span><span class="arrow">→</span>
+        <span>object_key</span><span class="arrow">→</span>
+        <span>SHA-256 verify</span>
+      </div>
+      <p>Reports reference evidence by ID — no raw artifact embed in MVP.</p>
+    </section>
+
+    <section>
+      <h2>CHICO boundary</h2>
+      <div class="boundary">
+        <strong>CHICO MAY:</strong> explain report ready, incident state, UNKNOWN/stale evidence<br />
+        <strong>CHICO MUST NOT:</strong> send email, decide recipients, modify prefs, invent report data, run queue
+      </div>
+      <div class="flow">
+        <span class="badge badge-tgt">ARGOS Core</span><span class="arrow">→</span>
+        <span>verified state</span><span class="arrow">→</span>
+        <span class="badge badge-cur">CHICO guardian</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>Job queue + failure / retry</h2>
+      <table>
+        <tr><th>Component</th><th>Status</th><th>Notes</th></tr>
+        <tr><td>Monitor scheduler (in-process)</td><td><span class="badge badge-cur">CURRENT</span></td><td>Not replaced</td></tr>
+        <tr><td>platform_jobs PG queue</td><td><span class="badge badge-tgt">TARGET</span></td><td>Report + notify workers</td></tr>
+        <tr><td>Retry / dead letter</td><td><span class="badge badge-tgt">TARGET</span></td><td>Independent of report READY</td></tr>
+        <tr><td>Redis / Temporal</td><td><span class="badge badge-fut">DEFER</span></td><td>ADR-004</td></tr>
+      </table>
+    </section>
+
+    <section>
+      <h2>Client vs NOC</h2>
+      <div class="grid-2">
+        <div class="card">
+          <strong>Client</strong>
+          <span class="badge badge-tgt">/dashboard/informes</span><br />
+          Own org · download/view · in-app inbox · sanitized errors
+        </div>
+        <div class="card">
+          <strong>NOC</strong>
+          <span class="badge badge-tgt">/noc/reports</span><br />
+          Cross-tenant · retry · delivery failures · audit
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Object storage</h2>
+      <div class="flow">
+        <span class="badge badge-tgt">Report Generator</span><span class="arrow">→</span>
+        <span class="badge badge-cur">EvidenceService</span><span class="arrow">→</span>
+        <span class="badge badge-cur">LocalPrivateObjectStore</span>
+        <span class="badge badge-cur">S3Compatible (POC)</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>Execution sub-phases</h2>
+      <table>
+        <tr><th>Phase</th><th>Focus</th></tr>
+        <tr><td>8A</td><td>Audit + threat model + human decisions</td></tr>
+        <tr><td>8B</td><td>Data model + PG job queue</td></tr>
+        <tr><td>8C–8E</td><td>Report core + producer + EvidenceService PDF</td></tr>
+        <tr><td>8F–8H</td><td>Client UI + in-app notify + NOC</td></tr>
+        <tr><td>8I</td><td>Email (optional, approval required)</td></tr>
+        <tr><td>8J</td><td>Red team + E2E + freeze</td></tr>
+      </table>
+    </section>
+  </main>
+  <footer>ARGOS Phase 8 — Planning only · STOP_FOR_HUMAN_REVIEW=YES · PHASE_8_EXECUTED=NO</footer>
+</body>
+</html>

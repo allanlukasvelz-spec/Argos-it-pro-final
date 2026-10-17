@@ -1,0 +1,198 @@
+/* Contacto público D+. No altera el Golden Master ni argos-corporate.css. */
+
+.argos-contact {
+  --contact-navy: #102c54;
+  --contact-teal: #168b8c;
+  --contact-focus: #65bfc1;
+  --contact-ink: #102c54;
+  --contact-muted: #3e4c5c;
+  --contact-field: #647992;
+  --contact-line: color-mix(in srgb, #102c54 22%, #eef6f7);
+  --contact-sheet: #eef6f7;
+}
+
+.argos-contact-hero {
+  padding: 1.25rem 0 0.35rem;
+}
+
+.argos-contact-hero .argos-corporate-link {
+  margin-bottom: 0.55rem;
+}
+
+.argos-contact-hero h1 {
+  margin: 0;
+  font-size: clamp(1.85rem, 3vw, 2.55rem);
+  line-height: 1.12;
+}
+
+.argos-contact-hero .argos-corp-section-index {
+  color: var(--contact-teal);
+}
+
+.argos-contact-lead {
+  max-width: 40rem;
+  margin-top: 0.55rem;
+  color: var(--contact-muted);
+  font-size: 1.02rem;
+  line-height: 1.45;
+}
+
+.argos-contact section.px-4 {
+  padding-bottom: 2.5rem;
+}
+
+.argos-contact-layout {
+  display: grid;
+  gap: 1.75rem;
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .argos-contact-layout {
+    grid-template-columns: minmax(0, 1.35fr) minmax(14rem, 0.72fr);
+    gap: 1.75rem;
+  }
+}
+
+.argos-contact-aside .argos-contact-lead {
+  margin-top: 0;
+  margin-bottom: 0.85rem;
+  max-width: none;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.argos-contact-channels {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--contact-line);
+}
+
+.argos-contact-channel {
+  padding: 0.7rem 0 0.75rem;
+  border-bottom: 1px solid var(--contact-line);
+  background: transparent;
+}
+
+.argos-contact-channel a {
+  white-space: nowrap;
+}
+
+.argos-contact-channel h3 {
+  margin: 0 0 0.25rem;
+  color: var(--contact-navy);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.argos-contact-channel p,
+.argos-contact-channel span {
+  color: var(--contact-muted);
+}
+
+.argos-contact-form {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding: 1.5rem 1.25rem 1.35rem;
+  border: 1px solid var(--contact-navy);
+  border-radius: 0;
+  background: var(--contact-sheet);
+  box-shadow: none;
+  color: var(--contact-ink);
+}
+
+@media (min-width: 768px) {
+  .argos-contact-form {
+    padding: 1.75rem 1.75rem 1.5rem;
+  }
+}
+
+.argos-contact-form h2 {
+  margin: 0;
+  color: var(--contact-navy);
+}
+
+.argos-contact-form .grid {
+  gap: 0.85rem 1rem;
+}
+
+.argos-contact-form label,
+.argos-contact-check p,
+.argos-contact-form #contact-captcha-label {
+  color: var(--contact-navy);
+}
+
+.argos-contact .argos-corporate-input {
+  border-radius: 0;
+  border-color: var(--contact-field);
+  background: #ffffff;
+  color: var(--contact-navy);
+  box-shadow: none;
+}
+
+.argos-contact .argos-corporate-input::placeholder {
+  color: var(--contact-muted);
+  opacity: 1;
+}
+
+.argos-contact .argos-corporate-input:focus,
+.argos-contact .argos-corporate-input:focus-visible {
+  border-color: var(--contact-navy);
+}
+
+.argos-contact .argos-corporate-input:focus,
+.argos-contact .argos-corporate-input:focus-visible,
+.argos-contact .argos-contact-submit:focus-visible,
+.argos-contact a:focus-visible,
+.argos-contact button:focus-visible {
+  outline: 3px solid var(--contact-focus);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+.argos-contact .argos-corporate-input[aria-invalid="true"],
+.argos-contact .argos-corporate-input[aria-invalid="true"]:focus,
+.argos-contact .argos-corporate-input[aria-invalid="true"]:focus-visible {
+  border-color: #9f1239;
+}
+
+.argos-contact-check {
+  padding-top: 1rem;
+  border-top: 1px solid var(--contact-field);
+  border-radius: 0;
+  background: transparent;
+}
+
+.argos-contact-check p,
+.argos-contact-form .text-sm:not(label):not(#contact-captcha-label) {
+  color: var(--contact-muted);
+}
+
+.argos-contact-error {
+  color: #9f1239;
+}
+
+.argos-contact-submit {
+  border-radius: 0;
+  background: var(--contact-navy);
+  box-shadow: none;
+  transform: none;
+}
+
+.argos-contact-submit:hover:not(:disabled),
+.argos-contact-submit:active:not(:disabled) {
+  background: var(--contact-teal);
+  box-shadow: none;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .argos-contact,
+  .argos-contact * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

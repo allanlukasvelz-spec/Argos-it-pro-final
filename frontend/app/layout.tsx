@@ -9,6 +9,7 @@ import "../assets/css/argos-backgrounds.css";
 import "../assets/css/argos-marketing-chrome.css";
 import "../assets/css/argos-method-galaxy.css";
 import "../assets/css/argos-corporate.css";
+import "../assets/css/argos-hyphen-stability.css";
 import "../styles/mascot-sprites.css";
 
 export const metadata: Metadata = {
@@ -18,8 +19,13 @@ export const metadata: Metadata = {
   keywords: "consultoría informática, servicios informáticos, mantenimiento informático, soporte IT, seguridad informática, diseño web profesional, automatización con IA",
   authors: [{ name: "ARGOS-IT" }],
   icons: {
-    icon: "/favicon.svg",
-    apple: "/apple-touch-icon.svg"
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" }
+    ],
+    apple: "/apple-touch-icon.png",
+    shortcut: "/favicon.ico"
   },
   
   // Open Graph
@@ -88,9 +94,12 @@ export default function RootLayout({
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#07111F" />
-        <link rel="icon" href="/favicon.svg" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
+        <meta name="theme-color" content="#102C54" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
+        <link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
         {/* Schema.org */}
         <script

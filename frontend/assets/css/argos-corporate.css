@@ -10,23 +10,37 @@
   --font-body: var(--font-inter), var(--font-system-sans);
   --font-ui: var(--font-inter), var(--font-system-sans);
 
-  /* Dock mascots must not cover copy — side/bottom clear zones */
-  --mascot-clear-inline: clamp(6.25rem, 9vw, 9rem);
-  --mascot-clear-block: clamp(5.5rem, 11vh, 8.5rem);
+  /*
+   * Reserva sistémica del chrome fijo (dock + Hablar con ARGOS).
+   * Los tokens viven en body:has(.argos-corporate); aquí solo se consumen.
+   */
+  --mascot-clear-inline: calc(var(--floating-ui-width) + var(--floating-ui-gap) + 8px);
+  --mascot-clear-block: calc(var(--floating-ui-height) + var(--floating-ui-gap));
 
   width: 100%;
   min-width: 0;
   overflow-x: clip;
 
-  /* Canonical brand (immutable) */
-  --argos-navy: #1f3a5f;
-  --argos-teal: #2f7d6d;
-  --argos-ivory: #f7f7f5;
+  /*
+   * D+ official palette — MASTER v2.0 auditado (corporate public scope only).
+   * Legacy #2f7d6d / #1f3a5f are not used inside `.argos-corporate`.
+   */
+  --dplus-azul: #102c54;
+  --dplus-teal: #168b8c;
+  --dplus-teal-light: #65bfc1;
+  --dplus-text-muted: #657183;
+  --dplus-surface: #eef6f7;
+  --dplus-white: #ffffff;
+
+  /* Canonical brand (corporate remapped to D+) */
+  --argos-navy: var(--dplus-azul);
+  --argos-teal: var(--dplus-teal);
+  --argos-ivory: var(--dplus-surface);
   --argos-ink: #0b1320;
 
   /* Visual Refinement 05 — semantic roles */
-  --argos-blue: #263746;
-  --argos-petroleum: #2f7d6d;
+  --argos-blue: var(--dplus-azul);
+  --argos-petroleum: var(--dplus-teal);
   --argos-mint: #c8ddd6;
   --argos-mint-deep: #a8c9bc;
   --argos-cream: #f3eee4;
@@ -34,10 +48,19 @@
   --argos-mineral: #eef1f4;
   --argos-surface: #fcfcfa;
   --argos-text: #0b1320;
-  --argos-muted: #64748b;
+  --argos-muted: var(--dplus-text-muted);
   --argos-border: #d4dce4;
-  --grad-method-bar: linear-gradient(105deg, #152233 0%, #1f3a5f 42%, #263746 72%, #152233 100%);
-  --grad-diag-exec: linear-gradient(145deg, #152233 0%, #1f3a5f 38%, #2f7d6d 100%);
+  --grad-method-bar: linear-gradient(
+    105deg,
+    color-mix(in srgb, var(--dplus-azul) 92%, #000) 0%,
+    var(--dplus-azul) 48%,
+    color-mix(in srgb, var(--dplus-teal) 35%, var(--dplus-azul)) 100%
+  );
+  --grad-diag-exec: linear-gradient(
+    145deg,
+    var(--dplus-azul) 0%,
+    color-mix(in srgb, var(--dplus-teal) 55%, var(--dplus-azul)) 100%
+  );
   --grad-mint-card: linear-gradient(165deg, #e8f2ee 0%, #d5e8e0 55%, #c8ddd6 100%);
   --grad-cream-card: linear-gradient(165deg, #faf7f1 0%, #f3eee4 55%, #ebe3d6 100%);
   --argos-card-blue-bg: color-mix(in srgb, #1d4d7a 72%, #ffffff);
@@ -69,13 +92,13 @@
   --text-muted: #64748b;
   --border-default: #d4dce4;
   --border-mineral: rgba(31, 58, 95, 0.12);
-  --action-primary: var(--argos-brand-primary);
-  --action-secondary: var(--argos-brand-secondary);
-  --action-accent: var(--argos-brand-secondary);
+  --action-primary: var(--dplus-teal);
+  --action-secondary: var(--dplus-azul);
+  --action-accent: var(--dplus-teal-light);
   --status-info: var(--argos-brand-primary);
 
-  --corporate-action-hover: #18304f;
-  --corporate-focus: #93c5fd;
+  --corporate-action-hover: color-mix(in srgb, var(--dplus-teal) 78%, #000);
+  --corporate-focus: var(--dplus-teal-light);
 
   /* VP-07 — motion tokens (calm / precise) */
   --motion-fast: 140ms;
@@ -604,12 +627,12 @@
 
 .argos-corporate-footer {
   --footer-legal-h: 3.15rem;
-  --footer-mascot-zone: 5.75rem;
+  --footer-mascot-zone: 0px;
   position: relative;
   overflow: hidden;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-  background: #505962;
-  color: #f4f7fb;
+  border-top: 0;
+  background: #102c54;
+  color: #eef6f7;
   font-family: var(--font-ui);
 }
 
@@ -686,7 +709,7 @@
   width: 100%;
   margin: 0 auto;
   /* Leave ZONE B clear so seated mascots do not cover brand/nav */
-  padding: 2.25rem var(--header-px, 16px) calc(1.25rem + var(--footer-mascot-zone));
+  padding: 2.5rem var(--header-px, 16px) 1.5rem;
 }
 
 @media (min-width: 768px) {
@@ -695,23 +718,21 @@
   }
 }
 
-/* Rectangular navy mark — compact, aligned to footer scale */
+/* Marca cuadrada estática — el archivo ya trae el campo azul. */
 .argos-corporate-footer__brand-mark {
   display: inline-block;
-  width: min(100%, 11.5rem);
+  width: min(100%, 8.75rem);
   line-height: 0;
-  border-radius: 0.4rem;
+  border-radius: 0;
   overflow: hidden;
   background: transparent;
   border: 0;
-  box-shadow: 0 6px 16px -12px rgba(0, 0, 0, 0.4);
+  box-shadow: none;
   text-decoration: none;
-  transition: transform 0.18s ease-out, box-shadow 0.18s ease-out;
 }
 
 .argos-corporate-footer__brand-mark:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 18px -12px rgba(0, 0, 0, 0.5);
+  box-shadow: none;
 }
 
 .argos-corporate-footer__brand-mark:focus-visible {
@@ -723,9 +744,8 @@
   display: block;
   width: 100%;
   height: auto;
-  max-height: 5.1rem;
-  aspect-ratio: 1024 / 452;
-  object-fit: cover;
+  aspect-ratio: 514 / 469;
+  object-fit: contain;
   object-position: center;
   opacity: 1;
   filter: none;
@@ -736,7 +756,7 @@
   margin-top: 0.75rem;
   font-size: 0.875rem;
   line-height: 1.75;
-  color: rgba(232, 238, 245, 0.72);
+  color: #eef6f7;
 }
 
 .argos-corporate-footer__heading {
@@ -753,7 +773,7 @@
 }
 
 .argos-corporate-footer__links a {
-  color: rgba(232, 238, 245, 0.78);
+  color: #eef6f7;
   font-size: 0.875rem;
   text-decoration: none;
   transition: color var(--motion-fast) var(--ease-standard);
@@ -772,16 +792,15 @@
 }
 
 .argos-corporate-footer__legal {
-  /* ZONE C — solid legal bar above decorative mascots */
   position: relative;
   z-index: 2;
   min-height: var(--footer-legal-h);
   padding: 1rem var(--header-px, 16px);
-  border-top: 1px solid rgba(244, 247, 251, 0.1);
-  background: #505962;
+  border-top: 1px solid color-mix(in srgb, #eef6f7 22%, transparent);
+  background: #102c54;
   text-align: center;
   font-size: 0.75rem;
-  color: rgba(232, 238, 245, 0.55);
+  color: #eef6f7;
 }
 
 /* ---- Surgical header: logo | banner | langs+hamburger ---- */
@@ -866,21 +885,21 @@
 /* Header banner Dumbo / Chico — azul claro corporativo */
 .argos-header-banner {
   position: relative;
-  min-height: 56px;
+  min-height: 40px;
   overflow: hidden;
 }
 
 .argos-header-banner__inner {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
-  min-height: 56px;
-  padding: 0.4rem 0.75rem;
-  border: 1px solid rgba(31, 58, 95, 0.12);
-  border-radius: 0.7rem;
-  background: linear-gradient(115deg, #348a7a 0%, #2f7d6d 52%, #2a7364 100%);
-  color: #1f3a5f;
-  box-shadow: 0 4px 14px -12px rgba(31, 58, 95, 0.22);
+  gap: 0.5rem;
+  min-height: 40px;
+  padding: 0.28rem 0.65rem;
+  border: 0;
+  border-left: 2px solid #168b8c;
+  background: #eef6f7;
+  color: #102c54;
+  box-shadow: none;
   opacity: 0;
   transform: translateX(-10px);
   transition: opacity 0.45s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
@@ -903,8 +922,8 @@
 
 .argos-header-banner__mascot {
   flex-shrink: 0;
-  width: 48px;
-  height: 48px;
+  width: 28px;
+  height: 28px;
 }
 
 .argos-header-banner__mascot-img {
@@ -926,15 +945,15 @@
   font-size: 0.78rem;
   font-weight: 700;
   line-height: 1.3;
-  color: #1f3a5f;
+  color: #102c54;
 }
 
 .argos-header-banner__body {
-  margin: 0.2rem 0 0;
+  margin: 0.12rem 0 0;
   font-size: 0.68rem;
   font-weight: 600;
   line-height: 1.35;
-  color: rgba(31, 58, 95, 0.78);
+  color: #102c54;
 }
 
 @media (max-width: 767px) {
@@ -959,12 +978,12 @@
   }
 
   .argos-header-banner {
-    min-height: 48px;
+    min-height: 40px;
   }
 
   .argos-header-banner__inner {
-    min-height: 48px;
-    padding: 0.35rem 0.6rem;
+    min-height: 40px;
+    padding: 0.28rem 0.55rem;
   }
 
   .argos-header-banner__title {
@@ -979,22 +998,22 @@
   }
 
   .argos-header-banner__mascot {
-    width: 36px;
-    height: 36px;
+    width: 24px;
+    height: 24px;
   }
 }
 
 @media (min-width: 768px) {
   .argos-header-banner,
   .argos-header-banner__inner {
-    min-height: 60px;
+    min-height: 42px;
   }
 }
 
 @media (min-width: 1024px) {
   .argos-header-banner,
   .argos-header-banner__inner {
-    min-height: 64px;
+    min-height: 44px;
   }
 
   .argos-header-banner__title {
@@ -1006,8 +1025,8 @@
   }
 
   .argos-header-banner__mascot {
-    width: 56px;
-    height: 56px;
+    width: 32px;
+    height: 32px;
   }
 }
 
@@ -1633,12 +1652,50 @@ body.argos-drawer-open .argos-corporate-footer {
   }
 }
 
+/* Una sola reserva lateral. El dock y «Hablar con ARGOS» caben dentro; el copy no entra. */
+body:has(.argos-corporate) {
+  --floating-ui-gap: 0.75rem;
+  --floating-ui-width: 13rem;
+  --floating-ui-height: 11.5rem;
+}
+
 /* Corporate pages: mascotas no tapan contenido */
 body:has(.argos-corporate) .mascot-root {
   z-index: 20;
   pointer-events: none;
-  /* Mantener dock bajo el fold de secciones editoriales */
-  --mascot-dock-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+  --mascot-dock-bottom: calc(var(--floating-ui-gap) + env(safe-area-inset-bottom, 0px));
+}
+
+body:has(.argos-corporate) .mascot--chico,
+body:has(.argos-corporate) .mascot--dumbo {
+  width: var(--floating-ui-width);
+  max-width: var(--floating-ui-width);
+  transform: none !important;
+}
+
+body:has(.argos-corporate) .mascot--chico {
+  left: var(--floating-ui-gap);
+}
+
+body:has(.argos-corporate) .mascot--dumbo {
+  right: var(--floating-ui-gap);
+}
+
+body:has(.argos-corporate) .mascot__bubble {
+  display: none !important;
+}
+
+/* Cookies, cierre institucional o menú: el chrome fijo sale del flujo visual. */
+html[data-argos-cookies="open"] .mascot-root,
+html[data-argos-cookies="open"] .mascot__pause,
+html[data-argos-cookies="open"] .argos-assistant-launcher,
+body[data-footer-in-view] .mascot-root,
+body[data-footer-in-view] .mascot__pause,
+body[data-footer-in-view] .argos-assistant-launcher,
+body.argos-drawer-open .mascot-root,
+body.argos-drawer-open .mascot__pause,
+body.argos-drawer-open .argos-assistant-launcher {
+  display: none !important;
 }
 
 body:has(.argos-corporate) .mascot__bubble,
@@ -1647,13 +1704,19 @@ body:has(.argos-corporate) .mascot__sprite-button {
 }
 
 @media (max-width: 1023px) {
-  body:has(.argos-corporate) .mascot-root {
+  body:has(.argos-corporate) .mascot-root,
+  body:has(.argos-corporate) .mascot__pause,
+  body:has(.argos-corporate) .argos-assistant-launcher {
     display: none !important;
   }
 
-  /* QA08-P2-01 — dock hidden: drop side clear so Method/phases aren't crushed */
+  /* Dock ausente: el contenido recupera el ancho. Un fijo aquí taparía el copy. */
+  body:has(.argos-corporate),
   .argos-corporate {
+    --floating-ui-width: 0px;
+    --floating-ui-height: 0px;
     --mascot-clear-inline: 0px;
+    --mascot-clear-block: 0px;
   }
 }
 
@@ -1699,10 +1762,11 @@ body:has(.argos-corporate) .mascot__sprite-button {
   width: 100%;
 }
 
-/* Last content blocks keep clear air above the dock */
+/* El dock vive en el margen lateral y se retira al llegar la barra azul.
+   No reservar su altura dentro de la FAQ: eso abría un vacío sin contenido. */
 .argos-corporate .argos-corp-section:last-of-type,
 .argos-corp-home .argos-corp-section--cta {
-  padding-bottom: max(4.75rem, var(--mascot-clear-block, 5.5rem));
+  padding-bottom: 4.75rem;
 }
 
 .argos-corp-section--hero {
@@ -2608,7 +2672,7 @@ body:has(.argos-corporate) .mascot__sprite-button {
 }
 
 .argos-reveal {
-  opacity: 0;
+  opacity: 1;
   transform: translateY(14px);
   transition:
     opacity var(--motion-slow) var(--ease-enter),
@@ -2804,43 +2868,56 @@ a.argos-cta-arrow:hover::after {
 
 /* ---- Diagnostic answer cards ---- */
 .argos-diag-option {
-  border: 1px solid #e2e8f0;
+  display: flex;
+  width: 100%;
+  min-height: 3.25rem;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 700;
+  line-height: 1.35;
+  border: 1px solid color-mix(in srgb, #102c54 16%, transparent);
   background: #ffffff;
-  color: #0f172a;
+  color: #102c54;
   cursor: pointer;
   transition:
-    transform 0.18s ease-out,
     border-color 0.2s ease-out,
-    background 0.2s ease-out,
-    box-shadow 0.2s ease-out;
+    background 0.2s ease-out;
 }
 
 .argos-diag-option:hover {
-  border-color: rgba(47, 125, 109, 0.45);
-  background: #f3faf8;
-  transform: translateY(-2px);
+  border-color: #168b8c;
+  background: #eef6f7;
 }
 
 .argos-diag-option:active {
-  transform: translateY(0) scale(0.985);
+  background: #eef6f7;
 }
 
 .argos-diag-option--selected {
-  border-color: #2f7d6d !important;
-  background: #e6f2ff !important;
-  color: #0b1320 !important;
-  box-shadow: inset 0 0 0 1px rgba(47, 125, 109, 0.25);
+  border-color: #168b8c !important;
+  background: #eef6f7 !important;
+  color: #102c54 !important;
+  box-shadow: inset 0 0 0 1px #168b8c;
 }
 
 .argos-diag-option__mark {
-  border-color: #cbd5e1;
-  color: #64748b;
+  display: inline-flex;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-right: 0.75rem;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #657183;
+  color: #102c54;
+  font-size: 0.7rem;
 }
 
 .argos-diag-option__mark--on {
-  border-color: #2f7d6d;
-  background: rgba(47, 125, 109, 0.12);
-  color: #1a5c52;
+  border-color: #168b8c;
+  background: #168b8c;
+  color: #ffffff;
   font-weight: 800;
 }
 
@@ -3794,5 +3871,1882 @@ a.argos-card:active {
   .argos-reveal--stagger-2,
   .argos-reveal--stagger-3 {
     --reveal-delay: 0ms;
+  }
+}
+
+.argos-wp-form {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1.75rem;
+}
+
+.argos-wp-field {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.argos-wp-field label,
+.argos-wp-choice legend {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.argos-wp-form__hint {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.argos-wp-form__error {
+  margin: 0;
+  color: var(--status-danger, #b42318);
+  font-weight: 600;
+}
+
+.argos-wp-choice {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-inline-size: 0;
+}
+
+.argos-wp-choice__grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .argos-wp-choice__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.argos-wp-choice__card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  min-height: 44px;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--border-default);
+  border-radius: 0.75rem;
+  background: #fff;
+  cursor: pointer;
+}
+
+.argos-wp-choice__card.is-selected,
+.argos-wp-choice__card:focus-within {
+  border-color: var(--action-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--action-secondary) 35%, transparent);
+}
+
+.argos-wp-choice__card input {
+  margin-top: 0.2rem;
+}
+
+.argos-wp-steps {
+  list-style: none;
+  padding: 0;
+}
+
+.argos-wp-steps li {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  margin: 0.75rem 0;
+}
+
+.argos-wp-steps__index {
+  flex: 0 0 auto;
+  color: var(--action-secondary);
+  font-weight: 700;
+}
+
+.argos-wp-resume {
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+  border: 1px solid color-mix(in srgb, #102c54 14%, transparent);
+  border-radius: 0;
+  background: #fff;
+  color: #102c54;
+}
+
+.argos-wp-resume__list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 1rem 0;
+  padding: 0;
+  list-style: none;
+}
+
+.argos-wp-public .argos-corp-cta-row {
+  flex-wrap: wrap;
+}
+
+/* D+ blue band — editorial variant (MASTER v2) */
+.argos-dplus-blue-band {
+  position: relative;
+  background: var(--dplus-azul);
+  color: var(--dplus-white);
+  padding: clamp(2rem, 4vw, 3rem) 0;
+  overflow: hidden;
+}
+
+.argos-dplus-blue-band__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+}
+
+.argos-dplus-blue-band__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+  font-weight: 600;
+  max-width: 28ch;
+}
+
+.argos-dplus-blue-band__lead {
+  margin: 0.35rem 0 0;
+  max-width: 42ch;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--dplus-white) 88%, var(--dplus-teal-light));
+}
+
+.argos-dplus-blue-band .argos-corporate-cta {
+  background: var(--dplus-teal);
+  flex-shrink: 0;
+}
+
+.argos-dplus-blue-band .argos-corporate-cta:hover {
+  background: var(--corporate-action-hover);
+}
+
+/* Onda oficial D+. El PNG trae campo blanco: multiply lo funde y no tapa el copy. */
+.argos-dplus-wave--hero {
+  display: block;
+  width: 100%;
+  height: clamp(4.75rem, 14vh, 8.5rem);
+  margin-top: 0.35rem;
+  object-fit: cover;
+  object-position: center 42%;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: 0.38;
+}
+
+.argos-dplus-blue-band__wave {
+  position: absolute;
+  z-index: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: clamp(3.75rem, 10vw, 6.25rem);
+  object-fit: cover;
+  object-position: center 48%;
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+  opacity: 0.72;
+}
+
+.argos-dplus-blue-band {
+  padding-bottom: calc(clamp(2rem, 4vw, 3rem) + clamp(3.25rem, 8vw, 5.5rem));
+}
+
+/* Four strategic pillars — editorial grid (official photography) */
+.argos-corp-pillars {
+  display: grid;
+  gap: 1rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 768px) {
+  .argos-corp-pillars {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .argos-corp-pillars {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.argos-corp-pillar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.argos-corp-pillar__media {
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  background: var(--dplus-surface);
+}
+
+.argos-corp-pillar__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+}
+
+.argos-corp-pillar__label {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--dplus-azul);
+}
+
+@media (max-width: 390px) {
+  .argos-wp-public .argos-corp-cta-row .argos-corporate-cta {
+    width: 100%;
+  }
+}
+
+/* ---- D+ Home visual rhythm (MASTER + directiva visual) ---- */
+
+.argos-corp-section--dplus-hero,
+.argos-corp-section--dplus-pillars,
+.argos-corp-section--dplus-problem,
+.argos-corp-section--dplus-services,
+.argos-corp-section--dplus-method,
+.argos-corp-section--dplus-projects,
+.argos-corp-section--dplus-philosophy,
+.argos-corp-section--dplus-continuity,
+.argos-corp-section--dplus-trust,
+.argos-corp-section--dplus-faq {
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.argos-corp-section--dplus-hero {
+  background: var(--dplus-surface);
+}
+
+.argos-corp-section--dplus-hero::before {
+  display: none;
+}
+
+.argos-corp-section--dplus-hero::before {
+  content: "";
+  position: absolute;
+  inset: auto -8% -28% 48%;
+  height: min(28rem, 70%);
+  pointer-events: none;
+  z-index: 0;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--dplus-teal) 16%, var(--dplus-surface));
+}
+
+.argos-corp-section--dplus-hero .argos-corp-container {
+  position: relative;
+  z-index: 1;
+}
+
+.argos-corp-section--dplus-pillars {
+  background: color-mix(in srgb, var(--dplus-teal-light) 18%, var(--dplus-surface));
+}
+
+.argos-corp-section--dplus-problem {
+  background: color-mix(in srgb, var(--dplus-azul) 8%, var(--dplus-surface));
+}
+
+.argos-corp-section--dplus-services {
+  background: var(--dplus-white);
+}
+
+.argos-corp-section--dplus-method {
+  background: var(--dplus-azul);
+  color: var(--dplus-white);
+}
+
+.argos-corp-section--dplus-method .argos-corp-body,
+.argos-corp-section--dplus-method .argos-corp-h2--subsection,
+.argos-corp-section--dplus-method .argos-corporate-link {
+  color: color-mix(in srgb, var(--dplus-white) 90%, var(--dplus-teal-light));
+}
+
+.argos-corp-section--dplus-method .argos-corp-section-index {
+  color: var(--dplus-teal-light);
+}
+
+.argos-corp-section--dplus-method .argos-card--bridge {
+  background: color-mix(in srgb, var(--dplus-white) 8%, var(--dplus-azul));
+  border-color: color-mix(in srgb, var(--dplus-teal) 45%, var(--dplus-azul));
+  box-shadow: none;
+}
+
+.argos-corp-section--dplus-method .argos-card-grid--philosophy .argos-card--method {
+  background: var(--dplus-surface);
+  border-color: color-mix(in srgb, var(--dplus-white) 24%, transparent);
+  color: var(--dplus-azul);
+  box-shadow: none;
+}
+
+.argos-corp-section--dplus-method .argos-card-grid--philosophy .argos-card--method .argos-corp-eyebrow {
+  color: var(--dplus-teal);
+}
+
+.argos-corp-section--dplus-method .argos-card-grid--philosophy .argos-card--method .argos-corp-card-title,
+.argos-corp-section--dplus-method .argos-card-grid--philosophy .argos-card--method .argos-corp-card-body {
+  color: var(--dplus-azul);
+}
+
+.argos-corp-section--dplus-projects {
+  background: color-mix(in srgb, var(--dplus-teal) 12%, var(--dplus-surface));
+}
+
+.argos-corp-section--dplus-philosophy {
+  background: var(--dplus-surface);
+}
+
+.argos-corp-section--dplus-continuity {
+  background: color-mix(in srgb, var(--dplus-azul) 6%, var(--dplus-white));
+}
+
+.argos-corp-section--dplus-trust {
+  background: color-mix(in srgb, var(--dplus-teal) 10%, var(--dplus-white));
+  color: var(--dplus-azul);
+}
+
+.argos-corp-section--dplus-trust .argos-corp-section-index {
+  color: var(--dplus-teal);
+}
+
+.argos-corp-section--dplus-trust .argos-corp-h2,
+.argos-corp-section--dplus-trust .argos-corp-body,
+.argos-corp-section--dplus-trust .argos-corp-card-body {
+  color: var(--dplus-azul);
+}
+
+.argos-corp-section--dplus-trust .argos-card--trust {
+  background: var(--dplus-surface);
+  border-color: color-mix(in srgb, var(--dplus-azul) 12%, transparent);
+  box-shadow: none;
+}
+
+.argos-corp-section--dplus-faq {
+  background: var(--dplus-surface);
+}
+
+.argos-corp-section--dplus-diagnosis {
+  background: var(--dplus-surface);
+}
+
+.argos-corp-section--dplus-diagnosis .argos-diag-card {
+  max-width: 42rem;
+}
+
+.argos-corp-section--dplus-diagnosis .argos-diag-card__title {
+  max-width: 24ch;
+}
+
+.argos-corp-section--dplus-modes {
+  background: color-mix(in srgb, var(--dplus-azul) 6%, var(--dplus-white));
+}
+
+.argos-home-modes {
+  display: grid;
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.argos-home-modes > li {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 1.35rem 0 0.2rem;
+  background: transparent;
+  border: 0;
+  border-top: 1px solid color-mix(in srgb, #102c54 18%, transparent);
+}
+
+.argos-home-modes .argos-corp-h2 {
+  margin: 0;
+  font-size: clamp(1.45rem, 2vw, 1.9rem);
+}
+
+.argos-home-modes .argos-corp-body,
+.argos-home-modes .argos-corp-rule-list {
+  margin-top: 0;
+}
+
+.argos-home-modes .argos-corporate-cta {
+  margin-top: auto;
+}
+
+@media (min-width: 1024px) {
+  .argos-home-modes {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: stretch;
+  }
+
+  .argos-home-modes > li {
+    border-top: 0;
+    border-left: 1px solid color-mix(in srgb, #102c54 18%, transparent);
+    padding: 0 1.35rem;
+  }
+
+  .argos-home-modes > li:first-child {
+    border-left: 0;
+    padding-left: 0;
+  }
+}
+
+.argos-dplus-faq {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 1.25rem;
+  max-width: 46rem;
+}
+
+.argos-dplus-faq__item {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid color-mix(in srgb, #102c54 16%, transparent);
+  border-radius: 0;
+}
+
+.argos-dplus-faq__summary {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  cursor: pointer;
+  list-style: none;
+  padding: 0.95rem 1.1rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--dplus-azul);
+}
+
+.argos-dplus-faq__summary::-webkit-details-marker {
+  display: none;
+}
+
+.argos-dplus-faq__mark {
+  flex-shrink: 0;
+  color: var(--dplus-teal);
+}
+
+.argos-dplus-faq__item[open] .argos-dplus-faq__mark {
+  transform: rotate(45deg);
+}
+
+.argos-dplus-faq__answer {
+  margin: 0;
+  padding: 0 1.1rem 1.05rem;
+  border-top: 1px solid color-mix(in srgb, var(--dplus-azul) 10%, transparent);
+  color: var(--dplus-text-muted);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+}
+
+@media (max-width: 430px) {
+  .argos-corporate-header__banner {
+    display: none;
+  }
+
+  .argos-corporate-header__row {
+    grid-template-areas: "logo . controls";
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .argos-corp-section--dplus-hero {
+    padding-top: 1.75rem;
+    padding-bottom: 2.25rem;
+  }
+
+  .argos-corp-section--dplus-hero::before {
+    display: none;
+  }
+
+  .argos-corp-section--dplus-hero .argos-corp-display {
+    font-size: clamp(1.85rem, 8.4vw, 2.35rem);
+  }
+
+  .argos-corp-section--dplus-hero .argos-corp-lead {
+    margin-top: 0.85rem;
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .argos-dplus-faq__item[open] .argos-dplus-faq__mark {
+    transform: none;
+  }
+}
+
+/* Campo en movimiento detrás de la web pública. Los bloques quedan encima, con superficie propia. */
+.argos-public-motion {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+body:has(.argos-public-motion) {
+  background: #071421;
+}
+
+.argos-corporate {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+}
+
+.argos-corporate-header {
+  background: #ffffff;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
+}
+
+.argos-corporate .argos-corporate-shell {
+  padding-top: 1rem;
+}
+
+.argos-corporate .argos-corp-section,
+.argos-corporate .argos-dplus-blue-band,
+.argos-corporate > .argos-corporate-footer,
+.argos-corporate-shell__main > :not(.argos-corp-section) {
+  width: auto;
+  max-width: none;
+  /* El campo en movimiento queda en el margen. En escritorio ese margen
+     también es la reserva del dock, para que el botón no tape el copy. */
+  margin-inline: max(clamp(1.25rem, 4vw, 3.5rem), var(--mascot-clear-inline, 0px));
+  border-radius: 0;
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.32);
+}
+
+.argos-corporate .argos-corp-section .argos-corp-container {
+  padding-left: max(1.25rem, var(--header-px, 16px));
+  padding-right: max(1.25rem, var(--header-px, 16px));
+}
+
+.argos-corporate .argos-corp-section:not([class*="dplus-"]),
+.argos-corporate-shell__main > :not(.argos-corp-section) {
+  background: #eef6f7;
+  color: #102c54;
+}
+
+.argos-corporate .argos-corp-section + .argos-corp-section,
+.argos-corporate .argos-dplus-blue-band,
+.argos-corporate > .argos-corporate-footer,
+.argos-corporate-shell__main > :not(.argos-corp-section) + :not(.argos-corp-section) {
+  margin-top: 1.35rem;
+}
+
+body:has(.argos-public-motion) .argos-history-nav__btn {
+  background: #ffffff;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.32);
+}
+
+body:has(.argos-corporate) .mascot__img {
+  filter:
+    drop-shadow(0 10px 14px rgba(0, 0, 0, 0.45))
+    drop-shadow(0 0 10px rgba(238, 246, 247, 0.85));
+}
+
+.argos-corporate .argos-corp-section--dplus-method,
+.argos-corporate .argos-dplus-blue-band,
+.argos-corporate > .argos-corporate-footer {
+  box-shadow:
+    0 22px 48px rgba(0, 0, 0, 0.38),
+    inset 0 0 0 1px rgba(238, 246, 247, 0.34);
+}
+
+.argos-corporate .argos-corporate-card,
+.argos-corporate .argos-mint-card {
+  background-color: #ffffff;
+  color: #102c54;
+}
+
+.argos-corporate .argos-corporate-cta,
+.argos-corporate .argos-corporate-cta--outline {
+  position: relative;
+  z-index: 1;
+}
+
+/* Regla inquebrantable: todo recuadro termina en punta. Sin bordes circulares. */
+.argos-corporate,
+.argos-corporate *,
+.argos-corporate *::before,
+.argos-corporate *::after,
+body:has(.argos-corporate) .argos-assistant-launcher,
+body:has(.argos-corporate) .argos-assistant-panel,
+body:has(.argos-corporate) .argos-assistant-panel *,
+body:has(.argos-corporate) .argos-assistant-panel *::before,
+body:has(.argos-corporate) .argos-assistant-panel *::after,
+body:has(.argos-corporate) [data-cookie-banner],
+body:has(.argos-corporate) [data-cookie-banner] *,
+body:has(.argos-corporate) [data-cookie-banner] *::before,
+body:has(.argos-corporate) [data-cookie-banner] *::after {
+  border-radius: 0 !important;
+}
+
+/* Atmósfera, no losa. El campo queda detrás y un poco más quieto. */
+body:has(.argos-corporate) .argos-public-motion {
+  opacity: 0.72;
+}
+
+/* Fondo oscuro: texto claro. Hero, problema y filosofía. */
+.argos-corporate :is(
+  .argos-corp-section--dplus-hero,
+  .argos-corp-section--dplus-problem,
+  .argos-corp-section--dplus-philosophy
+) {
+  background: color-mix(in srgb, #102c54 46%, transparent);
+  backdrop-filter: blur(8px);
+  color: #eef6f7;
+}
+
+.argos-corporate :is(
+  .argos-corp-section--dplus-hero,
+  .argos-corp-section--dplus-problem,
+  .argos-corp-section--dplus-philosophy
+) :is(
+  .argos-corp-brand-mark,
+  .argos-corp-display,
+  .argos-font-display,
+  .argos-corp-h1,
+  .argos-corp-h2,
+  .argos-corp-lead,
+  .argos-corp-body,
+  .argos-corp-quote
+) {
+  color: #eef6f7;
+}
+
+.argos-corporate :is(
+  .argos-corp-section--dplus-hero,
+  .argos-corp-section--dplus-problem,
+  .argos-corp-section--dplus-philosophy
+) :is(.argos-corp-section-index, .argos-corp-eyebrow) {
+  color: #65bfc1;
+}
+
+.argos-corporate .argos-corp-section--dplus-hero .argos-corporate-cta--outline {
+  border-color: #65bfc1;
+  color: #eef6f7;
+  background: transparent;
+}
+
+.argos-corporate .argos-corp-section--dplus-hero .argos-corporate-cta--outline:hover {
+  background: color-mix(in srgb, #168b8c 32%, transparent);
+  color: #ffffff;
+  border-color: #65bfc1;
+}
+
+/* Respiración clara: confianza, pilares, servicios, diagnóstico, modalidades, FAQ. */
+.argos-corporate :is(
+  .argos-corp-section--dplus-trust,
+  .argos-corp-section--dplus-pillars,
+  .argos-corp-section--dplus-services,
+  .argos-corp-section--dplus-diagnosis,
+  .argos-corp-section--dplus-modes,
+  .argos-corp-section--dplus-faq
+) {
+  background: color-mix(in srgb, #eef6f7 90%, transparent);
+  backdrop-filter: blur(6px);
+  color: #102c54;
+}
+
+.argos-corporate :is(
+  .argos-corp-section--dplus-trust,
+  .argos-corp-section--dplus-pillars,
+  .argos-corp-section--dplus-services,
+  .argos-corp-section--dplus-diagnosis,
+  .argos-corp-section--dplus-modes,
+  .argos-corp-section--dplus-faq
+) :is(
+  .argos-corp-display,
+  .argos-font-display,
+  .argos-corp-h1,
+  .argos-corp-h2,
+  .argos-corp-h2--subsection,
+  .argos-corp-lead,
+  .argos-corp-body,
+  .argos-corp-card-title,
+  .argos-corp-card-body,
+  .argos-corp-pillar__label,
+  .argos-corp-rule-list li,
+  .argos-dplus-faq__summary,
+  .argos-dplus-faq__answer
+) {
+  color: #102c54;
+}
+
+.argos-corporate :is(
+  .argos-corp-section--dplus-trust,
+  .argos-corp-section--dplus-pillars,
+  .argos-corp-section--dplus-services,
+  .argos-corp-section--dplus-faq
+) :is(.argos-corp-section-index, .argos-corp-eyebrow, .argos-dplus-faq__mark) {
+  color: #168b8c;
+}
+
+.argos-corporate .argos-corp-section--dplus-diagnosis .argos-diag-card :is(
+  .argos-font-display,
+  .argos-diag-card__title,
+  .argos-diag-card__body,
+  .argos-diag-card__eyebrow
+) {
+  color: #eef6f7;
+}
+
+.argos-corporate .argos-corp-section--dplus-diagnosis .argos-diag-card__points li {
+  color: #eef6f7;
+}
+
+.argos-corporate .argos-corp-section--dplus-diagnosis .argos-diag-card__cta {
+  background: #ffffff;
+  color: #102c54;
+}
+
+.argos-corporate :is(
+  .argos-corp-section--dplus-trust,
+  .argos-corp-section--dplus-modes
+) .argos-corp-rule-list,
+.argos-corporate :is(
+  .argos-corp-section--dplus-trust,
+  .argos-corp-section--dplus-modes
+) .argos-corp-rule-list li {
+  border-color: color-mix(in srgb, #102c54 14%, transparent);
+}
+
+.argos-corporate .argos-corp-section--dplus-problem .argos-mint-card {
+  background: #eef6f7;
+  color: #102c54;
+  border-color: color-mix(in srgb, #102c54 14%, transparent);
+  box-shadow: none;
+}
+
+.argos-corporate .argos-corp-section--dplus-problem .argos-mint-card__title {
+  color: #102c54;
+}
+
+.argos-corporate .argos-corp-section--dplus-problem .argos-mint-card__hint {
+  color: #168b8c;
+}
+
+.argos-corporate .argos-corp-section--dplus-services .argos-card--service {
+  background: #ffffff;
+  color: #102c54;
+  border-color: color-mix(in srgb, #102c54 14%, transparent);
+  box-shadow: none;
+}
+
+.argos-corporate .argos-corp-section--dplus-services .argos-card--service :is(
+  .argos-corp-card-title,
+  .argos-corp-card-body
+) {
+  color: #102c54;
+}
+
+.argos-corporate .argos-corp-section--dplus-services .argos-btn-detail {
+  color: #102c54;
+  background: #eef6f7;
+  border-color: #168b8c;
+}
+
+.argos-corporate .argos-home-modes > li,
+.argos-corporate .argos-dplus-faq__item {
+  background: #ffffff;
+  color: #102c54;
+  border-color: color-mix(in srgb, #102c54 14%, transparent);
+  box-shadow: none;
+}
+
+.argos-corporate .argos-corp-section--dplus-method .argos-card--method:not(.argos-card--bridge) {
+  background: #eef6f7;
+  color: #102c54;
+  border-color: color-mix(in srgb, #ffffff 42%, transparent);
+  box-shadow: none;
+}
+
+.argos-corporate .argos-corp-section--dplus-method .argos-card--method:not(.argos-card--bridge) :is(
+  .argos-corp-card-title,
+  .argos-corp-card-body
+) {
+  color: #102c54;
+}
+
+.argos-corporate .argos-corp-section--dplus-method .argos-card--method:not(.argos-card--bridge) :is(
+  .argos-corp-eyebrow,
+  .argos-btn-detail,
+  .argos-movement-card__hint
+) {
+  color: #168b8c;
+  background: transparent;
+  border-color: color-mix(in srgb, #168b8c 45%, transparent);
+}
+
+.argos-corporate :is(input, textarea, select):not([type="checkbox"]):not([type="radio"]):not([type="button"]):not([type="submit"]):not([type="reset"]) {
+  background-color: #ffffff;
+  color: #102c54;
+}
+
+/* Hero A+B: la fotografía es atmósfera. El copy y la onda quedan encima. */
+.argos-corporate .argos-corp-section--dplus-hero {
+  position: relative;
+}
+
+.argos-hero-photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  margin: 0;
+  pointer-events: none;
+}
+
+.argos-hero-photo__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 62%;
+}
+
+.argos-hero-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(16, 44, 84, 0.82) 0%,
+    rgba(16, 44, 84, 0.7) 46%,
+    rgba(16, 44, 84, 0.46) 100%
+  );
+}
+
+.argos-corporate .argos-dplus-wave--hero {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 1024px) {
+  .argos-hero-photo__img {
+    object-position: center 54%;
+  }
+}
+
+@media (max-width: 480px) {
+  .argos-hero-photo__img {
+    object-position: center 38%;
+  }
+}
+
+/* Hero A+B: la fotografía es atmósfera. El copy y la onda quedan encima. */
+.argos-corporate .argos-corp-section--dplus-hero {
+  position: relative;
+}
+
+.argos-hero-photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  margin: 0;
+  pointer-events: none;
+}
+
+.argos-hero-photo__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 62%;
+}
+
+.argos-hero-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(16, 44, 84, 0.82) 0%,
+    rgba(16, 44, 84, 0.7) 46%,
+    rgba(16, 44, 84, 0.46) 100%
+  );
+}
+
+.argos-corporate .argos-dplus-wave--hero {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 1024px) {
+  .argos-hero-photo__img {
+    object-position: center 54%;
+  }
+}
+
+@media (max-width: 480px) {
+  .argos-hero-photo__img {
+    object-position: center 38%;
+  }
+}
+
+/* B4 — apertura interior. No altera el hero congelado. */
+.argos-corporate .argos-corp-section--dplus-intro {
+  isolation: isolate;
+  overflow: hidden;
+  padding-top: 3.25rem;
+  padding-bottom: 3.25rem;
+  background: color-mix(in srgb, #102c54 46%, transparent);
+  backdrop-filter: blur(8px);
+  color: #eef6f7;
+}
+
+.argos-corporate .argos-corp-section--dplus-intro :is(
+  .argos-corp-page-title,
+  .argos-corp-brand-mark,
+  .argos-corp-display,
+  .argos-font-display,
+  .argos-corp-h1,
+  .argos-corp-h2,
+  .argos-corp-lead,
+  .argos-corp-body
+) {
+  color: #eef6f7;
+}
+
+.argos-corporate .argos-corp-section--dplus-intro .argos-corporate-cta--outline {
+  border-color: #65bfc1;
+  color: #eef6f7;
+  background: transparent;
+}
+
+.argos-corporate .argos-corp-section--dplus-intro .argos-corporate-cta--outline:hover {
+  background: color-mix(in srgb, #168b8c 32%, transparent);
+  color: #ffffff;
+  border-color: #65bfc1;
+}
+
+.argos-corporate .argos-corp-section--dplus-intro :is(
+  .argos-corp-section-index,
+  .argos-corp-eyebrow,
+  .argos-corp-back,
+  .argos-corporate-link,
+  .argos-corporate-link-quiet
+) {
+  color: #65bfc1;
+}
+
+.argos-corporate .argos-corp-section--dplus-intro .argos-corp-back:hover,
+.argos-corporate .argos-corp-section--dplus-intro .argos-corporate-link:hover {
+  color: #eef6f7;
+}
+
+.argos-corporate .argos-corp-section--dplus-services .argos-corp-related__label {
+  color: #102c54;
+}
+
+.argos-corporate .argos-corp-section--dplus-services .argos-corporate-link-quiet {
+  color: #102c54;
+}
+
+.argos-corporate .argos-corp-section--dplus-services .argos-corporate-link-quiet:hover {
+  color: #168b8c;
+}
+
+.argos-corporate .argos-corp-section--dplus-services .argos-corp-detail-card {
+  background: #ffffff;
+  color: #102c54;
+  border: 1px solid color-mix(in srgb, #102c54 14%, transparent);
+}
+
+.argos-corporate .argos-corp-section--dplus-services .argos-corp-detail-card :is(h2, .argos-corp-h2, .argos-corp-body, li) {
+  color: #102c54;
+}
+
+.argos-corporate .argos-about-emblem {
+  width: fit-content;
+  background: #eef6f7;
+  padding: 0.75rem;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.argos-corporate .argos-about-emblem img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.argos-corporate .argos-corp-section--dplus-trust .argos-corp-detail-card {
+  background: #ffffff;
+  color: #102c54;
+  border: 1px solid color-mix(in srgb, #102c54 14%, transparent);
+}
+
+.argos-corporate .argos-corp-section--dplus-trust .argos-corp-principle-list li,
+.argos-corporate .argos-corp-section--dplus-trust .argos-corporate-link-quiet {
+  color: #102c54;
+}
+
+.argos-corporate .argos-corp-section--dplus-trust .argos-corporate-link-quiet:hover {
+  color: #168b8c;
+}
+
+.argos-corporate .argos-corp-section--dplus-method :is(
+  .argos-corp-lead,
+  .argos-corp-h2:not(.argos-corp-h2--subsection),
+  .argos-corp-related__label,
+  .argos-corporate-link-quiet
+) {
+  color: #eef6f7;
+}
+
+.argos-corporate .argos-corp-section--dplus-method .argos-corporate-link-quiet:hover {
+  color: #65bfc1;
+}
+
+.argos-corporate .argos-corp-section--dplus-method .argos-corp-phase-card {
+  background: #ffffff;
+  color: #102c54;
+}
+
+.argos-corporate .argos-corp-section--dplus-method .argos-corp-phase-card :is(
+  .argos-corp-phase-title,
+  .argos-corp-phase-desc
+) {
+  color: #102c54;
+}
+
+.argos-corporate .argos-corp-section--dplus-method .argos-corp-phase-letter {
+  color: #102c54;
+}
+
+/* B4 — diagnóstico real. El modal vive fuera de .argos-corporate. */
+.argos-diag-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: auto;
+  background: color-mix(in srgb, #102c54 72%, transparent);
+  padding: 1rem;
+}
+
+.argos-diag-modal,
+.argos-diag-modal * {
+  border-radius: 0 !important;
+}
+
+.argos-diag-modal__panel {
+  width: min(100%, 48rem);
+  margin: 1rem auto;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100dvh - 2rem);
+  overflow: hidden;
+  background: #eef6f7;
+  color: #102c54;
+  border: 1px solid color-mix(in srgb, #102c54 18%, transparent);
+  outline: none;
+}
+
+.argos-diag-modal :focus-visible {
+  outline: 3px solid #65bfc1;
+  outline-offset: 2px;
+}
+
+.argos-diag-head {
+  flex: 0 0 auto;
+  padding: 1.1rem 1.25rem;
+  background: #102c54;
+  color: #eef6f7;
+}
+
+.argos-diag-kicker {
+  margin: 0;
+  color: #65bfc1;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.argos-diag-title {
+  margin: 0.35rem 0 0;
+  color: #eef6f7;
+  font-family: var(--font-display, Georgia, serif);
+  font-size: clamp(1.45rem, 2vw, 1.85rem);
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.argos-diag-close {
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  border: 1px solid #65bfc1;
+  background: transparent;
+  color: #eef6f7;
+  font-size: 1.35rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.argos-diag-progress {
+  flex: 0 0 auto;
+  height: 0.35rem;
+  background: color-mix(in srgb, #102c54 12%, #eef6f7);
+}
+
+.argos-diag-progress__bar {
+  height: 100%;
+  background: #168b8c;
+  transition: width 0.28s ease-out;
+}
+
+.argos-diag-step,
+.argos-diag-area {
+  margin: 0;
+  color: #168b8c;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.argos-diag-step {
+  flex: 0 0 auto;
+  padding: 0.85rem 1.25rem 0;
+  text-align: center;
+}
+
+.argos-diag-q,
+.argos-diag-results {
+  min-height: 0;
+  overflow: auto;
+  padding: 0.5rem 1.25rem 1.25rem;
+}
+
+.argos-diag-q {
+  max-height: min(52vh, 28rem);
+}
+
+.argos-diag-results {
+  max-height: min(72vh, calc(100dvh - 7rem));
+  padding-top: 1.25rem;
+}
+
+.argos-diag-area {
+  margin-bottom: 0.75rem;
+}
+
+.argos-diag-question {
+  margin: 0;
+  color: #102c54;
+  font-family: var(--font-display, Georgia, serif);
+  font-size: clamp(1.15rem, 2vw, 1.4rem);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.argos-diag-q [role="radiogroup"] {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.argos-diag-nav {
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: space-between;
+  padding: 0.9rem 1.25rem;
+  border-top: 1px solid color-mix(in srgb, #102c54 12%, transparent);
+  background: #ffffff;
+}
+
+.argos-diag-nav__next {
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.argos-diag-btn {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 1.1rem;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #102c54;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.argos-diag-btn--primary {
+  background: #168b8c;
+  color: #ffffff;
+}
+
+.argos-diag-btn--primary:hover {
+  background: color-mix(in srgb, #168b8c 82%, #000);
+  color: #ffffff;
+}
+
+.argos-diag-btn--quiet {
+  border-color: #102c54;
+  background: #ffffff;
+  color: #102c54;
+}
+
+.argos-diag-btn--text {
+  border-color: transparent;
+  color: #102c54;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.argos-diag-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.argos-diag-tier,
+.argos-diag-panel,
+.argos-diag-callout {
+  border: 1px solid color-mix(in srgb, #102c54 16%, transparent);
+  background: #ffffff;
+  color: #102c54;
+  padding: 1rem 1.1rem;
+}
+
+.argos-diag-tier {
+  margin-bottom: 1rem;
+}
+
+.argos-diag-tier--bajo,
+.argos-diag-tier--medio {
+  background: #eef6f7;
+  border-color: #168b8c;
+}
+
+.argos-diag-tier--alto {
+  background: #ffffff;
+  border-color: #102c54;
+}
+
+.argos-diag-tier--critico {
+  background: #102c54;
+  color: #eef6f7;
+  border-color: #102c54;
+}
+
+.argos-diag-tier__label {
+  margin: 0;
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 1.45rem;
+}
+
+.argos-diag-tier__score {
+  margin: 0.35rem 0 0;
+  font-weight: 700;
+}
+
+.argos-diag-tier__summary {
+  margin: 0.85rem 0 0;
+  padding-top: 0.85rem;
+  border-top: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+}
+
+.argos-diag-note {
+  margin: 0;
+  color: #102c54;
+  line-height: 1.55;
+}
+
+.argos-diag-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.argos-diag-panel {
+  margin-top: 1rem;
+}
+
+.argos-diag-grid .argos-diag-panel {
+  margin-top: 0;
+}
+
+.argos-diag-panel--risk,
+.argos-diag-panel--priority {
+  background: #eef6f7;
+  border-color: #102c54;
+}
+
+.argos-diag-panel__title {
+  margin: 0;
+  color: #168b8c;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.argos-diag-panel--risk .argos-diag-panel__title {
+  color: #102c54;
+}
+
+.argos-diag-panel__body,
+.argos-diag-panel__list {
+  margin: 0.75rem 0 0;
+  color: #102c54;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.argos-diag-panel__list {
+  padding-left: 1.1rem;
+}
+
+.argos-diag-callout {
+  margin-top: 1rem;
+}
+
+.argos-diag-callout--saved {
+  border-color: #168b8c;
+}
+
+.argos-diag-callout--error {
+  border-color: #102c54;
+  background: #ffffff;
+}
+
+.argos-diag-inline-link {
+  display: inline-block;
+  margin-top: 0.4rem;
+  color: #168b8c;
+  font-weight: 700;
+}
+
+.argos-diag-results .argos-diag-btn--primary,
+.argos-diag-results .argos-diag-btn--quiet {
+  flex: 1 1 14rem;
+}
+
+@media (min-width: 1024px) {
+  .argos-diag-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .argos-diag-progress__bar,
+  .argos-diag-modal .argos-diag-option,
+  .argos-diag-btn {
+    transition: none;
+  }
+}
+
+/* Home: el campo tecnológico permanece como marco.
+   Las secciones forman una sola columna D+, sin hueco ni sombra de tarjeta. */
+.argos-corporate.argos-corporate--home .argos-corp-section,
+.argos-corporate.argos-corporate--home .argos-dplus-blue-band,
+.argos-corporate.argos-corporate--home > .argos-corporate-footer {
+  margin-inline: clamp(0.75rem, 2.2vw, 1.75rem);
+  margin-top: 0;
+  box-shadow: none;
+}
+
+.argos-corporate.argos-corporate--home .argos-corp-section + .argos-corp-section,
+.argos-corporate.argos-corporate--home .argos-dplus-blue-band,
+.argos-corporate.argos-corporate--home > .argos-corporate-footer {
+  margin-top: 0;
+}
+
+.argos-corporate.argos-corporate--home :is(
+  .argos-corp-section--dplus-trust,
+  .argos-corp-section--dplus-pillars,
+  .argos-corp-section--dplus-services,
+  .argos-corp-section--dplus-diagnosis,
+  .argos-corp-section--dplus-modes,
+  .argos-corp-section--dplus-faq
+) {
+  background: transparent;
+  backdrop-filter: none;
+  color: #eef6f7;
+}
+
+.argos-corporate.argos-corporate--home :is(
+  .argos-corp-section--dplus-trust,
+  .argos-corp-section--dplus-pillars,
+  .argos-corp-section--dplus-services,
+  .argos-corp-section--dplus-diagnosis,
+  .argos-corp-section--dplus-modes,
+  .argos-corp-section--dplus-faq
+) :is(
+  .argos-corp-display,
+  .argos-font-display,
+  .argos-corp-h1,
+  .argos-corp-h2,
+  .argos-corp-h2--subsection,
+  .argos-corp-lead,
+  .argos-corp-body,
+  .argos-corp-card-title,
+  .argos-corp-card-body,
+  .argos-corp-pillar__label,
+  .argos-corp-rule-list li,
+  .argos-dplus-faq__summary,
+  .argos-dplus-faq__answer,
+  .argos-corp-quote
+) {
+  color: #eef6f7;
+}
+
+.argos-corporate.argos-corporate--home :is(
+  .argos-corp-section--dplus-trust,
+  .argos-corp-section--dplus-pillars,
+  .argos-corp-section--dplus-services,
+  .argos-corp-section--dplus-diagnosis,
+  .argos-corp-section--dplus-modes,
+  .argos-corp-section--dplus-faq
+) :is(
+  .argos-corp-section-index,
+  .argos-corp-eyebrow,
+  .argos-dplus-faq__mark,
+  .argos-corporate-link,
+  .argos-corporate-link-quiet,
+  .argos-btn-detail
+) {
+  color: #65bfc1;
+}
+
+.argos-corporate.argos-corporate--home :is(
+  .argos-card,
+  .argos-card--service,
+  .argos-card--method,
+  .argos-mint-card,
+  .argos-corporate-card,
+  .argos-expandable-card
+) {
+  background: transparent;
+  background-color: transparent;
+  color: #eef6f7;
+  box-shadow: none;
+  border-color: color-mix(in srgb, #65bfc1 22%, transparent);
+}
+
+.argos-corporate.argos-corporate--home .argos-mint-card__title,
+.argos-corporate.argos-corporate--home .argos-card--service :is(.argos-corp-card-title, .argos-corp-card-body),
+.argos-corporate.argos-corporate--home .argos-card--method :is(.argos-corp-card-title, .argos-corp-card-body) {
+  color: #eef6f7;
+}
+
+.argos-corporate.argos-corporate--home .argos-mint-card__hint,
+.argos-corporate.argos-corporate--home .argos-corp-section--dplus-method .argos-card--method :is(
+  .argos-corp-eyebrow,
+  .argos-movement-card__hint,
+  .argos-btn-detail
+) {
+  color: #65bfc1;
+}
+
+.argos-corporate.argos-corporate--home .argos-corp-section--dplus-method .argos-card--method :is(
+  .argos-corp-card-title,
+  .argos-corp-card-body
+) {
+  color: #eef6f7;
+}
+
+.argos-corporate.argos-corporate--home :is(
+  .argos-corp-section--dplus-trust,
+  .argos-corp-section--dplus-modes
+) .argos-corp-rule-list,
+.argos-corporate.argos-corporate--home :is(
+  .argos-corp-section--dplus-trust,
+  .argos-corp-section--dplus-modes
+) .argos-corp-rule-list li,
+.argos-corporate.argos-corporate--home .argos-dplus-faq__item,
+.argos-corporate.argos-corporate--home .argos-home-modes > li {
+  border-color: color-mix(in srgb, #65bfc1 32%, transparent);
+}
+
+.argos-corporate.argos-corporate--home .argos-diag-card__cta {
+  background: transparent;
+  color: #eef6f7;
+  border: 1px solid #65bfc1;
+}
+
+.argos-corporate.argos-corporate--home .argos-corporate-header {
+  background: transparent;
+  box-shadow: none;
+}
+
+.argos-corporate.argos-corporate--home .argos-corporate-logo__img {
+  filter: brightness(0) invert(1);
+}
+
+.argos-corporate.argos-corporate--home .argos-corporate-header__langs button {
+  color: #eef6f7;
+}
+
+.argos-corporate.argos-corporate--home .argos-corporate-header__langs button.is-active {
+  color: #65bfc1;
+  box-shadow: inset 0 -2px 0 #65bfc1;
+}
+
+.argos-corporate.argos-corporate--home .argos-header-banner__inner {
+  background: transparent;
+  color: #eef6f7;
+  border-left-color: #65bfc1;
+}
+
+.argos-corporate.argos-corporate--home .argos-header-banner__title,
+.argos-corporate.argos-corporate--home .argos-header-banner__body {
+  color: #eef6f7;
+}
+
+.argos-corporate.argos-corporate--home .argos-history-nav__btn {
+  background: transparent;
+  color: #eef6f7;
+  box-shadow: none;
+  border: 1px solid color-mix(in srgb, #65bfc1 45%, transparent);
+}
+
+body:has(.argos-corporate--home) .argos-assistant-launcher {
+  background: transparent;
+  color: #eef6f7;
+  border-color: color-mix(in srgb, #65bfc1 55%, transparent);
+  box-shadow: none;
+}
+
+body:has(.argos-corporate--home) .argos-assistant-launcher:hover {
+  background: color-mix(in srgb, #168b8c 28%, transparent);
+  color: #ffffff;
+}
+
+.argos-corporate.argos-corporate--home .argos-corporate-menu-toggle {
+  background: transparent;
+  color: #eef6f7;
+  border: 0;
+  box-shadow: none;
+}
+
+.argos-corporate.argos-corporate--home .argos-corporate-menu-toggle:hover {
+  background: color-mix(in srgb, #168b8c 22%, transparent);
+  border-color: #65bfc1;
+  color: #ffffff;
+}
+
+.argos-corporate.argos-corporate--home :is(
+  .argos-corp-section--dplus-problem,
+  .argos-corp-section--dplus-philosophy,
+  .argos-corp-section--dplus-method
+) {
+  background: #102c54;
+  color: #eef6f7;
+}
+
+.argos-corporate.argos-corporate--home .argos-dplus-blue-band__wave {
+  top: 0;
+  bottom: auto;
+  height: clamp(3.25rem, 8vw, 5rem);
+  object-position: center 62%;
+  mix-blend-mode: soft-light;
+  opacity: 0.9;
+}
+
+.argos-corporate.argos-corporate--home .argos-dplus-blue-band {
+  padding-top: calc(clamp(2rem, 4vw, 3rem) + clamp(2.5rem, 6vw, 4rem));
+  padding-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+.argos-corporate.argos-corporate--home .argos-corp-section--dplus-method .argos-card--method {
+  background: transparent;
+  background-color: transparent;
+  color: #eef6f7;
+  box-shadow: none;
+  border-color: color-mix(in srgb, #65bfc1 22%, transparent);
+}
+
+.argos-corporate.argos-corporate--home .argos-home-modes > li,
+.argos-corporate.argos-corporate--home .argos-dplus-faq,
+.argos-corporate.argos-corporate--home .argos-dplus-faq__item,
+.argos-corporate.argos-corporate--home .argos-dplus-faq__summary,
+.argos-corporate.argos-corporate--home .argos-dplus-faq__answer {
+  background: transparent;
+  background-color: transparent;
+  color: #eef6f7;
+  box-shadow: none;
+}
+
+.argos-corporate.argos-corporate--home .argos-dplus-faq__item {
+  border: 0;
+  border-bottom: 1px solid color-mix(in srgb, #65bfc1 32%, transparent);
+  border-radius: 0;
+}
+
+.argos-corporate.argos-corporate--home .argos-dplus-faq__answer {
+  border-top-color: color-mix(in srgb, #65bfc1 24%, transparent);
+}
+
+.argos-corporate.argos-corporate--home summary:focus-visible {
+  outline: 3px solid #65bfc1;
+  outline-offset: 2px;
+}
+
+.argos-corporate.argos-corporate--home .argos-btn-detail {
+  background: transparent;
+  color: #65bfc1;
+  border-color: #65bfc1;
+}
+
+.argos-corporate.argos-corporate--home .argos-method-bar__mark-wrap {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.argos-corporate.argos-corporate--home .argos-method-bar__mark {
+  filter: invert(1);
+  mix-blend-mode: screen;
+}
+
+.argos-corporate.argos-corporate--home .argos-corp-pillar__media {
+  background: transparent;
+}
+
+/* Pasada editorial del cuerpo. El héroe no entra en este bloque. */
+
+.argos-corporate.argos-corporate--home .argos-corp-section--dplus-trust {
+  padding-top: 15rem;
+  padding-bottom: clamp(5.25rem, 8vw, 7rem);
+}
+
+.argos-corporate.argos-corporate--home .argos-corp-section--dplus-trust .argos-corp-section-index {
+  margin-bottom: 1.35rem;
+}
+
+.argos-corporate.argos-corporate--home .argos-corp-section--dplus-trust .argos-corp-h2 {
+  margin-top: 0;
+  margin-bottom: 1.35rem;
+  max-width: 12ch;
+  font-size: clamp(2.35rem, 4vw, 3.35rem);
+  line-height: 1.05;
+}
+
+.argos-corporate.argos-corporate--home .argos-corp-section--dplus-trust .argos-corp-body {
+  margin-top: 0;
+  margin-bottom: 1.85rem;
+  max-width: 40rem;
+}
+
+.argos-corporate.argos-corporate--home .argos-corp-section--dplus-services .argos-card-grid--services {
+  gap: clamp(2.75rem, 4.5vw, 4rem) clamp(2.5rem, 4vw, 4.25rem);
+  align-items: start;
+}
+
+.argos-corporate.argos-corporate--home .argos-corp-section--dplus-services .argos-card--service {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  height: auto;
+  padding: 0;
+}
+
+.argos-corporate.argos-corporate--home .argos-corp-section--dplus-services .argos-card--service::before {
+  content: "";
+  display: block;
+  width: 1.35rem;
+  height: 2px;
+  margin-bottom: 0.85rem;
+  background: #65bfc1;
+}
+
+@media (min-width: 1024px) {
+  .argos-corporate.argos-corporate--home .argos-card-grid--services > li:not(:nth-child(3n + 1)) .argos-card--service {
+    border-left: 1px solid color-mix(in srgb, #65bfc1 26%, transparent);
+    padding-left: 1.75rem;
+  }
+}
+
+.argos-corporate.argos-corporate--home .argos-corp-section--dplus-services .argos-btn-detail {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 0.35rem 0;
+  min-height: 44px;
+}
+
+.argos-corporate.argos-corporate--home .argos-corp-section--dplus-method {
+  padding-top: clamp(5.5rem, 8vw, 7.25rem);
+  padding-bottom: clamp(5.5rem, 8vw, 7.25rem);
+}
+
+.argos-corporate.argos-corporate--home .argos-method-bar {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  gap: 2rem 3.5rem;
+  padding: 0.15rem 0 1.25rem;
+}
+
+.argos-corporate.argos-corporate--home .argos-method-bar__mark-wrap {
+  width: 3rem;
+  height: 3rem;
+  background: #102c54;
+  isolation: isolate;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.argos-corporate.argos-corporate--home .argos-method-bar__title {
+  font-size: clamp(1.65rem, 2.4vw, 2.15rem);
+}
+
+.argos-corporate.argos-corporate--home .argos-corp-phase-letters-row {
+  gap: 0;
+}
+
+.argos-corporate.argos-corporate--home .argos-corp-phase-letters-row__item {
+  min-width: 0;
+  padding: 0 1.15rem;
+}
+
+.argos-corporate.argos-corporate--home .argos-corp-phase-letters-row__item:first-child {
+  padding-left: 0;
+}
+
+.argos-corporate.argos-corporate--home .argos-corp-phase-letters-row__item:hover {
+  transform: none;
+}
+
+.argos-corporate.argos-corporate--home .argos-corp-phase-letters-row__letter {
+  font-size: 0.95rem;
+  font-weight: 650;
+  letter-spacing: 0.16em;
+  color: #65bfc1;
+}
+
+.argos-corporate.argos-corporate--home .argos-corp-phase-letters-row__title {
+  margin-top: 0.28rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: #eef6f7;
+}
+
+.argos-corporate.argos-corporate--home .argos-corp-phase-letters-row__item:not(:last-child)::after {
+  display: block;
+  top: 18%;
+  bottom: 18%;
+  width: 1px;
+  background: color-mix(in srgb, #65bfc1 32%, transparent);
+}
+
+.argos-corporate.argos-corporate--home .argos-corp-section--dplus-method .argos-card--bridge,
+.argos-corporate.argos-corporate--home .argos-corp-section--dplus-method .argos-card--method {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  padding: 0;
+}
+
+.argos-corporate.argos-corporate--home .argos-corp-section--dplus-method .argos-card-grid--philosophy {
+  gap: 2rem 2.25rem;
+  align-items: start;
+}
+
+.argos-corporate.argos-corporate--home .argos-corp-section--dplus-method .argos-card--method .argos-corp-eyebrow {
+  display: inline-block;
+  margin-bottom: 0.65rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 2px solid #65bfc1;
+}
+
+.argos-corporate.argos-corporate--home .argos-dplus-blue-band {
+  background: #102c54;
+  padding-bottom: 0.85rem;
+}
+
+.argos-corporate.argos-corporate--home .argos-dplus-blue-band::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -4.5rem;
+  height: 4.5rem;
+  background: linear-gradient(180deg, transparent, #102c54);
+  pointer-events: none;
+}
+
+.argos-corporate.argos-corporate--home > .argos-corporate-footer {
+  margin-top: 0;
+  border-top: 0;
+  box-shadow: none;
+}
+
+.argos-corporate.argos-corporate--home .argos-corporate-footer__grid,
+.argos-corporate.argos-corporate--home .argos-corporate-footer__legal {
+  padding-left: max(var(--header-px, 16px), var(--mascot-clear-inline, 0px));
+  padding-right: max(var(--header-px, 16px), var(--mascot-clear-inline, 0px));
+}
+
+.argos-corporate.argos-corporate--home .argos-corporate-footer__grid {
+  padding-top: 1.35rem;
+}
+
+/* 390: la firma A–S no cabe con el padding de escritorio y el fade móvil la recorta. */
+@media (max-width: 390px) {
+  .argos-corporate.argos-corporate--home .argos-method-bar__phases::after {
+    content: none;
+  }
+
+  .argos-corporate.argos-corporate--home .argos-corp-phase-letters-row {
+    overflow-x: visible;
+    padding-inline: 0;
+    column-gap: 0.75rem;
+  }
+
+  .argos-corporate.argos-corporate--home .argos-corp-phase-letters-row__item {
+    flex: 0 0 auto;
+    min-width: max-content;
+    padding-inline: 0;
+  }
+
+  .argos-corporate.argos-corporate--home .argos-corp-phase-letters-row__item:first-child {
+    padding-left: 0;
+  }
+
+  .argos-corporate.argos-corporate--home .argos-corp-phase-letters-row__item:last-child {
+    padding-right: 0;
   }
 }

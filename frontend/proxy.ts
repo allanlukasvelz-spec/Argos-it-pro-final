@@ -7,7 +7,7 @@ const AUTH_SESSION_COOKIE = "argos_session";
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (pathname.startsWith("/dashboard")) {
+  if (pathname.startsWith("/dashboard") || pathname.startsWith("/noc")) {
     if (request.cookies.get(AUTH_SESSION_COOKIE)?.value !== "1") {
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
@@ -16,7 +16,12 @@ export function proxy(request: NextRequest) {
     return res;
   }
 
-  if (pathname.startsWith("/auth/login") || pathname.startsWith("/auth/register")) {
+  if (
+    pathname.startsWith("/auth/") ||
+    pathname.startsWith("/proyecto-web/comenzar") ||
+    pathname.startsWith("/platform-map") ||
+    pathname.startsWith("/explainer")
+  ) {
     const res = NextResponse.next();
     res.headers.set("X-Robots-Tag", "noindex, nofollow");
     return res;
@@ -41,8 +46,14 @@ export const config = {
   matcher: [
     "/dashboard",
     "/dashboard/:path*",
-    "/auth/login",
-    "/auth/register",
+    "/noc",
+    "/noc/:path*",
+    "/auth/:path*",
+    "/proyecto-web/comenzar",
+    "/platform-map",
+    "/platform-map/:path*",
+    "/explainer",
+    "/explainer/:path*",
     "/mascot-motion-lab",
     "/mascot-motion-lab/:path*"
   ]

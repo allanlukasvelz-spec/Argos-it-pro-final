@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ARGOS — Plano maestro de producto (estructural)</title>
+<style>
+:root{--navy:#1F3A5F;--teal:#2F7D6D;--ivory:#F7F7F5;--dark:#0B1320;--muted:#5C6B7A;--line:#D4D4CE;--card:#EEEEEA;--warn:#B8860B;--crit:#A33B3B}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--ivory);color:var(--dark);line-height:1.5}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;color:var(--navy);font-weight:600}
+h1{font-size:2rem}h2{font-size:1.45rem;border-bottom:1px solid var(--line);padding-bottom:.3rem;margin-top:2rem}
+a{color:var(--teal)}
+pre,code{font-family:ui-monospace,Menlo,monospace;font-size:.84rem}
+pre{background:var(--dark);color:#E8EEF2;padding:1rem;overflow:auto}
+.banner{background:var(--navy);color:#fff;padding:.75rem 1.2rem;font-size:.85rem}
+.banner strong{color:#C9E4DC}
+.app{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+nav{background:#fff;border-right:1px solid var(--line);padding:1rem .75rem;position:sticky;top:0;height:100vh;overflow:auto}
+nav img{max-width:150px;margin-bottom:.8rem}
+nav a{display:block;color:var(--navy);text-decoration:none;font-size:.82rem;padding:.28rem .4rem}
+nav a:hover{background:var(--card)}
+main{padding:1.5rem 2rem 4rem;max-width:1080px}
+.note{background:#E8F0EE;border-left:4px solid var(--teal);padding:.8rem 1rem;margin:1rem 0}
+.warn{background:#F7F0DC;border-left:4px solid var(--warn);padding:.8rem 1rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem}
+.card{background:#fff;border:1px solid var(--line);padding:.9rem}
+.wf{border:1px solid var(--navy);background:#fff;margin:1rem 0;font-size:.8rem}
+.wf .hd{background:var(--navy);color:#fff;padding:.4rem .7rem;display:flex;justify-content:space-between}
+.wf .row{display:grid;grid-template-columns:170px 1fr;min-height:260px}
+.side{background:var(--card);padding:.5rem;border-right:1px solid var(--line)}
+.side div{background:#fff;margin:.2rem 0;padding:.25rem .4rem;border:1px solid var(--line)}
+.side .on{background:var(--navy);color:#fff}
+.mainp{padding:.7rem}
+.kpi span{display:inline-block;background:var(--card);border:1px dashed var(--muted);padding:.35rem .55rem;margin:.2rem}
+.badge{display:inline-block;font-size:.72rem;font-weight:700;padding:.12rem .4rem}
+.ok{background:#DCECE8;color:var(--teal)}.w{background:#F7E7C1}.c{background:#F3D4D4;color:var(--crit)}.u{background:#E5E7EB;color:#6B7280}
+table{border-collapse:collapse;width:100%;background:#fff;font-size:.85rem;margin:1rem 0}
+th,td{border:1px solid var(--line);padding:.4rem .5rem;vertical-align:top}
+th{background:var(--navy);color:#fff;text-align:left}
+.flow{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center;margin:1rem 0}
+.flow i{font-style:normal;background:var(--navy);color:#fff;padding:.3rem .5rem;font-size:.78rem}
+footer{margin-top:3rem;color:var(--muted);font-size:.8rem}
+@media(max-width:860px){.app{grid-template-columns:1fr}nav{height:auto;position:relative}}
+</style>
+</head>
+<body>
+<div class="banner">PLANO ARQUITECTÓNICO · WIREFRAMES = ESTRUCTURALES · UI FINAL = PENDIENTE RELUME + FRAMER · FASE 3 NO IMPLEMENTADA · HEAD <strong>ec27eb9</strong></div>
+<div class="app">
+<nav>
+<img src="../../frontend/public/logo-argos-it.png" alt="ARGOS-IT"/>
+<a href="#vision">Visión</a>
+<a href="#tres">Tres experiencias</a>
+<a href="#actual">Estado actual</a>
+<a href="#objetivo">Estado objetivo</a>
+<a href="#publica">Web pública</a>
+<a href="#portal">Portal cliente</a>
+<a href="#noc">NOC</a>
+<a href="#tenant">Multi-tenant</a>
+<a href="#monitor">Monitorización</a>
+<a href="#abc">Motor A/B/C</a>
+<a href="#auto">Automatización</a>
+<a href="#alta">Onboarding</a>
+<a href="#viajes">Journeys</a>
+<a href="#mapa">Roadmap</a>
+<a href="#riesgo">Riesgos</a>
+<a href="#siguiente">Siguiente paso</a>
+</nav>
+<main>
+<p class="note">Este HTML es el plano navegable. No es el diseño visual final. Cifras de ejemplo: <strong>MOCK / DEMO / PLACEHOLDER</strong>. Relume define IA/UX; Framer la alta fidelidad.</p>
+
+<h1 id="vision">ARGOS — plataforma de protección continua</h1>
+<p>ARGOS protege, observa y actúa sobre la tecnología de organizaciones cliente con evidencia, aislamiento de tenant y parada segura. No es un monitor de uptime de marketing ni tres productos.</p>
+<div class="grid">
+<div class="card"><h3>Web pública</h3><p>Captar, explicar, convertir. No es un dashboard.</p></div>
+<div class="card"><h3>Portal cliente</h3><p>Calma y verdad. ¿Estoy protegido? Sin fingir HEALTHY.</p></div>
+<div class="card"><h3>NOC interno</h3><p>Operar todos los tenants con evidencia y A/B/C.</p></div>
+</div>
+
+<h2 id="tres">Un núcleo, tres vistas</h2>
+<pre>PUBLIC WEBSITE     CLIENT PORTAL      INTERNAL NOC
+        \                |                 /
+                     ARGOS CORE
+              AUTH · TENANCY · OPERATIONS
+                     POSTGRESQL</pre>
+
+<h2 id="actual">CURRENT (ec27eb9) — Fases 0–2</h2>
+<table>
+<tr><th>Área</th><th>Estado</th><th>Hecho</th></tr>
+<tr><td>Organizations + members</td><td>DONE</td><td>3444916 / c19a8ce</td></tr>
+<tr><td>Assets + TLS observe</td><td>DONE</td><td>ec27eb9 · on-demand, sin scheduler</td></tr>
+<tr><td>Portal /dashboard</td><td>PARTIAL</td><td>Una página; assets/TLS reales</td></tr>
+<tr><td>Web pública</td><td>DONE</td><td>IA frozen 21.6B; piel legacy salvo /contacto</td></tr>
+<tr><td>/noc + monitors + alerts + incidents</td><td>NOT STARTED</td><td>No inventar como existentes</td></tr>
+<tr><td>org_role enforcement</td><td>PARTIAL</td><td>Modelo sí; rutas no</td></tr>
+</table>
+<p class="warn"><code>stash@{0}</code> contiene un intento de Fase 3. No aplicar. Este plano no se deriva del stash.</p>
+
+<h2 id="objetivo">TARGET — bloques por fase</h2>
+<div class="flow">
+<i>DONE org/asset/TLS</i><span>→</span><i>P3 monitor…incident</i><span>→</span><i>P4 portal</i><span>→</span><i>P5 NOC</i><span>→</span><i>P6 A/B/C</i><span>→</span><i>P7 agents</i><span>→</span><i>P8 notify</i><span>→</span><i>P9 prevent</i><span>→</span><i>P10 harden</i><span>→</span><i>P11 pilot</i><span>→</span><i>P12 prod</i>
+</div>
+
+<h2 id="publica">Web pública — estructura</h2>
+<p>CURRENT se conserva. TARGET es superconjunto. Relume no borra <code>/metodo</code> ni los 6 servicios.</p>
+<div class="wf">
+<div class="hd"><span>PUBLIC · estructural</span><span>Inicio · Servicios · Método · Sobre · Contacto</span></div>
+<div class="mainp">
+<p><strong>Hero editorial</strong> — qué protege ARGOS (no fake command-center).</p>
+<p>Método 5 pasos · Grid 6 servicios · Planes sin precios inventados · CTA Contacto.</p>
+<p>Páginas nuevas Relume: preventiva, 24/7, casos de uso — copy aprobada.</p>
+</div>
+</div>
+
+<h2 id="portal">Portal cliente — Resumen (estructural)</h2>
+<div class="wf">
+<div class="hd"><span>ARGOS</span><span>ORG NAME · PERFIL</span></div>
+<div class="row">
+<div class="side">
+<div class="on">Resumen</div>
+<div>Mis activos</div><div>Monitorización</div><div>Seguridad</div>
+<div>Alertas</div><div>Incidentes</div><div>Prevención</div>
+<div>Auditorías</div><div>Informes</div><div>Soporte</div><div>Cuenta</div>
+</div>
+<div class="mainp">
+<p>PROTECTION STATUS
+<span class="badge ok">PROTECTED</span>
+<span class="badge w">WARNING</span>
+<span class="badge c">CRITICAL</span>
+<span class="badge u">UNKNOWN</span></p>
+<p class="kpi"><span>Protection Score MOCK</span><span>Availability MOCK</span></p>
+<p>HEALTH: Web / TLS / DNS / Backups / Server — UNKNOWN si no hay evidencia</p>
+<p>PREVENTIVE ACTIONS · ATTENTION REQUIRED</p>
+<p><strong>UNKNOWN ≠ HEALTHY</strong></p>
+</div>
+</div>
+</div>
+
+<h2 id="noc">NOC — Command Center (estructural)</h2>
+<div class="wf">
+<div class="hd"><span>ARGOS NOC</span><span>PLATFORM HEALTH</span></div>
+<div class="row">
+<div class="side">
+<div class="on">Command</div>
+<div>Customers</div><div>Assets</div><div>Monitoring</div>
+<div>Alerts</div><div>Incidents</div><div>Predicted</div>
+<div>TLS / DNS / Servers</div><div>Runbooks</div><div>Audit</div>
+</div>
+<div class="mainp">
+<p class="kpi"><span>Customers MOCK</span><span>Assets MOCK</span><span>Alerts MOCK</span><span>Incidents MOCK</span></p>
+<p>ACTIVE PRIORITIES — customer · signal · severity · action</p>
+<p>PREDICTED INCIDENTS — sin ML ficticio</p>
+<p>PANEL A/B/C — Why this action · rollback · safe stop · ApprovalGate L3</p>
+</div>
+</div>
+</div>
+
+<h2 id="tenant">Aislamiento</h2>
+<pre>JWT → User → Membership → Tenant Context → organization_id → Scoped SQL
+ORG A  ─X─>  ORG B</pre>
+<p>IDOR → 404. Staff NOC también parametriza <code>organization_id</code>.</p>
+
+<h2 id="monitor">Pipeline de monitorización (Fase 3 — diseño)</h2>
+<div class="flow">
+<i>ASSET</i><span>→</span><i>MONITOR</i><span>→</span><i>SCHEDULER</i><span>→</span><i>CHECK</i><span>→</span><i>OBSERVATION</i><span>→</span><i>HEALTH</i><span>→</span><i>RISK</i><span>→</span><i>ALERT</i><span>→</span><i>INCIDENT</i><span>→</span><i>A/B/C</i><span>→</span><i>VERIFY</i>
+</div>
+<p>Risk: DETECTED / INFERRED / PREDICTED. No llamar AI a reglas. Sin cobertura → UNKNOWN.</p>
+
+<h2 id="abc">Si A falla, ARGOS aprende</h2>
+<pre>A FAIL → failure evidence → reduce hipótesis → Action B (predeclarada)
+B FAIL → Action C
+C FAIL → SAFE STOP / ROLLBACK / ESCALATE
+Ejemplo CONN_REFUSED DB: no rotar password en A; verificar listener/servicio.</pre>
+
+<h2 id="auto">Niveles de automatización</h2>
+<table>
+<tr><th>L</th><th>Nombre</th><th>UI</th></tr>
+<tr><td>0</td><td>READ ONLY</td><td>default</td></tr>
+<tr><td>1</td><td>SAFE AUTOMATION</td><td>auto OK</td></tr>
+<tr><td>2</td><td>REVERSIBLE CHANGE</td><td>auto + rollback listo</td></tr>
+<tr><td>3</td><td>HIGH IMPACT</td><td>ApprovalGate — Framer no «Auto Fix»</td></tr>
+<tr><td>4</td><td>NEVER AUTOMATIC</td><td>sin control auto</td></tr>
+</table>
+
+<h2 id="alta">Onboarding</h2>
+<div class="flow">
+<i>ORG</i><span>→</span><i>MEMBERS</i><span>→</span><i>DOMAIN</i><span>→</span><i>DISCOVER</i><span>→</span><i>CONFIRM</i><span>→</span><i>OWNERSHIP</i><span>→</span><i>PROFILE</i><span>→</span><i>MONITORS</i><span>→</span><i>BASELINE</i><span>→</span><i>COVERAGE</i><span>→</span><i>PROTECTED?</i>
+</div>
+<p>PROTECTED solo con cobertura mínima. Antes: onboarding / UNKNOWN.</p>
+
+<h2 id="viajes">Journeys</h2>
+<ol>
+<li>Visitante → lead → cliente</li>
+<li>Cliente → login → dashboard → alerta</li>
+<li>Cliente → incidente → resolución (observa; NOC actúa)</li>
+<li>NOC → alerta → evidencia → A/B/C → verify</li>
+<li>TLS warning → prevención → renovación</li>
+<li>DB failure → diagnóstico → recovery</li>
+</ol>
+
+<h2 id="mapa">Roadmap y DoD</h2>
+<p>P0–P2 DONE. P3 siguiente (requiere autorización). Compilar ≠ DONE. DoD: isolation, estados UNKNOWN, tests, rollback, no secrets.</p>
+<p>MVP real: org → asset → monitor → observation → health → alert → incident → visibilidad cliente → visibilidad NOC.</p>
+
+<h2 id="riesgo">Riesgos que no se negocian</h2>
+<ul>
+<li>Fuga entre tenants</li>
+<li>False HEALTHY</li>
+<li>Automatización L3 sin aprobación</li>
+<li>SSRF en probes</li>
+<li>Aplicar el stash de Fase 3</li>
+</ul>
+
+<h2 id="siguiente">Siguiente acción recomendada</h2>
+<ol>
+<li>No implementar Fase 3.</li>
+<li>No tocar stash / main / producción.</li>
+<li>Entregar a Relume <code>handoff/ARGOS_RELUME_HANDOFF.md</code>.</li>
+<li>Tras Relume: completar Framer + Design Contract.</li>
+<li>Autorización humana de Fase 3 sobre este plano.</li>
+</ol>
+<footer>Fuente de verdad: ARGOS_MASTER_PRODUCT_BLUEPRINT.md · Checkpoint argos-pre-multitenant-2026-08-24 · Rama feature/argos-multitenant-platform</footer>
+</main>
+</div>
+</body>
+</html>

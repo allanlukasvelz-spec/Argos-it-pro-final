@@ -1,13 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import ArgosCard from "@/components/corporate/ArgosCard";
 import ArgosExpandableCard from "@/components/corporate/ArgosExpandableCard";
 import ArgosReveal from "@/components/corporate/ArgosReveal";
 import CorporatePageShell from "@/components/layout/CorporatePageShell";
+import "@/assets/css/argos-abstract-surfaces.css";
 import { useI18n } from "@/i18n/useI18n";
 import { useLocalizedServices } from "@/hooks/useLocalizedServices";
 import { usePageMeta } from "@/components/seo/usePageMeta";
+
+/** Fotografías ya aprobadas en el Golden Master. El orden sigue el del contenido. */
+const PILLAR_PHOTO: Record<string, string> = {
+  Infraestructura: "/infraestructura.png",
+  Sistemas: "/sistemas.png",
+  Seguridad: "/seguridad.png",
+  Continuidad: "/continuidad.png"
+};
 
 export default function ServicesView() {
   const { t, get } = useI18n();
@@ -17,8 +25,8 @@ export default function ServicesView() {
   usePageMeta(t("meta.servicesTitle"), t("meta.servicesDescription"));
 
   return (
-    <CorporatePageShell>
-      <section className="argos-corp-section" aria-labelledby="services-title">
+    <CorporatePageShell className="argos-v4-surface argos-v4-services">
+      <section className="argos-corp-section argos-corp-section--dplus-intro" aria-labelledby="services-title">
         <div className="argos-corp-container">
           <ArgosReveal>
             <p className="argos-corp-section-index">02 / {t("nav.services")}</p>
@@ -27,22 +35,34 @@ export default function ServicesView() {
             </h1>
             <p className="argos-corp-lead">{t("servicesPage.subtitle")}</p>
           </ArgosReveal>
+        </div>
+      </section>
 
-          {strategicPillars.length > 0 ? (
-            <ArgosReveal as="div" className="mt-8">
-              <ul className="argos-card-grid argos-card-grid--pillars" aria-label={strategicPillars.join(", ")}>
-                {strategicPillars.map((pillar) => (
-                  <li key={pillar}>
-                    <ArgosCard variant="pillar">
-                      <p className="argos-corp-card-title">{pillar}</p>
-                    </ArgosCard>
-                  </li>
-                ))}
-              </ul>
-            </ArgosReveal>
-          ) : null}
+      {strategicPillars.length > 0 ? (
+        <section className="argos-corp-section argos-corp-section--dplus-pillars" aria-label={strategicPillars.join(", ")}>
+          <div className="argos-corp-container">
+            <ul className="argos-corp-pillars">
+              {strategicPillars.map((pillar) => (
+                <li key={pillar}>
+                  <article className="argos-corp-pillar">
+                    {PILLAR_PHOTO[pillar] ? (
+                      <div className="argos-corp-pillar__media">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={PILLAR_PHOTO[pillar]} alt="" width={400} height={300} loading="lazy" decoding="async" />
+                      </div>
+                    ) : null}
+                    <p className="argos-corp-pillar__label">{pillar}</p>
+                  </article>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      ) : null}
 
-          <ul className="argos-card-grid argos-card-grid--services mt-10">
+      <section className="argos-corp-section argos-corp-section--dplus-services" aria-label={t("nav.services")}>
+        <div className="argos-corp-container">
+          <ul className="argos-card-grid argos-card-grid--services">
             {services.map((service) => (
               <li key={service.slug}>
                 <ArgosReveal as="div">

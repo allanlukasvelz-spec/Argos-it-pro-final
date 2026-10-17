@@ -1,0 +1,118 @@
+# ARGOS port registry — SOURCE for governance (DATE=2026-08-25)
+# Default: prefer private binds; public only via Traefik/edge.
+
+ports:
+  - service: frontend
+    port: 3000
+    protocol: tcp
+    bind: "127.0.0.1 or container"
+    exposure: public_via_edge
+    auth: none_at_edge_then_app
+    tls: edge
+    purpose: Next.js UI
+    owner: frontend
+
+  - service: backend
+    port: 4000
+    protocol: tcp
+    bind: "127.0.0.1 or container"
+    exposure: private_or_api_hostname
+    auth: JWT / agent credential / public limited routes
+    tls: edge
+    purpose: Express API
+    owner: backend
+
+  - service: postgres
+    port: 5432
+    protocol: tcp
+    bind: private
+    exposure: private
+    auth: password/scram
+    tls: optional_internal
+    purpose: TRANSACTIONAL store
+    owner: data
+
+  # TARGET — not deployed in foundation
+  - service: otel-collector
+    port: 4317
+    protocol: tcp
+    bind: private
+    exposure: private
+    auth: network_policy
+    tls: optional
+    purpose: OTLP ingest
+    owner: platform
+    status: TARGET_V1
+
+  - service: prometheus
+    port: 9090
+    protocol: tcp
+    bind: private
+    exposure: private
+    auth: network_policy
+    tls: optional
+    purpose: metrics engine
+    owner: platform
+    status: TARGET_V1
+
+  - service: grafana
+    port: 3001
+    protocol: tcp
+    bind: private
+    exposure: private_noc_only
+    auth: required
+    tls: required_if_exposed
+    purpose: internal dashboards
+    owner: platform
+    status: TARGET_ADOPT_LATER
+
+  - service: minio
+    port: 9000
+    protocol: tcp
+    bind: "127.0.0.1 (POC overlay)"
+    exposure: private
+    auth: access_keys
+    tls: optional_local
+    purpose: OBJECT store API (S3-compatible)
+    owner: platform
+    status: POC_LOCAL
+    public: NO
+
+  - service: minio-console
+    port: 9001
+    protocol: tcp
+    bind: "127.0.0.1 (POC overlay)"
+    exposure: localhost_only
+    auth: MINIO_ROOT_USER/PASSWORD
+    tls: optional_local
+    purpose: MinIO admin console (POC)
+    owner: platform
+    status: POC_LOCAL
+    public: NO
+
+  # Local collision-safe alternate (validated 2026-08-26 when host 9000 occupied)
+  - service: minio-alt
+    port: 9010
+    protocol: tcp
+    bind: "127.0.0.1 (POC overlay)"
+    exposure: private
+    auth: access_keys
+    tls: optional_local
+    purpose: MinIO S3 API alternate host bind
+    owner: platform
+    status: POC_LOCAL
+    public: NO
+    notes: "Set MINIO_API_PORT=9010 in docker/.env.minio-poc"
+
+  - service: minio-console-alt
+    port: 9011
+    protocol: tcp
+    bind: "127.0.0.1 (POC overlay)"
+    exposure: localhost_only
+    auth: MINIO_ROOT_USER/PASSWORD
+    tls: optional_local
+    purpose: MinIO console alternate host bind
+    owner: platform
+    status: POC_LOCAL
+    public: NO
+    notes: "Set MINIO_CONSOLE_PORT=9011 in docker/.env.minio-poc"

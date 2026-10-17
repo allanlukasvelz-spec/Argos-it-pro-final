@@ -34,7 +34,10 @@ test.describe("corporate Quiet Authority chrome", () => {
 
     const dialog = page.locator(".argos-corporate-drawer");
     await expect(dialog).toBeVisible();
-    await expect(dialog.locator(".argos-drawer-block")).toHaveCount(6);
+    await expect(dialog.locator(".argos-drawer-block")).toHaveCount(7);
+    await expect(
+      dialog.getByRole("link", { name: /Proyecto web|Web project|Projecte web/i })
+    ).toBeVisible();
 
     await dialog.getByRole("button", { name: /Método ARGOS|ARGOS Method|Mètode ARGOS/i }).click();
     await expect(dialog.locator(".argos-drawer-method-card")).toBeVisible();

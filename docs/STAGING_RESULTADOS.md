@@ -1,5 +1,8 @@
 # Resultados de Staging ARGOS-IT
 
+> **Vigencia — 2026-10-16.** Registro del 2026-08-02. No se borra ni se reescribe como si fuera el presente. La observación pública posterior, el 2026-10-14, fue HTTP 503. V7.24 no la ha repetido y no le atribuye una causa. Coolify 4.1.2, los commits citados y el estado operativo pertenecen a aquella fecha.
+
+
 Fecha: 2026-08-02  
 Rama: `deploy/staging-readiness`  
 Commit desplegado (backend): `59dcd7d` — `fix(deploy): add Node fetch HEALTHCHECK to backend image`  

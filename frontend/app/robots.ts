@@ -6,7 +6,21 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/mascot-motion-lab", "/mascot-motion-lab/"]
+        disallow: [
+          "/mascot-motion-lab",
+          "/mascot-motion-lab/",
+          "/proyecto-web/comenzar",
+          "/dashboard",
+          "/dashboard/",
+          "/noc",
+          "/noc/",
+          "/auth",
+          "/auth/",
+          "/platform-map",
+          "/platform-map/",
+          "/explainer",
+          "/explainer/"
+        ]
       }
     ],
     sitemap: "https://argos-it.com/sitemap.xml"

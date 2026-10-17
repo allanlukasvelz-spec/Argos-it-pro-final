@@ -7,6 +7,7 @@ import ArgosReveal from "@/components/corporate/ArgosReveal";
 import MethodArgosBar from "@/components/corporate/MethodArgosBar";
 import PublicMovementsGrid from "@/components/corporate/PublicMovementsGrid";
 import CorporatePageShell from "@/components/layout/CorporatePageShell";
+import "@/assets/css/argos-abstract-surfaces.css";
 import { useDiagnosticSurveyLauncher } from "@/components/diagnostic/DiagnosticSurveyLauncher";
 import { useI18n } from "@/i18n/useI18n";
 import { usePageMeta } from "@/components/seo/usePageMeta";
@@ -39,8 +40,8 @@ export default function MethodView() {
   }, []);
 
   return (
-    <CorporatePageShell>
-      <section className="argos-corp-section" aria-labelledby="method-title">
+    <CorporatePageShell className="argos-v4-surface argos-v4-method">
+      <section className="argos-corp-section argos-corp-section--dplus-method" aria-labelledby="method-title">
         <div className="argos-corp-container">
           <ArgosReveal>
             <MethodArgosBar

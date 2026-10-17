@@ -15,7 +15,7 @@ type Props = {
 };
 
 type AccordionId = "services" | "method" | "about" | "contacts" | "portal" | null;
-type PressedId = "home" | AccordionId;
+type PressedId = "home" | "webProject" | AccordionId;
 
 function IconHome() {
   return (
@@ -60,6 +60,15 @@ function IconContacts() {
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <rect x="3.5" y="5.5" width="17" height="13" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
       <path d="m5 8 7 5 7-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function IconWebProject() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="3.5" y="5.5" width="17" height="13" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M3.5 9h17M8 13h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   );
 }
@@ -185,6 +194,26 @@ export default function CorporateNavDrawer({ open, onClose, menuId, pathname }: 
                 <IconHome />
               </span>
               <span className="argos-drawer-block__label">{t("nav.home")}</span>
+            </Link>
+          </div>
+
+          <div
+            className={`argos-drawer-block${pressed === "webProject" ? " is-pressed" : ""}${
+              isCorporateNavActive(pathname, "/proyecto-web") ? " is-current" : ""
+            }`}
+          >
+            <Link
+              href="/proyecto-web"
+              className={`argos-drawer-block__head${isCorporateNavActive(pathname, "/proyecto-web") ? " is-active" : ""}`}
+              onClick={() => {
+                markPress("webProject");
+                onClose();
+              }}
+            >
+              <span className="argos-drawer-block__icon">
+                <IconWebProject />
+              </span>
+              <span className="argos-drawer-block__label">{t("nav.webProject")}</span>
             </Link>
           </div>
 

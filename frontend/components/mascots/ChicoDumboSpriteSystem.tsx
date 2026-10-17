@@ -156,19 +156,26 @@ export default function ChicoDumboSpriteSystem() {
     }
   }, []);
 
-  /* QA08-P1-01/P1-03 — hide floating dock while corporate footer occupies viewport */
+  /* El dock se retira antes de la banda azul y del footer. No flota sobre el cierre. */
   useEffect(() => {
-    const footer = document.querySelector(".argos-corporate-footer");
-    if (!footer) return;
+    const nodes = [
+      document.querySelector(".argos-dplus-blue-band"),
+      document.querySelector(".argos-corporate-footer")
+    ].filter((node): node is Element => Boolean(node));
+    if (nodes.length === 0) return;
+    const visible = new Set<Element>();
     const io = new IntersectionObserver(
       (entries) => {
-        const hit = entries.some((e) => e.isIntersecting);
-        if (hit) document.body.dataset.footerInView = "true";
+        for (const entry of entries) {
+          if (entry.isIntersecting) visible.add(entry.target);
+          else visible.delete(entry.target);
+        }
+        if (visible.size > 0) document.body.dataset.footerInView = "true";
         else delete document.body.dataset.footerInView;
       },
-      { root: null, threshold: 0, rootMargin: "0px 0px -8% 0px" }
+      { root: null, threshold: 0, rootMargin: "0px 0px 140px 0px" }
     );
-    io.observe(footer);
+    for (const node of nodes) io.observe(node);
     return () => {
       io.disconnect();
       delete document.body.dataset.footerInView;

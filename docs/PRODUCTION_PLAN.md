@@ -1,11 +1,28 @@
 # Plan de producción ARGOS-IT
 
 Fecha de preparación: 2026-08-02
-Rama de trabajo: `release/production-v1`
-Commit base auditado: `db5c5a4`
+Rama de trabajo original: `release/production-v1`
+Commit histórico de aquella preparación: `db5c5a4`
+Revisión documental: 2026-10-14; nota de reconciliación 2026-10-16
 Estado: **preparación documental únicamente** — sin deploy, sin DNS, sin recursos nuevos, sin merge.
 
-Referencias: [STAGING.md](./STAGING.md), [STAGING_RESULTADOS.md](./STAGING_RESULTADOS.md), [DEPLOYMENT.md](./DEPLOYMENT.md), [DEPLOY_AUTH.md](./DEPLOY_AUTH.md), [VERIFY.md](./VERIFY.md).
+Identidades, sin mezclarlas:
+
+- INTEGRATION HEAD el 2026-10-16: `e1c9a5db03e52e8f637fc4f8c4d7c4b7e25ba88c` en `integration/gm-v3-main-b608665`. No consta desplegado.
+- INTEGRATION HEAD en la revisión del 2026-10-14: `111ed70d554e8b4f34fc9316e71121fd3f1066ed`, padre del commit anterior. Tampoco consta desplegado.
+- CURRENT PRODUCTION VERSION: UNKNOWN.
+- ROLLBACK TARGET: UNKNOWN y bloqueado. No se anota un commit de recuperación hasta identificar un despliegue real. `db5c5a4` sigue siendo solo la base histórica de esta preparación.
+
+Referencias: [STAGING.md](./STAGING.md), [STAGING_RESULTADOS.md](./STAGING_RESULTADOS.md), [DEPLOYMENT.md](./DEPLOYMENT.md), [DEPLOY_AUTH.md](./DEPLOY_AUTH.md), [VERIFY.md](./VERIFY.md), [ARCHITECTURE_CURRENT_STATUS.md](./ARCHITECTURE_CURRENT_STATUS.md).
+
+> **Nota de reconciliación — 2026-10-16.** El texto siguiente conserva la preparación del 2026-08-02 y la revisión del 2026-10-14.
+>
+> - «WordPress actual» en el apex describe aquella preparación. El 2026-10-14 `argos-it.com` respondió como Next.js desde `31.97.52.181`. Eso no demuestra que WordPress se haya retirado de todos los servidores. `www.argos-it.com` no tenía registro A ni CNAME en esa observación.
+> - `portal.argos-it.com` y `api.portal.argos-it.com` respondieron HTTP 200 el 2026-10-14 desde `91.108.121.181`. Un 200 no identifica el commit desplegado. El portal no se declara coincidente con este HEAD ni listo para producción.
+> - El healthcheck público informó base de datos conectada. El motor y el servidor de esa base no tienen verificación administrativa.
+> - Coolify como orquestador vigente: no verificado. El registro de agosto no demuestra que siga en uso ni que esté apagado.
+> - Staging figura operativo el 2026-08-02 y en HTTP 503 el 2026-10-14. V7.24 no repitió la prueba y no cierra una causa.
+> - Copias de base, aplicación y almacenamiento de producción: no verificadas. La copia local V7.23 solo protege `artifacts/` en este Mac. Rollback: bloqueado.
 
 ---
 
@@ -81,6 +98,8 @@ Nunca versionar `.env` reales. Generar secretos con `openssl rand -hex 48` (dos 
 
 ### 4.1 Backend producción (Coolify / proveedor)
 
+Obligatorias de aplicación:
+
 ```text
 NODE_ENV=production
 PORT=4000
@@ -90,15 +109,52 @@ JWT_REFRESH_SECRET=<nuevo y distinto — openssl rand -hex 48>
 CORS_ORIGINS=https://portal.argos-it.com
 FRONTEND_URL=https://portal.argos-it.com
 ENABLE_SOCKET_IO=false
+LOG_LEVEL=info
+```
+
+Correo de la aplicación. Contrato verificado en V7.11 y V7.12. No incluye contraseñas. El DNS y el correo de WordPress en el apex no forman parte de este bloque.
+
+Obligatorias para el transporte SMTP:
+
+```text
+ARGOS_EMAIL_TRANSPORT=smtp
+SMTP_HOST=smtp.hostinger.com
+SMTP_PORT=465
+SMTP_SECURE=true
+SMTP_USER=info@argos-it.com
+SMTP_PASSWORD=<secreto del buzón, solo en el proveedor, nunca en Git>
+EMAIL_FROM=info@argos-it.com
+CONTACT_EMAIL_TO=info@argos-it.com
+```
+
+`ARGOS_EMAIL_TRANSPORT=smtp` es lo que activa el adaptador. Las credenciales solas no envían correo. Si falta cualquiera de esas variables, el adaptador no abre socket. `CONTACT_EMAIL_TO` es el único destinatario del formulario; el cliente no puede sustituirlo ni cambiar `EMAIL_FROM`.
+
+Transporte QA, solo local o de prueba:
+
+```text
+ARGOS_EMAIL_TRANSPORT=qa
+```
+
+Con `NODE_ENV=production` el modo `qa` queda desactivado. No declara entrega a un buzón.
+
+Opcional del transporte:
+
+```text
+SMTP_TIMEOUT_MS=10000
+```
+
+El endpoint externo de formulario que figuraba aquí no es el transporte verificado. No copiarlo a producción. Si el transporte queda desactivado y ese endpoint existiera, el código aún podría usarlo; la configuración de publicación no debe depender de él.
+
+Opcional, pendiente de decisión:
+
+```text
 OPENAI_API_KEY=<pendiente decisión>
 OPENAI_MODEL=gpt-4o-mini
 OPENAI_TIMEOUT_MS=45000
 AI_MESSAGE_MAX_LEN=6000
-CONTACT_FORM_ENDPOINT=https://formspree.io/f/xpqooedl
-LOG_LEVEL=info
 ```
 
-Opcionales recomendados (ya en `backend/.env.example`; ajustar solo si se decide endurecer prod):
+Opcionales de límite, ya en `backend/.env.example`. Los valores por defecto del código no cambian si se omiten:
 
 ```text
 RATE_LIMIT_WINDOW_MS=900000
@@ -116,14 +172,16 @@ CONTACT_RATE_LIMIT_MAX=5
 ```text
 NEXT_PUBLIC_BACKEND_URL=https://api.portal.argos-it.com
 BACKEND_URL=<URL interna o pública confirmada del API>
-NEXT_PUBLIC_CONTACT_FORM_ENDPOINT=https://formspree.io/f/xpqooedl
 # Opcional metadata/OG:
 # NEXT_PUBLIC_SITE_URL=https://portal.argos-it.com
 ```
 
+El formulario público llama a `NEXT_PUBLIC_BACKEND_URL`. No usa un endpoint de formulario en el cliente.
+
 Notas de auditoría:
 
-- `NEXT_PUBLIC_BACKEND_URL` se inyecta en **build** (`frontend/Dockerfile` `ARG`/`ENV`); debe ser la URL pública del API.
+- `NEXT_PUBLIC_BACKEND_URL` se incrusta en el build. Un `next build` también lee `frontend/.env.local` si existe. Ese archivo es de desarrollo y no debe definir el artefacto de publicación.
+- Antes del build de publicación, con la URL pública ya exportada en el entorno y sin depender del `.env.local` de desarrollo: `ARGOS_RELEASE_BUILD=1 npm run check:release-build`. Si la URL resuelta es local, está vacía o no es `https`, el comando termina en error. `npm run build` ordinario no cambia y sigue sirviendo para verificación local.
 - `BACKEND_URL` la usan route handlers del servidor Next (p. ej. relay mascot-chat); puede ser la misma URL pública o una URL interna de red Coolify si se confirma reachability.
 - No usar `db`, `backend`, `localhost` ni `127.0.0.1` como URL pública de producción.
 
@@ -185,7 +243,7 @@ Auditoría `database/migrate.sh`: exige `DATABASE_URL`; `ON_ERROR_STOP=1`; no ha
 | Ítem | Hallazgo / plan |
 |------|-----------------|
 | Dockerfile | `backend/Dockerfile` — Node 22 Alpine, `npm ci --omit=dev`, `EXPOSE 4000`, `CMD npm start` |
-| HEALTHCHECK | Presente: `fetch('http://127.0.0.1:4000/api/health')` interval 30s / timeout 5s / start 20s / retries 3 |
+| HEALTHCHECK | En el HEAD `e1c9a5d`: `fetch('http://127.0.0.1:4000/api/live')`, intervalo 30s / timeout 5s / arranque 20s / reintentos 3. La revisión del 2026-10-14 anotaba `/api/health`. Esa ruta sigue en el código como comprobación de aplicación; no es la sonda de la imagen. |
 | Coolify health | Preferir HEALTHCHECK de imagen; no forzar HTTP con curl en Alpine |
 | Health endpoint | `GET /api/health` → 200 |
 | Socket.IO | `ENABLE_SOCKET_IO=false` hasta decisión explícita |
@@ -200,7 +258,7 @@ Auditoría `database/migrate.sh`: exige `DATABASE_URL`; `ON_ERROR_STOP=1`; no ha
 | Ítem | Hallazgo / plan |
 |------|-----------------|
 | Dockerfile | `frontend/Dockerfile` — Node 22 Alpine, `npm ci`, build con `ARG NEXT_PUBLIC_BACKEND_URL`, `EXPOSE 3000` |
-| HEALTHCHECK | **Ausente** en imagen frontend (a diferencia del backend) — documentar; evaluar en fase de implementación (fuera de esta preparación) |
+| HEALTHCHECK | Presente en el HEAD `e1c9a5d`: `fetch('http://127.0.0.1:3000/')`, intervalo 20s / timeout 5s / arranque 25s / reintentos 5. La revisión del 2026-10-14 lo daba por ausente. |
 | Build-arg producción | `NEXT_PUBLIC_BACKEND_URL=https://api.portal.argos-it.com` |
 | Runtime | Confirmar bind host adecuado para Coolify (patrón ya usado en staging) |
 | Dominio | `portal.argos-it.com` |
@@ -216,6 +274,8 @@ Auditoría `database/migrate.sh`: exige `DATABASE_URL`; `ON_ERROR_STOP=1`; no ha
 | TLS Let’s Encrypt | Cuando existan hosts → proxy Coolify/Traefik |
 | CAA | Conservar `letsencrypt.org`; no tocar apex/`www` |
 | Separación | Staging DNS (`staging`, `api-staging`) permanece; producción es independiente |
+
+La fila «No crear todavía» es la instrucción de aquella preparación. El 2026-10-14 `portal` y `api.portal` ya resolvían en público. La fila no ordena crearlos ni afirma que sigan ausentes.
 
 ---
 
@@ -290,6 +350,8 @@ Canal de alertas de **producción** separado del de staging. Coolify Sentinel + 
 - [ ] `https://argos-it.com` y `https://www.argos-it.com` siguen sirviendo WordPress
 - [ ] Portal no rompe enlaces críticos del sitio marketing actual (acordar enlaces cruzados si aplica)
 
+Estos dos puntos conservan el criterio de la preparación. El 2026-10-14 el apex no se observó como WordPress. No son una orden de cambiar DNS ni hosting.
+
 ---
 
 ## 13. Cutover
@@ -323,7 +385,7 @@ Orden propuesto (**no ejecutar en esta fase**):
 
 Reglas: sin `docker compose down -v` destructivo; sin force push; sin merge de emergencia a ciegas; no restaurar dumps de staging sobre prod.
 
-Commit/imagen de referencia a documentar en el momento del primer deploy exitoso (hoy: base de preparación `db5c5a4` en `release/production-v1`).
+Este procedimiento está documentado y no consta ensayado sobre producción. CURRENT PRODUCTION VERSION y ROLLBACK TARGET siguen UNKNOWN. `db5c5a4` es solo la base histórica de esta preparación; no es un objetivo de rollback. El script `scripts/staging/rollback-rehearsal.sh` pertenece al staging y no se ejecuta desde este plan.
 
 ---
 
@@ -336,7 +398,7 @@ Commit/imagen de referencia a documentar en el momento del primer deploy exitoso
 | Confundir CORS con WordPress apex | `CORS_ORIGINS` solo `https://portal.argos-it.com` salvo decisión explícita |
 | `OPENAI_API_KEY` vacía | IA 503; producto debe comunicarlo o activar clave |
 | `ENABLE_SOCKET_IO=false` | Sin WS hasta decisión y cliente real |
-| Frontend sin HEALTHCHECK en Dockerfile | Riesgo de “Running” sin probe; valorar en fase impl. |
+| Frontend sin HEALTHCHECK en Dockerfile. Antecedente de la revisión del 2026-10-14; no describe el Dockerfile de este HEAD. | El riesgo de “Running” sin probe corresponde a aquella nota. En `e1c9a5d`, `frontend/Dockerfile` tiene HEALTHCHECK hacia `http://127.0.0.1:3000/`. |
 | sharp transitivo (Next.js) | No `npm audit fix --force` |
 | Divergencia WordPress vs portal | Enlaces y expectativa de marca claros en cutover |
 | Rate limit auth agresivo (8/15 min) | Operación consciente en smoke login |
@@ -368,7 +430,8 @@ Commit/imagen de referencia a documentar en el momento del primer deploy exitoso
 
 - [ ] Recursos prod creados y aislados de staging
 - [ ] DNS + TLS en `portal` y `api.portal`
-- [ ] Variables prod inyectadas (JWT nuevos, DB nueva, CORS/FRONTEND correctos)
+- [ ] Variables prod inyectadas (JWT nuevos, DB nueva, CORS/FRONTEND correctos, SMTP del §4.1)
+- [ ] `ARGOS_RELEASE_BUILD=1 npm run check:release-build` en PASS antes del build público
 - [ ] `migrate.sh` aplicado con éxito
 - [ ] `/api/health` 200 y frontend 200
 - [ ] verify-api público + autenticado PASS en prod
@@ -403,10 +466,10 @@ Commit/imagen de referencia a documentar en el momento del primer deploy exitoso
 | `backend/.env.example` | Variables API completas; JWT dual; Socket.IO/OpenAI documentados |
 | `frontend/.env.example` | `BACKEND_URL` + `NEXT_PUBLIC_BACKEND_URL` + Formspree |
 | `docker/.env.example` | Postgres local + JWT + puertos; compose local |
-| `backend/Dockerfile` | Node 22 Alpine + HEALTHCHECK `fetch` `/api/health` |
-| `frontend/Dockerfile` | Node 22 Alpine + build-arg `NEXT_PUBLIC_BACKEND_URL`; sin HEALTHCHECK |
+| `backend/Dockerfile` | Node 22 Alpine + HEALTHCHECK `fetch` `/api/live`. La nota del 2026-10-14 decía `/api/health`. |
+| `frontend/Dockerfile` | Node 22 Alpine + build-arg `NEXT_PUBLIC_BACKEND_URL` + HEALTHCHECK a `/`. La nota del 2026-10-14 decía que no había sonda. |
 | `database/migrate.sh` | Idempotente; requiere `DATABASE_URL`; sin seed admin |
-| `docs/STAGING.md` / `STAGING_RESULTADOS.md` | Staging operativo; offsite staging pendiente de proveedor |
+| `docs/STAGING.md` / `STAGING_RESULTADOS.md` | Preparación sin proveedor en el repo, y registro operativo del 2026-08-02. La observación pública del 2026-10-14 fue HTTP 503. |
 | `docs/DEPLOYMENT.md` / `VERIFY.md` / `DEPLOY_AUTH.md` | Guías previas; este plan las especializa a portal/api.portal |
 
 ## Apéndice B — Decisiones pendientes (operador)

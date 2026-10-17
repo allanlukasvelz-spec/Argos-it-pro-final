@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>ARGOS Production Readiness — Implementation Map</title>
+  <style>
+    :root {
+      --navy: #1f3a5f;
+      --teal: #2f7d6d;
+      --dark: #0b1320;
+      --surface: #f7f7f5;
+      --current: #b45309;
+      --staging: #1f3a5f;
+      --prod: #6b7280;
+    }
+    body {
+      font-family: system-ui, sans-serif;
+      background: var(--surface);
+      color: var(--dark);
+      margin: 0;
+      padding: 24px;
+      line-height: 1.45;
+    }
+    h1 { color: var(--navy); margin-top: 0; }
+    .legend span {
+      display: inline-block;
+      padding: 4px 10px;
+      margin-right: 8px;
+      border-radius: 4px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .c-current { background: var(--current); }
+    .c-staging { background: var(--staging); }
+    .c-prod { background: var(--prod); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .col {
+      background: #fff;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .col h2 {
+      margin: 0 0 12px;
+      font-size: 16px;
+      padding-bottom: 8px;
+      border-bottom: 3px solid;
+    }
+    .col.current h2 { border-color: var(--current); color: var(--current); }
+    .col.staging h2 { border-color: var(--staging); color: var(--staging); }
+    .col.prod h2 { border-color: var(--prod); color: var(--prod); }
+    ul { padding-left: 18px; margin: 0; font-size: 14px; }
+    li { margin: 6px 0; }
+    .warn {
+      margin-top: 20px;
+      padding: 12px;
+      background: #fef3c7;
+      border: 1px solid #f59e0b;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    .blockers { margin-top: 16px; font-size: 13px; }
+    code { background: #eef2f7; padding: 1px 4px; border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <h1>ARGOS — Production Readiness Implementation Map</h1>
+  <p>HEAD <code>93b838f</code> · Documentation gate only · No deploy</p>
+  <div class="legend">
+    <span class="c-current">CURRENT</span>
+    <span class="c-staging">STAGING TARGET</span>
+    <span class="c-prod">PRODUCTION FUTURE</span>
+  </div>
+
+  <div class="grid">
+    <section class="col current">
+      <h2>CURRENT (local)</h2>
+      <ul>
+        <li>API :4000 + <strong>embedded scheduler</strong></li>
+        <li>Frontend :3000</li>
+        <li>PostgreSQL :5432</li>
+        <li>Worker <em>manual</em></li>
+        <li>Local evidence store</li>
+        <li>MinIO POC optional (<code>latest</code>)</li>
+        <li>Agents observation-only</li>
+        <li>Health = DB ping</li>
+        <li>Logs via console/morgan</li>
+        <li>Compose: db+api+fe only</li>
+      </ul>
+    </section>
+    <section class="col staging">
+      <h2>STAGING TARGET</h2>
+      <ul>
+        <li>Compose supervision (or systemd)</li>
+        <li>API×1 scheduler owner</li>
+        <li>Worker×N + Chromium</li>
+        <li>Pinned MinIO or S3</li>
+        <li>migrate.sh DDL role</li>
+        <li>Backup + restore drill</li>
+        <li>Synthetic data only</li>
+        <li>Test flags UNSET</li>
+        <li>Meta-monitoring external</li>
+        <li>Gates G0–G15</li>
+        <li><strong>Still no public DNS required</strong></li>
+      </ul>
+    </section>
+    <section class="col prod">
+      <h2>PRODUCTION FUTURE</h2>
+      <ul>
+        <li>FORBIDDEN until staging green</li>
+        <li>PITR + practiced RTO</li>
+        <li>Scheduler redesign if multi-API</li>
+        <li>Hardened secrets / rotation</li>
+        <li>Full observability stack</li>
+        <li>No test surfaces</li>
+        <li>REMOTE_EXECUTION stays NO</li>
+        <li>Phase 9 separate authorization</li>
+      </ul>
+    </section>
+  </div>
+
+  <div class="warn">
+    <strong>Invariants:</strong> UNKNOWN ≠ HEALTHY · PLATFORM ≠ CUSTOMER · NOT_SCANNED ≠ CLEAN ·
+    org_admin ≠ NOC · no public buckets · KUBERNETES_ADOPT_NOW=NO
+  </div>
+
+  <div class="blockers">
+    <strong>Top blockers:</strong> scheduler multi-replica · worker supervision · backup/restore proof ·
+    image pinning · dual DDL authority · meta-monitoring.
+    See <code>ARGOS_PRODUCTION_READINESS_BLOCKERS.md</code>.
+  </div>
+</body>
+</html>
