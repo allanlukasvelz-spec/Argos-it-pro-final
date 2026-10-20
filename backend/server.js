@@ -211,7 +211,7 @@ async function start() {
     await ensureRefreshSessionsTable(pool);
     await ensureClientDiagnosticsTable(pool);
   } catch (err) {
-    console.error("❌ No se pudo asegurar la tabla refresh_sessions:", err.message);
+    console.error("❌ No se pudieron asegurar las tablas de arranque:", err.message);
     process.exit(1);
   }
 
