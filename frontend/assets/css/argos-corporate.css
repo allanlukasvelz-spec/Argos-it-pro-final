@@ -5750,3 +5750,98 @@ body:has(.argos-corporate--home) .argos-assistant-launcher:hover {
     padding-right: 0;
   }
 }
+
+/* ==== Home: cabecera blanca fija + mascotas visibles (fix 2026-10-31) ==== */
+.argos-corporate.argos-corporate--home .argos-corporate-header {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 60 !important;
+  background: #ffffff !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12) !important;
+  backdrop-filter: none !important;
+}
+.argos-corporate.argos-corporate--home .argos-corporate-logo__img {
+  filter: none !important;
+}
+.argos-corporate.argos-corporate--home .argos-corporate-header__langs button,
+.argos-corporate.argos-corporate--home .argos-corporate-menu-toggle,
+.argos-corporate.argos-corporate--home .argos-corporate-menu-toggle:hover,
+.argos-corporate.argos-corporate--home .argos-header-banner__title,
+.argos-corporate.argos-corporate--home .argos-header-banner__body {
+  color: #0b1220 !important;
+}
+.argos-corporate.argos-corporate--home .argos-corporate-header__langs button.is-active {
+  color: #0b1220 !important;
+  box-shadow: inset 0 -2px 0 #0b1220 !important;
+}
+.argos-corporate.argos-corporate--home .argos-corporate-menu-toggle__bars span {
+  background: #0b1220 !important;
+}
+.argos-corporate.argos-corporate--home .argos-header-banner__inner {
+  background: #ffffff !important;
+  color: #0b1220 !important;
+  border-left-color: #0b1220 !important;
+}
+.argos-corporate.argos-corporate--home .argos-history-nav {
+  display: none !important;
+}
+
+body:has(.argos-corporate--home) .mascot--chico,
+body:has(.argos-corporate--home) .mascot--dumbo {
+  width: auto !important;
+  max-width: none !important;
+  opacity: 1 !important;
+}
+body:has(.argos-corporate--home) .mascot--chico {
+  left: 64px !important; /* libre del indicador de Next dev */
+}
+body:has(.argos-corporate--home) .mascot--dumbo {
+  right: 16px !important;
+}
+body:has(.argos-corporate--home) .mascot,
+body:has(.argos-corporate--home) .mascot--inactive,
+body:has(.argos-corporate--home) .mascot__img {
+  opacity: 1 !important;
+}
+body:has(.argos-corporate--home) .mascot__img,
+body:has(.argos-corporate--home) .mascot__img--chico,
+body:has(.argos-corporate--home) .mascot__img--dumbo {
+  width: clamp(84px, 9vw, 120px) !important;
+  height: clamp(84px, 9vw, 120px) !important;
+  max-width: none !important;
+}
+body:has(.argos-corporate--home) .mascot__pause {
+  left: auto !important;
+  right: 16px !important;
+  bottom: calc(var(--mascot-dock-bottom, 12px) + 132px) !important;
+  font-size: 0.7rem !important;
+  padding: 0.25rem 0.55rem !important;
+  min-height: 28px !important;
+  width: auto !important;
+}
+body:has(.argos-corporate--home) .argos-assistant-launcher {
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+  bottom: calc(var(--floating-ui-gap, 0.75rem) + env(safe-area-inset-bottom, 0px)) !important;
+  width: auto !important;
+  max-width: none !important;
+  background: #ffffff !important;
+  color: #0b1220 !important;
+  border: 1px solid #0b1220 !important;
+}
+@media (max-width: 860px) {
+  body:has(.argos-corporate--home) .mascot__img,
+  body:has(.argos-corporate--home) .mascot__img--chico,
+  body:has(.argos-corporate--home) .mascot__img--dumbo {
+    width: 72px !important;
+    height: 72px !important;
+  }
+  body:has(.argos-corporate--home) .mascot--chico { left: 56px !important; }
+  body:has(.argos-corporate--home) .mascot__pause { bottom: calc(var(--mascot-dock-bottom, 8px) + 84px) !important; }
+}
+@media (max-width: 1023px) {
+  html:not([data-argos-cookies="open"]) body:not([data-footer-in-view]):not(.argos-drawer-open):has(.argos-corporate--home) .mascot-root {
+    display: block !important;
+  }
+}

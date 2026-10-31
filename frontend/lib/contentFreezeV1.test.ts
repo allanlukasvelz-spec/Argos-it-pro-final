@@ -25,7 +25,7 @@ const es = JSON.parse(readFileSync(new URL("i18n/locales/es.json", ROOT), "utf8"
   servicesPage: { strategicPillars: string[] };
 };
 
-const FROZEN_H1 = "Sistemas que no fallen cuando no deben.";
+const FROZEN_H1 = "Sistemas que no Fallan cuando no deben";
 const FROZEN_SUPPORTING =
   "Primero entendemos cómo trabaja tu empresa y de qué depende su operativa. Después ponemos orden, reducimos riesgos y mantenemos bajo control la tecnología que necesita para funcionar.";
 const FROZEN_PRIMARY_CTA = "Iniciar diagnóstico ARGOS";
