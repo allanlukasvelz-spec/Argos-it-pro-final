@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const OpenAI = require("openai");
 const pool = require("../db");
 const { normalizeChatMessage } = require("../lib/aiMessage");
 
@@ -13,6 +12,8 @@ function getOpenAIClient() {
     throw new Error("OPENAI_API_KEY no configurada");
   }
 
+  // Lazy-load: top-level require("openai") can block process boot in some local envs.
+  const OpenAI = require("openai");
   return new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
     timeout: OPENAI_TIMEOUT_MS

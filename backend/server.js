@@ -11,15 +11,31 @@ const pool = require("./db");
 const { isAllowedWsActionType, sanitizeWsDetails } = require("./lib/wsActions");
 const { ensureRefreshSessionsTable } = require("./lib/ensureRefreshSessions");
 const { ensureClientDiagnosticsTable } = require("./lib/ensureClientDiagnosticsTable");
+const { ensureOrganizationsFoundation } = require("./lib/ensureOrganizations");
+const { ensureAssetsTables } = require("./lib/ensureAssets");
+const { ensureMonitorsTables } = require("./lib/ensureMonitors");
+const { ensureRemediationTables } = require("./lib/ensureRemediation");
+const { ensureAgentsTables } = require("./lib/ensureAgents");
+const {
+  createMonitorScheduler,
+  isSchedulerEnabled
+} = require("./lib/monitoring/scheduler");
 
 const authRoutes = require("./routes/auth");
 const aiRoutes = require("./routes/ai");
 const securityRoutes = require("./routes/security");
 const contactRoutes = require("./routes/contact");
-const clientRoutes = require("./routes/client");
+const createClientRouter = require("./routes/client");
 const { generalLimiter, detectBot, aiLimiter } = require("./middleware/security");
 const authMiddleware = require("./middleware/auth");
 const csrfOriginGuard = require("./middleware/csrfOrigin");
+const { resolveTenantContext, requireTenant } = require("./middleware/tenantContext");
+const createClientWebProjectsRouter = require("./routes/clientWebProjects");
+const createClientWebProjectSelfServiceRouter = require("./routes/clientWebProjectSelfService");
+const createNocWebProjectsRouter = require("./routes/nocWebProjects");
+const createNocWebProjectInvitationsRouter = require("./routes/nocWebProjectInvitations");
+const createPublicWebProjectInvitationsRouter = require("./routes/publicWebProjectInvitations");
+const { ensureWebProjects } = require("./lib/ensureWebProjects");
 
 const app = express();
 // Trust the single Traefik hop so rate limits use the real client IP.
@@ -151,27 +167,194 @@ app.use(cookieParser());
 app.use(express.json({ limit: "512kb" }));
 app.use(morgan("combined"));
 app.use(detectBot);
+
+// Local/test only: reset must bypass generalLimiter so serial E2E can recover between tests.
+const { isRateLimitResetAllowed } = require("./lib/ops/testSurfacePolicy");
+if (isRateLimitResetAllowed()) {
+  app.use("/api/test", require("./routes/testOnly")());
+} else if (process.env.ARGOS_ALLOW_RATE_LIMIT_RESET === "1") {
+  console.warn(
+    "[SECURITY] ARGOS_ALLOW_RATE_LIMIT_RESET ignored (staging/production or NODE_ENV not test|development)"
+  );
+}
+
 app.use(generalLimiter);
 app.use(csrfOriginGuard(allowedOrigins));
 
 // Rutas públicas
 app.use("/api/auth", authRoutes);
+app.use("/api/web-project-invitations", createPublicWebProjectInvitationsRouter(pool));
 app.use("/api/ai/public", aiLimiter, require("./routes/ai-public"));
 app.use("/api/assistant", aiLimiter, require("./routes/assistant"));
 app.use("/api/contact", contactRoutes);
 
+// Staging harness ONLY — synthetic fixture provision; never production
+const {
+  isStagingHarnessAllowed,
+  createStagingHarnessRouter
+} = require("./routes/stagingHarness");
+if (isStagingHarnessAllowed()) {
+  app.use("/api/staging-harness", createStagingHarnessRouter(pool));
+  console.log("[STAGING] harness mounted at /api/staging-harness (token-gated)");
+}
+
 // Rutas protegidas
 app.use("/api/ai", aiLimiter, authMiddleware, aiRoutes);
 app.use("/api/security", authMiddleware, securityRoutes);
-app.use("/api/client", authMiddleware, clientRoutes);
+app.use(
+  "/api/client/web-projects/self-service",
+  authMiddleware,
+  createClientWebProjectSelfServiceRouter(pool)
+);
+app.use(
+  "/api/client",
+  authMiddleware,
+  resolveTenantContext(pool),
+  requireTenant(),
+  createClientRouter(pool)
+);
+app.use(
+  "/api/client",
+  authMiddleware,
+  resolveTenantContext(pool),
+  requireTenant(),
+  createClientWebProjectsRouter(pool)
+);
 
-// Health check — verifies database connectivity
+// Phase 5 — Internal NOC (global staff only; never weaken /api/client)
+const requireNocAccess = require("./middleware/requireNocAccess");
+const createNocRouter = require("./routes/noc");
+const createNocRemediationRouter = require("./routes/nocRemediation");
+const createNocAgentsRouter = require("./routes/nocAgents");
+const createNocEvidenceRouter = require("./routes/nocEvidence");
+const createNocReportsRouter = require("./routes/nocReports");
+const createAgentV1Router = require("./routes/agentV1");
+const { configureEvidenceStore } = require("./lib/platform/evidenceStore");
+const { ensureEvidenceObjectsTable } = require("./lib/ensureEvidenceObjects");
+const { ensurePhase8Tables } = require("./lib/ensurePhase8Tables");
+app.use("/api/noc", authMiddleware, requireNocAccess, createNocRouter(pool));
+app.use("/api/noc", authMiddleware, requireNocAccess, createNocRemediationRouter(pool));
+app.use("/api/noc", authMiddleware, requireNocAccess, createNocAgentsRouter(pool));
+app.use("/api/noc/evidence", authMiddleware, requireNocAccess, createNocEvidenceRouter(pool));
+app.use("/api/noc", authMiddleware, requireNocAccess, createNocReportsRouter(pool));
+app.use("/api/noc", authMiddleware, requireNocAccess, createNocWebProjectsRouter(pool));
+app.use("/api/noc", authMiddleware, requireNocAccess, createNocWebProjectInvitationsRouter(pool));
+// Phase 7 — technical agent ingest (credential auth; no cookie CSRF path)
+app.use("/api/agent/v1", createAgentV1Router(pool));
+
+// Liveness — process up only (do not conflate with customer health)
+app.get("/api/live", (_req, res) => {
+  res.json({
+    status: "LIVE",
+    meaning: "Process is running. Not readiness. Not customer health.",
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Readiness — platform dependencies required to accept traffic
+app.get("/api/ready", async (_req, res) => {
+  const {
+    isEvidenceStoreConfigured,
+    getConfiguredBackend,
+    getEvidenceStore
+  } = require("./lib/platform/evidenceStore");
+  const checks = { db: "unknown", schema: "unknown", evidenceStore: "unknown" };
+  try {
+    await pool.query("SELECT 1");
+    checks.db = "ok";
+  } catch {
+    checks.db = "fail";
+    return res.status(503).json({
+      status: "NOT_READY",
+      checks,
+      meaning: "Database unreachable. Not customer health.",
+      timestamp: new Date().toISOString()
+    });
+  }
+
+  try {
+    const schema = await pool.query(
+      `SELECT to_regclass('public.organizations') AS organizations,
+              to_regclass('public.platform_jobs') AS platform_jobs,
+              to_regclass('public.evidence_objects') AS evidence_objects`
+    );
+    const row = schema.rows[0] || {};
+    if (!row.organizations || !row.platform_jobs || !row.evidence_objects) {
+      checks.schema = "incompatible";
+      return res.status(503).json({
+        status: "NOT_READY",
+        checks,
+        meaning: "Schema missing required relations. Migration gate failed.",
+        timestamp: new Date().toISOString()
+      });
+    }
+    checks.schema = "ok";
+  } catch {
+    checks.schema = "fail";
+    return res.status(503).json({
+      status: "NOT_READY",
+      checks,
+      meaning: "Schema verification failed.",
+      timestamp: new Date().toISOString()
+    });
+  }
+
+  if (!isEvidenceStoreConfigured()) {
+    checks.evidenceStore = "not_configured";
+    return res.status(503).json({
+      status: "NOT_READY",
+      checks,
+      backend: getConfiguredBackend(),
+      meaning: "Evidence object store not configured.",
+      timestamp: new Date().toISOString()
+    });
+  }
+
+  try {
+    const store = getEvidenceStore();
+    if (typeof store.exists === "function") {
+      // Valid key shape; missing object → false. Network/auth failures throw.
+      await store.exists("org/1/ev/00000000-0000-4000-8000-000000000001");
+    }
+    checks.evidenceStore = "ok";
+  } catch (err) {
+    checks.evidenceStore = "fail";
+    return res.status(503).json({
+      status: "NOT_READY",
+      checks,
+      backend: getConfiguredBackend(),
+      error: err.message,
+      meaning: "Evidence object store unreachable.",
+      timestamp: new Date().toISOString()
+    });
+  }
+
+  res.json({
+    status: "READY",
+    checks,
+    backend: getConfiguredBackend(),
+    meaning: "API ready for traffic. Not customer estate health.",
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Platform health (public probe) — DB connectivity only; not customer health
 app.get("/api/health", async (req, res) => {
   try {
     await pool.query("SELECT 1");
-    res.json({ status: "OK", db: "connected", timestamp: new Date() });
+    res.json({
+      status: "OK",
+      db: "connected",
+      meaning: "Database reachable. Not customer health. Prefer /api/live and /api/ready for orchestration.",
+      timestamp: new Date()
+    });
   } catch (_err) {
-    res.status(503).json({ status: "DEGRADED", db: "disconnected", timestamp: new Date() });
+    res.status(503).json({
+      status: "DEGRADED",
+      db: "disconnected",
+      meaning: "Database unreachable. Not customer health.",
+      timestamp: new Date()
+    });
   }
 });
 
@@ -208,10 +391,19 @@ server.on("error", (err) => {
 
 async function start() {
   try {
+    configureEvidenceStore();
     await ensureRefreshSessionsTable(pool);
     await ensureClientDiagnosticsTable(pool);
+    await ensureOrganizationsFoundation(pool);
+    await ensureAssetsTables(pool);
+    await ensureMonitorsTables(pool);
+    await ensureRemediationTables(pool);
+    await ensureAgentsTables(pool);
+    await ensureEvidenceObjectsTable(pool);
+    await ensurePhase8Tables(pool);
+    await ensureWebProjects(pool);
   } catch (err) {
-    console.error("❌ No se pudo asegurar la tabla refresh_sessions:", err.message);
+    console.error("❌ No se pudo asegurar tablas de arranque (sessions/diagnostics/orgs/assets/monitors/remediation/agents/evidence):", err.message);
     process.exit(1);
   }
 
@@ -223,6 +415,29 @@ async function start() {
       console.log(`📡 WebSockets desactivados (ENABLE_SOCKET_IO=false)`);
     }
     console.log(`🤖 IA (Chico + Dumbo) lista`);
+
+    if (isSchedulerEnabled()) {
+      const stagingLike =
+        process.env.ARGOS_ENVIRONMENT === "staging" ||
+        process.env.ARGOS_ENVIRONMENT === "production";
+      if (stagingLike && process.env.ARGOS_SCHEDULER_OWNER !== "1") {
+        console.error(
+          "[MONITOR] SCHEDULER_SCALE_BLOCKER: refusing scheduler start without ARGOS_SCHEDULER_OWNER=1 (exactly one API replica)"
+        );
+      } else {
+        try {
+          const scheduler = createMonitorScheduler(pool);
+          scheduler.start();
+          console.log(
+            `⏱️  Monitor scheduler activo (ENABLE_MONITOR_SCHEDULER) owner=${process.env.ARGOS_SCHEDULER_OWNER || "unset"} SCHEDULER_SCALE_BLOCKER=YES`
+          );
+        } catch (schedErr) {
+          console.error("[MONITOR] No se pudo iniciar scheduler:", schedErr.message);
+        }
+      }
+    } else {
+      console.log(`⏱️  Monitor scheduler desactivado (ENABLE_MONITOR_SCHEDULER=false)`);
+    }
   });
 }
 

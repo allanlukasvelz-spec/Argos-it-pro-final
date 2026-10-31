@@ -519,3 +519,8 @@ export function getMethodArgosStep(slug: string): MethodArgosStep | undefined {
 export function getAllMethodArgosSteps(): MethodArgosStep[] {
   return steps;
 }
+
+/** Home FAQ: first existing question of each A.R.G.O.S. phase. No new copy. */
+export function getHomeFaqItems(): MethodFaqItem[] {
+  return steps.map((step) => step.faq[0]).filter((item): item is MethodFaqItem => Boolean(item));
+}

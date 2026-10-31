@@ -1,0 +1,247 @@
+{
+  "startedAt": "2026-08-25T23:39:06.296Z",
+  "ts": 1787701146296,
+  "checks": {
+    "pipeline_request": {
+      "ok": true,
+      "detail": {
+        "reportId": "29c93f78-1915-4500-885f-c24c6af5d739",
+        "runId": "a895c678-1bca-474b-8b7d-24f790875712"
+      }
+    },
+    "pipeline_queue": {
+      "ok": true,
+      "detail": true
+    },
+    "pipeline_worker": {
+      "ok": true,
+      "detail": true
+    },
+    "pipeline_ready": {
+      "ok": true,
+      "detail": true
+    },
+    "real_pdf_signature": {
+      "ok": true,
+      "detail": true
+    },
+    "real_pdf_size": {
+      "ok": true,
+      "detail": 144174
+    },
+    "real_pdf_chromium": {
+      "ok": true,
+      "detail": true
+    },
+    "artifact_sha256": {
+      "ok": true,
+      "detail": "542954dc6e182570ba8b5da311d782acaeecba01d2b8fb3a2edecfd15516886a"
+    },
+    "evidence_retrieval": {
+      "ok": true,
+      "detail": {
+        "evidenceObjectId": "e9f6c084-a847-4b4b-a776-733913a782c4"
+      }
+    },
+    "pipeline_notification": {
+      "ok": true,
+      "detail": 2
+    },
+    "pipeline_report_model": {
+      "ok": true,
+      "detail": "unknown"
+    },
+    "pipeline_html": {
+      "ok": true,
+      "detail": true
+    },
+    "pipeline_storage": {
+      "ok": true,
+      "detail": "e9f6c084-a847-4b4b-a776-733913a782c4"
+    },
+    "idempotency_same_run": {
+      "ok": true,
+      "detail": true
+    },
+    "idempotency_no_duplicate_reports": {
+      "ok": true,
+      "detail": true
+    },
+    "idempotency_notification_dedupe": {
+      "ok": true,
+      "detail": true
+    },
+    "idempotency_semantics": {
+      "ok": true,
+      "detail": "Same organization_id+idempotency_key returns existing report_run; job idempotency_key job:report-run:{runId} prevents duplicate platform_jobs; evidence idempotency report-run:{runId} prevents duplicate artifacts; REPORT_READY event dedupe_key is per run."
+    },
+    "two_worker_concurrency": {
+      "ok": true,
+      "detail": {
+        "j1": "25",
+        "j2": "26"
+      }
+    },
+    "duplicate_execution": {
+      "ok": true,
+      "detail": false
+    },
+    "claim_ownership": {
+      "ok": true,
+      "detail": {
+        "w1": "w-conc-a",
+        "w2": "w-conc-b"
+      }
+    },
+    "stale_recovery": {
+      "ok": true,
+      "detail": "RETRY_WAIT"
+    },
+    "crash_recovery": {
+      "ok": true,
+      "detail": "crash-worker-2"
+    },
+    "crash_no_false_ready": {
+      "ok": true,
+      "detail": "QUEUED"
+    },
+    "dead_letter": {
+      "ok": true,
+      "detail": {
+        "deadLetter": true,
+        "attempts": 1
+      }
+    },
+    "dead_letter_status": {
+      "ok": true,
+      "detail": {
+        "status": "DEAD_LETTER",
+        "attempts": 1
+      }
+    },
+    "dead_letter_no_auto_retry": {
+      "ok": true,
+      "detail": true
+    },
+    "failure_invalid_payload": {
+      "ok": true,
+      "detail": true
+    },
+    "failure_missing_incident": {
+      "ok": true,
+      "detail": true
+    },
+    "tenant_isolation_list": {
+      "ok": true,
+      "detail": true
+    },
+    "report_idor_read": {
+      "ok": true,
+      "detail": "404-equivalent"
+    },
+    "artifact_idor_pdf": {
+      "ok": true,
+      "detail": "FORBIDDEN"
+    },
+    "tenant_cross_incident_request": {
+      "ok": true,
+      "detail": true
+    },
+    "notification_idor": {
+      "ok": true,
+      "detail": true
+    },
+    "tenant_forged_org_header": {
+      "ok": true,
+      "detail": "no cross-tenant row"
+    },
+    "notifications_recipient_resolution": {
+      "ok": true,
+      "detail": "membership-derived"
+    },
+    "notifications_preferences": {
+      "ok": true,
+      "detail": {
+        "disabledSkipped": true
+      }
+    },
+    "notifications_dedupe": {
+      "ok": true,
+      "detail": true
+    },
+    "notifications_read_unread": {
+      "ok": true,
+      "detail": true
+    },
+    "noc_legitimate_access": {
+      "ok": true,
+      "detail": true
+    },
+    "noc_gate_client": {
+      "ok": true,
+      "detail": 403
+    },
+    "noc_gate_org_admin": {
+      "ok": true,
+      "detail": 403
+    },
+    "noc_forged_role": {
+      "ok": true,
+      "detail": 401
+    },
+    "renderer_escaped_output": {
+      "ok": false,
+      "detail": "raw dangerous patterns in HTML"
+    },
+    "javascript_execution": {
+      "ok": true,
+      "detail": false
+    },
+    "renderer_ssrf": {
+      "ok": true,
+      "detail": 0
+    },
+    "file_access": {
+      "ok": true,
+      "detail": "blocked via escape + route abort"
+    },
+    "secret_leakage": {
+      "ok": true,
+      "detail": true
+    },
+    "truth_unknown_invariant": {
+      "ok": true,
+      "detail": "unknown"
+    },
+    "false_healthy": {
+      "ok": true,
+      "detail": true
+    },
+    "truth_freshness": {
+      "ok": true,
+      "detail": "2026-08-25T23:39:09.494Z"
+    }
+  },
+  "artifacts": {
+    "pdfSample": "docs/architecture/phase8-validation-artifacts/phase81-sample-1787701146296.pdf",
+    "sha256": "542954dc6e182570ba8b5da311d782acaeecba01d2b8fb3a2edecfd15516886a"
+  },
+  "fixes": [],
+  "fixtures": {
+    "orgA": 145,
+    "orgB": 146,
+    "incA": 12,
+    "emails": {
+      "userA": "phase81-a-1787701146296@example.test",
+      "userB": "phase81-b-1787701146296@example.test",
+      "noc": "phase81-noc-1787701146296@example.test"
+    },
+    "password": "[REDACTED — Phase81TestPass1 in harness only]"
+  },
+  "summary": {
+    "total": 50,
+    "failed": 1,
+    "status": "PASS_WITH_LIMITATIONS"
+  },
+  "completedAt": "2026-08-25T23:39:09.507Z"
+}

@@ -7,6 +7,19 @@ import ArgosPageShell from "@/components/layout/ArgosPageShell";
 import { useAuthStore } from "@/lib/auth";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import { inviteTokenStorageKey } from "@/lib/webProjects/invitationUi";
+import {
+  SELF_SERVICE_START_PATH,
+  readSelfServiceIntent,
+  selfServiceIntentStorageKey
+} from "@/lib/webProjects/selfServiceUi";
+
+function postAuthPath(): string {
+  if (typeof window === "undefined") return "/dashboard";
+  if (sessionStorage.getItem(inviteTokenStorageKey())) return "/auth/invite";
+  if (sessionStorage.getItem(selfServiceIntentStorageKey())) return SELF_SERVICE_START_PATH;
+  return "/dashboard";
+}
 
 export default function Login() {
   const router = useRouter();
@@ -18,8 +31,13 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    const intent = readSelfServiceIntent();
+    if (intent?.email) setEmail(intent.email);
+  }, []);
+
+  useEffect(() => {
     if (authenticated) {
-      router.replace("/dashboard");
+      router.replace(postAuthPath());
     }
   }, [authenticated, router]);
 
@@ -32,7 +50,7 @@ export default function Login() {
 
       login(res.data.user);
       toast.success("Sesion iniciada");
-      router.push("/dashboard");
+      router.push(postAuthPath());
     } catch (error: any) {
       toast.error(error.response?.data?.error || "Error en login");
     }

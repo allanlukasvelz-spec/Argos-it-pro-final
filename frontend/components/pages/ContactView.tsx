@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useMemo, useState, useEffect } from "react";
+import { FormEvent, useCallback, useMemo, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import CorporatePageShell from "@/components/layout/CorporatePageShell";
 import { useI18n } from "@/i18n/useI18n";
@@ -22,10 +22,19 @@ type FormState = {
   service: string;
   message: string;
   privacy: boolean;
+  captchaAnswer: string;
+  website: string;
 };
 
-const contactFormEndpoint =
-  process.env.NEXT_PUBLIC_CONTACT_FORM_ENDPOINT || "https://formspree.io/f/xpqooedl";
+type ContactChallenge = {
+  challengeId: string;
+  question: string;
+};
+
+const contactApiBase = process.env.NEXT_PUBLIC_BACKEND_URL || "http://127.0.0.1:4000";
+
+/** Misma política que `backend/lib/validateContact.js` (`clean` trunca a 2000 por campo). */
+const CONTACT_FIELD_MAX_LEN = 2000;
 
 const initialState: FormState = {
   name: "",
@@ -34,11 +43,10 @@ const initialState: FormState = {
   company: "",
   service: "",
   message: "",
-  privacy: false
+  privacy: false,
+  captchaAnswer: "",
+  website: ""
 };
-
-/** Misma política que `backend/routes/contact.js` (`clean` trunca a 2000 por campo). */
-const CONTACT_FIELD_MAX_LEN = 2000;
 
 export default function ContactView() {
   const { t, get } = useI18n();
@@ -47,6 +55,10 @@ export default function ContactView() {
   const [form, setForm] = useState<FormState>(initialState);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [status, setStatus] = useState<"idle" | "success" | "error" | "loading">("idle");
+  const [statusMessage, setStatusMessage] = useState("");
+  const [challenge, setChallenge] = useState<ContactChallenge | null>(null);
+  const [challengeError, setChallengeError] = useState(false);
+  const [challengeLoading, setChallengeLoading] = useState(true);
 
   usePageMeta(t("meta.contactTitle"), t("meta.contactDescription"));
 
@@ -57,16 +69,41 @@ export default function ContactView() {
     [services]
   );
 
+  const loadChallenge = useCallback(async () => {
+    setChallengeError(false);
+    setChallengeLoading(true);
+    try {
+      const response = await fetch(`${contactApiBase}/api/contact/challenge`, {
+        method: "GET",
+        headers: { Accept: "application/json" },
+        cache: "no-store"
+      });
+      if (!response.ok) throw new Error("challenge unavailable");
+      const nextChallenge = (await response.json()) as ContactChallenge;
+      setChallenge(nextChallenge);
+      setForm((prev) => ({ ...prev, captchaAnswer: "" }));
+      setErrors((prev) => ({ ...prev, captchaAnswer: "" }));
+    } catch {
+      setChallenge(null);
+      setChallengeError(true);
+    } finally {
+      setChallengeLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const preselected = params.get("service");
-    if (!preselected) return;
-    setForm((prev) => ({ ...prev, service: preselected }));
-  }, []);
+    if (preselected) {
+      setForm((prev) => ({ ...prev, service: preselected }));
+    }
+    void loadChallenge();
+  }, [loadChallenge]);
 
   const updateField = (field: keyof FormState, value: string | boolean) => {
     setForm((prev) => ({ ...prev, [field]: value }));
     setErrors((prev) => ({ ...prev, [field]: "" }));
+    setStatusMessage("");
   };
 
   const validate = () => {
@@ -91,6 +128,15 @@ export default function ContactView() {
     if (!form.message.trim()) nextErrors.message = t("contact.form.errors.required");
     else if (tooLong(form.message)) nextErrors.message = t("contact.form.errors.maxLength");
     if (!form.privacy) nextErrors.privacy = t("contact.form.errors.privacy");
+    if (!form.captchaAnswer.trim()) {
+      nextErrors.captchaAnswer = t("contact.form.errors.required", "Campo obligatorio");
+    }
+    if (!challenge?.challengeId) {
+      nextErrors.captchaAnswer = t(
+        "contact.form.captcha.loadError",
+        "No se pudo cargar la verificación. Inténtalo de nuevo."
+      );
+    }
 
     setErrors(nextErrors);
 
@@ -107,6 +153,7 @@ export default function ContactView() {
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setStatus("idle");
+    setStatusMessage("");
 
     if (!validate()) {
       setStatus("error");
@@ -115,36 +162,60 @@ export default function ContactView() {
 
     setStatus("loading");
 
-    const payload = new FormData();
-    payload.append("_subject", "Nueva solicitud desde ARGOS-IT");
-    payload.append("origen", "servicio-argos-it");
-    payload.append("name", form.name);
-    payload.append("email", form.email);
-    payload.append("phone", form.phone);
-    payload.append("company", form.company);
-    payload.append("service", form.service);
-    payload.append("servicio", form.service);
-    payload.append("message", form.message);
-    payload.append("privacy", "accepted");
-
     try {
-      const response = await fetch(contactFormEndpoint, {
+      const response = await fetch(`${contactApiBase}/api/contact`, {
         method: "POST",
-        body: payload,
         headers: {
-          Accept: "application/json"
-        }
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          company: form.company,
+          service: form.service,
+          message: form.message,
+          website: form.website,
+          challengeId: challenge?.challengeId,
+          captchaAnswer: form.captchaAnswer
+        })
       });
 
-      if (!response.ok) throw new Error("Formspree request failed");
+      const body = (await response.json().catch(() => ({}))) as {
+        error?: string;
+        code?: string;
+        message?: string;
+      };
+
+      if (!response.ok) {
+        if (body.code === "CAPTCHA_INVALID" || body.error?.toLowerCase().includes("verific")) {
+          setErrors((prev) => ({
+            ...prev,
+            captchaAnswer: t(
+              "contact.form.captcha.error",
+              "La respuesta de verificación no es correcta. Inténtalo de nuevo."
+            )
+          }));
+        }
+        await loadChallenge();
+        setStatus("error");
+        setStatusMessage(body.error || t("contact.form.error"));
+        window.dispatchEvent(new CustomEvent("argos:onFormError"));
+        return;
+      }
 
       window.dispatchEvent(new CustomEvent("argos:onFormSuccess"));
       setStatus("success");
+      setStatusMessage(body.message || t("contact.form.success"));
       setForm(initialState);
       setErrors({});
+      await loadChallenge();
     } catch {
       setStatus("error");
+      setStatusMessage(t("contact.form.error"));
       window.dispatchEvent(new CustomEvent("argos:onFormError"));
+      await loadChallenge();
     }
   };
 
@@ -201,7 +272,7 @@ export default function ContactView() {
           </motion.div>
 
           <motion.form
-            className="argos-corporate-card space-y-6 p-8"
+            className="argos-corporate-card relative space-y-6 p-8"
             onSubmit={onSubmit}
             onFocus={() => window.dispatchEvent(new CustomEvent("argos:onFormStart"))}
             {...fadeIn}
@@ -209,6 +280,20 @@ export default function ContactView() {
             <h2 className="argos-font-display mb-2 text-2xl text-[var(--text-primary)]">
               {t("contact.form.title")}
             </h2>
+
+            {/* Honeypot — hidden from users */}
+            <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden opacity-0" aria-hidden="true">
+              <label htmlFor="contact-website">Website</label>
+              <input
+                id="contact-website"
+                type="text"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                value={form.website}
+                onChange={(event) => updateField("website", event.target.value)}
+              />
+            </div>
 
             <div className="grid gap-6 md:grid-cols-2">
               <div>
@@ -326,6 +411,74 @@ export default function ContactView() {
               {errors.message && <p className="mt-1 text-xs text-red-600">{errors.message}</p>}
             </div>
 
+            <div
+              className="rounded-lg border border-[var(--border-default)] bg-[var(--surface-primary)] p-4"
+              data-captcha-state={
+                challengeLoading ? "loading" : challengeError ? "error" : challenge ? "ready" : "loading"
+              }
+            >
+              <p id="contact-captcha-label" className="argos-font-ui text-sm font-semibold text-[var(--text-primary)]">
+                {t("contact.form.captcha.label", "Verificación")} *
+              </p>
+              <p className="mt-1 text-sm text-[var(--text-secondary)]">
+                {t(
+                  "contact.form.captcha.hint",
+                  "Resuelve la operación para confirmar que no eres un robot."
+                )}
+              </p>
+              {challengeLoading ? (
+                <p className="mt-3 text-sm text-[var(--text-secondary)]">
+                  {t("contact.form.captcha.loading", "Cargando verificación…")}
+                </p>
+              ) : null}
+              {!challengeLoading && challengeError ? (
+                <div className="mt-3 space-y-2">
+                  <p className="text-sm text-red-600">
+                    {t(
+                      "contact.form.captcha.loadError",
+                      "No se pudo cargar la verificación. Inténtalo de nuevo."
+                    )}
+                  </p>
+                  <button
+                    type="button"
+                    className="argos-corporate-link text-sm font-semibold"
+                    onClick={() => void loadChallenge()}
+                    disabled={challengeLoading}
+                  >
+                    {t("contact.form.captcha.retry", "Reintentar")}
+                  </button>
+                </div>
+              ) : null}
+              {!challengeLoading && !challengeError && challenge ? (
+                <div className="mt-3 space-y-2">
+                  <p className="text-sm text-[var(--text-primary)]">
+                    {t("contact.form.captcha.questionPrefix", "¿Cuánto es")} {challenge.question}?
+                  </p>
+                  <label htmlFor="contact-captcha" className="sr-only">
+                    {t("contact.form.captcha.label", "Verificación")}
+                  </label>
+                  <input
+                    id="contact-captcha"
+                    type="text"
+                    name="captchaAnswer"
+                    inputMode="numeric"
+                    autoComplete="off"
+                    value={form.captchaAnswer}
+                    onChange={(event) => updateField("captchaAnswer", event.target.value)}
+                    className="argos-corporate-input"
+                    placeholder={t("contact.form.captcha.placeholder", "Tu respuesta")}
+                    aria-invalid={Boolean(errors.captchaAnswer)}
+                    aria-describedby={errors.captchaAnswer ? "contact-captcha-error" : "contact-captcha-label"}
+                  />
+                  {errors.captchaAnswer ? (
+                    <p id="contact-captcha-error" className="mt-1 text-xs text-red-600" role="alert">
+                      {errors.captchaAnswer}
+                    </p>
+                  ) : null}
+                </div>
+              ) : null}
+            </div>
+
             <div className="rounded-lg border border-[var(--border-default)] bg-[var(--surface-primary)] p-4">
               <label className="flex items-start gap-3">
                 <input
@@ -350,9 +503,13 @@ export default function ContactView() {
             </button>
 
             {status === "success" && (
-              <p className="text-center text-sm text-emerald-700">{t("contact.form.success")}</p>
+              <p className="text-center text-sm text-emerald-700">
+                {statusMessage || t("contact.form.success")}
+              </p>
             )}
-            {status === "error" && <p className="text-center text-sm text-red-600">{t("contact.form.error")}</p>}
+            {status === "error" && (
+              <p className="text-center text-sm text-red-600">{statusMessage || t("contact.form.error")}</p>
+            )}
 
             <p className="text-center text-sm text-[var(--text-secondary)]">{t("contact.form.requiredHint")}</p>
           </motion.form>

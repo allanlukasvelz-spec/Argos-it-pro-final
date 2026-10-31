@@ -6,7 +6,7 @@ import { readFileSync } from "node:fs";
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { serviceSlugs } from "./services.ts";
-import { METHOD_ARGOS_SLUGS } from "./methodArgosSteps.ts";
+import { getHomeFaqItems, METHOD_ARGOS_SLUGS } from "./methodArgosSteps.ts";
 
 const ROOT = new URL("../", import.meta.url);
 const es = JSON.parse(readFileSync(new URL("i18n/locales/es.json", ROOT), "utf8")) as {
@@ -25,7 +25,7 @@ const es = JSON.parse(readFileSync(new URL("i18n/locales/es.json", ROOT), "utf8"
   servicesPage: { strategicPillars: string[] };
 };
 
-const FROZEN_H1 = "Sistemas que no fallen cuando no deben.";
+const FROZEN_H1 = "Sistemas que no Fallan cuando no deben";
 const FROZEN_SUPPORTING =
   "Primero entendemos cómo trabaja tu empresa y de qué depende su operativa. Después ponemos orden, reducimos riesgos y mantenemos bajo control la tecnología que necesita para funcionar.";
 const FROZEN_PRIMARY_CTA = "Iniciar diagnóstico ARGOS";
@@ -81,6 +81,15 @@ describe("content freeze v1.0 — FROZEN_CONCEPT", () => {
       es.method.publicSteps.map((s) => s.title),
       PUBLIC_PHASES
     );
+  });
+
+  it("home FAQ reuses one existing question per phase", () => {
+    const items = getHomeFaqItems();
+    assert.equal(items.length, 5);
+    for (const item of items) {
+      assert.ok(item.question.length > 0);
+      assert.ok(item.answer.length > 0);
+    }
   });
 
   it("5 operational A.R.G.O.S. phases preserved", () => {

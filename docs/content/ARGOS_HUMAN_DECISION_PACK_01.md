@@ -260,6 +260,19 @@ If owner prefers operational punch: A as **proof tag** or **method section kicke
 
 ---
 
+## 10b. OWNER RESOLUTION (2026-09-09)
+
+| Field | Value |
+|-------|-------|
+| STATUS | **RESOLVED** |
+| APPROVED_OPTION | **B — Quiet Authority** |
+| RESOLVED_DATE | 2026-09-09 |
+| RESOLVED_BY | Owner (P8-B2 finalization) |
+
+Hero H1 canonical: *Tecnología serena para empresas que avanzan* (and EN/CA locale equivalents). OG/meta aligned to Quiet Authority. Content Freeze v1.0 hero H1 superseded for public marketing surfaces.
+
+---
+
 ## 11. IMPLEMENTATION IMPACT
 
 | Field | Impact |
@@ -613,7 +626,7 @@ None acceptable under quality gate.
 | ID | Options | Your choice (write here) |
 |----|---------|--------------------------|
 | C-001 | A / B / C / DEFER | |
-| C-002 | A / B / C / D / DEFER | |
+| C-002 | A / B / C / D / DEFER | **B — APPROVED 2026-09-09** |
 | C-003 | A / B / C / DEFER | |
 | C-004 | A (BLOCKED) only until evidence | |
 | C-006 | A / B / DEFER | |

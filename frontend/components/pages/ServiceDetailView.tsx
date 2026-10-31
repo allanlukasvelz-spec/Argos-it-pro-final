@@ -37,7 +37,7 @@ export default function ServiceDetailView({ slug }: Props) {
 
   return (
     <CorporatePageShell>
-      <section className="argos-corp-section" aria-labelledby="service-detail-title">
+      <section className="argos-corp-section argos-corp-section--dplus-intro" aria-labelledby="service-detail-title">
         <div className="argos-corp-container" style={{ maxWidth: "64rem" }}>
           <Link href="/servicios" className="argos-corp-back">
             ← {t("actions.backServices")}
@@ -46,7 +46,11 @@ export default function ServiceDetailView({ slug }: Props) {
             {service.title}
           </h1>
           <p className="argos-corp-lead">{service.description}</p>
+        </div>
+      </section>
 
+      <section className="argos-corp-section argos-corp-section--dplus-services" aria-label={service.title}>
+        <div className="argos-corp-container" style={{ maxWidth: "64rem" }}>
           <div className="argos-corp-detail-grid">
             <article className="argos-corporate-card argos-corp-detail-card">
               <h2>{t("serviceDetail.problemTitle")}</h2>
@@ -92,8 +96,8 @@ export default function ServiceDetailView({ slug }: Props) {
             </article>
           </div>
 
-          <section className="argos-corp-section--cta mt-10 rounded-lg border border-[var(--border-default)] bg-white p-6 md:p-8">
-            <h2 className="argos-font-display argos-corp-h2">{t("serviceDetail.ctaTitle")}</h2>
+          <section className="argos-corporate-card argos-corp-detail-card mt-10" aria-labelledby="service-detail-cta">
+            <h2 id="service-detail-cta" className="argos-font-display argos-corp-h2">{t("serviceDetail.ctaTitle")}</h2>
             <p className="argos-corp-body mt-3">{t("serviceDetail.ctaSubtitle")}</p>
             <div className="argos-corp-cta-row">
               <Link href={`/contacto?service=${slug}`} className="argos-corporate-cta">

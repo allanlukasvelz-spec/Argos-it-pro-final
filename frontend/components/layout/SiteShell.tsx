@@ -4,12 +4,14 @@ import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import ArgosAssistantRoot from "@/components/assistant/ArgosAssistantRoot";
 import ClientAssistants from "@/components/ClientAssistants";
+import CorporateBlueBand from "@/components/corporate/CorporateBlueBand";
 import CorporateFooter from "@/components/corporate/CorporateFooter";
 import CorporateHeader from "@/components/corporate/CorporateHeader";
 import CorporateHistoryNav from "@/components/corporate/CorporateHistoryNav";
 import { MascotChatProvider } from "@/components/mascots/MascotChatContext";
 import { MascotPauseControlProvider } from "@/components/mascots/MascotPauseControlContext";
 import CookieBanner from "@/components/layout/CookieBanner";
+import PublicMotionField from "@/components/layout/PublicMotionField";
 import { DiagnosticSurveyLauncherProvider } from "@/components/diagnostic/DiagnosticSurveyLauncher";
 import SiteFooter from "@/components/layout/SiteFooter";
 import SiteHeader from "@/components/layout/SiteHeader";
@@ -27,6 +29,9 @@ type Props = {
 export default function SiteShell({ children }: Props) {
   const pathname = usePathname();
   const chromeOwner = getChromeOwner(pathname);
+  const isContactRoute =
+    pathname === "/contacto" || pathname.startsWith("/contacto/");
+  const showCookies = !shouldHideCookieBanner(pathname);
 
   return (
     <MascotPauseControlProvider>
@@ -35,12 +40,17 @@ export default function SiteShell({ children }: Props) {
           children
         ) : chromeOwner === "corporate" ? (
           <DiagnosticSurveyLauncherProvider>
-            <div className="argos-corporate">
+            <PublicMotionField />
+            <div className={pathname === "/" ? "argos-corporate argos-corporate--home" : "argos-corporate"}>
               <CorporateHeader />
+              {isContactRoute && showCookies ? (
+                <CookieBanner placement="contact-inline" />
+              ) : null}
               <div className="argos-corp-container">
                 <CorporateHistoryNav />
               </div>
               {children}
+              <CorporateBlueBand />
               <CorporateFooter />
             </div>
             <ArgosAssistantRoot />
@@ -53,7 +63,7 @@ export default function SiteShell({ children }: Props) {
           </DiagnosticSurveyLauncherProvider>
         )}
         {!shouldHideAssistants(pathname) && <ClientAssistants />}
-        {!shouldHideCookieBanner(pathname) && <CookieBanner />}
+        {!isContactRoute && showCookies ? <CookieBanner /> : null}
       </MascotChatProvider>
     </MascotPauseControlProvider>
   );

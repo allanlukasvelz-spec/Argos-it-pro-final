@@ -40,7 +40,7 @@ export default function MethodView() {
 
   return (
     <CorporatePageShell>
-      <section className="argos-corp-section" aria-labelledby="method-title">
+      <section className="argos-corp-section argos-corp-section--dplus-method" aria-labelledby="method-title">
         <div className="argos-corp-container">
           <ArgosReveal>
             <MethodArgosBar

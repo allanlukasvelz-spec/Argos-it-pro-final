@@ -6,35 +6,14 @@ import { useI18n } from "@/i18n/useI18n";
 import { corporateFooterNav, corporateLegalNav } from "@/lib/corporateNav";
 
 /**
- * Footer brand: rectangular navy ARGOS-IT mark (white art on dark field).
- * Seated mascots: Dumbo (guía) left, Chico (protege) right — real assets only.
+ * Cierre institucional. La marca es el archivo oficial.
+ * Chico y Dumbo no forman parte del footer.
  */
 export default function CorporateFooter() {
   const { t } = useI18n();
 
   return (
     <footer className="argos-corporate-footer">
-      <div className="argos-corporate-footer__mascot argos-corporate-footer__mascot--dumbo" aria-hidden="true">
-        <Image
-          src="/mascots/dumbo/dumbo_sentado_atento.png"
-          alt=""
-          width={120}
-          height={120}
-          className="argos-corporate-footer__mascot-img"
-          loading="lazy"
-        />
-      </div>
-      <div className="argos-corporate-footer__mascot argos-corporate-footer__mascot--chico" aria-hidden="true">
-        <Image
-          src="/mascots/chico/chico_sit.png"
-          alt=""
-          width={120}
-          height={120}
-          className="argos-corporate-footer__mascot-img"
-          loading="lazy"
-        />
-      </div>
-
       <div className="argos-corporate-footer__grid">
         <div className="argos-corporate-footer__brand">
           <Link
@@ -45,8 +24,8 @@ export default function CorporateFooter() {
             <Image
               src="/logo-argos-it-footer.png"
               alt="Logo ARGOS-IT"
-              width={1024}
-              height={452}
+              width={514}
+              height={469}
               className="argos-corporate-footer__logo"
               loading="lazy"
             />

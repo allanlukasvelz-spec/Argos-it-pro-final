@@ -28,16 +28,37 @@ export function DiagnosticSurveyModal({ open, onClose }: Props) {
       (focusable ?? panelRef.current)?.focus?.();
     }, 0);
 
-    const onEsc = (e: KeyboardEvent) => {
+    const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         e.preventDefault();
         onClose();
+        return;
+      }
+      if (e.key !== "Tab") return;
+      const root = panelRef.current;
+      if (!root) return;
+      const list = [...root.querySelectorAll<HTMLElement>("button, a[href], input, textarea, select, [tabindex]")].filter((el) => {
+        if (el.hasAttribute("disabled") || el.getAttribute("tabindex") === "-1") return false;
+        const style = window.getComputedStyle(el);
+        return style.display !== "none" && style.visibility !== "hidden";
+      });
+      if (list.length === 0) return;
+      const first = list[0];
+      const last = list[list.length - 1];
+      const active = document.activeElement;
+      const inside = active instanceof Node && root.contains(active);
+      if (e.shiftKey && (active === first || active === root || !inside)) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && (active === last || active === root || !inside)) {
+        e.preventDefault();
+        first.focus();
       }
     };
-    document.addEventListener("keydown", onEsc);
+    document.addEventListener("keydown", onKey);
     return () => {
       window.clearTimeout(timer);
-      document.removeEventListener("keydown", onEsc);
+      document.removeEventListener("keydown", onKey);
       document.body.style.overflow = prevOverflow;
       queueMicrotask(() => returnFocusRef.current?.focus?.());
     };
@@ -54,7 +75,7 @@ export function DiagnosticSurveyModal({ open, onClose }: Props) {
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[100] overflow-y-auto overflow-x-hidden bg-[#0B1E33]/72 px-4 py-6 backdrop-blur-sm sm:py-12"
+      className="argos-diag-modal"
       role="presentation"
       onMouseDown={onBackdropMouseDown}
     >
@@ -65,7 +86,7 @@ export function DiagnosticSurveyModal({ open, onClose }: Props) {
           aria-modal="true"
           aria-labelledby={titleId}
           tabIndex={-1}
-          className="relative w-full max-w-2xl overflow-hidden rounded-[1.25rem] border-2 border-[#1f3a5f]/45 bg-[#f8fafc] shadow-[0_28px_64px_-28px_rgba(11,30,51,0.5)] outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2f7d6d] lg:max-w-3xl"
+          className="argos-diag-modal__panel"
         >
           <DiagnosticSurvey ariaTitleId={titleId} onRequestClose={onClose} />
         </div>

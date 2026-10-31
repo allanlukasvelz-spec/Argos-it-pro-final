@@ -356,6 +356,35 @@ body:has(.argos-corporate) .mascot--dumbo {
   }
 }
 
+/* Corporate: sin translate. La reserva lateral es la única geometría válida. */
+body:has(.argos-corporate) .mascot--chico,
+body:has(.argos-corporate) .mascot--dumbo {
+  transform: none !important;
+}
+
+body:has(.argos-corporate) .mascot__bubble {
+  display: none !important;
+}
+
+body:has(.argos-corporate) .mascot__img,
+body:has(.argos-corporate) .mascot__img--chico,
+body:has(.argos-corporate) .mascot__img--dumbo {
+  width: 84px;
+  height: 84px;
+  opacity: 0.86;
+}
+
+/* Home 1440: acompañan el margen. No hacen de poste de la sección. */
+@media (min-width: 1024px) {
+  body:has(.argos-corporate--home) .mascot__img,
+  body:has(.argos-corporate--home) .mascot__img--chico,
+  body:has(.argos-corporate--home) .mascot__img--dumbo {
+    width: 46px;
+    height: 46px;
+    opacity: 0.42;
+  }
+}
+
 @media (prefers-reduced-motion: reduce){
   .mascot{
     transition:none!important;
