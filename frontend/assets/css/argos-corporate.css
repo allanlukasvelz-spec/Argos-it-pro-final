@@ -5840,8 +5840,5 @@ body:has(.argos-corporate--home) .argos-assistant-launcher {
   body:has(.argos-corporate--home) .mascot--chico { left: 56px !important; }
   body:has(.argos-corporate--home) .mascot__pause { bottom: calc(var(--mascot-dock-bottom, 8px) + 84px) !important; }
 }
-@media (max-width: 1023px) {
-  html:not([data-argos-cookies="open"]) body:not([data-footer-in-view]):not(.argos-drawer-open):has(.argos-corporate--home) .mascot-root {
-    display: block !important;
-  }
-}
+/* Por debajo de 1024 px se mantiene el ocultamiento aprobado del dock.
+   No reabrir .mascot-root aquí: el contrato visual lo exige invisible. */
